@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Admin — Global Capital Venture Holdings</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .admin-wrap{max-width:1200px;margin:0 auto;padding:32px 20px}
+    .admin-login{max-width:420px;margin:8vh auto}
+    .admin-card{background:var(--card,#fff);border:1px solid rgba(0,0,0,.08);border-radius:16px;padding:22px;margin-bottom:18px;box-shadow:0 8px 30px rgba(0,0,0,.06)}
+    .admin-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
+    .admin-stat{font-size:28px;font-weight:700;margin-top:8px}
+    .admin-table{width:100%;border-collapse:collapse;font-size:14px}
+    .admin-table th,.admin-table td{padding:11px 9px;border-bottom:1px solid rgba(0,0,0,.08);text-align:left;vertical-align:top}
+    .admin-table th{font-weight:700}
+    .table-scroll{overflow:auto}
+    .admin-actions{display:flex;gap:8px;flex-wrap:wrap}
+    .admin-btn{border:0;border-radius:9px;padding:9px 13px;cursor:pointer;font-weight:600}
+    .admin-btn.primary{background:#111;color:#fff}
+    .admin-btn.danger{background:#b42318;color:#fff}
+    .admin-btn.light{background:#eee;color:#111}
+    .admin-input{width:100%;box-sizing:border-box;padding:11px 12px;border:1px solid #ccc;border-radius:9px;margin:7px 0 13px}
+    .admin-msg{padding:10px 12px;border-radius:9px;margin:10px 0;display:none}
+    .admin-msg.error{display:block;background:#fff1f0;color:#b42318}
+    .admin-msg.ok{display:block;background:#effaf3;color:#167447}
+    .admin-top{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:22px}
+    .status{display:inline-block;padding:4px 8px;border-radius:999px;background:#eee;font-size:12px}
+    .status.pending{background:#fff4cc}
+    .status.confirmed,.status.paid{background:#e7f7ed}
+    .status.rejected{background:#ffe8e6}
+    .muted{opacity:.7;font-size:13px}
+    @media(max-width:700px){.admin-table{min-width:850px}}
+  </style>
+</head>
+<body>
+  <main class="admin-wrap">
+    <section id="loginView" class="admin-login admin-card">
+      <h1>Admin Login</h1>
+      <p class="muted">Global Capital Venture Holdings</p>
+      <div id="loginMsg" class="admin-msg"></div>
+      <label>Username</label>
+      <input id="username" class="admin-input" autocomplete="username">
+      <label>Password</label>
+      <input id="password" class="admin-input" type="password" autocomplete="current-password">
+      <button class="admin-btn primary" id="loginBtn">Sign in</button>
+    </section>
+
+    <section id="panel" hidden>
+      <div class="admin-top">
+        <div>
+          <h1>Admin Dashboard</h1>
+          <p class="muted">Deposits, withdrawals, customers and Binance status</p>
+        </div>
+        <div class="admin-actions">
+          <button class="admin-btn light" id="refreshBtn">Refresh</button>
+          <button class="admin-btn light" id="logoutBtn">Logout</button>
+        </div>
+      </div>
+
+      <div id="panelMsg" class="admin-msg"></div>
+
+      <div class="admin-grid">
+        <div class="admin-card"><div>Customers</div><div class="admin-stat" id="customerCount">—</div></div>
+        <div class="admin-card"><div>Pending Deposits</div><div class="admin-stat" id="pendingDepositCount">—</div></div>
+        <div class="admin-card"><div>Pending Withdrawals</div><div class="admin-stat" id="pendingWithdrawalCount">—</div></div>
+        <div class="admin-card"><div>Binance</div><div class="admin-stat" id="binanceStatus">—</div></div>
+      </div>
+
+      <section class="admin-card">
+        <h2>Pending / Recent Deposits</h2>
+        <div class="table-scroll">
+          <table class="admin-table">
+            <thead><tr><th>ID</th><th>Customer</th><th>Amount</th><th>Asset</th><th>Network</th><th>TXID</th><th>Status</th><th>Action</th></tr></thead>
+            <tbody id="depositsBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="admin-card">
+        <h2>Withdrawals</h2>
+        <div class="table-scroll">
+          <table class="admin-table">
+            <thead><tr><th>ID</th><th>Customer</th><th>Amount</th><th>Asset</th><th>Network</th><th>Destination</th><th>Status</th><th>Action</th></tr></thead>
+            <tbody id="withdrawalsBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="admin-card">
+        <h2>Binance Account</h2>
+        <div id="binanceBody" class="muted">Loading…</div>
+      </section>
+
+      <section class="admin-card">
+        <h2>Customers</h2>
+        <div class="table-scroll">
+          <table class="admin-table">
+            <thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Status</th><th>Package</th><th>Principal</th><th>Available Withdrawal</th></tr></thead>
+            <tbody id="customersBody"></tbody>
+          </table>
+        </div>
+      </section>
+    </section>
+  </main>
+
+<script>
+const API = 'https://global-capital-venture-holdings-backend-production.up.railway.app';
+let token = localStorage.getItem("gcvh_admin_token") || "";
+
+const $ = id => document.getElementById(id);
+function msg(el, text, type="error") {
+  el.textContent = text; el.className = "admin-msg " + type;
+}
+function esc(v) {
+  return String(v ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+async function api(path, options={}) {
+  const headers = Object.assign({"Content-Type":"application/json"}, options.headers || {});
+  if (token) headers.Authorization = "Bearer " + token;
+  const r = await fetch(API + path, Object.assign({}, options, {headers}));
+  const text = await r.text();
+  let data; try { data = text ? JSON.parse(text) : null; } catch { data = text; }
+  if (!r.ok) throw new Error(data?.error || data?.message || ("Request failed ("+r.status+")"));
+  return data;
+}
+
+async function login() {
+  try {
+    const data = await api("/api/admin/login", {
+      method:"POST",
+      body:JSON.stringify({username:$("username").value,password:$("password").value})
+    });
+    token = data.token;
+    localStorage.setItem("gcvh_admin_token", token);
+    $("loginView").hidden = true;
+    $("panel").hidden = false;
+    await refreshAll();
+  } catch(e) { msg($("loginMsg"), e.message); }
+}
+
+async function refreshAll() {
+  try {
+    const [users,deposits,withdrawals,account] = await Promise.all([
+      api("/api/admin/users"),
+      api("/api/admin/deposits"),
+      api("/api/admin/withdrawals"),
+      api("/api/admin/binance/account")
+    ]);
+    $("customerCount").textContent = users.length;
+    $("pendingDepositCount").textContent = deposits.filter(x=>x.status==="pending").length;
+    $("pendingWithdrawalCount").textContent = withdrawals.filter(x=>x.status==="pending").length;
+    $("binanceStatus").textContent = "Connected";
+    $("binanceBody").innerHTML = (account.balances || []).length
+      ? account.balances.map(x=>`<div><strong>${esc(x.asset)}</strong>: ${esc(x.free)} free / ${esc(x.locked)} locked</div>`).join("")
+      : "Connected — no non-zero balances returned.";
+
+    $("depositsBody").innerHTML = deposits.map(d=>`
+      <tr>
+        <td>${esc(d.id)}</td><td>${esc(d.full_name)}<br><span class="muted">${esc(d.email)}</span></td>
+        <td>${esc(d.amount)}</td><td>${esc(d.asset)}</td><td>${esc(d.network)}</td>
+        <td>${esc(d.txid)}</td><td><span class="status ${esc(d.status)}">${esc(d.status)}</span></td>
+        <td>${d.status==="pending" ? `<button class="admin-btn primary" onclick="approveDeposit('${esc(d.id)}')">Approve</button>` : ""}</td>
+      </tr>`).join("") || `<tr><td colspan="8">No deposits found.</td></tr>`;
+
+    $("withdrawalsBody").innerHTML = withdrawals.map(w=>`
+      <tr>
+        <td>${esc(w.id)}</td><td>${esc(w.full_name)}<br><span class="muted">${esc(w.email)}</span></td>
+        <td>${esc(w.amount)}</td><td>${esc(w.asset)}</td><td>${esc(w.network)}</td>
+        <td>${esc(w.destination)}</td><td><span class="status ${esc(w.status)}">${esc(w.status)}</span></td>
+        <td>${w.status==="pending" ? `<button class="admin-btn primary" onclick="processWithdrawal('${esc(w.id)}','approve')">Approve</button> <button class="admin-btn danger" onclick="processWithdrawal('${esc(w.id)}','reject')">Reject</button>` : ""}</td>
+      </tr>`).join("") || `<tr><td colspan="8">No withdrawals found.</td></tr>`;
+
+    $("customersBody").innerHTML = users.map(u=>`
+      <tr><td>${esc(u.id)}</td><td>${esc(u.full_name)}</td><td>${esc(u.email)}</td>
+      <td>${esc(u.status)}</td><td>${esc(u.tier || "—")}</td>
+      <td>${esc(u.principal ?? "0")}</td><td>${esc(u.available_withdrawal ?? "0")}</td></tr>`
+    ).join("") || `<tr><td colspan="7">No customers found.</td></tr>`;
+  } catch(e) {
+    if (/401|expired|invalid/i.test(e.message)) {
+      logout(); return;
+    }
+    msg($("panelMsg"), e.message);
+  }
+}
+
+async function approveDeposit(id) {
+  if (!confirm("Approve this deposit and activate the customer's package?")) return;
+  try {
+    await api("/api/admin/deposits/"+id+"/approve", {method:"POST",body:"{}" });
+    msg($("panelMsg"), "Deposit approved and package activated.", "ok");
+    await refreshAll();
+  } catch(e) { msg($("panelMsg"), e.message); }
+}
+
+async function processWithdrawal(id, action) {
+  const note = prompt("Admin note (optional):", "");
+  if (note === null) return;
+  if (action === "approve") {
+    if (!confirm("Approve this withdrawal? Live Binance withdrawals are currently disabled unless BINANCE_LIVE_WITHDRAWALS is true.")) return;
+  }
+  try {
+    await api("/api/admin/withdrawals/"+id+"/process", {
+      method:"POST", body:JSON.stringify({action,note})
+    });
+    msg($("panelMsg"), "Withdrawal "+action+" request completed.", "ok");
+    await refreshAll();
+  } catch(e) { msg($("panelMsg"), e.message); }
+}
+
+function logout() {
+  token = "";
+  localStorage.removeItem("gcvh_admin_token");
+  $("panel").hidden = true;
+  $("loginView").hidden = false;
+}
+
+$("loginBtn").onclick = login;
+$("password").addEventListener("keydown", e => { if(e.key==="Enter") login(); });
+$("refreshBtn").onclick = refreshAll;
+$("logoutBtn").onclick = logout;
+
+if (token) {
+  $("loginView").hidden = true;
+  $("panel").hidden = false;
+  refreshAll();
+}
+</script>
+</body>
+</html>
