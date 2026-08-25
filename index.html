@@ -289,30 +289,6 @@
 </section>
 </main>
 
-<div id="authModal" class="auth-modal" aria-hidden="true">
-  <div class="auth-card">
-    <button id="closeAuth" class="auth-close" type="button">×</button>
-    <div class="section-tag">PRIVATE CLIENT ACCESS</div>
-    <h2>Access Your <span>Portfolio</span></h2>
-    <p class="auth-subtitle">Create an account or sign in to continue with your selected package.</p>
-    <div class="auth-selected">Selected package <strong id="authPackageAmount">—</strong></div>
-    <div class="auth-tabs"><button id="loginTab" type="button">Sign In</button><button id="registerTab" type="button">Create Account</button></div>
-    <form id="loginForm" class="auth-form">
-      <label>Email<input name="email" type="email" autocomplete="email" required></label>
-      <label>Password<input name="password" type="password" autocomplete="current-password" required></label>
-      <button class="btn btn-primary" type="submit">Sign In</button>
-    </form>
-    <form id="registerForm" class="auth-form" hidden>
-      <label>Full Name<input name="fullName" type="text" autocomplete="name" required></label>
-      <label>Email<input name="email" type="email" autocomplete="email" required></label>
-      <label>Password<input name="password" type="password" minlength="8" autocomplete="new-password" required></label>
-      <label>Confirm Password<input name="confirmPassword" type="password" minlength="8" autocomplete="new-password" required></label>
-      <button class="btn btn-primary" type="submit">Create Account</button>
-    </form>
-    <div id="authMessage" class="auth-message"></div>
-  </div>
-</div>
-
 <div id="fundModal" class="auth-modal" aria-hidden="true">
   <div class="auth-card funding-card">
     <button id="closeFund" class="auth-close" type="button">×</button>
@@ -339,9 +315,7 @@ const TOKEN_KEY = "gcvh_token";
 const PACKAGE_KEY = "gcvh_selected_package";
 
 function getToken(){ return localStorage.getItem(TOKEN_KEY); }
-function setSession(data){ localStorage.setItem(TOKEN_KEY, data.token); localStorage.setItem("gcvh_user", JSON.stringify(data.user || {})); }
 function selectedPackage(){ try{return JSON.parse(localStorage.getItem(PACKAGE_KEY) || "null");}catch(_){return null;} }
-
 function setMessage(id,text){ const el=document.getElementById(id); if(el) el.textContent=text; }
 function showModal(id){ document.getElementById(id).classList.add("open"); }
 function closeModal(id){ document.getElementById(id).classList.remove("open"); }
@@ -377,9 +351,9 @@ async function updateDashboardLinks(){
 
 async function openFunding(){
   const pkg=selectedPackage();
-  if(!pkg || !getToken()){ openAuth(pkg?.amount); return; }
+  if(!pkg || !getToken()) return;
   const account=await getAccount();
-  if(isPurchased(account)){ window.location.href="dashboard.html"; return; }
+  if(isPurchased(account)){ localStorage.removeItem(PACKAGE_KEY); window.location.href="dashboard.html"; return; }
   document.getElementById("fundPackageAmount").textContent=`$${Number(pkg.amount).toLocaleString("en-US")}`;
   document.getElementById("depositPackageAmount").value=Number(pkg.amount);
   document.getElementById("depositAmount").value=Number(pkg.amount);
@@ -392,7 +366,15 @@ async function openFunding(){
   }catch(e){ document.getElementById("fundAddress").textContent="Unable to load payment instructions."; }
 }
 
-updateDashboardLinks();
+async function initialise(){
+  const account=await updateDashboardLinks();
+  const pkg=selectedPackage();
+  if(pkg && getToken() && !isPurchased(account)){
+    await openFunding();
+  }
+}
+
+initialise();
 
 window.addEventListener("load", () => {
   if (window.TradingView) {
@@ -405,70 +387,12 @@ window.addEventListener("load", () => {
   }
 });
 
-function openAuth(amount){
-  const modal=document.getElementById("authModal");
-  document.getElementById("authPackageAmount").textContent = amount ? `$${Number(amount).toLocaleString("en-US")}` : "—";
-  modal.classList.add("open");
-  showAuthMode("login");
-}
-function closeAuth(){document.getElementById("authModal").classList.remove("open");}
-function showAuthMode(mode){
-  document.getElementById("loginForm").hidden=mode!=="login";
-  document.getElementById("registerForm").hidden=mode!=="register";
-  document.getElementById("loginTab").classList.toggle("active",mode==="login");
-  document.getElementById("registerTab").classList.toggle("active",mode==="register");
-  document.getElementById("authMessage").textContent="";
-}
-
-async function continueAfterAuth(){
-  const account=await getAccount();
-  if(isPurchased(account)){
-    localStorage.removeItem(PACKAGE_KEY);
-    window.location.href="dashboard.html";
-    return;
-  }
-  closeAuth();
-  await openFunding();
-  await updateDashboardLinks();
-}
-
-async function login(event){
-  event.preventDefault();
-  const form=event.currentTarget;
-  const msg=document.getElementById("authMessage");
-  msg.textContent="Signing in…";
-  try{
-    const data=await api("/api/auth/login",{method:"POST",body:JSON.stringify({email:form.email.value.trim(),password:form.password.value})});
-    setSession(data);
-    await continueAfterAuth();
-  }catch(e){msg.textContent=e.message;}
-}
-
-async function register(event){
-  event.preventDefault();
-  const form=event.currentTarget;
-  const msg=document.getElementById("authMessage");
-  if(form.password.value!==form.confirmPassword.value){msg.textContent="Passwords do not match.";return;}
-  msg.textContent="Creating account…";
-  try{
-    const data=await api("/api/auth/register",{method:"POST",body:JSON.stringify({fullName:form.fullName.value.trim(),email:form.email.value.trim(),password:form.password.value})});
-    setSession(data);
-    await continueAfterAuth();
-  }catch(e){msg.textContent=e.message;}
-}
-
 function selectPackage(amount){
   localStorage.setItem(PACKAGE_KEY,JSON.stringify({amount:Number(amount),selectedAt:new Date().toISOString()}));
   if(getToken()){ openFunding(); return; }
-  openAuth(amount);
+  window.location.href=`login.html?package=${encodeURIComponent(Number(amount))}`;
 }
 
-document.getElementById("loginForm").addEventListener("submit",login);
-document.getElementById("registerForm").addEventListener("submit",register);
-document.getElementById("loginTab").onclick=()=>showAuthMode("login");
-document.getElementById("registerTab").onclick=()=>showAuthMode("register");
-document.getElementById("closeAuth").onclick=closeAuth;
-document.getElementById("authModal").addEventListener("click",e=>{if(e.target.id==="authModal")closeAuth()});
 document.getElementById("closeFund").onclick=()=>closeModal("fundModal");
 document.getElementById("fundModal").addEventListener("click",e=>{if(e.target.id==="fundModal")closeModal("fundModal")});
 

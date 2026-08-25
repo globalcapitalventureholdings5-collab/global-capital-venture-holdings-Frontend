@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Global Capital Venture Holdings, Inc. — Sign In</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<main class="auth-page">
+  <section class="auth-card">
+    <a href="index.html" class="logo" style="display:inline-flex;text-decoration:none"><span class="logo-mark">$</span><span class="brand-name">Global Capital<br><b>Venture Holdings, Inc.</b></span></a>
+    <div class="section-tag" style="margin-top:26px">PRIVATE CLIENT ACCESS</div>
+    <h1>Sign In to Your <span>Portfolio</span></h1>
+    <p class="auth-subtitle">Enter your account credentials to continue with your selected package.</p>
+    <div class="auth-selected">Selected package <strong id="packageAmount">—</strong></div>
+    <form id="authForm" class="auth-form">
+      <label>Email<input name="email" type="email" autocomplete="email" required></label>
+      <label>Password<input name="password" type="password" autocomplete="current-password" required></label>
+      <button class="btn btn-primary" type="submit">Sign In</button>
+    </form>
+    <div id="authMessage" class="auth-message"></div>
+    <p class="auth-switch">Don't have an account? <a id="switchLink" href="register.html">Create Account</a></p>
+    <div class="auth-back"><a href="index.html#packages">← Return to investment packages</a></div>
+  </section>
+</main>
+<script>
+const API_BASE="https://global-capital-venture-holdings-backend-production.up.railway.app";
+const TOKEN_KEY="gcvh_token";
+const PACKAGE_KEY="gcvh_selected_package";
+function getSelectedPackage(){try{return JSON.parse(localStorage.getItem(PACKAGE_KEY)||"null")}catch(_){return null}}
+function packageFromUrl(){const n=Number(new URLSearchParams(location.search).get("package"));return Number.isFinite(n)&&n>0?n:null}
+function setSession(data){localStorage.setItem(TOKEN_KEY,data.token);localStorage.setItem("gcvh_user",JSON.stringify(data.user||{}));}
+async function api(path,options={}){const headers={"Content-Type":"application/json",...(options.headers||{})};const token=localStorage.getItem(TOKEN_KEY);if(token)headers.Authorization=`Bearer ${token}`;const res=await fetch(API_BASE+path,{...options,headers});const data=await res.json().catch(()=>({}));if(!res.ok)throw new Error(data.error||`Request failed (${res.status})`);return data}
+let pkg=getSelectedPackage();
+if(!pkg){const amount=packageFromUrl();if(amount){pkg={amount,selectedAt:new Date().toISOString()};localStorage.setItem(PACKAGE_KEY,JSON.stringify(pkg));}}
+document.getElementById("packageAmount").textContent=pkg?`$${Number(pkg.amount).toLocaleString("en-US")}`:"—";
+const switchLink=document.getElementById("switchLink");if(switchLink){switchLink.href=switchLink.getAttribute("href")+`?package=${encodeURIComponent(pkg?.amount||"")}`;}
+if(localStorage.getItem(TOKEN_KEY)){location.href="index.html";}
+document.getElementById("authForm").addEventListener("submit",async e=>{e.preventDefault();const f=e.currentTarget,m=document.getElementById("authMessage");m.textContent="Signing in…";try{const data=await api("/api/auth/login",{method:"POST",body:JSON.stringify({email:f.email.value.trim(),password:f.password.value})});setSession(data);location.href="index.html";}catch(err){m.textContent=err.message;}});
+</script>
+</body>
+</html>
