@@ -3,7 +3,24 @@
 <script>
 (function(){
   const token=localStorage.getItem("gcvh_token");
-  if(!token) window.location.replace("index.html#packages");
+  const API_BASE="https://global-capital-venture-holdings-backend-production.up.railway.app";
+  if(!token){ window.location.replace("index.html#packages"); return; }
+  fetch(API_BASE+"/api/me",{headers:{Authorization:"Bearer "+token}})
+    .then(async res=>{
+      const data=await res.json().catch(()=>({}));
+      if(!res.ok) throw new Error(data.error||"Session invalid");
+      return data;
+    })
+    .then(account=>{
+      if(!account.activated_at || Number(account.principal)<=0){
+        window.location.replace("index.html#packages");
+      }
+    })
+    .catch(()=>{
+      localStorage.removeItem("gcvh_token");
+      localStorage.removeItem("gcvh_user");
+      window.location.replace("index.html#packages");
+    });
 })();
 </script>
 

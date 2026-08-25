@@ -313,6 +313,24 @@
   </div>
 </div>
 
+<div id="fundModal" class="auth-modal" aria-hidden="true">
+  <div class="auth-card funding-card">
+    <button id="closeFund" class="auth-close" type="button">×</button>
+    <div class="section-tag">PACKAGE PAYMENT</div>
+    <h2>Complete Your <span>Package</span></h2>
+    <p class="auth-subtitle">Your dashboard becomes available after your payment is verified by the administrator.</p>
+    <div class="auth-selected">Selected package <strong id="fundPackageAmount">—</strong></div>
+    <div class="funding-info"><span>ASSET / NETWORK</span><strong id="fundAsset">Loading…</strong><span>DEPOSIT ADDRESS</span><code id="fundAddress">Loading…</code></div>
+    <form id="depositForm" class="auth-form">
+      <label>Package Amount<input id="depositPackageAmount" name="packageAmount" type="number" min="10" step="0.01" readonly required></label>
+      <label>Paid Amount<input id="depositAmount" name="amount" type="number" min="0.01" step="0.01" required></label>
+      <label>Transaction ID<input name="txid" type="text" autocomplete="off" required></label>
+      <button class="btn btn-primary" type="submit">Submit Payment for Verification</button>
+    </form>
+    <div id="depositMessage" class="auth-message"></div>
+  </div>
+</div>
+
 <footer class="footer"><div class="footer-logo">Global Capital <span>Venture Holdings, Inc.</span></div><p>Professional portfolio and market analytics platform.</p><span>© 2026 Global Capital Venture Holdings, Inc.</span></footer>
 
 <script>
@@ -322,14 +340,58 @@ const PACKAGE_KEY = "gcvh_selected_package";
 
 function getToken(){ return localStorage.getItem(TOKEN_KEY); }
 function setSession(data){ localStorage.setItem(TOKEN_KEY, data.token); localStorage.setItem("gcvh_user", JSON.stringify(data.user || {})); }
-function selectedPackage(){ return JSON.parse(localStorage.getItem(PACKAGE_KEY) || "null"); }
+function selectedPackage(){ try{return JSON.parse(localStorage.getItem(PACKAGE_KEY) || "null");}catch(_){return null;} }
 
-function updateDashboardLinks(){
-  const loggedIn = !!getToken();
-  ["dashboardNav","dashboardNavButton","heroDashboardButton"].forEach(id=>{
-    const el=document.getElementById(id); if(el) el.hidden=!loggedIn;
-  });
+function setMessage(id,text){ const el=document.getElementById(id); if(el) el.textContent=text; }
+function showModal(id){ document.getElementById(id).classList.add("open"); }
+function closeModal(id){ document.getElementById(id).classList.remove("open"); }
+
+async function api(path, options={}){
+  const headers={"Content-Type":"application/json",...(options.headers||{})};
+  const token=getToken(); if(token) headers.Authorization=`Bearer ${token}`;
+  const res=await fetch(API_BASE+path,{...options,headers});
+  const data=await res.json().catch(()=>({}));
+  if(res.status===401){ localStorage.removeItem(TOKEN_KEY); localStorage.removeItem("gcvh_user"); throw new Error("Session expired. Please sign in again."); }
+  if(!res.ok) throw new Error(data.error || `Request failed (${res.status})`);
+  return data;
 }
+
+async function getAccount(){
+  if(!getToken()) return null;
+  try{return await api("/api/me");}
+  catch(_){return null;}
+}
+
+function isPurchased(account){
+  return !!account && !!account.activated_at && Number(account.principal)>0;
+}
+
+async function updateDashboardLinks(){
+  const account=await getAccount();
+  const purchased=isPurchased(account);
+  ["dashboardNav","dashboardNavButton","heroDashboardButton"].forEach(id=>{
+    const el=document.getElementById(id); if(el) el.hidden=!purchased;
+  });
+  return account;
+}
+
+async function openFunding(){
+  const pkg=selectedPackage();
+  if(!pkg || !getToken()){ openAuth(pkg?.amount); return; }
+  const account=await getAccount();
+  if(isPurchased(account)){ window.location.href="dashboard.html"; return; }
+  document.getElementById("fundPackageAmount").textContent=`$${Number(pkg.amount).toLocaleString("en-US")}`;
+  document.getElementById("depositPackageAmount").value=Number(pkg.amount);
+  document.getElementById("depositAmount").value=Number(pkg.amount);
+  setMessage("depositMessage","");
+  showModal("fundModal");
+  try{
+    const info=await api("/api/funding-info");
+    document.getElementById("fundAsset").textContent=`${info.asset} / ${info.network}`;
+    document.getElementById("fundAddress").textContent=info.address || info.instructions;
+  }catch(e){ document.getElementById("fundAddress").textContent="Unable to load payment instructions."; }
+}
+
 updateDashboardLinks();
 
 window.addEventListener("load", () => {
@@ -358,13 +420,16 @@ function showAuthMode(mode){
   document.getElementById("authMessage").textContent="";
 }
 
-async function api(path, options={}){
-  const headers={"Content-Type":"application/json",...(options.headers||{})};
-  const token=getToken(); if(token) headers.Authorization=`Bearer ${token}`;
-  const res=await fetch(API_BASE+path,{...options,headers});
-  const data=await res.json().catch(()=>({}));
-  if(!res.ok) throw new Error(data.error || `Request failed (${res.status})`);
-  return data;
+async function continueAfterAuth(){
+  const account=await getAccount();
+  if(isPurchased(account)){
+    localStorage.removeItem(PACKAGE_KEY);
+    window.location.href="dashboard.html";
+    return;
+  }
+  closeAuth();
+  await openFunding();
+  await updateDashboardLinks();
 }
 
 async function login(event){
@@ -375,9 +440,7 @@ async function login(event){
   try{
     const data=await api("/api/auth/login",{method:"POST",body:JSON.stringify({email:form.email.value.trim(),password:form.password.value})});
     setSession(data);
-    const pkg=selectedPackage();
-    if(pkg) localStorage.setItem(PACKAGE_KEY,JSON.stringify(pkg));
-    window.location.href="dashboard.html";
+    await continueAfterAuth();
   }catch(e){msg.textContent=e.message;}
 }
 
@@ -390,13 +453,13 @@ async function register(event){
   try{
     const data=await api("/api/auth/register",{method:"POST",body:JSON.stringify({fullName:form.fullName.value.trim(),email:form.email.value.trim(),password:form.password.value})});
     setSession(data);
-    window.location.href="dashboard.html";
+    await continueAfterAuth();
   }catch(e){msg.textContent=e.message;}
 }
 
 function selectPackage(amount){
   localStorage.setItem(PACKAGE_KEY,JSON.stringify({amount:Number(amount),selectedAt:new Date().toISOString()}));
-  if(getToken()){ window.location.href="dashboard.html"; return; }
+  if(getToken()){ openFunding(); return; }
   openAuth(amount);
 }
 
@@ -406,6 +469,30 @@ document.getElementById("loginTab").onclick=()=>showAuthMode("login");
 document.getElementById("registerTab").onclick=()=>showAuthMode("register");
 document.getElementById("closeAuth").onclick=closeAuth;
 document.getElementById("authModal").addEventListener("click",e=>{if(e.target.id==="authModal")closeAuth()});
+document.getElementById("closeFund").onclick=()=>closeModal("fundModal");
+document.getElementById("fundModal").addEventListener("click",e=>{if(e.target.id==="fundModal")closeModal("fundModal")});
+
+document.getElementById("depositForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const form=e.currentTarget;
+  const pkg=selectedPackage();
+  if(!pkg){setMessage("depositMessage","Please select a package first.");return;}
+  setMessage("depositMessage","Submitting payment for verification…");
+  try{
+    const assetNetwork=document.getElementById("fundAsset").textContent.split("/");
+    const data=await api("/api/deposits",{method:"POST",body:JSON.stringify({
+      amount:Number(form.amount.value),
+      packageAmount:Number(form.packageAmount.value),
+      asset:(assetNetwork[0]||"USDT").trim(),
+      network:(assetNetwork[1]||"TRX").trim(),
+      txid:form.txid.value.trim()
+    })});
+    form.reset();
+    document.getElementById("depositPackageAmount").value=Number(pkg.amount);
+    setMessage("depositMessage",data.message||"Payment submitted for verification. Your dashboard will unlock after approval.");
+    alert("Payment submitted successfully. Your dashboard will unlock after the payment is verified.");
+  }catch(e){setMessage("depositMessage",e.message);}
+});
 </script>
 </body>
 </html>
