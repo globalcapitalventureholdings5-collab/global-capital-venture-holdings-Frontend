@@ -296,11 +296,19 @@
     <h2>Complete Your <span>Package</span></h2>
     <p class="auth-subtitle">Your dashboard becomes available after your payment is verified by the administrator.</p>
     <div class="auth-selected">Selected package <strong id="fundPackageAmount">—</strong></div>
-    <div class="funding-info"><span>ASSET / NETWORK</span><strong id="fundAsset">Loading…</strong><span>DEPOSIT ADDRESS</span><code id="fundAddress">Loading…</code></div>
+    <div class="funding-info">
+      <span>PAYMENT ASSET</span>
+      <strong id="fundAsset">Loading…</strong>
+      <span>NETWORK</span>
+      <strong id="fundNetwork">Loading…</strong>
+      <span>USDT DEPOSIT ADDRESS</span>
+      <div class="fund-address-row"><code id="fundAddress">Loading…</code><button id="copyFundAddress" class="btn btn-outline fund-copy" type="button">Copy</button></div>
+      <p class="funding-instructions">Send <strong>USDT only</strong> using the <strong>TRON (TRX)</strong> network to the address above. Do not send TRX or another token to this address.</p>
+    </div>
     <form id="depositForm" class="auth-form">
-      <label>Package Amount<input id="depositPackageAmount" name="packageAmount" type="number" min="10" step="0.01" readonly required></label>
-      <label>Paid Amount<input id="depositAmount" name="amount" type="number" min="0.01" step="0.01" required></label>
-      <label>Transaction ID<input name="txid" type="text" autocomplete="off" required></label>
+      <label>Amount to Send (USDT)<input id="depositAmount" name="amount" type="number" min="0.01" step="0.01" readonly required></label>
+      <input id="depositPackageAmount" name="packageAmount" type="hidden" required>
+      <label>USDT Transaction ID (TXID)<input name="txid" type="text" autocomplete="off" placeholder="Paste your USDT transaction ID" required></label>
       <button class="btn btn-primary" type="submit">Submit Payment for Verification</button>
     </form>
     <div id="depositMessage" class="auth-message"></div>
@@ -361,8 +369,10 @@ async function openFunding(){
   showModal("fundModal");
   try{
     const info=await api("/api/funding-info");
-    document.getElementById("fundAsset").textContent=`${info.asset} / ${info.network}`;
+    document.getElementById("fundAsset").textContent=info.asset || "USDT";
+    document.getElementById("fundNetwork").textContent=info.network || "TRX";
     document.getElementById("fundAddress").textContent=info.address || info.instructions;
+    document.getElementById("fundAddress").classList.toggle("missing", !info.address);
   }catch(e){ document.getElementById("fundAddress").textContent="Unable to load payment instructions."; }
 }
 
@@ -393,6 +403,17 @@ function selectPackage(amount){
   window.location.href=`login.html?package=${encodeURIComponent(Number(amount))}`;
 }
 
+
+document.getElementById("copyFundAddress").onclick=async()=>{
+  const address=document.getElementById("fundAddress").textContent.trim();
+  if(!address || address.startsWith("Unable") || address.startsWith("Loading")) return;
+  try{
+    await navigator.clipboard.writeText(address);
+    const btn=document.getElementById("copyFundAddress");
+    const old=btn.textContent; btn.textContent="Copied";
+    setTimeout(()=>btn.textContent=old,1400);
+  }catch(_){ setMessage("depositMessage","Copy failed. Please copy the address manually."); }
+};
 document.getElementById("closeFund").onclick=()=>closeModal("fundModal");
 document.getElementById("fundModal").addEventListener("click",e=>{if(e.target.id==="fundModal")closeModal("fundModal")});
 
@@ -403,12 +424,11 @@ document.getElementById("depositForm").addEventListener("submit",async e=>{
   if(!pkg){setMessage("depositMessage","Please select a package first.");return;}
   setMessage("depositMessage","Submitting payment for verification…");
   try{
-    const assetNetwork=document.getElementById("fundAsset").textContent.split("/");
     const data=await api("/api/deposits",{method:"POST",body:JSON.stringify({
       amount:Number(form.amount.value),
       packageAmount:Number(form.packageAmount.value),
-      asset:(assetNetwork[0]||"USDT").trim(),
-      network:(assetNetwork[1]||"TRX").trim(),
+      asset:(document.getElementById("fundAsset").textContent||"USDT").trim(),
+      network:(document.getElementById("fundNetwork").textContent||"TRX").trim(),
       txid:form.txid.value.trim()
     })});
     form.reset();

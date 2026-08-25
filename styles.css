@@ -522,3 +522,4 @@
 .auth-switch{text-align:center;margin:18px 0 0;color:var(--muted);font-size:10px}.auth-switch a{color:var(--gold);font-weight:900;text-decoration:none}.auth-switch a:hover{text-decoration:underline}
 .auth-back{text-align:center;margin-top:12px}.auth-back a{color:var(--muted);font-size:9px;text-decoration:none}.auth-back a:hover{color:#fff}
 @media(max-width:800px){.auth-page{padding:20px}.auth-page .auth-card{padding:26px 20px}.auth-page .auth-card h1{font-size:29px}}
+.fund-address-row{display:flex;gap:8px;align-items:center}.fund-address-row code{flex:1}.fund-copy{width:auto!important;min-width:58px;padding:0 10px!important;min-height:36px!important;margin:0!important}.funding-instructions{margin:4px 0 0;color:var(--muted);font-size:9px;line-height:1.55}.funding-instructions strong{color:var(--gold)}
