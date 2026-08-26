@@ -130,8 +130,24 @@ button{cursor:pointer}
 </section>
 
 <section id="binance" class="card section">
-<div class="section-head"><div class="section-title">Binance Account</div><div class="section-sub">Balances returned by the connected Binance API.</div></div>
-<div id="balanceRows" class="balances"></div>
+<div class="section-head">
+  <div class="section-title">Binance Account</div>
+  <div class="section-sub">Balances are fetched only when you manually request them. No automatic polling.</div>
+</div>
+<div style="padding:18px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap">
+  <div>
+    <div id="binanceFetchStatus" class="muted">Not requested yet.</div>
+    <div class="muted" style="margin-top:5px">A 30-second cooldown prevents accidental repeated Binance REST requests.</div>
+  </div>
+  <button id="binanceRefresh" class="refresh" type="button">Refresh Binance Balance</button>
+</div>
+<div id="balanceRows" class="balances">
+  <div class="balance">
+    <div class="coin">BINANCE</div>
+    <div class="amount">—</div>
+    <div class="muted">Click “Refresh Binance Balance” to request balances.</div>
+  </div>
+</div>
 </section>
 </div>
 </main>
@@ -202,23 +218,18 @@ async function loadDashboard() {
     const results = await Promise.all([
       request("/api/admin/users"),
       request("/api/admin/deposits"),
-      request("/api/admin/withdrawals"),
-      request("/api/admin/binance/account")
+      request("/api/admin/withdrawals")
     ]);
 
     const users = results[0] || [];
     const deposits = results[1] || [];
     const withdrawals = results[2] || [];
-    const account = results[3] || {};
 
     $("customersCount").textContent = users.length;
     $("depositsCount").textContent = deposits.filter(function(x){return x.status==="pending";}).length;
     $("withdrawalsCount").textContent = withdrawals.filter(function(x){return x.status==="pending";}).length;
-    $("binanceStatus").textContent = "Connected";
-
-    const balances = account.balances || [];
-    $("balanceRows").innerHTML = balances.length
-      ? balances.map(function(x){return '<div class="balance"><div class="coin">'+escapeHtml(x.asset)+'</div><div class="amount">'+escapeHtml(x.free)+'</div><div class="muted">Free · Locked '+escapeHtml(x.locked)+'</div></div>';}).join("")
+    $("binanceStatus").textContent = "Ready";
+}).join("")
       : '<div class="balance"><div class="coin">API STATUS</div><div class="amount">Connected</div><div class="muted">No non-zero balances returned.</div></div>';
 
     $("depositRows").innerHTML = deposits.length ? deposits.map(function(d) {
@@ -240,6 +251,59 @@ async function loadDashboard() {
     } else {
       showAlert("appAlert", error.message);
     }
+  }
+}
+
+
+let binanceLastFetch = 0;
+let binanceFetchBusy = false;
+
+async function refreshBinanceBalance() {
+  const now = Date.now();
+  const remaining = 30000 - (now - binanceLastFetch);
+
+  if (binanceFetchBusy) return;
+
+  if (remaining > 0) {
+    const seconds = Math.ceil(remaining / 1000);
+    showAlert("appAlert", "Please wait " + seconds + " seconds before requesting Binance again.");
+    return;
+  }
+
+  binanceFetchBusy = true;
+  $("binanceRefresh").disabled = true;
+  $("binanceRefresh").style.opacity = "0.55";
+  $("binanceFetchStatus").textContent = "Requesting Binance balance…";
+
+  try {
+    const account = await request("/api/admin/binance/account");
+    binanceLastFetch = Date.now();
+
+    const balances = account.balances || [];
+    $("binanceStatus").textContent = "Connected";
+
+    $("balanceRows").innerHTML = balances.length
+      ? balances.map(function(x) {
+          return '<div class="balance"><div class="coin">' +
+            escapeHtml(x.asset) +
+            '</div><div class="amount">' +
+            escapeHtml(x.free) +
+            '</div><div class="muted">Free · Locked ' +
+            escapeHtml(x.locked) +
+            '</div></div>';
+        }).join("")
+      : '<div class="balance"><div class="coin">BINANCE</div><div class="amount">0</div><div class="muted">No non-zero balances returned.</div></div>';
+
+    $("binanceFetchStatus").textContent =
+      "Balance fetched successfully at " + new Date().toLocaleTimeString() + ".";
+    showAlert("appAlert", "Binance balance refreshed.", "success");
+  } catch (error) {
+    $("binanceFetchStatus").textContent = "Binance request failed: " + error.message;
+    showAlert("appAlert", error.message);
+  } finally {
+    binanceFetchBusy = false;
+    $("binanceRefresh").disabled = false;
+    $("binanceRefresh").style.opacity = "1";
   }
 }
 
@@ -269,6 +333,7 @@ async function processWithdrawal(id, action) {
 $("signIn").addEventListener("click", signIn);
 $("signOut").addEventListener("click", signOut);
 $("refresh").addEventListener("click", loadDashboard);
+$("binanceRefresh").addEventListener("click", refreshBinanceBalance);
 
 document.querySelectorAll("[data-target]").forEach(function(button) {
   button.addEventListener("click", function() {
