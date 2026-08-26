@@ -86,7 +86,6 @@ button{cursor:pointer}
     <button class="nav" data-target="deposits"><span class="nav-icon">↓</span>Deposits</button>
     <button class="nav" data-target="withdrawals"><span class="nav-icon">↑</span>Withdrawals</button>
     <button class="nav" data-target="customers"><span class="nav-icon">◈</span>Customers</button>
-    <button class="nav" data-target="signals"><span class="nav-icon">✦</span>Signals</button>
   </div>
   <div class="nav-group"><div class="nav-label">Infrastructure</div>
     <button class="nav" data-target="binance"><span class="nav-icon">◇</span>Binance</button>
@@ -111,7 +110,7 @@ button{cursor:pointer}
   <div class="card kpi"><div class="kpi-label">Customers</div><div id="customersCount" class="kpi-value">—</div><div class="kpi-foot">Registered accounts</div></div>
   <div class="card kpi"><div class="kpi-label">Pending Deposits</div><div id="depositsCount" class="kpi-value">—</div><div class="kpi-foot">Awaiting verification</div></div>
   <div class="card kpi"><div class="kpi-label">Pending Withdrawals</div><div id="withdrawalsCount" class="kpi-value">—</div><div class="kpi-foot">Awaiting action</div></div>
-  <div class="card kpi"><div class="kpi-label">Binance API</div><div id="binanceStatus" class="kpi-value" style="font-size:20px">Checking</div><div class="kpi-foot">Connected account</div></div>
+  <div class="card kpi"><div class="kpi-label">Binance API</div><div id="binanceStatus" class="kpi-value" style="font-size:20px">Checking</div><div class="kpi-foot">Read-only account connection</div></div>
 </div>
 </section>
 
@@ -121,6 +120,7 @@ button{cursor:pointer}
 </section>
 
 <section id="withdrawals" class="card section">
+<div id="manual-withdrawal-notice" style="margin:0 18px 14px;padding:12px 14px;border:1px solid rgba(230,198,111,.22);border-radius:10px;background:rgba(230,198,111,.06);color:#d9c989;font-size:12px;line-height:1.5"><strong>Manual payout:</strong> Copy the customer's destination, send the requested amount yourself, then click <b>Mark Paid</b> and enter the blockchain transaction ID or payment reference. This panel never sends withdrawals through Binance.</div>
 <div class="section-head"><div class="section-title">Withdrawal Requests</div><div class="section-sub">Approve or reject customer withdrawals.</div></div>
 <div class="table-wrap"><table><thead><tr><th>ID</th><th>Customer</th><th>Amount</th><th>Asset</th><th>Network</th><th>Destination</th><th>Status</th><th>Action</th></tr></thead><tbody id="withdrawalRows"></tbody></table></div>
 </section>
@@ -128,43 +128,6 @@ button{cursor:pointer}
 <section id="customers" class="card section">
 <div class="section-head"><div class="section-title">Customers</div><div class="section-sub">Account and package overview.</div></div>
 <div class="table-wrap"><table><thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Status</th><th>Package</th><th>Principal</th><th>Available Withdrawal</th></tr></thead><tbody id="customerRows"></tbody></table></div>
-</section>
-
-<section id="signals" class="card section">
-<div class="section-head"><div class="section-title">Daily Signal</div><div class="section-sub">Publish today's XAUUSD trading signal. Customers must execute it once to qualify for that day's 1% growth.</div></div>
-<div style="padding:18px;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px 16px;align-items:end">
-  <div class="field" style="margin-bottom:0">
-    <label for="signalActiveDate">Active Date</label>
-    <input id="signalActiveDate" type="date">
-  </div>
-  <div class="field" style="margin-bottom:0">
-    <label for="signalSide">Side</label>
-    <select id="signalSide" style="display:block;width:100%;height:46px;padding:0 13px;border:1px solid var(--line);border-radius:9px;background:#070a0d;color:#fff;outline:none;appearance:none">
-      <option value="BUY">BUY</option>
-      <option value="SELL">SELL</option>
-    </select>
-  </div>
-  <div class="field" style="margin-bottom:0">
-    <label for="signalEntryInput">Entry</label>
-    <input id="signalEntryInput" type="text" placeholder="e.g. 2385.50">
-  </div>
-  <div class="field" style="margin-bottom:0">
-    <label for="signalStopLoss">Stop Loss</label>
-    <input id="signalStopLoss" type="text" placeholder="e.g. 2378.00">
-  </div>
-  <div class="field" style="margin-bottom:0">
-    <label for="signalTakeProfit">Take Profit</label>
-    <input id="signalTakeProfit" type="text" placeholder="e.g. 2398.00">
-  </div>
-</div>
-<div style="padding:0 18px 18px">
-  <div class="field">
-    <label for="signalMessage">Message to customers (optional)</label>
-    <input id="signalMessage" type="text" placeholder="Note shown on the customer dashboard">
-  </div>
-  <button id="publishSignal" class="login-button" type="button" style="width:auto;padding:0 26px">Publish Signal</button>
-  <div id="signalPublishStatus" class="muted" style="margin-top:10px">No signal published from this session yet.</div>
-</div>
 </section>
 
 <section id="binance" class="card section">
@@ -267,13 +230,15 @@ async function loadDashboard() {
     $("depositsCount").textContent = deposits.filter(function(x){return x.status==="pending";}).length;
     $("withdrawalsCount").textContent = withdrawals.filter(function(x){return x.status==="pending";}).length;
     $("binanceStatus").textContent = "Ready";
+}).join("")
+      : '<div class="balance"><div class="coin">API STATUS</div><div class="amount">Connected</div><div class="muted">No non-zero balances returned.</div></div>';
 
     $("depositRows").innerHTML = deposits.length ? deposits.map(function(d) {
       return '<tr><td>#'+escapeHtml(d.id)+'</td><td><b>'+escapeHtml(d.full_name)+'</b><br><span class="muted">'+escapeHtml(d.email)+'</span></td><td>'+escapeHtml(d.amount)+'</td><td>'+escapeHtml(d.asset)+'</td><td>'+escapeHtml(d.network)+'</td><td>'+escapeHtml(d.txid)+'</td><td><span class="badge '+escapeHtml(d.status)+'">'+escapeHtml(d.status)+'</span></td><td>'+(d.status==="pending"?'<button class="action approve" onclick="approveDeposit('+Number(d.id)+')">Approve</button>':'—')+'</td></tr>';
     }).join("") : '<tr><td colspan="8"><div class="empty">No deposit requests.</div></td></tr>';
 
     $("withdrawalRows").innerHTML = withdrawals.length ? withdrawals.map(function(w) {
-      return '<tr><td>#'+escapeHtml(w.id)+'</td><td><b>'+escapeHtml(w.full_name)+'</b><br><span class="muted">'+escapeHtml(w.email)+'</span></td><td>'+escapeHtml(w.amount)+'</td><td>'+escapeHtml(w.asset)+'</td><td>'+escapeHtml(w.network)+'</td><td>'+escapeHtml(w.destination)+'</td><td><span class="badge '+escapeHtml(w.status)+'">'+escapeHtml(w.status)+'</span></td><td>'+(w.status==="pending"?'<div class="actions"><button class="action approve" onclick="processWithdrawal('+Number(w.id)+',\'approve\')">Approve</button><button class="action reject" onclick="processWithdrawal('+Number(w.id)+',\'reject\')">Reject</button></div>':'—')+'</td></tr>';
+      return '<tr><td>#'+escapeHtml(w.id)+'</td><td><b>'+escapeHtml(w.full_name)+'</b><br><span class="muted">'+escapeHtml(w.email)+'</span></td><td>'+escapeHtml(w.amount)+'</td><td>'+escapeHtml(w.asset)+'</td><td>'+escapeHtml(w.network)+'</td><td><div style="max-width:260px;word-break:break-all">'+escapeHtml(w.destination)+'</div></td><td><span class="badge '+escapeHtml(w.status)+'">'+escapeHtml(w.status)+'</span></td><td>'+(w.status==="pending"?'<div class="actions"><button class="action approve" onclick="processWithdrawal('+Number(w.id)+',\'approve\')">Mark Paid</button><button class="action reject" onclick="processWithdrawal('+Number(w.id)+',\'reject\')">Reject</button></div>':'—')+'</td></tr>';
     }).join("") : '<tr><td colspan="8"><div class="empty">No withdrawal requests.</div></td></tr>';
 
     $("customerRows").innerHTML = users.length ? users.map(function(u) {
@@ -343,44 +308,6 @@ async function refreshBinanceBalance() {
   }
 }
 
-async function publishSignal() {
-  const activeDate = $("signalActiveDate").value;
-  const side = $("signalSide").value;
-  const entry = $("signalEntryInput").value.trim();
-  const stopLoss = $("signalStopLoss").value.trim();
-  const takeProfit = $("signalTakeProfit").value.trim();
-  const message = $("signalMessage").value.trim();
-
-  if (!activeDate) {
-    $("signalPublishStatus").textContent = "Pick an active date first.";
-    return;
-  }
-
-  $("publishSignal").disabled = true;
-  $("signalPublishStatus").textContent = "Publishing…";
-
-  try {
-    await request("/api/admin/signals", {
-      method: "POST",
-      body: JSON.stringify({
-        side: side,
-        entry: entry || null,
-        stopLoss: stopLoss || null,
-        takeProfit: takeProfit || null,
-        message: message || null,
-        activeDate: activeDate
-      })
-    });
-    $("signalPublishStatus").textContent = "Signal published for " + activeDate + ".";
-    showAlert("appAlert", "Signal published. Customers will see it on their dashboard.", "success");
-  } catch (error) {
-    $("signalPublishStatus").textContent = "Failed: " + error.message;
-    showAlert("appAlert", error.message);
-  } finally {
-    $("publishSignal").disabled = false;
-  }
-}
-
 async function approveDeposit(id) {
   if (!confirm("Approve this deposit and activate the customer's package?")) return;
   try {
@@ -391,15 +318,39 @@ async function approveDeposit(id) {
 }
 
 async function processWithdrawal(id, action) {
-  if (action === "approve" && !confirm("Approve this withdrawal and send it through Binance?")) return;
-  const note = prompt("Admin note (optional):", "");
+  if (action === "approve") {
+    if (!confirm("Have you already sent this withdrawal manually to the customer's destination?\n\nOnly continue after the payment has actually been sent.")) return;
+
+    const providerId = prompt("Enter the blockchain transaction ID or payment reference:", "");
+    if (providerId === null || !providerId.trim()) {
+      showAlert("appAlert", "Payment reference / transaction ID is required.");
+      return;
+    }
+
+    const note = prompt("Admin note (optional):", "Paid manually by admin");
+    if (note === null) return;
+
+    try {
+      await request("/api/admin/withdrawals/"+id+"/process", {
+        method:"POST",
+        body:JSON.stringify({action:"approve",providerId:providerId.trim(),note:note.trim()})
+      });
+      showAlert("appAlert","Withdrawal marked as paid manually.","success");
+      await loadDashboard();
+    } catch(error) { showAlert("appAlert",error.message); }
+    return;
+  }
+
+  if (!confirm("Reject this withdrawal request and release the reserved funds back to the customer?")) return;
+  const note = prompt("Reason for rejection (optional):", "Rejected by admin");
   if (note === null) return;
+
   try {
     await request("/api/admin/withdrawals/"+id+"/process", {
       method:"POST",
-      body:JSON.stringify({action:action,note:note})
+      body:JSON.stringify({action:"reject",note:note.trim()})
     });
-    showAlert("appAlert","Withdrawal "+action+" completed.","success");
+    showAlert("appAlert","Withdrawal rejected and funds released.","success");
     await loadDashboard();
   } catch(error) { showAlert("appAlert",error.message); }
 }
@@ -408,8 +359,6 @@ $("signIn").addEventListener("click", signIn);
 $("signOut").addEventListener("click", signOut);
 $("refresh").addEventListener("click", loadDashboard);
 $("binanceRefresh").addEventListener("click", refreshBinanceBalance);
-$("publishSignal").addEventListener("click", publishSignal);
-$("signalActiveDate").value = new Date().toISOString().slice(0, 10);
 
 document.querySelectorAll("[data-target]").forEach(function(button) {
   button.addEventListener("click", function() {
