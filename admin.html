@@ -230,8 +230,7 @@ async function loadDashboard() {
     $("depositsCount").textContent = deposits.filter(function(x){return x.status==="pending";}).length;
     $("withdrawalsCount").textContent = withdrawals.filter(function(x){return x.status==="pending";}).length;
     $("binanceStatus").textContent = "Ready";
-}).join("")
-      : '<div class="balance"><div class="coin">API STATUS</div><div class="amount">Connected</div><div class="muted">No non-zero balances returned.</div></div>';
+    $("balanceRows").innerHTML = '<div class="balance"><div class="coin">BINANCE</div><div class="amount">Manual refresh</div><div class="muted">Use the refresh button below to request the current account balance.</div></div>';
 
     $("depositRows").innerHTML = deposits.length ? deposits.map(function(d) {
       return '<tr><td>#'+escapeHtml(d.id)+'</td><td><b>'+escapeHtml(d.full_name)+'</b><br><span class="muted">'+escapeHtml(d.email)+'</span></td><td>'+escapeHtml(d.amount)+'</td><td>'+escapeHtml(d.asset)+'</td><td>'+escapeHtml(d.network)+'</td><td>'+escapeHtml(d.txid)+'</td><td><span class="badge '+escapeHtml(d.status)+'">'+escapeHtml(d.status)+'</span></td><td>'+(d.status==="pending"?'<button class="action approve" onclick="approveDeposit('+Number(d.id)+')">Approve</button>':'—')+'</td></tr>';
