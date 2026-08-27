@@ -293,7 +293,7 @@
 
 <script>
 // Dashboard access is only exposed after a package has been purchased/selected.
-const storedInvestment = localStorage.getItem("globalCapitalsInvestment");
+const storedInvestment = localStorage.getItem("globeCapitalInvestment");
 if (storedInvestment) {
   document.getElementById("dashboardNav").hidden = false;
   document.getElementById("dashboardNavButton").hidden = false;
@@ -313,7 +313,7 @@ document.querySelectorAll(".package-card").forEach(card => {
   card.addEventListener("click", () => {
     const amount = Number(card.dataset.package);
     const now = Date.now();
-    localStorage.setItem("globalCapitalsInvestment", JSON.stringify({
+    localStorage.setItem("globeCapitalInvestment", JSON.stringify({
       amount, startTime:now, payoutTime:now + 14*24*60*60*1000
     }));
     window.location.href = "dashboard.html";
@@ -322,9 +322,13 @@ document.querySelectorAll(".package-card").forEach(card => {
 </script>
 <script>
 function selectPackage(amount) {
-  localStorage.setItem("globalCapitalsInvestment", JSON.stringify({
-    amount: Number(amount),
-    purchasedAt: new Date().toISOString()
+  const value = Number(amount);
+  const now = Date.now();
+  localStorage.setItem("globeCapitalInvestment", JSON.stringify({
+    amount: value,
+    startTime: now,
+    purchasedAt: new Date(now).toISOString(),
+    payoutTime: now + 14*24*60*60*1000
   }));
   window.location.href = "dashboard.html";
 }

@@ -14,7 +14,7 @@
 <div class="platform-note"><strong>ACCOUNT TERMS</strong><span>Daily ROI is credited only when the customer executes the administrator's designated daily XAUUSD trade. One qualifying trade is permitted per calendar day. Payout timing follows the account's 14-day cycle.</span></div>
 </main></div>
 <script>
-'use strict';const DAY=86400,$=id=>document.getElementById(id);let investment=JSON.parse(localStorage.getItem('globeCapitalInvestment')||'null');if(!investment){location.href='index.html#packages';throw new Error('Package required');}
+'use strict';const DAY=86400,$=id=>document.getElementById(id);const API='https://global-capital-venture-holdings-backend-production.up.railway.app';const customerToken=localStorage.getItem('gcvh_customer_token');if(!customerToken){location.href='login.html';throw new Error('Authentication required');}let investment=JSON.parse(localStorage.getItem('globeCapitalInvestment')||'null')||{amount:0,startTime:Date.now(),payoutTime:Date.now()};
 const dayKey=()=>new Date().toISOString().slice(0,10);let executed=JSON.parse(localStorage.getItem('globeCapitalExecutedSignals')||'{}');let trades=JSON.parse(localStorage.getItem('globeCapitalTradeHistory')||'[]');
 /* Front-end fallback signal. Replace this object/API call with your authenticated admin backend for real multi-customer signal delivery. */
 let signal=JSON.parse(localStorage.getItem('globeCapitalTodaySignal')||'null');if(!signal||signal.date!==dayKey())signal={date:dayKey(),instrument:'XAUUSD',direction:'BUY',entry:'Market',sl:'—',tp:'—',message:"Today's XAUUSD signal is active. Execute it once today to qualify for today's ROI."};
@@ -33,8 +33,9 @@ $('withdrawButton').onclick=()=>{$('payoutMessage').textContent=`Growth of ${mon
 if(window.TradingView){new TradingView.widget({autosize:true,symbol:'OANDA:XAUUSD',interval:'1',timezone:'Etc/UTC',theme:'dark',style:'1',locale:'en',toolbar_bg:'#070a0d',enable_publishing:false,hide_top_toolbar:false,hide_legend:false,save_image:false,container_id:'dashboardTV'});new TradingView.widget({autosize:true,symbol:'OANDA:XAUUSD',timezone:'Etc/UTC',theme:'dark',locale:'en',colorTheme:'dark',isTransparent:true,showSymbolLogo:false,displayMode:'regular',container_id:'quoteWidget'});}
 $('mobileMenuButton').onclick=()=>$('sidebar').classList.toggle('mobile-open');
 
-const customerToken=localStorage.getItem('gcvh_customer_token');
 async function loadReferral(){if(!customerToken)return;try{const r=await fetch('https://global-capital-venture-holdings-backend-production.up.railway.app/api/referral',{headers:{Authorization:'Bearer '+customerToken}});if(!r.ok)return;const d=await r.json();document.getElementById('referralCode').textContent=d.code||'—';document.getElementById('referralLink').value=d.link||'';document.getElementById('referralCount').textContent=d.referred_customers??0;document.getElementById('referralRewards').textContent=d.total_rewards??'0';}catch(e){}}
+async function loadMe(){try{const r=await fetch(API+'/api/me',{headers:{Authorization:'Bearer '+customerToken}});if(r.status===401){localStorage.removeItem('gcvh_customer_token');localStorage.removeItem('gcvh_customer_user');location.href='login.html';return;}if(!r.ok)return;const d=await r.json();if(Number(d.principal||0)>0){investment={amount:Number(d.principal),startTime:d.activated_at?new Date(d.activated_at).getTime():Date.now(),payoutTime:d.next_payout_at?new Date(d.next_payout_at).getTime():Date.now()};localStorage.setItem('globeCapitalInvestment',JSON.stringify(investment));refresh();} }catch(e){}}
+loadMe();
 loadReferral();
 document.getElementById('copyReferral').onclick=async()=>{const v=document.getElementById('referralLink').value;if(v){await navigator.clipboard.writeText(v);document.getElementById('copyReferral').textContent='Copied';setTimeout(()=>document.getElementById('copyReferral').textContent='Copy Link',1500)}};
 </script></body></html>
