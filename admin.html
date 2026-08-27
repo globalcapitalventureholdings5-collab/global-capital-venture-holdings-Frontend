@@ -55,7 +55,7 @@ button{cursor:pointer}
 .empty{padding:30px;text-align:center;color:#61707a;font-size:10px}
 .balances{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;padding:18px}.balance{padding:15px;border:1px solid var(--line);border-radius:11px;background:#ffffff03}.coin{color:var(--gold);font-weight:900;font-size:12px}.amount{font-size:20px;font-weight:850;margin-top:7px}
 @media(max-width:1050px){.cards{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:720px){.sidebar{display:none}.main{margin-left:0;width:100%}.header{padding:0 15px}.connected{display:none}.content{padding:20px 15px}.cards{grid-template-columns:1fr 1fr}}
+@media(max-width:720px){.sidebar{display:none}.field{min-width:0}#signals [style*="grid-template-columns:repeat(2"]{grid-template-columns:1fr!important}#signals [style*="grid-template-columns:repeat(3"]{grid-template-columns:1fr!important}.main{margin-left:0;width:100%}.header{padding:0 15px}.connected{display:none}.content{padding:20px 15px}.cards{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
@@ -86,6 +86,7 @@ button{cursor:pointer}
     <button class="nav" data-target="deposits"><span class="nav-icon">↓</span>Deposits</button>
     <button class="nav" data-target="withdrawals"><span class="nav-icon">↑</span>Withdrawals</button>
     <button class="nav" data-target="customers"><span class="nav-icon">◈</span>Customers</button>
+    <button class="nav" data-target="signals"><span class="nav-icon">⌁</span>Signals</button>
   </div>
   <div class="nav-group"><div class="nav-label">Infrastructure</div>
     <button class="nav" data-target="binance"><span class="nav-icon">◇</span>Binance</button>
@@ -128,6 +129,28 @@ button{cursor:pointer}
 <section id="customers" class="card section">
 <div class="section-head"><div class="section-title">Customers</div><div class="section-sub">Account and package overview.</div></div>
 <div class="table-wrap"><table><thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Status</th><th>Package</th><th>Principal</th><th>Available Withdrawal</th></tr></thead><tbody id="customerRows"></tbody></table></div>
+</section>
+
+<section id="signals" class="card section">
+<div class="section-head"><div class="section-title">XAUUSD Daily Signal</div><div class="section-sub">Publish or update the customer-facing trading signal. Only one signal is stored per active date.</div></div>
+<div style="padding:20px">
+  <div id="signalAlert" class="alert"></div>
+  <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px">
+    <div class="field"><label for="signalSide">Direction</label><select id="signalSide" style="display:block;width:100%;height:46px;padding:0 13px;border:1px solid var(--line);border-radius:9px;background:#070a0d;color:#fff;outline:none"><option value="BUY">BUY</option><option value="SELL">SELL</option></select></div>
+    <div class="field"><label for="signalDate">Active Date</label><input id="signalDate" type="date"></div>
+    <div class="field"><label for="signalEntry">Entry</label><input id="signalEntry" type="number" step="any" placeholder="e.g. 3350.50"></div>
+    <div class="field"><label for="signalStopLoss">Stop Loss</label><input id="signalStopLoss" type="number" step="any" placeholder="e.g. 3325.00"></div>
+    <div class="field"><label for="signalTakeProfit">Take Profit</label><input id="signalTakeProfit" type="number" step="any" placeholder="e.g. 3400.00"></div>
+    <div class="field" style="grid-column:1/-1"><label for="signalMessage">Message / Analysis</label><textarea id="signalMessage" rows="4" placeholder="Add the customer-facing explanation for today's signal..." style="display:block;width:100%;padding:13px;border:1px solid var(--line);border-radius:9px;background:#070a0d;color:#fff;outline:none;resize:vertical"></textarea></div>
+  </div>
+  <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:4px">
+    <button id="publishSignal" class="login-button" type="button" style="width:auto;padding:0 22px">Publish / Update Signal</button>
+    <button id="loadTodaySignal" class="refresh" type="button">Load Today's Signal</button>
+  </div>
+  <div id="currentSignal" style="margin-top:18px;padding:15px;border:1px solid var(--line);border-radius:11px;background:#ffffff03">
+    <div class="muted">No signal loaded.</div>
+  </div>
+</div>
 </section>
 
 <section id="binance" class="card section">
@@ -307,6 +330,71 @@ async function refreshBinanceBalance() {
   }
 }
 
+function localDateString() {
+  const d = new Date();
+  const y = d.getFullYear();
+  const m = String(d.getMonth()+1).padStart(2,"0");
+  const day = String(d.getDate()).padStart(2,"0");
+  return y+"-"+m+"-"+day;
+}
+
+function renderSignal(signal) {
+  const box = $("currentSignal");
+  if (!signal) {
+    box.innerHTML = '<div class="muted">No signal found for this date.</div>';
+    return;
+  }
+  box.innerHTML = '<div style="display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap"><div><div class="muted">XAUUSD · '+escapeHtml(signal.active_date)+'</div><div style="font-size:22px;font-weight:900;margin-top:6px">'+escapeHtml(signal.side)+'</div></div><span class="badge confirmed">Published</span></div>' +
+    '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:15px">' +
+    '<div><div class="muted">Entry</div><b>'+escapeHtml(signal.entry ?? "—")+'</b></div>' +
+    '<div><div class="muted">Stop Loss</div><b>'+escapeHtml(signal.stop_loss ?? "—")+'</b></div>' +
+    '<div><div class="muted">Take Profit</div><b>'+escapeHtml(signal.take_profit ?? "—")+'</b></div></div>' +
+    (signal.message ? '<div style="margin-top:14px;color:#cdd3d7;font-size:11px;line-height:1.6">'+escapeHtml(signal.message)+'</div>' : '');
+}
+
+async function loadTodaySignal() {
+  try {
+    const date = $("signalDate").value || localDateString();
+    $("signalDate").value = date;
+    const signal = await request("/api/signals/today");
+    if (signal && String(signal.active_date).slice(0,10) === date) {
+      $("signalSide").value = signal.side || "BUY";
+      $("signalEntry").value = signal.entry ?? "";
+      $("signalStopLoss").value = signal.stop_loss ?? "";
+      $("signalTakeProfit").value = signal.take_profit ?? "";
+      $("signalMessage").value = signal.message || "";
+      renderSignal(signal);
+    } else {
+      renderSignal(null);
+    }
+  } catch (error) {
+    showAlert("signalAlert", error.message);
+  }
+}
+
+async function publishSignal() {
+  const activeDate = $("signalDate").value;
+  const side = $("signalSide").value;
+  if (!activeDate) { showAlert("signalAlert", "Select an active date."); return; }
+  try {
+    const signal = await request("/api/admin/signals", {
+      method:"POST",
+      body:JSON.stringify({
+        side,
+        entry: $("signalEntry").value === "" ? null : Number($("signalEntry").value),
+        stopLoss: $("signalStopLoss").value === "" ? null : Number($("signalStopLoss").value),
+        takeProfit: $("signalTakeProfit").value === "" ? null : Number($("signalTakeProfit").value),
+        message: $("signalMessage").value.trim() || null,
+        activeDate
+      })
+    });
+    renderSignal(signal);
+    showAlert("signalAlert", "Signal published successfully.", "success");
+  } catch (error) {
+    showAlert("signalAlert", error.message);
+  }
+}
+
 async function approveDeposit(id) {
   if (!confirm("Approve this deposit and activate the customer's package?")) return;
   try {
@@ -358,6 +446,9 @@ $("signIn").addEventListener("click", signIn);
 $("signOut").addEventListener("click", signOut);
 $("refresh").addEventListener("click", loadDashboard);
 $("binanceRefresh").addEventListener("click", refreshBinanceBalance);
+$("publishSignal").addEventListener("click", publishSignal);
+$("loadTodaySignal").addEventListener("click", loadTodaySignal);
+$("signalDate").value = localDateString();
 
 document.querySelectorAll("[data-target]").forEach(function(button) {
   button.addEventListener("click", function() {
