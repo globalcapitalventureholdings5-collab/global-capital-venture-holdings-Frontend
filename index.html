@@ -14,7 +14,7 @@ a{color:inherit;text-decoration:none}button{font:inherit}
 .logo{display:flex;align-items:center;gap:12px;min-width:0}.logo-mark{width:48px;height:48px;border:1px solid var(--gold);border-radius:50%;display:grid;place-items:center;color:var(--gold2);font-family:Georgia,serif;font-size:25px}.brand-name{font-family:Georgia,"Times New Roman",serif;font-size:16px;line-height:1.02;white-space:nowrap}.brand-name b{color:var(--gold2);font-weight:600}
 .nav-links{margin-left:auto;display:flex;align-items:center;gap:8px}.nav-links a{padding:13px 15px;border-radius:10px;color:#c8cbd0;font-size:13px;text-transform:uppercase;letter-spacing:.08em}.nav-links a:hover{color:var(--gold2)}.dashboard-link{border:1px solid var(--gold);color:var(--gold2)!important}
 .menu-btn{display:none;margin-left:auto;width:48px;height:48px;border:1px solid var(--gold);border-radius:10px;background:transparent;color:#fff;font-size:25px}.mobile-menu{display:none;border-top:1px solid rgba(255,255,255,.07);padding:10px 20px 18px;background:#090b0e}.mobile-menu a{display:block;padding:14px 4px;color:#ddd;border-bottom:1px solid rgba(255,255,255,.05);text-transform:uppercase;letter-spacing:.08em;font-size:13px}
-.hero{position:relative;min-height:calc(100vh - 82px);display:flex;align-items:center;overflow:hidden}.tradingview-background{display:none}.hero-overlay{position:absolute;inset:0;background:linear-gradient(90deg,rgba(7,9,11,.96) 0%,rgba(7,9,11,.82) 42%,rgba(7,9,11,.48) 75%,rgba(7,9,11,.78) 100%),linear-gradient(0deg,rgba(7,9,11,.92),transparent 30%,rgba(7,9,11,.4))}
+.hero{position:relative;min-height:calc(100vh - 82px);display:flex;align-items:center;overflow:hidden}.tradingview-background{position:absolute;inset:0;width:100%;height:100%;overflow:hidden;opacity:.38;pointer-events:none;z-index:0}.tradingview-background iframe{max-width:100%!important}#tradingview_chart{width:100%;height:100%}.hero-overlay{position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(7,9,11,.96) 0%,rgba(7,9,11,.82) 42%,rgba(7,9,11,.48) 75%,rgba(7,9,11,.78) 100%),linear-gradient(0deg,rgba(7,9,11,.92),transparent 30%,rgba(7,9,11,.4))}
 .hero-content{position:relative;z-index:2;max-width:1280px;width:100%;margin:auto;padding:92px 28px 74px}.live-badge{display:inline-flex;align-items:center;gap:10px;border:1px solid rgba(22,229,139,.55);color:var(--green);border-radius:999px;padding:11px 18px;font-size:13px;letter-spacing:.14em;font-weight:600}.live-dot{width:10px;height:10px;background:var(--green);border-radius:50%;box-shadow:0 0 14px rgba(22,229,139,.8)}
 h1{font-family:Georgia,"Times New Roman",serif;font-size:clamp(54px,7.5vw,105px);line-height:.95;letter-spacing:-.045em;max-width:850px;margin:34px 0 30px}h1 span{color:var(--gold2)}.hero-content>p{max-width:700px;font-size:20px;line-height:1.8;color:#d1d3d5;margin:0 0 36px}
 .hero-buttons{display:flex;gap:14px;flex-wrap:wrap}.btn{display:inline-flex;justify-content:center;align-items:center;min-height:62px;padding:0 30px;border-radius:16px;font-weight:700}.btn-primary{background:linear-gradient(135deg,#f0cf78,#cfa447);color:#111;min-width:250px}.btn-outline{border:1px solid var(--gold);background:rgba(0,0,0,.2);color:#fff;min-width:250px}
@@ -23,35 +23,14 @@ h1{font-family:Georgia,"Times New Roman",serif;font-size:clamp(54px,7.5vw,105px)
 .package-tier{margin-bottom:48px}.tier-header{display:flex;align-items:center;gap:16px;margin-bottom:18px}.tier-line{height:1px;flex:1;background:linear-gradient(90deg,var(--line),transparent)}.package-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.package-card{position:relative;background:linear-gradient(145deg,#101419,#090b0e);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:24px;cursor:pointer;transition:.2s;border-top:1px solid rgba(217,173,75,.18)}.package-card:hover{transform:translateY(-3px);border-color:rgba(217,173,75,.55);box-shadow:0 16px 45px rgba(0,0,0,.3)}.package-top{display:flex;justify-content:space-between;align-items:center}.package-label{font-size:13px;text-transform:uppercase;letter-spacing:.12em;color:#d7d9dc}.package-status{font-size:10px;color:var(--green);letter-spacing:.12em}.package-amount{font:600 48px Georgia,serif;color:var(--gold2);margin:22px 0}.package-details{display:flex;justify-content:space-between;color:#969ba2;border-top:1px solid rgba(255,255,255,.07);padding-top:15px}.package-details strong{color:#fff}.package-select{width:100%;margin-top:20px;min-height:48px;border:1px solid var(--gold);border-radius:12px;background:rgba(217,173,75,.06);color:#f4f4f2;cursor:pointer}.popular-badge{position:absolute;right:18px;top:-12px;background:var(--gold2);color:#151515;border-radius:999px;padding:5px 10px;font-size:9px;font-weight:800;letter-spacing:.1em}
 .info-section{max-width:1280px;margin:0 auto;padding:0 28px 90px;display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.info-card{padding:28px;border:1px solid rgba(255,255,255,.08);border-radius:20px;background:#0b0e12}.info-icon{color:var(--gold2);font-size:28px}.info-kicker{margin-top:18px;color:var(--gold);font-size:10px;letter-spacing:.18em}.info-card h3{font:600 27px Georgia,serif;margin:10px 0}.info-card p{color:#969ba2;line-height:1.7;margin:0}.footer{border-top:1px solid rgba(255,255,255,.07);padding:38px 28px;text-align:center;color:#777d84;font-size:13px}.footer-logo{font:600 20px Georgia,serif;color:#eee}.footer-logo span{color:var(--gold2)}
 @media(max-width:800px){
+.tradingview-background{opacity:.24;inset:0;width:100vw;height:100%;}
+.hero-overlay{background:linear-gradient(90deg,rgba(7,9,11,.97) 0%,rgba(7,9,11,.9) 55%,rgba(7,9,11,.78) 100%),linear-gradient(0deg,rgba(7,9,11,.96),rgba(7,9,11,.25) 55%,rgba(7,9,11,.72));}
+.hero-content{z-index:2;}
 .nav-container{min-height:76px;padding:10px 18px}.nav-links{display:none}.menu-btn{display:block}.logo-mark{width:44px;height:44px}.brand-name{font-size:14px}.mobile-menu.open{display:block}
 .hero{min-height:auto}.hero-content{padding:72px 22px 64px}.live-badge{font-size:11px;padding:10px 14px}h1{font-size:clamp(49px,15vw,76px);line-height:.96;margin:28px 0 24px}.hero-content>p{font-size:17px;line-height:1.65;margin-bottom:28px}.hero-buttons{display:grid;grid-template-columns:1fr;gap:12px}.btn{width:100%;min-height:58px}.hero-stats{grid-template-columns:repeat(3,1fr);gap:12px;margin-top:48px}.hero-stats strong{font-size:32px}.hero-stats span{font-size:9px;line-height:1.35}
 .packages-section{padding:72px 18px}.section-heading{margin-bottom:42px}.section-heading p{font-size:15px;line-height:1.6}.package-grid{grid-template-columns:1fr}.package-card{padding:20px}.package-amount{font-size:42px}.info-section{grid-template-columns:1fr;padding:0 18px 65px}
 }
 @media(min-width:801px) and (max-width:1050px){.nav-links a{padding:10px 8px;font-size:11px}h1{font-size:68px}}
-
-.market-section{max-width:1280px;margin:0 auto;padding:78px 28px 30px}
-.market-heading{text-align:center;margin-bottom:30px}
-.market-heading h2{font:600 clamp(38px,5vw,60px)/1.05 Georgia,serif;margin:14px 0}
-.market-heading h2 span{color:var(--gold2)}
-.market-heading p{max-width:720px;margin:0 auto;color:var(--muted);line-height:1.7}
-.market-card{background:#0b0e12;border:1px solid rgba(255,255,255,.1);border-radius:24px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.25)}
-.market-card-top{min-height:58px;padding:0 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.07)}
-.market-card-top>div{display:flex;align-items:center;gap:10px}
-.market-card-top strong{font-size:14px}
-.market-live-dot{width:9px;height:9px;border-radius:50%;background:var(--green);box-shadow:0 0 12px rgba(22,229,139,.8)}
-.market-note{font-size:10px;letter-spacing:.16em;color:var(--green);font-weight:700}
-.tradingview-wrap{width:100%;height:620px;background:#090b0e}
-#tradingview_chart{width:100%;height:100%}
-
-@media(max-width:800px){
-  .market-section{padding:58px 14px 20px}
-  .market-heading{margin-bottom:22px}
-  .market-heading p{font-size:14px}
-  .market-card{border-radius:20px}
-  .market-card-top{padding:0 14px;min-height:52px}
-  .market-card-top strong{font-size:12px}
-  .tradingview-wrap{height:520px;min-height:520px}
-}
 </style>
 </head>
 <body>
@@ -61,34 +40,13 @@ h1{font-family:Georgia,"Times New Roman",serif;font-size:clamp(54px,7.5vw,105px)
 <button class="menu-btn" id="menuBtn" type="button" aria-label="Open menu" aria-expanded="false">☰</button>
 </div><div class="mobile-menu" id="mobileMenu"><a href="#home">Home</a><a href="#packages">Packages</a><a href="login.html">Login</a><a id="mobileRegisterLink" href="register.html">Create Account</a><a id="mobileDashboard" href="dashboard.html" hidden>Dashboard</a></div></header>
 <main>
-<section id="home" class="hero"><div class="hero-overlay"></div><div class="hero-content">
+<section id="home" class="hero"><div class="tradingview-background"><div id="tradingview_chart"></div></div><div class="hero-overlay"></div><div class="hero-content">
 <div class="live-badge"><span class="live-dot"></span>XAUUSD LIVE MARKET</div>
 <h1>Build Your <span>Global Financial Future.</span></h1>
 <p>Explore investment packages and track portfolio growth through a modern trading dashboard.</p>
 <div class="hero-buttons"><a href="#packages" class="btn btn-primary">Explore Packages <span>&nbsp;→</span></a><a id="heroDashboardButton" href="dashboard.html" class="btn btn-outline" hidden>Open Dashboard <span>&nbsp;→</span></a></div>
 <div class="hero-stats"><div><strong>24/7</strong><span>Market Monitoring</span></div><div><strong>1%</strong><span>Daily ROI</span></div><div><strong>14D</strong><span>Payout Cycle</span></div></div>
 </div></section>
-
-<section class="market-section" id="market">
-  <div class="market-heading">
-    <span class="section-tag">LIVE MARKET</span>
-    <h2>Interactive <span>XAUUSD</span> Chart</h2>
-    <p>Use the TradingView controls to change timeframe, chart type, indicators, drawings and other available tools.</p>
-  </div>
-  <div class="market-card">
-    <div class="market-card-top">
-      <div>
-        <span class="market-live-dot"></span>
-        <strong>XAUUSD / U.S. Dollar</strong>
-      </div>
-      <span class="market-note">LIVE</span>
-    </div>
-    <div class="tradingview-wrap">
-      <div id="tradingview_chart"></div>
-    </div>
-  </div>
-</section>
-
 <section id="packages" class="packages-section">
     <div class="section-heading">
       <span class="section-tag">CAPITAL TIERS</span>
@@ -326,29 +284,6 @@ menuBtn.addEventListener("click",()=>{const open=mobileMenu.classList.toggle("op
 document.querySelectorAll(".mobile-menu a").forEach(a=>a.addEventListener("click",()=>mobileMenu.classList.remove("open")));
 function selectPackage(amount){localStorage.setItem("globalCapitalsInvestment",JSON.stringify({amount:Number(amount),purchasedAt:new Date().toISOString()}));window.location.href="dashboard.html";}
 document.querySelectorAll(".package-card").forEach(card=>card.addEventListener("click",()=>selectPackage(Number(card.dataset.package))));
-window.addEventListener("load",()=>{if(window.TradingView){
-new TradingView.widget({
-  autosize:true,
-  symbol:"OANDA:XAUUSD",
-  interval:"30",
-  timezone:"Etc/UTC",
-  theme:"dark",
-  style:"1",
-  locale:"en",
-  toolbar_bg:"#0a0d10",
-  enable_publishing:false,
-  allow_symbol_change:true,
-  hide_top_toolbar:false,
-  hide_side_toolbar:false,
-  hide_legend:false,
-  save_image:true,
-  withdateranges:true,
-  details:true,
-  hotlist:true,
-  calendar:true,
-  studies:["Volume@tv-basicstudies"],
-  container_id:"tradingview_chart"
-});
-}});
+window.addEventListener("load",()=>{if(window.TradingView){new TradingView.widget({width:"100%",height:"100%",symbol:"OANDA:XAUUSD",interval:"1",timezone:"Etc/UTC",theme:"dark",style:"1",locale:"en",toolbar_bg:"#0a0d10",enable_publishing:false,hide_top_toolbar:true,hide_legend:true,save_image:false,container_id:"tradingview_chart"});}});
 </script>
 </body></html>
