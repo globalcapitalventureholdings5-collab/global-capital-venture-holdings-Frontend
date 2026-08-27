@@ -86,6 +86,7 @@ button{cursor:pointer}
     <button class="nav" data-target="deposits"><span class="nav-icon">↓</span>Deposits</button>
     <button class="nav" data-target="withdrawals"><span class="nav-icon">↑</span>Withdrawals</button>
     <button class="nav" data-target="customers"><span class="nav-icon">◈</span>Customers</button>
+    <button class="nav" data-target="referrals"><span class="nav-icon">%</span>Referrals</button>
     <button class="nav" data-target="signals"><span class="nav-icon">⌁</span>Signals</button>
   </div>
   <div class="nav-group"><div class="nav-label">Infrastructure</div>
@@ -128,7 +129,12 @@ button{cursor:pointer}
 
 <section id="customers" class="card section">
 <div class="section-head"><div class="section-title">Customers</div><div class="section-sub">Account and package overview.</div></div>
-<div class="table-wrap"><table><thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Status</th><th>Package</th><th>Principal</th><th>Available Withdrawal</th></tr></thead><tbody id="customerRows"></tbody></table></div>
+<div class="table-wrap"><table><thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Status</th><th>Package</th><th>Referral Code</th><th>Principal</th><th>Available Withdrawal</th></tr></thead><tbody id="customerRows"></tbody></table></div>
+</section>
+
+<section id="referrals" class="card section">
+<div class="section-head"><div class="section-title">Referral Rewards</div><div class="section-sub">10% commission credited when a referred customer's deposit is confirmed.</div></div>
+<div class="table-wrap"><table><thead><tr><th>ID</th><th>Referrer</th><th>Referred Customer</th><th>Deposit</th><th>Commission</th><th>Status</th><th>Date</th></tr></thead><tbody id="referralRows"></tbody></table></div>
 </section>
 
 <section id="signals" class="card section">
@@ -242,12 +248,14 @@ async function loadDashboard() {
     const results = await Promise.all([
       request("/api/admin/users"),
       request("/api/admin/deposits"),
-      request("/api/admin/withdrawals")
+      request("/api/admin/withdrawals"),
+      request("/api/admin/referrals")
     ]);
 
     const users = results[0] || [];
     const deposits = results[1] || [];
     const withdrawals = results[2] || [];
+    const referrals = results[3] || [];
 
     $("customersCount").textContent = users.length;
     $("depositsCount").textContent = deposits.filter(function(x){return x.status==="pending";}).length;
@@ -263,9 +271,13 @@ async function loadDashboard() {
       return '<tr><td>#'+escapeHtml(w.id)+'</td><td><b>'+escapeHtml(w.full_name)+'</b><br><span class="muted">'+escapeHtml(w.email)+'</span></td><td>'+escapeHtml(w.amount)+'</td><td>'+escapeHtml(w.asset)+'</td><td>'+escapeHtml(w.network)+'</td><td><div style="max-width:260px;word-break:break-all">'+escapeHtml(w.destination)+'</div></td><td><span class="badge '+escapeHtml(w.status)+'">'+escapeHtml(w.status)+'</span></td><td>'+(w.status==="pending"?'<div class="actions"><button class="action approve" onclick="processWithdrawal('+Number(w.id)+',\'approve\')">Mark Paid</button><button class="action reject" onclick="processWithdrawal('+Number(w.id)+',\'reject\')">Reject</button></div>':'—')+'</td></tr>';
     }).join("") : '<tr><td colspan="8"><div class="empty">No withdrawal requests.</div></td></tr>';
 
+    $("referralRows").innerHTML = referrals.length ? referrals.map(function(r) {
+      return '<tr><td>#'+escapeHtml(r.id)+'</td><td><b>'+escapeHtml(r.referrer_name)+'</b><br><span class="muted">'+escapeHtml(r.referrer_email)+'</span></td><td><b>'+escapeHtml(r.referred_name)+'</b><br><span class="muted">'+escapeHtml(r.referred_email)+'</span></td><td>#'+escapeHtml(r.deposit_id)+'</td><td>'+escapeHtml(r.amount)+'</td><td><span class="badge confirmed">'+escapeHtml(r.status)+'</span></td><td>'+escapeHtml(r.created_at)+'</td></tr>';
+    }).join("") : '<tr><td colspan="7"><div class="empty">No referral rewards yet.</div></td></tr>';
+
     $("customerRows").innerHTML = users.length ? users.map(function(u) {
-      return '<tr><td>#'+escapeHtml(u.id)+'</td><td><b>'+escapeHtml(u.full_name)+'</b></td><td>'+escapeHtml(u.email)+'</td><td><span class="badge">'+escapeHtml(u.status)+'</span></td><td>'+escapeHtml(u.tier || "—")+'</td><td>'+escapeHtml(u.principal ?? "0")+'</td><td>'+escapeHtml(u.available_withdrawal ?? "0")+'</td></tr>';
-    }).join("") : '<tr><td colspan="7"><div class="empty">No customers.</div></td></tr>';
+      return '<tr><td>#'+escapeHtml(u.id)+'</td><td><b>'+escapeHtml(u.full_name)+'</b></td><td>'+escapeHtml(u.email)+'</td><td><span class="badge">'+escapeHtml(u.status)+'</span></td><td>'+escapeHtml(u.tier || "—")+'</td><td>'+escapeHtml(u.referral_code || "—")+'</td><td>'+escapeHtml(u.principal ?? "0")+'</td><td>'+escapeHtml(u.available_withdrawal ?? "0")+'</td></tr>';
+    }).join("") : '<tr><td colspan="8"><div class="empty">No customers.</div></td></tr>';
 
   } catch(error) {
     if (/401|expired|invalid/i.test(error.message)) {

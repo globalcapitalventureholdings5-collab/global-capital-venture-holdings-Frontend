@@ -11,7 +11,7 @@
 <header class="navbar">
   <div class="nav-container">
     <a href="index.html" class="logo"><span class="logo-mark">$</span><span class="brand-name">Global Capital<br><b>Venture Holdings, Inc.</b></span></a>
-    <nav class="nav-links"><a href="#home">Home</a><a href="#packages">Packages</a><a id="dashboardNav" href="dashboard.html" hidden class="nav-dashboard-btn dashboard-gated">Dashboard</a></nav>
+    <nav class="nav-links"><a href="#home">Home</a><a href="#packages">Packages</a><a href="login.html">Login</a><a href="register.html">Create Account</a><a id="dashboardNav" href="dashboard.html" hidden id="dashboardNav" class="nav-dashboard-btn dashboard-gated">Dashboard</a></nav>
     <a id="dashboardNavButton" href="dashboard.html" class="nav-dashboard-btn" hidden>Open Dashboard</a>
   </div>
 </header>
@@ -289,103 +289,16 @@
 </section>
 </main>
 
-<div id="fundModal" class="auth-modal" aria-hidden="true">
-  <div class="auth-card funding-card">
-    <button id="closeFund" class="auth-close" type="button">×</button>
-    <div class="section-tag">PACKAGE PAYMENT</div>
-    <h2>Complete Your <span>Package</span></h2>
-    <p class="auth-subtitle">Your dashboard becomes available after your payment is verified by the administrator.</p>
-    <div class="auth-selected">Selected package <strong id="fundPackageAmount">—</strong></div>
-    <div class="funding-info">
-      <span>PAYMENT ASSET</span>
-      <strong id="fundAsset">Loading…</strong>
-      <span>NETWORK</span>
-      <strong id="fundNetwork">Loading…</strong>
-      <span>USDT DEPOSIT ADDRESS</span>
-      <div class="fund-address-row"><code id="fundAddress">Loading…</code><button id="copyFundAddress" class="btn btn-outline fund-copy" type="button">Copy</button></div>
-      <p class="funding-instructions">Send <strong>USDT only</strong> using the <strong>TRON (TRX)</strong> network to the address above. Do not send TRX or another token to this address.</p>
-    </div>
-    <form id="depositForm" class="auth-form">
-      <label>Amount to Send (USDT)<input id="depositAmount" name="amount" type="number" min="0.01" step="0.01" readonly required></label>
-      <input id="depositPackageAmount" name="packageAmount" type="hidden" required>
-      <label>USDT Transaction ID (TXID)<input name="txid" type="text" autocomplete="off" placeholder="Paste your USDT transaction ID" required></label>
-      <button class="btn btn-primary" type="submit">Submit Payment for Verification</button>
-    </form>
-    <div id="depositMessage" class="auth-message"></div>
-  </div>
-</div>
-
 <footer class="footer"><div class="footer-logo">Global Capital <span>Venture Holdings, Inc.</span></div><p>Professional portfolio and market analytics platform.</p><span>© 2026 Global Capital Venture Holdings, Inc.</span></footer>
 
 <script>
-const API_BASE = "https://global-capital-venture-holdings-backend-production.up.railway.app";
-const TOKEN_KEY = "gcvh_token";
-const PACKAGE_KEY = "gcvh_selected_package";
-
-function getToken(){ return localStorage.getItem(TOKEN_KEY); }
-function selectedPackage(){ try{return JSON.parse(localStorage.getItem(PACKAGE_KEY) || "null");}catch(_){return null;} }
-function setMessage(id,text){ const el=document.getElementById(id); if(el) el.textContent=text; }
-function showModal(id){ document.getElementById(id).classList.add("open"); }
-function closeModal(id){ document.getElementById(id).classList.remove("open"); }
-
-async function api(path, options={}){
-  const headers={"Content-Type":"application/json",...(options.headers||{})};
-  const token=getToken(); if(token) headers.Authorization=`Bearer ${token}`;
-  const res=await fetch(API_BASE+path,{...options,headers});
-  const data=await res.json().catch(()=>({}));
-  if(res.status===401){ localStorage.removeItem(TOKEN_KEY); localStorage.removeItem("gcvh_user"); throw new Error("Session expired. Please sign in again."); }
-  if(!res.ok) throw new Error(data.error || `Request failed (${res.status})`);
-  return data;
+// Dashboard access is only exposed after a package has been purchased/selected.
+const storedInvestment = localStorage.getItem("globalCapitalsInvestment");
+if (storedInvestment) {
+  document.getElementById("dashboardNav").hidden = false;
+  document.getElementById("dashboardNavButton").hidden = false;
+  document.getElementById("heroDashboardButton").hidden = false;
 }
-
-async function getAccount(){
-  if(!getToken()) return null;
-  try{return await api("/api/me");}
-  catch(_){return null;}
-}
-
-function isPurchased(account){
-  return !!account && !!account.activated_at && Number(account.principal)>0;
-}
-
-async function updateDashboardLinks(){
-  const account=await getAccount();
-  const purchased=isPurchased(account);
-  ["dashboardNav","dashboardNavButton","heroDashboardButton"].forEach(id=>{
-    const el=document.getElementById(id); if(el) el.hidden=!purchased;
-  });
-  return account;
-}
-
-async function openFunding(){
-  const pkg=selectedPackage();
-  if(!pkg || !getToken()) return;
-  const account=await getAccount();
-  if(isPurchased(account)){ localStorage.removeItem(PACKAGE_KEY); window.location.href="dashboard.html"; return; }
-  document.getElementById("fundPackageAmount").textContent=`$${Number(pkg.amount).toLocaleString("en-US")}`;
-  document.getElementById("depositPackageAmount").value=Number(pkg.amount);
-  document.getElementById("depositAmount").value=Number(pkg.amount);
-  setMessage("depositMessage","");
-  showModal("fundModal");
-  try{
-    const info=await api("/api/funding-info");
-    document.getElementById("fundAsset").textContent=info.asset || "USDT";
-    document.getElementById("fundNetwork").textContent=info.network || "TRX";
-    document.getElementById("fundAddress").textContent=info.address || info.instructions;
-    document.getElementById("fundAddress").classList.toggle("missing", !info.address);
-  }catch(e){ document.getElementById("fundAddress").textContent="Unable to load payment instructions."; }
-}
-
-async function initialise(){
-  const account=await updateDashboardLinks();
-  const pkg=selectedPackage();
-  if(pkg && getToken() && !isPurchased(account)){
-    await openFunding();
-  }
-}
-
-initialise();
-
 window.addEventListener("load", () => {
   if (window.TradingView) {
     new TradingView.widget({
@@ -396,47 +309,25 @@ window.addEventListener("load", () => {
     });
   }
 });
-
-function selectPackage(amount){
-  localStorage.setItem(PACKAGE_KEY,JSON.stringify({amount:Number(amount),selectedAt:new Date().toISOString()}));
-  if(getToken()){ openFunding(); return; }
-  window.location.href=`login.html?package=${encodeURIComponent(Number(amount))}`;
-}
-
-
-document.getElementById("copyFundAddress").onclick=async()=>{
-  const address=document.getElementById("fundAddress").textContent.trim();
-  if(!address || address.startsWith("Unable") || address.startsWith("Loading")) return;
-  try{
-    await navigator.clipboard.writeText(address);
-    const btn=document.getElementById("copyFundAddress");
-    const old=btn.textContent; btn.textContent="Copied";
-    setTimeout(()=>btn.textContent=old,1400);
-  }catch(_){ setMessage("depositMessage","Copy failed. Please copy the address manually."); }
-};
-document.getElementById("closeFund").onclick=()=>closeModal("fundModal");
-document.getElementById("fundModal").addEventListener("click",e=>{if(e.target.id==="fundModal")closeModal("fundModal")});
-
-document.getElementById("depositForm").addEventListener("submit",async e=>{
-  e.preventDefault();
-  const form=e.currentTarget;
-  const pkg=selectedPackage();
-  if(!pkg){setMessage("depositMessage","Please select a package first.");return;}
-  setMessage("depositMessage","Submitting payment for verification…");
-  try{
-    const data=await api("/api/deposits",{method:"POST",body:JSON.stringify({
-      amount:Number(form.amount.value),
-      packageAmount:Number(form.packageAmount.value),
-      asset:(document.getElementById("fundAsset").textContent||"USDT").trim(),
-      network:(document.getElementById("fundNetwork").textContent||"TRX").trim(),
-      txid:form.txid.value.trim()
-    })});
-    form.reset();
-    document.getElementById("depositPackageAmount").value=Number(pkg.amount);
-    setMessage("depositMessage",data.message||"Payment submitted for verification. Your dashboard will unlock after approval.");
-    alert("Payment submitted successfully. Your dashboard will unlock after the payment is verified.");
-  }catch(e){setMessage("depositMessage",e.message);}
+document.querySelectorAll(".package-card").forEach(card => {
+  card.addEventListener("click", () => {
+    const amount = Number(card.dataset.package);
+    const now = Date.now();
+    localStorage.setItem("globalCapitalsInvestment", JSON.stringify({
+      amount, startTime:now, payoutTime:now + 14*24*60*60*1000
+    }));
+    window.location.href = "dashboard.html";
+  });
 });
+</script>
+<script>
+function selectPackage(amount) {
+  localStorage.setItem("globalCapitalsInvestment", JSON.stringify({
+    amount: Number(amount),
+    purchasedAt: new Date().toISOString()
+  }));
+  window.location.href = "dashboard.html";
+}
 </script>
 </body>
 </html>
