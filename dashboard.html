@@ -3,7 +3,16 @@
 <body class="dashboard-body">
 <header class="mobile-header"><a href="index.html" class="brand"><span class="brand-mark">$</span><span>Global Capital <em>Venture Holdings, Inc.</em></span></a><button id="mobileMenuButton" class="mobile-menu">☰</button></header>
 <div class="dashboard-layout"><aside class="sidebar" id="sidebar"><div class="sidebar-logo"><a href="index.html" class="brand"><span class="brand-mark">$</span><span>Global Capital <em>Venture Holdings, Inc.</em></span></a></div><div class="sidebar-profile"><div class="profile-avatar">GC</div><div><strong>Private Client</strong><span>Account Active</span></div></div><nav class="sidebar-navigation"><a href="#overview" class="active"><span>▦</span>Overview</a><a href="#market"><span>◈</span>Market</a><a href="#signals"><span>✦</span>Daily Signals</a><a href="#payout"><span>↗</span>Payout</a><a href="#referrals"><span>%</span>Referrals</a><a href="index.html"><span>←</span>Packages</a></nav><div class="sidebar-bottom"><div class="account-note"><span>PRIVATE ACCOUNT</span><p>Your account is linked to the capital package selected at registration.</p></div><a href="index.html" class="sidebar-home">← Return to Website</a></div></aside>
-<main class="dashboard-main">
+<div id="dashboardLocked" class="dashboard-locked" hidden>
+  <div class="locked-card">
+    <div class="locked-icon">🔒</div>
+    <div class="section-tag">ACCOUNT NOT ACTIVE</div>
+    <h1>Your dashboard is locked</h1>
+    <p id="lockedMessage">Your account has not been activated yet. Select an investment package and complete the deposit. Your dashboard will unlock after the payment has been verified by the administrator.</p>
+    <div class="locked-actions"><a class="btn btn-primary" href="index.html#packages">Choose a Package</a><a class="btn btn-outline" href="index.html">Return to Website</a></div>
+  </div>
+</div>
+<main class="dashboard-main" id="dashboardMain" style="display:none">
 <section class="dashboard-header"><div><div class="section-tag">PRIVATE CLIENT AREA</div><h1>Portfolio <span>Overview</span></h1><p>Your package balance, growth and daily trading instruction.</p></div><div class="status-indicator"><span></span>Account Active</div></section>
 <section id="overview" class="statistics-grid"><div class="stat-card"><div class="stat-header"><span>PACKAGE BALANCE</span><div class="stat-icon">$</div></div><div id="packageBalance" class="stat-value">$0.00</div><div class="stat-footer"><span class="green-text">● Active</span><span>Purchased package</span></div></div><div class="stat-card"><div class="stat-header"><span>TOTAL GROWTH</span><div class="stat-icon green-icon">↗</div></div><div id="totalGrowth" class="stat-value profit-value">$0.000000</div><div class="stat-footer"><span class="green-text">1% Daily ROI</span><span>Earned growth</span></div></div><div class="stat-card"><div class="stat-header"><span>NEXT FORTNIGHTLY PAYOUT</span><div class="stat-icon">◷</div></div><div id="payoutDate" class="stat-date">--</div><div class="stat-footer"><span>14-day cycle</span><span>Unlock date</span></div></div></section>
 
@@ -23,85 +32,162 @@
 
 <script>
 'use strict';
-const DAY=86400,$=id=>document.getElementById(id);
+const DAY=86400;
+const $=id=>document.getElementById(id);
 const API='https://global-capital-venture-holdings-backend-production.up.railway.app';
 const customerToken=localStorage.getItem('gcvh_customer_token');
-if(!customerToken){location.href='login.html';throw new Error('Authentication required');}
-let investment=JSON.parse(localStorage.getItem('globeCapitalInvestment')||'null')||{amount:0,startTime:Date.now(),payoutTime:Date.now()};
+
+if(!customerToken){
+  location.href='login.html?redirect='+encodeURIComponent('dashboard.html');
+  throw new Error('Authentication required');
+}
+
+let investment={amount:0,startTime:Date.now(),payoutTime:0,serverGrowth:0,availableWithdrawal:0};
+let accountActive=false;
 const dayKey=()=>new Date().toISOString().slice(0,10);
 let executed=JSON.parse(localStorage.getItem('globeCapitalExecutedSignals')||'{}');
 let trades=JSON.parse(localStorage.getItem('globeCapitalTradeHistory')||'[]');
-
 let signal=JSON.parse(localStorage.getItem('globeCapitalTodaySignal')||'null');
 if(!signal||signal.date!==dayKey())signal={date:dayKey(),instrument:'XAUUSD',direction:'BUY',entry:'Market',sl:'—',tp:'—',message:"Today's XAUUSD signal is active. Execute it once today to qualify for today's ROI."};
 
-function money(n,d=2){return '$'+Number(n).toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d})}
-function qualifiedDays(){let n=0,start=new Date(investment.startTime);start.setHours(0,0,0,0);let end=new Date();end.setHours(0,0,0,0);for(let d=new Date(start);d<=end;d.setDate(d.getDate()+1))if(executed[d.toISOString().slice(0,10)])n++;return n}
-function growth(){return investment.amount*.01*qualifiedDays()}
-function refresh(){ $('packageBalance').textContent=money(investment.amount);$('totalGrowth').textContent=money(growth(),6);$('payoutDate').textContent=new Date(investment.payoutTime).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});let r=investment.payoutTime-Date.now();if(r<=0){$('countdown').textContent='PAYOUT UNLOCKED';$('withdrawButton').disabled=false;$('payoutMessage').textContent='Your growth is ready for payout processing.';return}let s=Math.floor(r/1000),d=Math.floor(s/DAY),h=Math.floor(s%DAY/3600),m=Math.floor(s%3600/60),sec=s%60;$('countdown').textContent=`${d}d ${h}h ${m}m ${sec}s`}
-refresh();setInterval(refresh,1000);
-
-function renderSignal(){let done=!!executed[signal.date];$('signalDate').textContent=new Date(signal.date+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});$('signalDirection').textContent=signal.direction+' XAUUSD';$('signalDirection').className='signal-direction '+(signal.direction==='BUY'?'buy-signal':'sell-signal');$('signalInstrument').textContent=signal.instrument;$('signalEntry').textContent=signal.entry;$('signalSL').textContent=signal.sl;$('signalTP').textContent=signal.tp;$('signalStatus').textContent=done?'Trade Executed':'Signal Active';$('signalStatus').className='signal-status '+(done?'completed':'');$('executeSignal').disabled=done;$('tradeOnce').disabled=done;$('executionState').textContent=done?"Today's signal has been executed. Today's ROI qualification is recorded.":"Execute the daily administrator signal above to record today's trade.";$('signalNotice').textContent=done?"Today's 1% ROI qualification has been recorded.":"Execute the administrator's daily signal once today to qualify for today's 1% ROI growth."}
-renderSignal();
-
-function addTrade(){if(executed[signal.date])return;executed[signal.date]={time:Date.now(),direction:signal.direction};localStorage.setItem('globeCapitalExecutedSignals',JSON.stringify(executed));trades.unshift({date:signal.date,direction:signal.direction,instrument:signal.instrument,status:'Executed',time:new Date().toLocaleTimeString()});localStorage.setItem('globeCapitalTradeHistory',JSON.stringify(trades.slice(0,30)));renderSignal();renderTrades();addChat('Account Desk',"Your daily XAUUSD signal has been recorded. Today's ROI qualification is now active.");refresh()}
-$('executeSignal').onclick=addTrade;$('tradeOnce').onclick=addTrade;
-
-function renderTrades(){if(!trades.length){$('tradeHistoryList').innerHTML='<div class="empty-history">No trades recorded yet.</div>';return}$('tradeHistoryList').innerHTML=trades.map(t=>`<div class="trade-history-row"><div><strong class="green-text">${t.direction}</strong><span>${t.date}</span></div><div>${t.instrument}</div><div>${t.status}</div><div>${t.time}</div></div>`).join('')}
-renderTrades();
-
-function addChat(sender,text){let row=document.createElement('div');row.className='chat-row '+(sender==='You'?'mine':'desk');row.innerHTML='<span>'+sender+'</span><p>'+String(text).replace(/[<>&]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]))+'</p>';$('chatMessages').appendChild(row);$('chatMessages').scrollTop=$('chatMessages').scrollHeight}
-addChat('Account Desk',signal.message);
-$('sendChat').onclick=()=>{let v=$('chatInput').value.trim();if(v){addChat('You',v);$('chatInput').value=''}};
-$('chatInput').addEventListener('keydown',e=>{if(e.key==='Enter')$('sendChat').click()});
-
-$('withdrawButton').onclick=()=>{$('payoutMessage').textContent=`Growth of ${money(growth(),6)} is ready for payout processing.`};
-
-/* MAIN XAUUSD CHART: full chart stays here, with no drawing/tools toolbar. */
-if(window.TradingView){
-  new TradingView.widget({
-    autosize:true,
-    symbol:'OANDA:XAUUSD',
-    interval:'1',
-    timezone:'Etc/UTC',
-    theme:'dark',
-    style:'1',
-    locale:'en',
-    toolbar_bg:'#070a0d',
-    enable_publishing:false,
-    hide_top_toolbar:true,
-    hide_legend:true,
-    hide_side_toolbar:true,
-    save_image:false,
-    container_id:'dashboardTV'
-  });
+function money(n,d=2){return '$'+Number(n||0).toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d})}
+function showLocked(message){
+  $('dashboardMain').style.display='none';
+  $('dashboardLocked').hidden=false;
+  if(message)$('lockedMessage').textContent=message;
+}
+function showDashboard(){
+  $('dashboardLocked').hidden=true;
+  $('dashboardMain').style.display='';
+}
+function qualifiedDays(){
+  let n=0;
+  if(!investment.amount)return 0;
+  let start=new Date(investment.startTime);start.setHours(0,0,0,0);
+  let end=new Date();end.setHours(0,0,0,0);
+  for(let d=new Date(start);d<=end;d.setDate(d.getDate()+1)){
+    if(executed[d.toISOString().slice(0,10)])n++;
+  }
+  return n;
+}
+function growth(){return Number(investment.serverGrowth||0)}
+function refresh(){
+  if(!accountActive)return;
+  $('packageBalance').textContent=money(investment.amount);
+  $('totalGrowth').textContent=money(growth(),6);
+  if(investment.payoutTime){
+    $('payoutDate').textContent=new Date(investment.payoutTime).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+  }else $('payoutDate').textContent='—';
+  const r=investment.payoutTime-Date.now();
+  if(!investment.payoutTime){
+    $('countdown').textContent='NOT ACTIVE';
+    $('withdrawButton').disabled=true;
+    $('payoutMessage').textContent='Your next payout date will appear after package activation.';
+    return;
+  }
+  if(r<=0){
+    $('countdown').textContent='PAYOUT UNLOCKED';
+    $('withdrawButton').disabled=false;
+    $('payoutMessage').textContent='Your growth is ready for payout processing.';
+    return;
+  }
+  let sec=Math.floor(r/1000),d=Math.floor(sec/DAY),h=Math.floor(sec%DAY/3600),m=Math.floor(sec%3600/60),ss=sec%60;
+  $('countdown').textContent=`${d}d ${h}h ${m}m ${ss}s`;
+}
+function renderSignal(){
+  let done=!!executed[signal.date];
+  $('signalDate').textContent=new Date(signal.date+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+  $('signalDirection').textContent=signal.direction+' XAUUSD';
+  $('signalDirection').className='signal-direction '+(signal.direction==='BUY'?'buy-signal':'sell-signal');
+  $('signalInstrument').textContent=signal.instrument;
+  $('signalEntry').textContent=signal.entry;
+  $('signalSL').textContent=signal.sl;
+  $('signalTP').textContent=signal.tp;
+  $('signalStatus').textContent=done?'Trade Executed':'Signal Active';
+  $('signalStatus').className='signal-status '+(done?'completed':'');
+  $('executeSignal').disabled=done;
+  $('tradeOnce').disabled=done;
+  $('executionState').textContent=done?"Today's signal has been executed. Today's ROI qualification is recorded.":"Execute the daily administrator signal above to record today's trade.";
+  $('signalNotice').textContent=done?"Today's 1% ROI qualification has been recorded.":"Execute the administrator's daily signal once today to qualify for today's 1% ROI growth.";
+}
+function renderTrades(){
+  if(!trades.length){$('tradeHistoryList').innerHTML='<div class="empty-history">No trades recorded yet.</div>';return;}
+  $('tradeHistoryList').innerHTML=trades.map(t=>`<div class="trade-history-row"><div><strong class="green-text">${t.direction}</strong><span>${t.date}</span></div><div>${t.instrument}</div><div>${t.status}</div><div>${t.time}</div></div>`).join('');
+}
+function addChat(sender,text){
+  let row=document.createElement('div');row.className='chat-row '+(sender==='You'?'mine':'desk');
+  row.innerHTML='<span>'+sender+'</span><p>'+String(text).replace(/[<>&]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]))+'</p>';
+  $('chatMessages').appendChild(row);$('chatMessages').scrollTop=$('chatMessages').scrollHeight;
+}
+function addTrade(){
+  if(!accountActive||executed[signal.date])return;
+  executed[signal.date]={time:Date.now(),direction:signal.direction};
+  localStorage.setItem('globeCapitalExecutedSignals',JSON.stringify(executed));
+  trades.unshift({date:signal.date,direction:signal.direction,instrument:signal.instrument,status:'Executed',time:new Date().toLocaleTimeString()});
+  localStorage.setItem('globeCapitalTradeHistory',JSON.stringify(trades.slice(0,30)));
+  renderSignal();renderTrades();addChat('Account Desk',"Your daily XAUUSD signal has been recorded. Today's ROI qualification is now active.");refresh();
 }
 
-/* PRICE-ONLY BOX: no TradingView chart or tools here. */
-async function loadXauPrice(){
-  const priceEl=$('xauPrice');
+async function loadMe(){
   try{
-    const r=await fetch('https://api.gold-api.com/price/XAU',{cache:'no-store'});
-    if(!r.ok)throw new Error('Price request failed');
+    const r=await fetch(API+'/api/me',{headers:{Authorization:'Bearer '+customerToken},cache:'no-store'});
+    if(r.status===401){localStorage.removeItem('gcvh_customer_token');localStorage.removeItem('gcvh_customer_user');location.href='login.html';return;}
+    if(!r.ok)throw new Error('Unable to load your account.');
     const d=await r.json();
-    const price=Number(d.price);
-    if(!Number.isFinite(price))throw new Error('Invalid price');
-    priceEl.textContent='$'+price.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
-    priceEl.dataset.updated=new Date().toLocaleTimeString();
+    const principal=Number(d.principal||0);
+    const packageAmount=Number(d.package_amount||0);
+    const packageId=d.package_id||d.packageId||null;
+    accountActive=principal>0 && (packageId!==null || packageAmount>0);
+    if(!accountActive){
+      showLocked('Your account is registered, but no investment package has been activated yet. Select a package, complete the deposit, and wait for administrator verification. The dashboard will unlock after approval.');
+      return;
+    }
+    investment={
+      amount:principal,
+      startTime:d.activated_at?new Date(d.activated_at).getTime():Date.now(),
+      payoutTime:d.next_payout_at?new Date(d.next_payout_at).getTime():0,
+      serverGrowth:Number(d.growth||0),
+      availableWithdrawal:Number(d.available_withdrawal||0)
+    };
+    localStorage.setItem('globeCapitalInvestment',JSON.stringify(investment));
+    showDashboard();
+    refresh();renderSignal();renderTrades();
   }catch(e){
-    priceEl.textContent='—';
+    showLocked('We could not confirm your account activation right now. Please try again in a moment. Your dashboard will remain locked until the backend confirms that your package has been activated.');
   }
 }
-loadXauPrice();
-setInterval(loadXauPrice,15000);
 
+$('executeSignal').onclick=addTrade;
+$('tradeOnce').onclick=addTrade;
+$('sendChat').onclick=()=>{let v=$('chatInput').value.trim();if(v){addChat('You',v);$('chatInput').value=''}};
+$('chatInput').addEventListener('keydown',e=>{if(e.key==='Enter')$('sendChat').click()});
+$('withdrawButton').onclick=()=>{if(accountActive)$('payoutMessage').textContent=`Growth of ${money(growth(),6)} is ready for payout processing.`};
 $('mobileMenuButton').onclick=()=>$('sidebar').classList.toggle('mobile-open');
 
-async function loadReferral(){if(!customerToken)return;try{const r=await fetch(API+'/api/referral',{headers:{Authorization:'Bearer '+customerToken}});if(!r.ok)return;const d=await r.json();document.getElementById('referralCode').textContent=d.code||'—';document.getElementById('referralLink').value=d.link||'';document.getElementById('referralCount').textContent=d.referred_customers??0;document.getElementById('referralRewards').textContent=d.total_rewards??'0';}catch(e){}}
-async function loadMe(){try{const r=await fetch(API+'/api/me',{headers:{Authorization:'Bearer '+customerToken}});if(r.status===401){localStorage.removeItem('gcvh_customer_token');localStorage.removeItem('gcvh_customer_user');location.href='login.html';return;}if(!r.ok)return;const d=await r.json();if(Number(d.principal||0)>0){investment={amount:Number(d.principal),startTime:d.activated_at?new Date(d.activated_at).getTime():Date.now(),payoutTime:d.next_payout_at?new Date(d.next_payout_at).getTime():Date.now()};localStorage.setItem('globeCapitalInvestment',JSON.stringify(investment));refresh();}}catch(e){}}
-loadMe();
-loadReferral();
-document.getElementById('copyReferral').onclick=async()=>{const v=document.getElementById('referralLink').value;if(v){await navigator.clipboard.writeText(v);document.getElementById('copyReferral').textContent='Copied';setTimeout(()=>document.getElementById('copyReferral').textContent='Copy Link',1500)}};
+async function loadReferral(){
+  try{
+    const r=await fetch(API+'/api/referral',{headers:{Authorization:'Bearer '+customerToken},cache:'no-store'});
+    if(!r.ok)return;
+    const d=await r.json();
+    $('referralCode').textContent=d.code||'—';$('referralLink').value=d.link||'';$('referralCount').textContent=d.referred_customers??0;$('referralRewards').textContent=d.total_rewards??'0';
+  }catch(e){}
+}
+$('copyReferral').onclick=async()=>{const v=$('referralLink').value;if(v){try{await navigator.clipboard.writeText(v);$('copyReferral').textContent='Copied';setTimeout(()=>$('copyReferral').textContent='Copy Link',1500)}catch(e){$('referralLink').select();document.execCommand('copy');$('copyReferral').textContent='Copied'}}};
+
+/* MAIN XAUUSD CHART: full chart stays here, with no drawing/tools toolbar. */
+function loadChart(){
+  if(window.TradingView){
+    new TradingView.widget({autosize:true,symbol:'OANDA:XAUUSD',interval:'1',timezone:'Etc/UTC',theme:'dark',style:'1',locale:'en',toolbar_bg:'#070a0d',enable_publishing:false,hide_top_toolbar:true,hide_legend:true,hide_side_toolbar:true,save_image:false,container_id:'dashboardTV'});
+  }
+}
+/* PRICE-ONLY BOX */
+async function loadXauPrice(){
+  const priceEl=$('xauPrice');
+  try{const r=await fetch('https://api.gold-api.com/price/XAU',{cache:'no-store'});if(!r.ok)throw new Error();const d=await r.json();const price=Number(d.price);if(!Number.isFinite(price))throw new Error();priceEl.textContent='$'+price.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
+  catch(e){priceEl.textContent='—';}
+}
+
+window.addEventListener('load',()=>{loadMe();loadReferral();loadXauPrice();setInterval(loadXauPrice,15000);setInterval(refresh,1000);loadChart();});
 </script>
 
 <style>
@@ -116,5 +202,10 @@ document.getElementById('copyReferral').onclick=async()=>{const v=document.getEl
   color:#f1d17a;
   letter-spacing:-.02em;
 }
+</style>
+<style>
+.dashboard-locked{min-height:100vh;display:grid;place-items:center;padding:40px 20px;background:#07090b;color:#f5f5f2}
+.locked-card{width:min(680px,100%);padding:42px 32px;text-align:center;border:1px solid rgba(217,173,75,.25);border-radius:24px;background:linear-gradient(145deg,#101419,#090b0e);box-shadow:0 25px 80px rgba(0,0,0,.35)}
+.locked-icon{font-size:46px;margin-bottom:18px}.locked-card h1{font-size:clamp(36px,6vw,58px);margin:12px 0 18px}.locked-card p{color:#aeb1b5;line-height:1.7;max-width:560px;margin:0 auto 28px}.locked-actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}.locked-actions .btn{min-width:220px}
 </style>
 </body></html>

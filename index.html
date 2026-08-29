@@ -90,15 +90,68 @@ h1{font-family:Georgia,"Times New Roman",serif;font-size:clamp(54px,7.5vw,105px)
 </main>
 <footer class="footer"><div class="footer-logo">Global Capital <span>Venture Holdings, Inc.</span></div><p>Professional portfolio and market analytics platform.</p><span>© 2026 Global Capital Venture Holdings, Inc.</span></footer>
 <script>
-const storedInvestment=localStorage.getItem("globalCapitalsInvestment");
-if(storedInvestment){document.getElementById("dashboardNavButton").hidden=false;document.getElementById("heroDashboardButton").hidden=false;document.getElementById("mobileDashboard").hidden=false;}
-const ref=new URLSearchParams(location.search).get("ref");
-if(ref){const r="register.html?ref="+encodeURIComponent(ref);document.getElementById("registerLink").href=r;document.getElementById("mobileRegisterLink").href=r;}
-const menuBtn=document.getElementById("menuBtn"),mobileMenu=document.getElementById("mobileMenu");
-menuBtn.addEventListener("click",()=>{const open=mobileMenu.classList.toggle("open");menuBtn.setAttribute("aria-expanded",String(open));});
-document.querySelectorAll(".mobile-menu a").forEach(a=>a.addEventListener("click",()=>mobileMenu.classList.remove("open")));
-function selectPackage(amount){localStorage.setItem("globalCapitalsInvestment",JSON.stringify({amount:Number(amount),purchasedAt:new Date().toISOString()}));window.location.href="dashboard.html";}
-document.querySelectorAll(".package-card").forEach(card=>card.addEventListener("click",()=>selectPackage(Number(card.dataset.package))));
-window.addEventListener("load",()=>{if(window.TradingView){new TradingView.widget({width:"100%",height:"100%",symbol:"OANDA:XAUUSD",interval:"1",timezone:"Etc/UTC",theme:"dark",style:"1",locale:"en",toolbar_bg:"#0a0d10",enable_publishing:false,hide_top_toolbar:true,hide_legend:true,save_image:false,container_id:"tradingview_chart"});}});
+const API='https://global-capital-venture-holdings-backend-production.up.railway.app';
+const customerToken=localStorage.getItem('gcvh_customer_token');
+
+const ref=new URLSearchParams(location.search).get('ref');
+if(ref){
+  const r='register.html?ref='+encodeURIComponent(ref);
+  document.getElementById('registerLink').href=r;
+  document.getElementById('mobileRegisterLink').href=r;
+}
+
+const menuBtn=document.getElementById('menuBtn');
+const mobileMenu=document.getElementById('mobileMenu');
+menuBtn.addEventListener('click',()=>{
+  const open=mobileMenu.classList.toggle('open');
+  menuBtn.setAttribute('aria-expanded',String(open));
+});
+document.querySelectorAll('.mobile-menu a').forEach(a=>a.addEventListener('click',()=>mobileMenu.classList.remove('open')));
+
+function selectPackage(amount){
+  const value=Number(amount);
+  if(!Number.isFinite(value) || value<=0) return;
+  // A package selection is NOT a purchase and must never unlock the dashboard.
+  localStorage.setItem('gcvh_selected_package',JSON.stringify({amount:value,selectedAt:new Date().toISOString()}));
+  const token=localStorage.getItem('gcvh_customer_token');
+  if(!token){
+    const next='deposit.html?amount='+encodeURIComponent(value);
+    window.location.href='login.html?redirect='+encodeURIComponent(next);
+    return;
+  }
+  window.location.href='deposit.html?amount='+encodeURIComponent(value);
+}
+
+document.querySelectorAll('.package-card').forEach(card=>{
+  card.removeAttribute('onclick');
+  card.addEventListener('click',()=>selectPackage(Number(card.dataset.package)));
+});
+
+async function syncDashboardLinks(){
+  const token=localStorage.getItem('gcvh_customer_token');
+  if(!token)return;
+  try{
+    const r=await fetch(API+'/api/me',{headers:{Authorization:'Bearer '+token},cache:'no-store'});
+    if(!r.ok)return;
+    const d=await r.json();
+    const active=Number(d.principal||0)>0 && (d.package_id!==undefined && d.package_id!==null || Number(d.package_amount||0)>0);
+    if(active){
+      document.getElementById('dashboardNavButton').hidden=false;
+      document.getElementById('heroDashboardButton').hidden=false;
+      document.getElementById('mobileDashboard').hidden=false;
+    }
+  }catch(e){}
+}
+window.addEventListener('load',()=>{
+  syncDashboardLinks();
+  if(window.TradingView){
+    new TradingView.widget({
+      width:'100%',height:'100%',symbol:'OANDA:XAUUSD',interval:'1',timezone:'Etc/UTC',
+      theme:'dark',style:'1',locale:'en',toolbar_bg:'#0a0d10',
+      enable_publishing:false,hide_top_toolbar:true,hide_legend:true,save_image:false,
+      container_id:'tradingview_chart'
+    });
+  }
+});
 </script>
 </body></html>
