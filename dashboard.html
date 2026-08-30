@@ -24,7 +24,7 @@
 <div class="tv-dashboard-chart"><div id="dashboardTV"></div></div></section>
 
 <section id="signals" class="signal-section"><div class="signal-head"><div><div class="section-tag">PRIVATE SIGNAL INBOX</div><h2>Daily <span>Trading Signal</span></h2><p>Your daily instruction from the account administrator.</p></div><div id="signalStatus" class="signal-status">Awaiting Signal</div></div><div class="signal-layout"><div class="signal-card"><div class="signal-meta"><span id="signalDate">--</span><span>DAILY INSTRUCTION</span></div><div id="signalDirection" class="signal-direction">No signal received</div><div class="signal-details"><div><span>Instrument</span><strong id="signalInstrument">XAUUSD</strong></div><div><span>Entry</span><strong id="signalEntry">--</strong></div><div><span>Stop Loss</span><strong id="signalSL">--</strong></div><div><span>Take Profit</span><strong id="signalTP">--</strong></div></div><button id="executeSignal" class="btn btn-primary" disabled>Execute Today's Signal</button><p id="signalNotice" class="signal-notice">Execute the administrator's daily signal once today to qualify for today's 1% ROI growth.</p></div><div class="chat-panel"><div class="chat-header"><div class="chat-avatar">GC</div><div><strong>Account Desk</strong><span>Signal & Client Support</span></div><i></i></div><div id="chatMessages" class="chat-messages"></div><div class="chat-input-row"><input id="chatInput" placeholder="Message the account desk…" maxlength="300"><button id="sendChat">Send</button></div></div></div></section>
-<section id="referrals" class="payout-section" style="margin-top:22px"><div class="payout-content"><div class="payout-icon">%</div><div><div class="section-tag">REFERRAL PROGRAM</div><h2>Earn 10% Referral Commission</h2><p>Share your personal referral link. When a referred customer's deposit is confirmed, the referral commission is credited to your account.</p></div></div><div style="padding:0 28px 24px;width:100%;box-sizing:border-box"><div style="display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center"><input id="referralLink" readonly style="width:100%;box-sizing:border-box;padding:13px;border:1px solid #2b3540;border-radius:9px;background:#070a0d;color:#cdd3d7"><button id="copyReferral" class="btn btn-primary" type="button">Copy Link</button></div><div style="display:flex;gap:25px;margin-top:12px;color:#7f8b94;font-size:12px"><span>Code: <strong id="referralCode" style="color:#f1d48b">—</strong></span><span>Referred: <strong id="referralCount" style="color:#fff">0</strong></span><span>Rewards: <strong id="referralRewards" style="color:#38d99a">0</strong></span></div></div></section>
+<section id="referrals" class="payout-section" style="margin-top:22px"><div class="payout-content"><div class="payout-icon">%</div><div><div class="section-tag">DEMO REFERRAL PROGRAM</div><h2>Three-Level Referral Simulation</h2><p>This referral calculator is for demonstration/testing only. It does not create real commissions or change any withdrawal balance.</p></div></div><div style="padding:0 28px 24px;width:100%;box-sizing:border-box"><div style="display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center"><input id="referralLink" readonly style="width:100%;box-sizing:border-box;padding:13px;border:1px solid #2b3540;border-radius:9px;background:#070a0d;color:#cdd3d7"><button id="copyReferral" class="btn btn-primary" type="button">Copy Link</button></div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:15px"><div class="stat-card"><div class="stat-header"><span>LEVEL 1</span></div><div id="refL1" class="stat-value" style="font-size:22px">0.00</div><div class="stat-footer"><span>10%</span><span>Direct</span></div></div><div class="stat-card"><div class="stat-header"><span>LEVEL 2</span></div><div id="refL2" class="stat-value" style="font-size:22px">0.00</div><div class="stat-footer"><span>5%</span><span>Indirect</span></div></div><div class="stat-card"><div class="stat-header"><span>LEVEL 3</span></div><div id="refL3" class="stat-value" style="font-size:22px">0.00</div><div class="stat-footer"><span>3%</span><span>Third level</span></div></div></div><div style="display:flex;gap:25px;margin-top:12px;color:#7f8b94;font-size:12px;flex-wrap:wrap"><span>Code: <strong id="referralCode" style="color:#f1d48b">—</strong></span><span>Network: <strong id="referralCount" style="color:#fff">0</strong></span><span>Demo Credits: <strong id="referralRewards" style="color:#38d99a">0</strong></span></div><div style="margin-top:18px;padding:16px;border:1px solid #2b3540;border-radius:10px;background:#070a0d"><strong style="display:block;margin-bottom:10px">Simulation tester</strong><div style="display:flex;gap:10px;flex-wrap:wrap"><input id="demoReferralAmount" type="number" min="1" step="1" value="100" placeholder="Simulated purchase amount" style="flex:1;min-width:180px;padding:12px;border:1px solid #2b3540;border-radius:8px;background:#10171e;color:#fff"><button id="demoReferralPurchase" class="btn btn-primary" type="button">Simulate Purchase</button></div><small id="demoReferralMessage" style="display:block;margin-top:10px;color:#7f8b94">Example: a simulated $100 purchase produces 10 / 5 / 3 demo credits up the three levels.</small></div><div id="demoReferralTree" style="margin-top:18px"></div></div></section>
 <section id="payout" class="payout-section"><div class="payout-content"><div class="payout-icon">$</div><div><div class="section-tag">FORTNIGHTLY PAYOUT</div><h2>Withdraw Your Growth</h2><p id="payoutMessage">Your next payout unlocks when the 14-day cycle is complete.</p></div></div><div class="payout-action"><div id="countdown" class="countdown">Loading…</div><button id="withdrawButton" class="btn btn-primary" disabled>Withdraw Growth</button></div></section>
 <section class="trading-arena"><div class="arena-header"><div><div class="section-tag">TRADING DESK</div><h2>XAUUSD <span>Execution</span></h2></div><div class="market-status"><span class="live-dot"></span>MARKET OPEN</div></div><div class="execution-card"><div><strong>Today's trading permission</strong><p id="executionState">Execute the daily administrator signal above to record today's trade.</p></div><button id="tradeOnce" class="trade-btn buy-btn" disabled>Trade Today's Signal</button></div><div class="trade-history"><div class="history-header"><h3>Trade History</h3></div><div id="tradeHistoryList"></div></div></section>
 <div class="platform-note"><strong>ACCOUNT TERMS</strong><span>Daily ROI is credited only when the customer executes the administrator's designated daily XAUUSD trade. One qualifying trade is permitted per calendar day. Payout timing follows the account's 14-day cycle.</span></div>
@@ -174,10 +174,37 @@ async function loadReferral(){
     const r=await fetch(API+'/api/referral',{headers:{Authorization:'Bearer '+customerToken},cache:'no-store'});
     if(!r.ok)return;
     const d=await r.json();
-    $('referralCode').textContent=d.code||'—';$('referralLink').value=d.link||'';$('referralCount').textContent=d.referred_customers??0;$('referralRewards').textContent=d.total_rewards??'0';
+    $('referralCode').textContent=d.code||'—';$('referralLink').value=d.link||'';
+    $('referralCount').textContent=Number(d.referred_customers||0);
+    $('referralRewards').textContent=Number(d.total_rewards||0).toFixed(2);
+    $('refL1').textContent=Number(d.level1_rewards||0).toFixed(2);
+    $('refL2').textContent=Number(d.level2_rewards||0).toFixed(2);
+    $('refL3').textContent=Number(d.level3_rewards||0).toFixed(2);
+  }catch(e){}
+}
+async function loadDemoReferralTree(){
+  try{
+    const r=await fetch(API+'/api/demo/referral-tree',{headers:{Authorization:'Bearer '+customerToken},cache:'no-store'});
+    if(!r.ok)return;
+    const d=await r.json();
+    const rows=(title,items,rate)=>`<div style="margin-top:10px;padding:12px;border:1px solid #2b3540;border-radius:9px"><strong>${title}</strong> <span style="color:#7f8b94">(${items.length} members · ${rate})</span><div style="margin-top:8px;color:#cdd3d7;font-size:12px">${items.length?items.map(x=>`<div style="padding:5px 0">${String(x.full_name||x.email||'Client').replace(/[<>&]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]))}</div>`).join(''):'None yet'}</div></div>`;
+    $('demoReferralTree').innerHTML=rows('Level 1',d.level1||[],'10%')+rows('Level 2',d.level2||[],'5%')+rows('Level 3',d.level3||[],'3%');
   }catch(e){}
 }
 $('copyReferral').onclick=async()=>{const v=$('referralLink').value;if(v){try{await navigator.clipboard.writeText(v);$('copyReferral').textContent='Copied';setTimeout(()=>$('copyReferral').textContent='Copy Link',1500)}catch(e){$('referralLink').select();document.execCommand('copy');$('copyReferral').textContent='Copied'}}};
+$('demoReferralPurchase').onclick=async()=>{
+  const amount=Number($('demoReferralAmount').value);
+  if(!Number.isFinite(amount)||amount<=0){$('demoReferralMessage').textContent='Enter a valid simulated amount.';return;}
+  $('demoReferralPurchase').disabled=true;
+  try{
+    const r=await fetch(API+'/api/demo/referral-purchase',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+customerToken},body:JSON.stringify({amount})});
+    const d=await r.json();
+    if(!r.ok)throw new Error(d.error||'Simulation failed.');
+    $('demoReferralMessage').textContent=`Simulation recorded: ${d.rewards?.length||0} referral levels generated. No real balance was changed.`;
+    await loadReferral();await loadDemoReferralTree();
+  }catch(e){$('demoReferralMessage').textContent=e.message}
+  finally{$('demoReferralPurchase').disabled=false;}
+};
 
 /* MAIN XAUUSD CHART: full chart stays here, with no drawing/tools toolbar. */
 function loadChart(){
@@ -192,7 +219,7 @@ async function loadXauPrice(){
   catch(e){priceEl.textContent='—';}
 }
 
-window.addEventListener('load',()=>{loadMe();loadReferral();loadXauPrice();setInterval(loadXauPrice,15000);setInterval(refresh,1000);loadChart();});
+window.addEventListener('load',()=>{loadMe();loadReferral();loadDemoReferralTree();loadXauPrice();setInterval(loadXauPrice,15000);setInterval(refresh,1000);loadChart();});
 </script>
 
 <style>
