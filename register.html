@@ -1,1 +1,99 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>GCVH — Create Account</title><style>body{margin:0;background:#070a0d;color:#f4f6f8;font-family:Inter,Arial,sans-serif;display:grid;place-items:center;min-height:100vh}.card{width:min(460px,92vw);background:#10171e;border:1px solid #2b3540;border-radius:18px;padding:30px;box-shadow:0 30px 80px #000}.logo{width:50px;height:50px;border:1px solid #d5ad5a80;border-radius:50%;display:grid;place-items:center;color:#f1d48b;font:28px Georgia,serif;margin:0 auto 14px}.title{text-align:center;font:700 27px Georgia,serif;margin:0}.sub{text-align:center;color:#d5ad5a;font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;margin:8px 0 25px}.field{margin-bottom:15px}.field label{display:block;color:#9ba6ae;font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:7px}.field input{width:100%;height:46px;box-sizing:border-box;padding:0 13px;background:#070a0d;border:1px solid #222c35;border-radius:9px;color:#fff;outline:none}.button{width:100%;height:46px;border:0;border-radius:9px;background:linear-gradient(135deg,#f1d48b,#b98d3e);font-weight:900;color:#171209;cursor:pointer}.alert{display:none;padding:11px;border-radius:9px;margin-bottom:15px;font-size:12px}.alert.show{display:block}.error{background:#ff647f12;border:1px solid #ff647f35;color:#ff9aae}.success{background:#38d99a12;border:1px solid #38d99a35;color:#7ce7ba}.ref{display:none;margin:18px 0;padding:15px;border:1px solid #d5ad5a35;border-radius:11px;background:#d5ad5a08}.ref.show{display:block}.refcode{font-weight:900;color:#f1d48b}.link{word-break:break-all;color:#cdd3d7;font-size:12px;margin:8px 0}.copy{padding:8px 11px;border:1px solid #2b3540;border-radius:8px;background:#ffffff05;color:#fff;cursor:pointer}.footer{text-align:center;color:#66737d;font-size:11px;margin-top:18px;line-height:1.5}.links{text-align:center;margin-top:15px;font-size:12px}.links a{color:#f1d48b}</style></head><body><div class="card"><div class="logo">G</div><h1 class="title">Create Your Account</h1><div class="sub">Global Capital Venture Holdings</div><div id="alert" class="alert"></div><div class="field"><label>Full Name</label><input id="fullName" autocomplete="name"></div><div class="field"><label>Email</label><input id="email" type="email" autocomplete="email"></div><div class="field"><label>Password</label><input id="password" type="password" autocomplete="new-password"></div><div class="field"><label>Referral Code <span style="color:#66737d">(optional)</span></label><input id="referralCode" autocomplete="off"></div><button id="create" class="button" type="button">Create Account</button><div id="ref" class="ref"><div style="font-size:11px;color:#9ba6ae">YOUR REFERRAL CODE</div><div id="refCode" class="refcode"></div><div style="font-size:11px;color:#9ba6ae;margin-top:12px">YOUR REFERRAL LINK</div><div id="refLink" class="link"></div><button id="copy" class="copy" type="button">Copy Referral Link</button></div><div class="links">Already have an account? <a href="login.html">Sign in</a></div><div class="footer">Three-level referral simulation: Level 1 = 10%, Level 2 = 5%, Level 3 = 3%. Demo credits are for testing only and are not real-money commissions.</div></div><script>const API='https://global-capital-venture-holdings-backend-production.up.railway.app';const qs=new URLSearchParams(location.search);const ref=qs.get('ref');if(ref)document.getElementById('referralCode').value=ref.toUpperCase();function alertBox(t,ok){const e=document.getElementById('alert');e.textContent=t;e.className='alert show '+(ok?'success':'error')}document.getElementById('create').onclick=async()=>{const fullName=document.getElementById('fullName').value.trim(),email=document.getElementById('email').value.trim(),password=document.getElementById('password').value,referralCode=document.getElementById('referralCode').value.trim();if(!fullName||!email||password.length<8){alertBox('Enter your name, email and a password of at least 8 characters.');return}try{const r=await fetch(API+'/api/auth/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({fullName,email,password,referralCode:referralCode||undefined})});const data=await r.json();if(!r.ok)throw new Error(data.error||'Registration failed.');localStorage.setItem('gcvh_customer_token',data.token);localStorage.setItem('gcvh_customer_user',JSON.stringify(data.user));if(data.referral){document.getElementById('refCode').textContent=data.referral.code;document.getElementById('refLink').textContent=data.referral.link;document.getElementById('ref').classList.add('show')}alertBox('Account created successfully. Your referral link is ready.',true)}catch(e){alertBox(e.message)}};document.getElementById('copy').onclick=async()=>{try{await navigator.clipboard.writeText(document.getElementById('refLink').textContent);alertBox('Referral link copied.',true)}catch(e){alertBox('Could not copy the referral link.',false)}};</script></body></html>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>GCVH — Create Account</title><style>body{margin:0;background:#070a0d;color:#f4f6f8;font-family:Inter,Arial,sans-serif;display:grid;place-items:center;min-height:100vh}.card{width:min(460px,92vw);background:#10171e;border:1px solid #2b3540;border-radius:18px;padding:30px;box-shadow:0 30px 80px #000}.logo{width:50px;height:50px;border:1px solid #d5ad5a80;border-radius:50%;display:grid;place-items:center;color:#f1d48b;font:28px Georgia,serif;margin:0 auto 14px}.title{text-align:center;font:700 27px Georgia,serif;margin:0}.sub{text-align:center;color:#d5ad5a;font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;margin:8px 0 25px}.field{margin-bottom:15px}.field label{display:block;color:#9ba6ae;font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:7px}.field input{width:100%;height:46px;box-sizing:border-box;padding:0 13px;background:#070a0d;border:1px solid #222c35;border-radius:9px;color:#fff;outline:none}.button{width:100%;height:46px;border:0;border-radius:9px;background:linear-gradient(135deg,#f1d48b,#b98d3e);font-weight:900;color:#171209;cursor:pointer}.alert{display:none;padding:11px;border-radius:9px;margin-bottom:15px;font-size:12px}.alert.show{display:block}.error{background:#ff647f12;border:1px solid #ff647f35;color:#ff9aae}.success{background:#38d99a12;border:1px solid #38d99a35;color:#7ce7ba}.ref{display:none;margin:18px 0;padding:15px;border:1px solid #d5ad5a35;border-radius:11px;background:#d5ad5a08}.ref.show{display:block}.refcode{font-weight:900;color:#f1d48b}.link{word-break:break-all;color:#cdd3d7;font-size:12px;margin:8px 0}.copy{padding:8px 11px;border:1px solid #2b3540;border-radius:8px;background:#ffffff05;color:#fff;cursor:pointer}.footer{text-align:center;color:#66737d;font-size:11px;margin-top:18px;line-height:1.5}.links{text-align:center;margin-top:15px;font-size:12px}.links a{color:#f1d48b}</style></head><body><div class="card"><div class="logo">G</div><h1 class="title">Create Your Account</h1><div class="sub">Global Capital Venture Holdings</div><div id="alert" class="alert"></div><div class="field"><label>Full Name</label><input id="fullName" autocomplete="name"></div><div class="field"><label>Email</label><input id="email" type="email" autocomplete="email"></div><div class="field"><label>Password</label><input id="password" type="password" autocomplete="new-password"></div><div class="field"><label>Referral Code <span style="color:#66737d">(optional)</span></label><input id="referralCode" autocomplete="off"></div><button id="create" class="button" type="button">Create Account</button><div id="ref" class="ref"><div style="font-size:11px;color:#9ba6ae">YOUR REFERRAL CODE</div><div id="refCode" class="refcode"></div><div style="font-size:11px;color:#9ba6ae;margin-top:12px">YOUR REFERRAL LINK</div><div id="refLink" class="link"></div><button id="copy" class="copy" type="button">Copy Referral Link</button></div><div class="links">Already have an account? <a href="login.html">Sign in</a></div><div class="footer">Three-level referral simulation: Level 1 = 10%, Level 2 = 5%, Level 3 = 3%. Demo credits are for testing only and are not real-money commissions.</div></div><script>
+const API='https://global-capital-venture-holdings-backend-production.up.railway.app';
+
+const qs=new URLSearchParams(location.search);
+const ref=qs.get('ref');
+
+if(ref){
+  document.getElementById('referralCode').value=ref.toUpperCase();
+}
+
+function alertBox(t,ok){
+  const e=document.getElementById('alert');
+  e.textContent=t;
+  e.className='alert show '+(ok?'success':'error');
+}
+
+document.getElementById('create').onclick=async()=>{
+  const fullName=document.getElementById('fullName').value.trim();
+  const email=document.getElementById('email').value.trim();
+  const password=document.getElementById('password').value;
+  const referralCode=document.getElementById('referralCode').value.trim();
+
+  if(!fullName || !email || password.length<8){
+    alertBox('Enter your name, email and a password of at least 8 characters.');
+    return;
+  }
+
+  const createButton=document.getElementById('create');
+
+  try{
+    createButton.disabled=true;
+    createButton.textContent='Creating Account...';
+
+    const r=await fetch(API+'/api/auth/register',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json'
+      },
+      body:JSON.stringify({
+        fullName,
+        email,
+        password,
+        referralCode:referralCode || undefined
+      })
+    });
+
+    const data=await r.json();
+
+    if(!r.ok){
+      throw new Error(data.error || 'Registration failed.');
+    }
+
+    /*
+     * Registration is complete, but the customer is NOT
+     * automatically logged in. They must use the credentials
+     * they just created on the login page.
+     */
+    alertBox(
+      'Account created successfully. Redirecting you to the login page...',
+      true
+    );
+
+    /*
+     * Pass the email to login.html so the login form can
+     * optionally pre-fill it.
+     */
+    setTimeout(()=>{
+      window.location.href=
+        'login.html?registered=1&email='+
+        encodeURIComponent(email);
+    },1200);
+
+  }catch(e){
+    createButton.disabled=false;
+    createButton.textContent='Create Account';
+    alertBox(e.message || 'Registration failed.');
+  }
+};
+
+document.getElementById('copy').onclick=async()=>{
+  const link=document.getElementById('refLink').textContent;
+
+  if(!link)return;
+
+  try{
+    await navigator.clipboard.writeText(link);
+    alertBox('Referral link copied.',true);
+  }catch(e){
+    const temp=document.createElement('textarea');
+    temp.value=link;
+    document.body.appendChild(temp);
+    temp.select();
+    document.execCommand('copy');
+    temp.remove();
+
+    alertBox('Referral link copied.',true);
+  }
+};
+</script></body></html>
