@@ -14,7 +14,7 @@
 </div>
 <main class="dashboard-main" id="dashboardMain" style="display:none">
 <section class="dashboard-header"><div><div class="section-tag">PRIVATE CLIENT AREA</div><h1>Portfolio <span>Overview</span></h1><p>Your package balance, growth and daily trading instruction.</p></div><div class="status-indicator"><span></span><span id="headerAccountStatus">Checking account...</span></div></section>
-<section id="overview" class="statistics-grid"><div class="stat-card"><div class="stat-header"><span>PACKAGE BALANCE</span><div class="stat-icon">$</div></div><div id="packageBalance" class="stat-value">$0.00</div><div class="stat-footer"><span class="green-text">● Active</span><span>Purchased package</span></div></div><div class="stat-card"><div class="stat-header"><span>TOTAL GROWTH</span><div class="stat-icon green-icon">↗</div></div><div id="totalGrowth" class="stat-value profit-value">$0.000000</div><div class="stat-footer"><span class="green-text">1% Daily ROI</span><span>Earned growth</span></div></div><div class="stat-card"><div class="stat-header"><span>NEXT FORTNIGHTLY PAYOUT</span><div class="stat-icon">◷</div></div><div id="payoutDate" class="stat-date">--</div><div class="stat-footer"><span>14-day cycle</span><span>Unlock date</span></div></div></section>
+<section id="overview" class="statistics-grid"><div class="stat-card"><div class="stat-header"><span>PACKAGE BALANCE</span><div class="stat-icon">$</div></div><div id="packageBalance" class="stat-value">$0.00</div><div class="stat-footer"><span class="green-text">● Active</span><span>Purchased package</span></div></div><div class="stat-card"><div class="stat-header"><span>TOTAL PAYOUT BALANCE</span><div class="stat-icon green-icon">↗</div></div><div id="totalGrowth" class="stat-value profit-value">$0.000000</div><div class="stat-footer"><span class="green-text">Growth + Referrals</span><span>Visible now · withdraws after 14 days</span></div></div><div class="stat-card"><div class="stat-header"><span>NEXT FORTNIGHTLY PAYOUT</span><div class="stat-icon">◷</div></div><div id="payoutDate" class="stat-date">--</div><div class="stat-footer"><span>14-day cycle</span><span>Unlock date</span></div></div></section>
 
 <section id="market" class="live-market-card"><div class="market-card-head"><div><div class="section-tag">LIVE MARKET</div><h2>XAUUSD <span>Gold Spot</span></h2></div><div class="market-live"><i></i>LIVE</div></div>
 <div class="market-price-row">
@@ -48,7 +48,7 @@ if(!customerToken){
   throw new Error('Authentication required');
 }
 
-let investment={amount:0,startTime:Date.now(),payoutTime:0,serverGrowth:0,availableWithdrawal:0};
+let investment={amount:0,startTime:Date.now(),payoutTime:0,totalGrowth:0,normalGrowth:0,referralBalance:0,availableWithdrawal:0};
 let accountActive=false;
 const dayKey=()=>new Date().toISOString().slice(0,10);
 let executed=JSON.parse(localStorage.getItem('globeCapitalExecutedSignals')||'{}');
@@ -81,11 +81,15 @@ function qualifiedDays(){
   }
   return n;
 }
-function growth(){return Number(investment.serverGrowth||0)}
+function totalGrowth(){return Number(investment.totalGrowth||0)}
+function normalGrowth(){return Number(investment.normalGrowth||0)}
+function referralBalance(){return Number(investment.referralBalance||0)}
 function refresh(){
   if(!accountActive)return;
   $('packageBalance').textContent=money(investment.amount);
-  $('totalGrowth').textContent=money(growth(),6);
+  // Display investment growth + earned referral commissions as the total
+  // payout balance. The backend still keeps it locked until the 14-day cycle completes.
+  $('totalGrowth').textContent=money(totalGrowth(),6);
   if(investment.payoutTime){
     $('payoutDate').textContent=new Date(investment.payoutTime).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
   }else $('payoutDate').textContent='—';
@@ -99,7 +103,7 @@ function refresh(){
   if(r<=0){
     $('countdown').textContent='PAYOUT UNLOCKED';
     $('withdrawButton').disabled=false;
-    $('payoutMessage').textContent='Your growth is ready for payout processing.';
+    $('payoutMessage').textContent=`Your total payout balance of ${money(totalGrowth(),6)} is unlocked and ready for payout processing.`;
     return;
   }
   let sec=Math.floor(r/1000),d=Math.floor(sec/DAY),h=Math.floor(sec%DAY/3600),m=Math.floor(sec%3600/60),ss=sec%60;
@@ -157,7 +161,9 @@ async function loadMe(){
       amount:principal,
       startTime:d.activated_at?new Date(d.activated_at).getTime():Date.now(),
       payoutTime:d.next_payout_at?new Date(d.next_payout_at).getTime():0,
-      serverGrowth:Number(d.growth||0),
+      totalGrowth:Number(d.growth||d.combined_payout_balance||0),
+      normalGrowth:Number(d.normal_growth||0),
+      referralBalance:Number(d.referral_balance||0),
       availableWithdrawal:Number(d.available_withdrawal||0)
     };
     localStorage.setItem('globeCapitalInvestment',JSON.stringify(investment));
@@ -172,10 +178,10 @@ $('executeSignal').onclick=addTrade;
 $('tradeOnce').onclick=addTrade;
 $('sendChat').onclick=()=>{let v=$('chatInput').value.trim();if(v){addChat('You',v);$('chatInput').value=''}};
 $('chatInput').addEventListener('keydown',e=>{if(e.key==='Enter')$('sendChat').click()});
-$('withdrawButton').onclick=()=>{if(accountActive)$('payoutMessage').textContent=`Growth of ${money(growth(),6)} is ready for payout processing.`};
+$('withdrawButton').onclick=()=>{if(accountActive)$('payoutMessage').textContent=`Your total payout balance of ${money(totalGrowth(),6)} (growth + referral commissions) is ready for payout processing.`};
 $('mobileMenuButton').onclick=()=>$('sidebar').classList.toggle('mobile-open');
 
-async function loadReferral(){try{const r=await fetch(API+'/api/referral',{headers:{Authorization:'Bearer '+customerToken},cache:'no-store'});if(!r.ok)throw new Error('Unable to load referral information.');const x=await r.json();$('referralCode').textContent=x.code||'—';$('referralLink').value=x.link||'';$('referralL1Count').textContent=Number(x.level1_count||0);$('referralL2Count').textContent=Number(x.level2_count||0);$('referralL3Count').textContent=Number(x.level3_count||0);$('referralCount').textContent=Number(x.total_network||0);$('referralRewards').textContent=money(x.total_rewards||0,2);$('referralBalance').textContent=money(x.referral_balance||0,2);$('refL1').textContent=money(x.level1_rewards||0,2);$('refL2').textContent=money(x.level2_rewards||0,2);$('refL3').textContent=money(x.level3_rewards||0,2);$('referralStatus').textContent='Real referral commissions are credited automatically when qualifying deposits are confirmed by the administrator.';}catch(e){if($('referralStatus'))$('referralStatus').textContent=e.message||'Unable to load referral information.';}}
+async function loadReferral(){try{const r=await fetch(API+'/api/referral',{headers:{Authorization:'Bearer '+customerToken},cache:'no-store'});if(!r.ok)throw new Error('Unable to load referral information.');const x=await r.json();$('referralCode').textContent=x.code||'—';$('referralLink').value=x.link||'';$('referralL1Count').textContent=Number(x.level1_count||0);$('referralL2Count').textContent=Number(x.level2_count||0);$('referralL3Count').textContent=Number(x.level3_count||0);$('referralCount').textContent=Number(x.total_network||0);$('referralRewards').textContent=money(x.total_rewards||0,2);$('referralBalance').textContent=money(x.referral_balance||0,2);if(investment){investment.referralBalance=Number(x.referral_balance||0);investment.totalGrowth=Number(investment.normalGrowth||0)+investment.referralBalance;}refresh();$('refL1').textContent=money(x.level1_rewards||0,2);$('refL2').textContent=money(x.level2_rewards||0,2);$('refL3').textContent=money(x.level3_rewards||0,2);$('referralStatus').textContent='Real referral commissions are credited automatically when qualifying deposits are confirmed by the administrator.';}catch(e){if($('referralStatus'))$('referralStatus').textContent=e.message||'Unable to load referral information.';}}
 async function loadReferralTree(){try{const r=await fetch(API+'/api/referral-tree',{headers:{Authorization:'Bearer '+customerToken},cache:'no-store'});if(!r.ok)throw new Error();const x=await r.json();const safe=v=>String(v||'Client').replace(/[<>&]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));const rows=(title,items,rate)=>`<div style="margin-top:10px;padding:12px;border:1px solid #2b3540;border-radius:9px"><strong>${title}</strong> <span style="color:#7f8b94">(${items.length} members · ${rate})</span><div style="margin-top:8px;color:#cdd3d7;font-size:12px">${items.length?items.map(i=>`<div style="padding:5px 0">${safe(i.full_name||i.email)}</div>`).join(''):'None yet'}</div></div>`;$('referralTree').innerHTML=rows('Level 1',x.level1||[],'10%')+rows('Level 2',x.level2||[],'5%')+rows('Level 3',x.level3||[],'3%');}catch(e){if($('referralTree'))$('referralTree').innerHTML='<div class="tree-empty">Unable to load referral network.</div>';}}
 $('copyReferral').onclick=async()=>{const v=$('referralLink').value;if(v){try{await navigator.clipboard.writeText(v);$('copyReferral').textContent='Copied';setTimeout(()=>$('copyReferral').textContent='Copy Link',1500)}catch(e){$('referralLink').select();document.execCommand('copy');$('copyReferral').textContent='Copied'}}};
 /* MAIN XAUUSD CHART: full chart stays here, with no drawing/tools toolbar. */
