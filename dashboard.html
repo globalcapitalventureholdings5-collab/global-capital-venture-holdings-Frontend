@@ -1,5 +1,45 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Global Capital Venture Holdings, Inc. | Private Portfolio</title><link rel="stylesheet" href="styles.css"></head>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Global Capital Venture Holdings, Inc. | Private Portfolio</title><link rel="stylesheet" href="styles.css"><style>
+/* GCVH dashboard mobile header/sidebar fix */
+@media(max-width:900px){
+  html,body{width:100%;max-width:100%;overflow-x:hidden}
+  .mobile-header{
+    width:100%;height:68px;box-sizing:border-box;
+    padding:10px 12px;display:flex;align-items:center;
+    overflow:visible;position:relative;z-index:120
+  }
+  .mobile-header .brand{
+    min-width:0;max-width:calc(100% - 56px);
+    display:flex;align-items:center;gap:9px;overflow:hidden
+  }
+  .mobile-header .brand-mark{
+    width:40px;height:40px;min-width:40px;flex:0 0 40px
+  }
+  .mobile-header .brand em{
+    display:block;font-size:9px;line-height:1.1;
+    white-space:normal
+  }
+  .mobile-menu{
+    display:grid!important;place-items:center;
+    flex:0 0 44px;width:44px;height:44px;
+    margin-left:auto;position:relative;right:0;
+    z-index:121;box-sizing:border-box
+  }
+  .sidebar{
+    z-index:110;
+    max-width:86vw;
+    overflow-y:auto;
+    overflow-x:hidden
+  }
+  .dashboard-main{width:100%;max-width:100%;box-sizing:border-box}
+}
+@media(max-width:420px){
+  .mobile-header{padding-left:10px;padding-right:10px}
+  .mobile-header .brand-mark{width:38px;height:38px;min-width:38px;flex-basis:38px}
+  .mobile-header .brand{max-width:calc(100% - 52px)}
+  .mobile-menu{width:42px;height:42px;flex-basis:42px}
+}
+</style></head>
 <body class="dashboard-body">
 <header class="mobile-header"><a href="index.html" class="brand"><span class="brand-mark">$</span><span>Global Capital <em>Venture Holdings, Inc.</em></span></a><button id="mobileMenuButton" class="mobile-menu">☰</button></header>
 <div class="dashboard-layout"><aside class="sidebar" id="sidebar"><div class="sidebar-logo"><a href="index.html" class="brand"><span class="brand-mark">$</span><span>Global Capital <em>Venture Holdings, Inc.</em></span></a></div><div class="sidebar-profile"><div class="profile-avatar">GC</div><div><strong>Private Client</strong><span id="sidebarAccountStatus">Checking account...</span></div></div><nav class="sidebar-navigation"><a href="#overview" class="active"><span>▦</span>Overview</a><a href="#market"><span>◈</span>Market</a><a href="#signals"><span>✦</span>Daily Signals</a><a href="#payout"><span>↗</span>Payout</a><a href="#referrals"><span>%</span>Referrals</a><a href="index.html"><span>←</span>Packages</a></nav><div class="sidebar-bottom"><div class="account-note"><span>PRIVATE ACCOUNT</span><p>Your account is linked to the capital package selected at registration.</p></div><button id="logoutButton" class="sidebar-logout" type="button">↪ Logout</button><a href="index.html" class="sidebar-home">← Return to Website</a></div></aside>
@@ -9,16 +49,7 @@
     <div class="section-tag">ACCOUNT NOT ACTIVE</div>
     <h1>Your dashboard is locked</h1>
     <p id="lockedMessage">Your account has not been activated yet. Select an investment package and complete the deposit. Your dashboard will unlock after the payment has been verified by the administrator.</p>
-    <div id="lockedReferralBox" style="margin:24px auto 0;max-width:620px;padding:18px;border:1px solid rgba(217,173,75,.22);border-radius:14px;background:#0d1217;text-align:left">
-      <div style="font-size:10px;letter-spacing:1.5px;font-weight:800;color:#d5ad5a">REFERRAL PROGRAM</div>
-      <div style="font-size:20px;font-weight:700;margin:7px 0">10% / 5% / 3%</div>
-      <p style="margin:0 0 12px;color:#9ba6ae;font-size:12px;line-height:1.6">Your personal referral link is available even before package activation. Referral commissions are credited after qualifying deposits are confirmed.</p>
-      <div style="display:grid;grid-template-columns:1fr auto;gap:8px">
-        <input id="lockedReferralLink" readonly placeholder="Loading referral link…" style="min-width:0;width:100%;box-sizing:border-box;padding:11px;border:1px solid #2b3540;border-radius:8px;background:#070a0d;color:#cdd3d7">
-        <button id="lockedCopyReferral" class="btn btn-outline" type="button">Copy Link</button>
-      </div>
-    </div>
-    <div class="locked-actions" style="margin-top:18px"><a class="btn btn-primary" href="index.html#packages">Choose a Package</a><a class="btn btn-outline" href="index.html">Return to Website</a></div>
+    <div class="locked-actions"><a class="btn btn-primary" href="index.html#packages">Choose a Package</a><a class="btn btn-outline" href="index.html">Return to Website</a></div>
   </div>
 </div>
 <main class="dashboard-main" id="dashboardMain" style="display:none">
@@ -475,22 +506,6 @@ $('logoutButton').onclick=()=>{
   window.location.href='index.html';
 };
 
-async function loadReferralLinkForPending(){
-  try{
-    const r=await fetch(API+'/api/referral?ts='+Date.now(),NO_CACHE());
-    if(!r.ok)return;
-    const x=await r.json();
-    const link=x.link||'';
-    if($('lockedReferralLink'))$('lockedReferralLink').value=link;
-    $('lockedCopyReferral')?.addEventListener('click',async()=>{
-      if(!link)return;
-      try{await navigator.clipboard.writeText(link)}catch(_e){$('lockedReferralLink').select();document.execCommand('copy')}
-      $('lockedCopyReferral').textContent='Copied';
-      setTimeout(()=>$('lockedCopyReferral').textContent='Copy Link',1500);
-    },{once:true});
-  }catch(_e){}
-}
-
 async function loadReferral(){
   try{
     const r=await fetch(API+'/api/referral?ts='+Date.now(),NO_CACHE());
@@ -562,7 +577,6 @@ async function loadXauPrice(){
 }
 
 window.addEventListener('load',async()=>{
-  await loadReferralLinkForPending();
   await loadMe();
   if(accountActive){
     await loadTrades();
