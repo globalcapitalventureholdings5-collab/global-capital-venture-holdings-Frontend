@@ -44,41 +44,49 @@ h1{font-family:Georgia,"Times New Roman",serif;font-size:clamp(54px,7.5vw,105px)
 @keyframes feedIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
 @media(max-width:800px){.withdrawal-feed-section{padding:10px 18px 65px}.withdrawal-feed-head{align-items:flex-start;flex-direction:column}.withdrawal-feed-top{display:none}.withdrawal-row{grid-template-columns:1fr auto;gap:8px 14px;padding:16px}.withdrawal-client{grid-column:1}.withdrawal-date{grid-column:1}.withdrawal-amount{grid-column:2;grid-row:1 / span 2;text-align:right}.withdrawal-method{grid-column:1}.withdrawal-status{grid-column:2;grid-row:3;text-align:right}.withdrawal-ref{grid-column:1 / -1}.-badge{align-self:flex-start}}
 /* =========================
-    DEPOSIT FEED
+   DEPOSIT FEED
    ========================= */
 
 .deposit-feed-section{
   max-width:1280px;
   margin:0 auto;
-  padding:20px 28px 50px;
+  padding:20px 28px 90px;
 }
 
 .deposit-feed-head{
   display:flex;
-  align-items:flex-end;
   justify-content:space-between;
+  align-items:flex-end;
   gap:20px;
-  margin-bottom:18px;
+  margin-bottom:26px;
 }
 
 .deposit-feed-head h2{
-  margin:8px 0 6px;
+  font:600 clamp(34px,4vw,52px)/1.05 Georgia,serif;
+  margin:14px 0 8px;
+}
+
+.deposit-feed-head h2 span{
+  color:var(--gold2);
 }
 
 .deposit-feed-head p{
+  color:var(--muted);
   margin:0;
-  opacity:.7;
+  line-height:1.6;
 }
 
 .deposit-badge{
   display:inline-flex;
   align-items:center;
   gap:8px;
-  padding:9px 13px;
-  border:1px solid rgba(255,255,255,.12);
+  border:1px solid rgba(217,173,75,.4);
   border-radius:999px;
-  font-size:11px;
-  letter-spacing:.08em;
+  padding:9px 13px;
+  color:var(--gold2);
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.12em;
   white-space:nowrap;
 }
 
@@ -86,37 +94,37 @@ h1{font-family:Georgia,"Times New Roman",serif;font-size:clamp(54px,7.5vw,105px)
   width:7px;
   height:7px;
   border-radius:50%;
-  background:#22c55e;
+  background:var(--green);
   display:inline-block;
-  box-shadow:0 0 10px rgba(34,197,94,.7);
+  box-shadow:0 0 10px rgba(22,229,139,.7);
 }
 
 .deposit-feed{
   border:1px solid rgba(255,255,255,.08);
-  border-radius:18px;
+  border-radius:20px;
   overflow:hidden;
-  background:rgba(255,255,255,.025);
-}
-
-.deposit-feed-top,
-.deposit-row{
-  display:grid;
-  grid-template-columns:2fr 1.2fr 1fr 1.4fr;
-  align-items:center;
-  gap:18px;
-  padding:15px 20px;
+  background:linear-gradient(145deg,#101419,#090b0e);
+  box-shadow:0 16px 45px rgba(0,0,0,.18);
 }
 
 .deposit-feed-top{
-  font-size:11px;
+  display:grid;
+  grid-template-columns:1.2fr 1fr 1fr 1.4fr;
+  padding:15px 20px;
+  color:#858b92;
+  font-size:10px;
+  letter-spacing:.12em;
   text-transform:uppercase;
-  letter-spacing:.08em;
-  opacity:.5;
   border-bottom:1px solid rgba(255,255,255,.07);
 }
 
 .deposit-row{
-  border-bottom:1px solid rgba(255,255,255,.06);
+  display:grid;
+  grid-template-columns:1.2fr 1fr 1fr 1.4fr;
+  padding:17px 20px;
+  align-items:center;
+  border-bottom:1px solid rgba(255,255,255,.055);
+  animation:feedIn .35s ease;
 }
 
 .deposit-row:last-child{
@@ -124,38 +132,50 @@ h1{font-family:Georgia,"Times New Roman",serif;font-size:clamp(54px,7.5vw,105px)
 }
 
 .deposit-package{
-  font-weight:600;
+  font-weight:700;
+  color:#e9ebed;
 }
 
-.deposit-date,
-.deposit-type{
+.deposit-date{
+  color:#9ca2a8;
   font-size:12px;
-  opacity:.6;
 }
 
 .deposit-amount{
-  font-weight:700;
+  font:600 20px Georgia,serif;
+  color:var(--gold2);
 }
 
 .deposit-status{
-  display:inline-block;
-  padding:5px 8px;
-  border-radius:999px;
-  border:1px solid rgba(255,255,255,.1);
-  font-size:10px;
-  letter-spacing:.06em;
+  color:var(--green);
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:.08em;
+}
+
+.deposit-type{
+  color:#737a82;
+  font-size:11px;
+  margin-top:4px;
 }
 
 .deposit-note{
-  margin-top:12px;
+  text-align:center;
+  color:#70777e;
   font-size:11px;
-  opacity:.55;
+  line-height:1.6;
+  margin-top:14px;
 }
 
-@media(max-width:760px){
+.deposit-note .feed-live{
+  color:var(--green);
+  font-weight:700;
+}
+
+@media(max-width:800px){
+
   .deposit-feed-section{
-    padding-left:18px;
-    padding-right:18px;
+    padding:10px 18px 65px;
   }
 
   .deposit-feed-head{
@@ -163,13 +183,42 @@ h1{font-family:Georgia,"Times New Roman",serif;font-size:clamp(54px,7.5vw,105px)
     flex-direction:column;
   }
 
-  .deposit-feed{
-    overflow-x:auto;
+  .deposit-feed-top{
+    display:none;
   }
 
-  .deposit-feed-top,
   .deposit-row{
-    min-width:650px;
+    grid-template-columns:1fr auto;
+    gap:8px 14px;
+    padding:16px;
+  }
+
+  .deposit-package{
+    grid-column:1;
+  }
+
+  .deposit-date{
+    grid-column:1;
+  }
+
+  .deposit-amount{
+    grid-column:2;
+    grid-row:1 / span 2;
+    text-align:right;
+  }
+
+  .deposit-status{
+    grid-column:1;
+  }
+
+  .deposit-type{
+    grid-column:2;
+    grid-row:3;
+    text-align:right;
+  }
+
+  .deposit-badge{
+    align-self:flex-start;
   }
 }
 </style>
@@ -226,15 +275,19 @@ h1{font-family:Georgia,"Times New Roman",serif;font-size:clamp(54px,7.5vw,105px)
 <section class="deposit-feed-section" id="deposit-activity">
 
   <div class="deposit-feed-head">
+
     <div>
       <span class="section-tag">PACKAGE ACTIVITY</span>
+
       <h2>Recent <span>Deposits</span></h2>
+
     </div>
 
     <div class="deposit-badge">
       <i></i>
       DEPOSIT ACTIVITY
     </div>
+
   </div>
 
   <div class="deposit-feed" id="depositFeed"></div>
