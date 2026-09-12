@@ -243,7 +243,12 @@ $('sendChat').onclick=()=>{let v=$('chatInput').value.trim();if(v){addChat('You'
 $('chatInput').addEventListener('keydown',e=>{if(e.key==='Enter')$('sendChat').click()});
 $('withdrawButton').onclick=()=>{if(accountActive)$('payoutMessage').textContent=`Growth of ${money(growth(),6)} is ready for payout processing.`};
 $('mobileMenuButton').onclick=()=>$('sidebar').classList.toggle('mobile-open');
-
+$('customerLogout').onclick=(e)=>{
+  e.preventDefault();
+  localStorage.removeItem('gcvh_customer_token');
+  localStorage.removeItem('gcvh_customer_user');
+  location.href='login.html';
+};
 document.querySelectorAll('.sidebar-navigation a').forEach(link=>{
   link.addEventListener('click',()=>{
     $('sidebar').classList.remove('mobile-open');
