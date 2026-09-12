@@ -147,20 +147,43 @@ function addChat(sender,text){
 function playExecutionSound(){
   try{
     const AudioCtx=window.AudioContext||window.webkitAudioContext;
-    if(!AudioCtx)return;
-    const ctx=new AudioCtx();
-    const now=ctx.currentTime;
-    const osc=ctx.createOscillator();
-    const gain=ctx.createGain();
-    osc.type='sine';
-    osc.frequency.setValueAtTime(880,now);
-    osc.frequency.exponentialRampToValueAtTime(1320,now+0.12);
-    gain.gain.setValueAtTime(0.0001,now);
-    gain.gain.exponentialRampToValueAtTime(0.16,now+0.015);
-    gain.gain.exponentialRampToValueAtTime(0.0001,now+0.22);
-    osc.connect(gain);gain.connect(ctx.destination);
-    osc.start(now);osc.stop(now+0.23);
-    setTimeout(()=>ctx.close(),350);
+
+    if(AudioCtx){
+      const ctx=new AudioCtx();
+      const now=ctx.currentTime;
+
+      const osc=ctx.createOscillator();
+      const gain=ctx.createGain();
+
+      osc.type='sine';
+      osc.frequency.setValueAtTime(880,now);
+      osc.frequency.exponentialRampToValueAtTime(1320,now+0.12);
+
+      gain.gain.setValueAtTime(0.0001,now);
+      gain.gain.exponentialRampToValueAtTime(0.35,now+0.015);
+      gain.gain.exponentialRampToValueAtTime(0.0001,now+0.35);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start(now);
+      osc.stop(now+0.35);
+
+      setTimeout(()=>ctx.close(),500);
+    }
+
+    if('speechSynthesis' in window){
+      window.speechSynthesis.cancel();
+
+      const speech=new SpeechSynthesisUtterance('Trade executed');
+
+      speech.rate=0.85;
+      speech.pitch=1;
+      speech.volume=1;
+
+      window.speechSynthesis.speak(speech);
+    }
+
   }catch(e){}
 }
 
