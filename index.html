@@ -358,6 +358,127 @@ function rotateWithdrawalFeed(){
 }
 renderWithdrawalFeed();
 setInterval(rotateWithdrawalFeed,7000);
+/* =========================
+    DEPOSIT FEED
+   ========================= */
 
+const depositData = [
+  {
+    package:'Premium Package',
+    amount:1000,
+    date:'2 minutes ago',
+    status:'PACKAGE SELECTED',
+    type:'Deposit Activity'
+  },
+  {
+    package:'Pro Package',
+    amount:300,
+    date:'6 minutes ago',
+    status:'PACKAGE SELECTED',
+    type:'Deposit Activity'
+  },
+  {
+    package:'Elite Package',
+    amount:5000,
+    date:'11 minutes ago',
+    status:'PACKAGE SELECTED',
+    type:'Deposit Activity'
+  },
+  {
+    package:'Basic Package',
+    amount:100,
+    date:'17 minutes ago',
+    status:'PACKAGE SELECTED',
+    type:'Deposit Activity'
+  },
+  {
+    package:'Ultimate Package',
+    amount:10000,
+    date:'24 minutes ago',
+    status:'PACKAGE SELECTED',
+    type:'Deposit Activity'
+  },
+  {
+    package:'Starter Package',
+    amount:25,
+    date:'31 minutes ago',
+    status:'PACKAGE SELECTED',
+    type:'Deposit Activity'
+  },
+  {
+    package:'Premium Package',
+    amount:500,
+    date:'38 minutes ago',
+    status:'PACKAGE SELECTED',
+    type:'Deposit Activity'
+  },
+  {
+    package:'Elite Package',
+    amount:2500,
+    date:'45 minutes ago',
+    status:'PACKAGE SELECTED',
+    type:'Deposit Activity'
+  }
+];
+
+function renderDepositFeed(){
+
+  const el = document.getElementById('depositFeed');
+
+  if(!el) return;
+
+  const rows = depositData.slice(0,6);
+
+  el.innerHTML =
+    '<div class="deposit-feed-top">' +
+      '<span>Package</span>' +
+      '<span>Time</span>' +
+      '<span>Amount</span>' +
+      '<span>Activity</span>' +
+    '</div>' +
+
+    rows.map(x => `
+      <div class="deposit-row">
+
+        <div class="deposit-package">
+          ${x.package}
+        </div>
+
+        <div class="deposit-date">
+          ${x.date}
+        </div>
+
+        <div class="deposit-amount">
+          $${x.amount.toLocaleString('en-US',{
+            minimumFractionDigits:2
+          })}
+        </div>
+
+        <div>
+          <span class="deposit-status">
+            ${x.status}
+          </span>
+
+          <div class="deposit-type">
+            ${x.type}
+          </div>
+        </div>
+
+      </div>
+    `).join('');
+}
+
+function rotateDepositFeed(){
+
+  const first = depositData.shift();
+
+  depositData.push(first);
+
+  renderDepositFeed();
+}
+
+renderDepositFeed();
+
+setInterval(rotateDepositFeed,7000);
 </script>
 </body></html>
