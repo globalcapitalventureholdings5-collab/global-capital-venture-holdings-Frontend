@@ -221,9 +221,9 @@ async function addTrade(){
     playExecutionSound();
     $('signalStatus').textContent='Trade Executed';
     $('signalStatus').className='signal-status completed';
-    $('executionState').textContent="Today's signal has been executed. Growth qualification has been recorded.";
-    $('signalNotice').textContent="Signal Executed. Today's 1% ROI qualification has been recorded.";
-    addChat('Account Desk',"Signal Executed. Today's XAUUSD trade has been recorded.");
+   $('executionState').textContent="Today's signal has been executed. Your 1% growth will be credited after the 2-minute processing period.";
+$('signalNotice').textContent="Trade Executed. Your 1% ROI growth will be credited in approximately 2 minutes.";
+addChat('Account Desk',"Trade Executed. Today's XAUUSD trade has been recorded. Growth will be credited after the 2-minute processing period.");
     await loadMe();
     await loadTrades();
   }catch(e){
