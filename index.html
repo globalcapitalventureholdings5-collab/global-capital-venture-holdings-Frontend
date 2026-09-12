@@ -172,8 +172,6 @@ h1{font-family:Georgia,"Times New Roman",serif;font-size:clamp(54px,7.5vw,105px)
     min-width:650px;
   }
 }
-
-</style>
 </style>
 </head>
 <body>
@@ -224,6 +222,29 @@ h1{font-family:Georgia,"Times New Roman",serif;font-size:clamp(54px,7.5vw,105px)
   </div>
 
 </section>
+
+<section class="deposit-feed-section" id="deposit-activity">
+
+  <div class="deposit-feed-head">
+    <div>
+      <span class="section-tag">PACKAGE ACTIVITY</span>
+      <h2>Recent <span>Deposits</span></h2>
+    </div>
+
+    <div class="deposit-badge">
+      <i></i>
+      DEPOSIT ACTIVITY
+    </div>
+  </div>
+
+  <div class="deposit-feed" id="depositFeed"></div>
+
+  <div class="deposit-note">
+    <span class="feed-live">● DEPOSIT FEED</span>
+  </div>
+
+</section>
+
 <section class="withdrawal-feed-section" id="withdrawal-activity">
   <div class="withdrawal-feed-head">
     <div><span class="section-tag">WITHDRAWAL ACTIVITY</span><h2>Recent <span>Withdrawals</span></h2><p>Illustrative platform activity </p></div>
@@ -448,18 +469,12 @@ function renderDepositFeed(){
       </div>
     `).join('');
 }
-
 function rotateDepositFeed(){
-
   const first = depositData.shift();
-
   depositData.push(first);
-
   renderDepositFeed();
 }
-
 renderDepositFeed();
-
 setInterval(rotateDepositFeed,7000);
 </script>
 </body></html>
