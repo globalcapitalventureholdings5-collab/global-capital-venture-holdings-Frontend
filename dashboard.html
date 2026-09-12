@@ -275,7 +275,7 @@ async function loadSalary(){
     if(next){
       const progress=Math.max(0,Math.min(Number(next.incremental||0),Number(next.progress||0)));
       const pct=next.incremental>0?(progress/Number(next.incremental))*100:0;
-      $('salaryNextTitle').textContent=`Tier ${next.tier} · $${Number(next.monthly_salary||0).toLocaleString('en-US')}/month`;
+      $('salaryNextTitle').textContent=`${next.name || ('Tier '+next.tier)} · $${Number(next.monthly_salary||0).toLocaleString('en-US')}/month`;
       $('salaryNextAmount').textContent=`${money(progress,2)} / ${money(next.incremental,2)}`;
       $('salaryProgressBar').style.width=pct.toFixed(2)+'%';
       $('salaryProgressText').textContent=`${money(progress,2)} completed`;
@@ -296,7 +296,7 @@ async function loadSalary(){
       const active=!!t.active;
       const exp=t.expires_at?new Date(t.expires_at).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}):'—';
       const activated=t.activated_at?new Date(t.activated_at).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}):'—';
-      return `<div class="salary-tier-row ${active?'active':'expired'}"><div><span>Tier ${t.tier}</span><strong>${money(t.monthly_salary,2)} / month</strong></div><div><span>Activated</span><strong>${activated}</strong></div><div><span>Expires</span><strong>${exp}</strong></div><div><span>Status</span><strong>${active?'ACTIVE':'EXPIRED'}</strong></div></div>`;
+      return `<div class="salary-tier-row ${active?'active':'expired'}"><div><span>${t.name || ('Tier '+t.tier)}</span><strong>${money(t.monthly_salary,2)} / month</strong></div><div><span>Activated</span><strong>${activated}</strong></div><div><span>Expires</span><strong>${exp}</strong></div><div><span>Status</span><strong>${active?'ACTIVE':'EXPIRED'}</strong></div></div>`;
     }).join('');
   }catch(e){
     if($('salaryNextTitle'))$('salaryNextTitle').textContent='Salary information unavailable';
