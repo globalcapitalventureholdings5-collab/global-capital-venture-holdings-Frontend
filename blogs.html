@@ -1,350 +1,628 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1.0" />
-<title>Blogs | Global Capital Venture Holdings</title>
-<link rel="icon" type="image/svg+xml" href="favicon.svg">
-<style>
-  :root {
-    --bg: #ffffff;
-    --panel: #f6f9f7;
-    --panel-strong: #eef7f1;
-    --text: #0d1117;
-    --muted: #4a5a56;
-    --green: #0d7a58;
-    --green-strong: #085b3d;
-    --line: rgba(13, 122, 88, 0.18);
-    --shadow: 0 18px 45px rgba(13, 22, 18, 0.08);
-  }
-  * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  body {
-    margin: 0;
-    font-family: Inter, Arial, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-  }
-  a { color: inherit; text-decoration: none; }
-  button, input, textarea { font: inherit; }
-  .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
-  .site-header { position: sticky; top: 0; z-index: 20; background: rgba(255,255,255,0.96); backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); }
-  .nav { min-height: 78px; display: flex; align-items: center; gap: 20px; }
-  .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; }
-  .brand-mark { width: 42px; height: 42px; border-radius: 50%; border: 1px solid var(--green); display: grid; place-items: center; color: var(--green); font-weight: 700; }
-  .nav-links { margin-left: auto; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-  .nav-links a { padding: 10px 14px; border-radius: 10px; color: #111827; font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 700; }
-  .nav-links a:hover { background: rgba(13,122,88,0.06); }
-  .header-cta { border: 1px solid rgba(13,122,88,0.2); background: var(--green); color: #fff; border-radius: 12px; padding: 11px 16px; font-weight: 700; }
-  .hero { padding: 58px 0 26px; background: linear-gradient(180deg, #f5faf7 0%, #ffffff 100%); border-bottom: 1px solid var(--line); }
-  .hero-inner { display: flex; align-items: end; justify-content: space-between; gap: 20px; }
-  .eyebrow { display: inline-flex; align-items: center; gap: 8px; color: var(--green); background: rgba(13,122,88,0.06); padding: 8px 12px; border-radius: 999px; border: 1px solid rgba(13,122,88,0.12); letter-spacing: 0.12em; text-transform: uppercase; font-size: 10px; font-weight: 800; }
-  .hero h1 { margin: 18px 0 10px; font-size: clamp(2.4rem, 5vw, 4.4rem); line-height: 1.03; letter-spacing: -0.05em; }
-  .hero p { margin: 0; max-width: 680px; color: var(--muted); line-height: 1.7; font-size: 1.05rem; }
-  .toolbar { display: flex; align-items: center; justify-content: flex-end; margin-top: 24px; }
-  .primary-btn, .ghost-btn, .download-btn { border: none; border-radius: 12px; cursor: pointer; transition: transform 0.15s ease; font-weight: 700; }
-  .primary-btn:hover, .ghost-btn:hover, .download-btn:hover { transform: translateY(-1px); }
-  .primary-btn { background: var(--green); color: #fff; padding: 14px 18px; min-width: 150px; }
-  .ghost-btn { background: #fff; color: var(--green); border: 1px solid rgba(13,122,88,0.18); padding: 13px 18px; min-width: 120px; }
-  .content { padding: 32px 0 70px; }
-  .empty-state { background: var(--panel); border: 1px solid var(--line); border-radius: 18px; padding: 2rem; text-align: center; color: var(--muted); }
-  .blog-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
-  .blog-card { background: linear-gradient(180deg, #ffffff 0%, var(--panel) 100%); border: 1px solid var(--line); border-radius: 20px; overflow: hidden; box-shadow: var(--shadow); }
-  .blog-video { width: 100%; height: 260px; background: #101826; object-fit: cover; display: block; border-bottom: 1px solid var(--line); }
-  .blog-body { padding: 22px 22px 18px; }
-  .blog-meta { display: flex; align-items: center; justify-content: space-between; gap: 8px; color: var(--muted); font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; }
-  .blog-title { margin: 16px 0 10px; font-size: clamp(1.5rem, 3vw, 2rem); line-height: 1.2; }
-  .blog-description { margin: 0 0 18px; color: var(--muted); line-height: 1.7; min-height: 88px; }
-  .blog-footer { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
-  .price { display: inline-flex; align-items: center; padding: 9px 12px; background: rgba(13,122,88,0.08); color: var(--green-strong); border: 1px solid rgba(13,122,88,0.12); border-radius: 10px; font-weight: 800; }
-  .download-btn { background: #fff; color: var(--text); border: 1px solid rgba(13,122,88,0.18); padding: 10px 14px; font-weight: 700; }
-  .pagination { margin-top: 30px; display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; }
-  .page-btn { border: 1px solid rgba(13,122,88,0.2); background: #fff; color: var(--text); min-width: 44px; min-height: 42px; border-radius: 12px; font-weight: 700; cursor: pointer; }
-  .page-btn.active { background: var(--green); color: #fff; border-color: var(--green); }
-  .form-wrap { display: none; margin: 24px 0 36px; background: var(--panel); border: 1px solid var(--line); border-radius: 20px; padding: 22px; box-shadow: var(--shadow); }
-  .form-wrap.open { display: block; }
-  .form-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 16px; }
-  .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
-  .field { display: flex; flex-direction: column; gap: 8px; }
-  .field.full { grid-column: 1 / -1; }
-  label { font-size: 13px; font-weight: 700; color: var(--muted); }
-  input, textarea { width: 100%; border: 1px solid rgba(13,122,88,0.18); border-radius: 12px; background: white; color: var(--text); padding: 12px 14px; outline: none; }
-  input:focus, textarea:focus { border-color: rgba(13,122,88,0.48); box-shadow: 0 0 0 3px rgba(13,122,88,0.08); }
-  textarea { min-height: 140px; resize: vertical; }
-  .alert { margin-top: 16px; padding: 12px 14px; border-radius: 12px; font-size: 14px; display: none; }
-  .alert.error { display: block; background: rgba(185,28,28,0.08); color: #b91c1c; border: 1px solid rgba(185,28,28,0.16); }
-  .alert.success { display: block; background: rgba(13,122,88,0.08); color: var(--green-strong); border: 1px solid rgba(13,122,88,0.16); }
-  
-  .nav-btn-signin {
-    border: 1.5px solid rgba(13, 122, 88, 0.35) !important;
-    color: var(--green-strong) !important;
-    background: rgba(13, 122, 88, 0.04) !important;
-    padding: 8px 16px !important;
-    border-radius: 8px !important;
-    font-weight: 800 !important;
-    transition: all 0.15s ease !important;
-  }
-  .nav-btn-signin:hover {
-    background: rgba(13, 122, 88, 0.1) !important;
-    border-color: var(--green) !important;
-    transform: translateY(-1px);
-  }
-  .nav-btn-signup {
-    background: linear-gradient(135deg, #0f7a57, #0d5a3f) !important;
-    color: #ffffff !important;
-    padding: 9px 18px !important;
-    border-radius: 8px !important;
-    font-weight: 800 !important;
-    box-shadow: 0 4px 14px rgba(13, 90, 63, 0.22);
-    transition: all 0.15s ease !important;
-  }
-  .nav-btn-signup:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 6px 20px rgba(13, 90, 63, 0.35);
-    background: linear-gradient(135deg, #129269, #094530) !important;
-    color: #ffffff !important;
-  }
-  .nav-btn-dashboard {
-    background: #081a13 !important;
-    color: #5eead4 !important;
-    border: 1.5px solid #0f7a57 !important;
-    padding: 9px 18px !important;
-    border-radius: 8px !important;
-    font-weight: 800 !important;
-    transition: all 0.15s ease !important;
-  }
-  .nav-btn-dashboard:hover {
-    background: #0d2c20 !important;
-    color: #ffffff !important;
-    border-color: #10b981 !important;
-    transform: translateY(-1px);
-  }
-  .menu-btn {
-    display: none;
-    margin-left: auto;
-    width: 44px;
-    height: 44px;
-    border: 1px solid var(--line);
-    border-radius: 8px;
-    background: transparent;
-    color: var(--green);
-    font-size: 24px;
-    cursor: pointer;
-  }
-  .mobile-menu {
-    display: none;
-    border-top: 1px solid var(--line);
-    padding: 16px 20px 24px;
-    background: #ffffff;
-  }
-  .mobile-menu.open { display: block; }
-  .mobile-menu a {
-    display: block;
-    padding: 12px 0;
-    color: #243831;
-    border-bottom: 1px solid var(--line);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    font-size: 13px;
-    font-weight: 700;
-  }
-  .mobile-auth-group {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-top: 16px;
-    padding-top: 16px;
-  }
-  .mobile-btn-signin {
-    display: flex !important;
-    align-items: center;
-    justify-content: center;
-    padding: 13px !important;
-    border: 1.5px solid rgba(13, 90, 63, 0.35) !important;
-    background: rgba(13, 90, 63, 0.05) !important;
-    color: var(--green-strong) !important;
-    border-radius: 10px !important;
-    font-size: 14px !important;
-    font-weight: 800 !important;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    border-bottom: 1.5px solid rgba(13, 90, 63, 0.35) !important;
-  }
-  .mobile-btn-signup {
-    display: flex !important;
-    align-items: center;
-    justify-content: center;
-    padding: 14px !important;
-    border: 0 !important;
-    background: linear-gradient(135deg, #0f7a57, #0d5a3f) !important;
-    color: #ffffff !important;
-    border-radius: 10px !important;
-    font-size: 14px !important;
-    font-weight: 800 !important;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    box-shadow: 0 4px 14px rgba(13, 90, 63, 0.2);
-    border-bottom: 0 !important;
-  }
-  .mobile-btn-dashboard {
-    display: flex !important;
-    align-items: center;
-    justify-content: center;
-    padding: 14px !important;
-    border: 1.5px solid #0f7a57 !important;
-    background: #081a13 !important;
-    color: #5eead4 !important;
-    border-radius: 10px !important;
-    font-size: 14px !important;
-    font-weight: 800 !important;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    border-bottom: 1.5px solid #0f7a57 !important;
-  }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Blogs & Market Insights — Global Capital Venture Holdings, Inc.</title>
+  <meta name="description" content="Explore published market intelligence, algorithmic trading strategies, and video research with Global Capital Venture Holdings, Inc.">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <style>
+    :root {
+      --bg: #ffffff;
+      --panel: #f4fbf7;
+      --primary: #0d5a3f;
+      --primary-light: #0f7a57;
+      --primary-dark: #073827;
+      --gold: #c59b27;
+      --text: #0d5a3f;
+      --text-dark: #111e19;
+      --muted: #4c7667;
+      --line: rgba(13, 90, 63, 0.12);
+      --shadow: 0 18px 45px rgba(13, 90, 63, 0.08);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text-dark);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; cursor: pointer; }
 
-  /* USER PROFILE CHIP & DROPDOWN */
-  .user-nav-profile {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-  }
-  .user-chip-btn {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 5px 12px 5px 6px;
-    border-radius: 999px;
-    background: rgba(13, 122, 88, 0.06);
-    border: 1.5px solid rgba(13, 122, 88, 0.22);
-    color: var(--green-strong);
-    cursor: pointer;
-    transition: all 0.15s ease;
-  }
-  .user-chip-btn:hover {
-    background: rgba(13, 122, 88, 0.12);
-    border-color: var(--green);
-  }
-  .user-avatar-sm {
-    width: 34px;
-    height: 34px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #0f7a57, #073827);
-    color: #ffffff;
-    font-weight: 800;
-    font-size: 13px;
-    display: grid;
-    place-items: center;
-    box-shadow: 0 2px 6px rgba(13, 90, 63, 0.25);
-    flex-shrink: 0;
-  }
-  .user-text-meta {
-    display: flex;
-    flex-direction: column;
-    text-align: left;
-    line-height: 1.15;
-  }
-  .user-text-name {
-    font-size: 12px;
-    font-weight: 800;
-    color: var(--green-strong);
-    max-width: 120px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .user-text-email {
-    font-size: 10px;
-    color: var(--muted);
-    max-width: 120px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .user-dropdown-menu {
-    position: absolute;
-    top: calc(100% + 10px);
-    right: 0;
-    min-width: 220px;
-    background: #ffffff;
-    border: 1px solid rgba(13, 122, 88, 0.16);
-    border-radius: 12px;
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
-    padding: 6px;
-    display: none;
-    flex-direction: column;
-    gap: 3px;
-    z-index: 500;
-  }
-  .user-dropdown-menu.show {
-    display: flex;
-  }
-  .user-dropdown-menu a, .user-dropdown-menu button {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 9px 12px;
-    border-radius: 8px;
-    font-size: 13px;
-    font-weight: 700;
-    color: #1a2f26;
-    border: 0;
-    background: transparent;
-    text-decoration: none;
-    width: 100%;
-    text-align: left;
-    cursor: pointer;
-    transition: background 0.15s;
-  }
-  .user-dropdown-menu a:hover, .user-dropdown-menu button:hover {
-    background: rgba(13, 122, 88, 0.08);
-    color: var(--green);
-  }
-  .user-dropdown-menu .logout-action {
-    color: #b91c1c;
-    border-top: 1px solid rgba(13, 122, 88, 0.08);
-    margin-top: 4px;
-    padding-top: 9px;
-  }
-  .user-dropdown-menu .logout-action:hover {
-    background: rgba(185, 28, 28, 0.08);
-    color: #991b1b;
-  }
+    /* SITE HEADER */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav-container {
+      max-width: 1320px;
+      margin: auto;
+      min-height: 84px;
+      padding: 12px 28px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .logo-mark {
+      width: 46px;
+      height: 46px;
+      border: 1px solid var(--primary);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: var(--primary-light);
+      font-family: Georgia, serif;
+      font-size: 24px;
+      background: rgba(13, 90, 63, 0.04);
+      flex-shrink: 0;
+    }
+    .brand-name {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 16px;
+      line-height: 1.1;
+      color: var(--primary);
+    }
+    .brand-name b { color: var(--primary-light); font-weight: 700; }
+    .nav-links {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .nav-links a {
+      padding: 9px 13px;
+      border-radius: 8px;
+      color: #243831;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 700;
+      transition: color 0.15s, background-color 0.15s;
+    }
+    .nav-links a:hover, .nav-links a.active {
+      color: var(--primary);
+      background: rgba(13, 90, 63, 0.06);
+    }
 
-  /* MOBILE USER CARD IN DRAWER */
-  .mobile-user-card {
-    align-items: center;
-    gap: 12px;
-    padding: 12px 14px;
-    border-radius: 12px;
-    background: rgba(13, 122, 88, 0.06);
-    border: 1px solid rgba(13, 122, 88, 0.15);
-    margin-bottom: 14px;
-  }
+    .nav-btn-signin {
+      border: 1.5px solid rgba(13, 90, 63, 0.35) !important;
+      color: var(--primary) !important;
+      background: rgba(13, 90, 63, 0.04) !important;
+      padding: 9px 18px !important;
+      border-radius: 8px !important;
+      font-weight: 800 !important;
+      transition: all 0.15s ease !important;
+    }
+    .nav-btn-signin:hover {
+      background: rgba(13, 90, 63, 0.1) !important;
+      border-color: var(--primary) !important;
+      transform: translateY(-1px);
+    }
+    .nav-btn-signup {
+      background: linear-gradient(135deg, #0f7a57, #0d5a3f) !important;
+      color: #ffffff !important;
+      padding: 10px 20px !important;
+      border-radius: 8px !important;
+      font-weight: 800 !important;
+      box-shadow: 0 4px 14px rgba(13, 90, 63, 0.22);
+      transition: all 0.15s ease !important;
+    }
+    .nav-btn-signup:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(13, 90, 63, 0.35);
+      background: linear-gradient(135deg, #129269, #094530) !important;
+      color: #ffffff !important;
+    }
+    .nav-btn-dashboard {
+      background: #081a13 !important;
+      color: #5eead4 !important;
+      border: 1.5px solid #0f7a57 !important;
+      padding: 10px 20px !important;
+      border-radius: 8px !important;
+      font-weight: 800 !important;
+      transition: all 0.15s ease !important;
+    }
+    .nav-btn-dashboard:hover {
+      background: #0d2c20 !important;
+      color: #ffffff !important;
+      border-color: #10b981 !important;
+      transform: translateY(-1px);
+    }
 
-  @media (max-width: 900px) {
-    .hero-inner { display: block; }
-    .toolbar { justify-content: flex-start; }
-    .blog-grid { grid-template-columns: 1fr; }
-    .form-grid { grid-template-columns: 1fr; }
-    .nav-links { display: none; }
-    .menu-btn { display: grid; place-items: center; }
-    #postBlogTrigger { display: none; }
-  }
-</style>
+    /* USER PROFILE CHIP & DROPDOWN */
+    .user-nav-profile {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+    }
+    .user-chip-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 5px 12px 5px 6px;
+      border-radius: 999px;
+      background: rgba(13, 90, 63, 0.06);
+      border: 1.5px solid rgba(13, 90, 63, 0.22);
+      color: #0d5a3f;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .user-chip-btn:hover {
+      background: rgba(13, 90, 63, 0.12);
+      border-color: #0d5a3f;
+    }
+    .user-avatar-sm {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #0f7a57, #073827);
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 13px;
+      display: grid;
+      place-items: center;
+      box-shadow: 0 2px 6px rgba(13, 90, 63, 0.25);
+      flex-shrink: 0;
+    }
+    .user-text-meta {
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+      line-height: 1.15;
+    }
+    .user-text-name {
+      font-size: 12px;
+      font-weight: 800;
+      color: #0d5a3f;
+      max-width: 120px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .user-text-email {
+      font-size: 10px;
+      color: #597368;
+      max-width: 120px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .user-dropdown-menu {
+      position: absolute;
+      top: calc(100% + 10px);
+      right: 0;
+      min-width: 220px;
+      background: #ffffff;
+      border: 1px solid rgba(13, 90, 63, 0.16);
+      border-radius: 12px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
+      padding: 6px;
+      display: none;
+      flex-direction: column;
+      gap: 3px;
+      z-index: 500;
+    }
+    .user-dropdown-menu.show { display: flex; }
+    .user-dropdown-menu a, .user-dropdown-menu button {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #1a2f26;
+      border: 0;
+      background: transparent;
+      text-decoration: none;
+      width: 100%;
+      text-align: left;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .user-dropdown-menu a:hover, .user-dropdown-menu button:hover {
+      background: rgba(13, 90, 63, 0.08);
+      color: #0d5a3f;
+    }
+    .user-dropdown-menu .logout-action {
+      color: #b91c1c;
+      border-top: 1px solid rgba(13, 90, 63, 0.08);
+      margin-top: 4px;
+      padding-top: 9px;
+    }
+    .user-dropdown-menu .logout-action:hover {
+      background: rgba(185, 28, 28, 0.08);
+      color: #991b1b;
+    }
+
+    /* MOBILE MENU BUTTON */
+    .menu-btn {
+      display: none;
+      margin-left: auto;
+      width: 44px;
+      height: 44px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: transparent;
+      color: var(--primary);
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    /* BACKDROP OVERLAY FOR MOBILE DRAWER */
+    .nav-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.72);
+      backdrop-filter: blur(4px);
+      z-index: 998;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .nav-backdrop.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* MOBILE DRAWER (SLIDES FROM RIGHT) */
+    .mobile-menu {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 320px;
+      max-width: 86vw;
+      background: #ffffff;
+      z-index: 999;
+      transform: translateX(100%);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: -10px 0 40px rgba(0, 0, 0, 0.3);
+      padding: 24px 20px;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+    .mobile-menu.open {
+      transform: translateX(0);
+    }
+    .mobile-drawer-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 16px;
+      margin-bottom: 16px;
+      border-bottom: 1px solid var(--line);
+    }
+    .mobile-drawer-close {
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #f4fbf7;
+      color: var(--primary);
+      font-size: 16px;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+    }
+
+    /* MOBILE USER CARD IN DRAWER */
+    .mobile-user-card {
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: rgba(13, 90, 63, 0.06);
+      border: 1px solid rgba(13, 90, 63, 0.15);
+      margin-bottom: 14px;
+    }
+
+    .mobile-nav-links {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .mobile-nav-links a {
+      display: block;
+      padding: 12px 14px;
+      border-radius: 8px;
+      color: #243831;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-size: 13px;
+      font-weight: 700;
+      transition: background 0.15s;
+    }
+    .mobile-nav-links a:hover, .mobile-nav-links a.active {
+      background: rgba(13, 90, 63, 0.08);
+      color: var(--primary);
+    }
+
+    .mobile-auth-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: auto;
+      padding-top: 20px;
+      border-top: 1px solid var(--line);
+    }
+    .mobile-btn-signin {
+      display: flex !important;
+      align-items: center;
+      justify-content: center;
+      padding: 13px !important;
+      border: 1.5px solid rgba(13, 90, 63, 0.35) !important;
+      background: rgba(13, 90, 63, 0.05) !important;
+      color: var(--primary) !important;
+      border-radius: 10px !important;
+      font-size: 14px !important;
+      font-weight: 800 !important;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .mobile-btn-signup {
+      display: flex !important;
+      align-items: center;
+      justify-content: center;
+      padding: 14px !important;
+      border: 0 !important;
+      background: linear-gradient(135deg, #0f7a57, #0d5a3f) !important;
+      color: #ffffff !important;
+      border-radius: 10px !important;
+      font-size: 14px !important;
+      font-weight: 800 !important;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      box-shadow: 0 4px 14px rgba(13, 90, 63, 0.2);
+    }
+    .mobile-btn-dashboard {
+      display: flex !important;
+      align-items: center;
+      justify-content: center;
+      padding: 14px !important;
+      border: 1.5px solid #0f7a57 !important;
+      background: #081a13 !important;
+      color: #5eead4 !important;
+      border-radius: 10px !important;
+      font-size: 14px !important;
+      font-weight: 800 !important;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    /* PAGE HERO */
+    .page-hero {
+      background: linear-gradient(135deg, #071c14, #0b2e21);
+      color: #ffffff;
+      padding: 70px 28px;
+      text-align: center;
+    }
+    .page-hero .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #5eead4;
+      background: rgba(94, 234, 212, 0.1);
+      padding: 7px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(94, 234, 212, 0.25);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-size: 11px;
+      font-weight: 800;
+      margin-bottom: 14px;
+    }
+    .page-hero h1 {
+      font: 700 clamp(36px, 5vw, 56px)/1.1 Georgia, serif;
+      margin-bottom: 16px;
+      color: #ffffff;
+    }
+    .page-hero h1 span { color: #5eead4; }
+    .page-hero p {
+      max-width: 680px;
+      margin: 0 auto;
+      color: #c0ded4;
+      font-size: 17px;
+      line-height: 1.7;
+    }
+
+    /* BLOGS CONTENT */
+    .blogs-container {
+      max-width: 1320px;
+      margin: auto;
+      padding: 60px 28px 80px;
+    }
+    .blog-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 28px;
+    }
+    .blog-card {
+      background: linear-gradient(180deg, #ffffff 0%, var(--panel) 100%);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .blog-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 24px 55px rgba(13, 90, 63, 0.12);
+    }
+    .blog-video {
+      width: 100%;
+      height: 280px;
+      background: #091711;
+      object-fit: cover;
+      display: block;
+      border-bottom: 1px solid var(--line);
+    }
+    .blog-body { padding: 24px 24px 20px; }
+    .blog-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .blog-title {
+      margin: 14px 0 10px;
+      font: 700 clamp(1.4rem, 2.5vw, 1.8rem)/1.2 Georgia, serif;
+      color: var(--primary);
+    }
+    .blog-description {
+      margin: 0 0 20px;
+      color: #375349;
+      line-height: 1.7;
+      font-size: 14px;
+      min-height: 60px;
+    }
+    .blog-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      border-top: 1px solid var(--line);
+      padding-top: 16px;
+    }
+    .price {
+      display: inline-flex;
+      align-items: center;
+      padding: 8px 14px;
+      background: rgba(13, 90, 63, 0.08);
+      color: var(--primary);
+      border: 1px solid rgba(13, 90, 63, 0.15);
+      border-radius: 10px;
+      font-weight: 800;
+      font-size: 13px;
+    }
+    .download-btn {
+      background: linear-gradient(135deg, #0f7a57, #0d5a3f);
+      color: #ffffff;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 800;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .download-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(13, 90, 63, 0.25);
+    }
+    .pagination {
+      margin-top: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .page-btn {
+      border: 1px solid var(--line);
+      background: #ffffff;
+      color: var(--primary);
+      min-width: 44px;
+      min-height: 42px;
+      border-radius: 10px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .page-btn:hover {
+      background: rgba(13, 90, 63, 0.08);
+    }
+    .page-btn.active {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+    }
+    .empty-state {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 50px 24px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 15px;
+      grid-column: 1 / -1;
+    }
+
+    /* FOOTER */
+    .footer {
+      background: #071912;
+      color: #8dafa3;
+      padding: 80px 28px 40px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .footer-container {
+      max-width: 1320px;
+      margin: auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1.2fr;
+      gap: 48px;
+      padding-bottom: 60px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .footer-brand h4 { font: 700 24px Georgia, serif; color: #ffffff; margin-bottom: 14px; }
+    .footer-brand p { font-size: 14px; line-height: 1.7; max-width: 360px; }
+    .footer-col h5 { color: #ffffff; font-size: 13px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 20px; }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+    .footer-col a { color: #8dafa3; font-size: 14px; transition: color 0.15s; }
+    .footer-col a:hover { color: #ffffff; }
+    .footer-bottom {
+      max-width: 1320px;
+      margin: 30px auto 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: #638579;
+    }
+
+    @media (max-width: 900px) {
+      .nav-links { display: none; }
+      .menu-btn { display: grid; place-items: center; }
+      .blog-grid { grid-template-columns: 1fr; }
+      .footer-container { grid-template-columns: 1fr; gap: 32px; }
+      .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+    }
+  </style>
 </head>
 <body>
+
+  <!-- SITE HEADER -->
   <header class="site-header">
-    <div class="container nav">
-      <a href="index.html" class="brand">
-        <span class="brand-mark">✦</span>
-        <span>Global Capital Venture Holdings</span>
+    <div class="nav-container">
+      <a href="index.html" class="logo">
+        <span class="logo-mark">✦</span>
+        <span class="brand-name">Global Capital<br><b>Venture Holdings, Inc.</b></span>
       </a>
+
       <nav class="nav-links">
         <a href="index.html">Home</a>
         <a href="packages.html">Packages</a>
         <a href="salary-system.html">Salary System</a>
         <a href="about.html">About Us</a>
-        <a href="blogs.html" style="color:var(--green)">Blogs</a>
+        <a href="blogs.html" class="active">Blogs</a>
         <a href="contact.html">Contact</a>
 
         <!-- Guest state -->
@@ -371,110 +649,120 @@
           </div>
         </div>
       </nav>
-      <button class="header-cta" id="postBlogTrigger" type="button">Post Blog</button>
-      <button class="menu-btn" id="menuBtn" type="button" aria-label="Toggle navigation">☰</button>
+
+      <button class="menu-btn" id="menuBtn" type="button" aria-label="Open navigation menu">☰</button>
+    </div>
+  </header>
+
+  <!-- MOBILE OVERLAY BACKDROP -->
+  <div id="navBackdrop" class="nav-backdrop"></div>
+
+  <!-- MOBILE DRAWER (OVERLAY ON TOP OF PAGE) -->
+  <div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-drawer-header">
+      <div style="font:700 15px Georgia, serif; color:var(--primary); display:flex; align-items:center; gap:8px;">
+        <span class="logo-mark" style="width:32px;height:32px;font-size:16px;">✦</span> GCVH Navigation
+      </div>
+      <button id="mobileCloseBtn" class="mobile-drawer-close" type="button" aria-label="Close navigation">✕</button>
     </div>
 
-    <div class="mobile-menu" id="mobileMenu">
-      <!-- Logged in user profile card at top of mobile menu -->
-      <div class="mobile-user-card nav-user-item" style="display:none;">
-        <div class="mobile-user-avatar user-avatar-sm">GC</div>
-        <div style="flex:1; overflow:hidden;">
-          <strong class="mobile-user-name" style="display:block; font-size:13px; color:var(--green-strong); text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">Private Client</strong>
-          <span class="mobile-user-email" style="display:block; font-size:11px; color:var(--muted); text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">Active Member</span>
-        </div>
-        <button type="button" class="nav-logout-btn" style="border:1px solid rgba(239,68,68,0.3); background:rgba(239,68,68,0.08); color:#ef4444; border-radius:8px; padding:6px 10px; font-size:11px; font-weight:800; cursor:pointer;">Logout</button>
+    <!-- Logged in user profile card in mobile drawer -->
+    <div class="mobile-user-card nav-user-item" style="display:none;">
+      <div class="mobile-user-avatar user-avatar-sm">GC</div>
+      <div style="flex:1; overflow:hidden;">
+        <strong class="mobile-user-name" style="display:block; font-size:13px; color:var(--primary); text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">Private Client</strong>
+        <span class="mobile-user-email" style="display:block; font-size:11px; color:var(--muted); text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">Active Member</span>
       </div>
+      <button type="button" class="nav-logout-btn" style="border:1px solid rgba(239,68,68,0.3); background:rgba(239,68,68,0.08); color:#ef4444; border-radius:8px; padding:6px 10px; font-size:11px; font-weight:800; cursor:pointer;">Logout</button>
+    </div>
 
+    <div class="mobile-nav-links">
       <a href="index.html">Home</a>
       <a href="packages.html">Packages</a>
       <a href="salary-system.html">Salary System</a>
       <a href="about.html">About Us</a>
-      <a href="blogs.html">Blogs</a>
+      <a href="blogs.html" class="active">Blogs</a>
       <a href="contact.html">Contact</a>
-
-      <!-- Guest actions -->
-      <div class="mobile-auth-group mobile-guest-item">
-        <a href="login.html" class="mobile-btn-signin">Sign In</a>
-        <a href="register.html" class="mobile-btn-signup">Create Account</a>
-      </div>
-
-      <!-- User action -->
-      <div class="mobile-auth-group nav-user-item" style="display:none;">
-        <a href="dashboard.html" class="mobile-btn-dashboard">Go to Dashboard →</a>
-      </div>
     </div>
-  </header>
 
+    <!-- Guest actions -->
+    <div class="mobile-auth-group mobile-guest-item">
+      <a href="login.html" class="mobile-btn-signin">Sign In</a>
+      <a href="register.html" class="mobile-btn-signup">Create Account</a>
+    </div>
+
+    <!-- User action -->
+    <div class="mobile-auth-group nav-user-item" style="display:none;">
+      <a href="dashboard.html" class="mobile-btn-dashboard">Go to Dashboard →</a>
+    </div>
+  </div>
+
+  <!-- HERO SECTION -->
   <main>
-    <section class="hero">
-      <div class="container hero-inner">
-        <div>
-          <div class="eyebrow">Community</div>
-          <h1>Blogs & Market Insights</h1>
-          <p>Explore published blogs, watch videos, and share your own content with the community. Each blog can include a title, price, description, and a video upload.</p>
-        </div>
-        <div class="toolbar">
-          <button id="toggleForm" class="primary-btn" type="button">Post Blog</button>
-        </div>
-      </div>
+    <section class="page-hero">
+      <div class="eyebrow">RESEARCH & INSIGHTS</div>
+      <h1>Blogs & <span>Market Insights</span></h1>
+      <p>Explore real-time algorithmic market analysis, trading insights, and technical research from the Global Capital community.</p>
     </section>
 
-    <section class="content">
-      <div class="container">
-        <div class="form-wrap" id="blogFormWrap">
-          <div class="form-head">
-            <h2 style="margin:0; font-size: clamp(1.5rem, 2vw, 2.2rem);">Create a New Blog</h2>
-            <button class="ghost-btn" id="closeForm" type="button">Close</button>
-          </div>
-
-          <form id="blogForm" enctype="multipart/form-data">
-            <div class="form-grid">
-              <div class="field">
-                <label for="blogName">Blog name</label>
-                <input id="blogName" name="name" type="text" placeholder="Example: Gold Market Strategy" required />
-              </div>
-              <div class="field">
-                <label for="blogPrice">Price</label>
-                <input id="blogPrice" name="price" type="number" min="0" step="0.01" value="0" placeholder="0.00" required />
-              </div>
-              <div class="field full">
-                <label for="blogDescription">Description</label>
-                <textarea id="blogDescription" name="description" placeholder="Write a summary, insights, or strategy details..." required></textarea>
-              </div>
-              <div class="field full">
-                <label for="blogVideo">Video upload</label>
-                <input id="blogVideo" name="video" type="file" accept="video/*" required />
-              </div>
-            </div>
-
-            <div style="display:flex; justify-content:flex-end; gap:12px; margin-top:20px; flex-wrap:wrap;">
-              <button class="ghost-btn" id="cancelForm" type="button">Cancel</button>
-              <button class="primary-btn" type="submit">Publish Blog</button>
-            </div>
-          </form>
-          <div id="blogAlert" class="alert"></div>
-        </div>
-
-        <div id="blogList" class="blog-grid"></div>
-        <div class="pagination" id="pagination"></div>
+    <section class="blogs-container">
+      <div id="blogList" class="blog-grid">
+        <div class="empty-state">Loading published research and market insights...</div>
       </div>
+      <div class="pagination" id="pagination"></div>
     </section>
   </main>
 
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-brand">
+        <h4>Global Capital Venture Holdings, Inc.</h4>
+        <p>Institutional portfolio growth, real-time algorithmic execution, and premier leadership salary programs.</p>
+      </div>
+
+      <div class="footer-col">
+        <h5>Platform</h5>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="packages.html">Investment Packages</a></li>
+          <li><a href="salary-system.html">Salary System</a></li>
+          <li><a href="dashboard.html">Member Dashboard</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h5>Company</h5>
+        <ul>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="blogs.html">Market Insights</a></li>
+          <li><a href="contact.html">Support & Contact</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h5>Security & Access</h5>
+        <ul>
+          <li><a href="login.html">Client Sign In</a></li>
+          <li><a href="register.html">Create New Account</a></li>
+          <li><a href="deposit.html">Deposit Portal</a></li>
+          <li><a href="admin.html">Admin Gateway</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2026 Global Capital Venture Holdings, Inc. All rights reserved.</span>
+      <span>Risk Warning: Trading financial instruments involves significant risk to capital.</span>
+    </div>
+  </footer>
+
   <script src="config.js"></script>
   <script>
+    'use strict';
     const state = { page: 1, totalPages: 1, items: [] };
     const blogList = document.getElementById('blogList');
     const paginationEl = document.getElementById('pagination');
-    const blogFormWrap = document.getElementById('blogFormWrap');
-    const blogAlert = document.getElementById('blogAlert');
-    const blogForm = document.getElementById('blogForm');
-
-    function setAlert(message, type = 'error') {
-      blogAlert.textContent = message;
-      blogAlert.className = `alert ${type}`;
-    }
 
     function resolveMedia(url) {
       if (!url) return '';
@@ -499,7 +787,7 @@
 
     function renderBlogs() {
       if (!state.items.length) {
-        blogList.innerHTML = '<div class="empty-state">No blog posts have been published yet. Create the first post above.</div>';
+        blogList.innerHTML = '<div class="empty-state">No market insight articles or videos are currently published. Please check back shortly.</div>';
         return;
       }
 
@@ -508,14 +796,14 @@
           <video class="blog-video" controls preload="metadata" src="${resolveMedia(blog.video_url)}"></video>
           <div class="blog-body">
             <div class="blog-meta">
-              <span>${blog.author_name || 'Community Member'}</span>
-              <span>${new Date(blog.created_at).toLocaleDateString()}</span>
+              <span>${blog.author_name || 'Market Strategist'}</span>
+              <span>${blog.created_at ? new Date(blog.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'Recent'}</span>
             </div>
-            <h3 class="blog-title">${blog.name}</h3>
-            <p class="blog-description">${(blog.description || '').replace(/\n/g, '<br>')}</p>
+            <h3 class="blog-title">${String(blog.name || 'Market Report').replace(/[<>&]/g, c => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' }[c]))}</h3>
+            <p class="blog-description">${String(blog.description || '').replace(/[<>&]/g, c => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' }[c])).replace(/\n/g, '<br>')}</p>
             <div class="blog-footer">
-              <span class="price">Price: $${Number(blog.price || 0).toFixed(2)}</span>
-              <a class="download-btn" href="${API}/api/blogs/${blog.id}/download" target="_blank" rel="noopener">Download Video</a>
+              <span class="price">Valuation: $${Number(blog.price || 0).toFixed(2)}</span>
+              <a class="download-btn" href="${API}/api/blogs/${blog.id}/download" target="_blank" rel="noopener">Download Video ↓</a>
             </div>
           </div>
         </article>
@@ -525,6 +813,10 @@
     function renderPagination() {
       const pages = [];
       const total = Math.max(1, state.totalPages);
+      if (total <= 1) {
+        paginationEl.innerHTML = '';
+        return;
+      }
       for (let i = 1; i <= total; i++) {
         pages.push(`<button class="page-btn ${i === state.page ? 'active' : ''}" type="button" data-page="${i}">${i}</button>`);
       }
@@ -543,82 +835,35 @@
       });
     }
 
-    function toggleForm(show) {
-      blogFormWrap.classList.toggle('open', show);
-      if (show) {
-        setAlert('', 'success');
-      }
-    }
-
-    document.getElementById('postBlogTrigger').addEventListener('click', () => {
-      const token = localStorage.getItem('gcvh_customer_token');
-      if (!token) {
-        location.href = `login.html?redirect=${encodeURIComponent(location.pathname)}`;
-        return;
-      }
-      toggleForm(true);
-    });
-
-    document.getElementById('toggleForm').addEventListener('click', () => {
-      const token = localStorage.getItem('gcvh_customer_token');
-      if (!token) {
-        location.href = `login.html?redirect=${encodeURIComponent(location.pathname)}`;
-        return;
-      }
-      toggleForm(true);
-    });
-
-    document.getElementById('closeForm').addEventListener('click', () => toggleForm(false));
-    document.getElementById('cancelForm').addEventListener('click', () => toggleForm(false));
-
-    blogForm.addEventListener('submit', async (event) => {
-      event.preventDefault();
-      const token = localStorage.getItem('gcvh_customer_token');
-      if (!token) {
-        location.href = `login.html?redirect=${encodeURIComponent(location.pathname)}`;
-        return;
-      }
-
-      const formData = new FormData(blogForm);
-      const fileInput = document.getElementById('blogVideo');
-      if (!fileInput.files.length) {
-        setAlert('Please choose a video file to upload.', 'error');
-        return;
-      }
-
-      try {
-        setAlert('Publishing your blog...', 'success');
-        const res = await fetch(`${API}/api/blogs`, {
-          method: 'POST',
-          headers: { Authorization: `Bearer ${token}` },
-          body: formData
-        });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || 'Blog could not be published.');
-
-        blogForm.reset();
-        toggleForm(false);
-        setAlert('Blog published successfully.', 'success');
-        fetchBlogs(1);
-      } catch (error) {
-        setAlert(error.message, 'error');
-      }
-    });
-
+    // Mobile Drawer Handlers
     const menuBtn = document.getElementById('menuBtn');
     const mobileMenu = document.getElementById('mobileMenu');
-    if (menuBtn && mobileMenu) {
-      menuBtn.addEventListener('click', () => {
-        mobileMenu.classList.toggle('open');
-      });
+    const navBackdrop = document.getElementById('navBackdrop');
+    const mobileCloseBtn = document.getElementById('mobileCloseBtn');
+
+    function openMobileDrawer() {
+      mobileMenu.classList.add('open');
+      navBackdrop.classList.add('active');
+      document.body.style.overflow = 'hidden';
     }
 
-    const token = localStorage.getItem('gcvh_customer_token');
-    if (token) {
-      document.querySelectorAll('.nav-btn-dashboard, #mobileDashboard').forEach(el => el.hidden = false);
+    function closeMobileDrawer() {
+      mobileMenu.classList.remove('open');
+      navBackdrop.classList.remove('active');
+      document.body.style.overflow = '';
     }
 
-    fetchBlogs(1);
+    if (menuBtn) menuBtn.onclick = openMobileDrawer;
+    if (mobileCloseBtn) mobileCloseBtn.onclick = closeMobileDrawer;
+    if (navBackdrop) navBackdrop.onclick = closeMobileDrawer;
+
+    document.querySelectorAll('.mobile-nav-links a, .mobile-auth-group a').forEach(a => {
+      a.addEventListener('click', closeMobileDrawer);
+    });
+
+    window.addEventListener('load', () => {
+      fetchBlogs(1);
+    });
   </script>
 </body>
 </html>
