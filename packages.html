@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <title>Investment Packages — Global Capital Venture Holdings, Inc.</title>
-  <meta name="description" content="Explore our institutional investment packages ranging from $10 to $10,000 with 1.00% daily returns, 14-day payout cycles, and full capital security.">
+  <meta name="description"
+    content="Explore our institutional investment packages ranging from $10 to $10,000 with 1.00% daily returns, 14-day payout cycles, and full capital security.">
   <style>
     :root {
       --bg: #ffffff;
@@ -17,16 +19,33 @@
       --muted: #4c7667;
       --line: rgba(13, 90, 63, 0.12);
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       background: var(--bg);
       color: var(--text-dark);
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       line-height: 1.6;
     }
-    a { color: inherit; text-decoration: none; }
-    button { font: inherit; cursor: pointer; }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font: inherit;
+      cursor: pointer;
+    }
 
     /* SITE HEADER */
     .site-header {
@@ -37,6 +56,7 @@
       backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--line);
     }
+
     .nav-container {
       max-width: 1320px;
       margin: auto;
@@ -46,7 +66,13 @@
       align-items: center;
       gap: 24px;
     }
-    .logo { display: flex; align-items: center; gap: 12px; }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
     .logo-mark {
       width: 46px;
       height: 46px;
@@ -59,9 +85,26 @@
       font-size: 24px;
       background: rgba(13, 90, 63, 0.04);
     }
-    .brand-name { font-family: Georgia, "Times New Roman", serif; font-size: 16px; line-height: 1.1; color: var(--primary); }
-    .brand-name b { color: var(--primary-light); font-weight: 700; }
-    .nav-links { margin-left: auto; display: flex; align-items: center; gap: 6px; }
+
+    .brand-name {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 16px;
+      line-height: 1.1;
+      color: var(--primary);
+    }
+
+    .brand-name b {
+      color: var(--primary-light);
+      font-weight: 700;
+    }
+
+    .nav-links {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
     .nav-links a {
       padding: 10px 14px;
       border-radius: 8px;
@@ -72,18 +115,26 @@
       font-weight: 700;
       transition: color 0.15s, background-color 0.15s;
     }
-    .nav-links a:hover, .nav-links a.active { color: var(--primary); background: rgba(13, 90, 63, 0.06); }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--primary);
+      background: rgba(13, 90, 63, 0.06);
+    }
+
     .nav-cta {
       background: linear-gradient(135deg, #0f7a57, #0d5a3f) !important;
       color: #ffffff !important;
       padding: 10px 18px !important;
       border-radius: 8px !important;
     }
+
     .nav-dashboard-link {
       border: 1px solid var(--primary) !important;
       color: var(--primary) !important;
       background: rgba(13, 90, 63, 0.04) !important;
     }
+
     .menu-btn {
       display: none;
       margin-left: auto;
@@ -95,8 +146,18 @@
       color: var(--primary);
       font-size: 24px;
     }
-    .mobile-menu { display: none; border-top: 1px solid var(--line); padding: 16px 24px 24px; background: #ffffff; }
-    .mobile-menu.open { display: block; }
+
+    .mobile-menu {
+      display: none;
+      border-top: 1px solid var(--line);
+      padding: 16px 24px 24px;
+      background: #ffffff;
+    }
+
+    .mobile-menu.open {
+      display: block;
+    }
+
     .mobile-menu a {
       display: block;
       padding: 12px 0;
@@ -115,19 +176,42 @@
       padding: 70px 28px;
       text-align: center;
     }
-    .page-hero h1 { font: 700 clamp(36px, 5vw, 56px)/1.1 Georgia, serif; margin-bottom: 16px; color: #ffffff; }
-    .page-hero h1 span { color: #5eead4; }
-    .page-hero p { max-width: 680px; margin: 0 auto; color: #c0ded4; font-size: 18px; }
+
+    .page-hero h1 {
+      font: 700 clamp(36px, 5vw, 56px)/1.1 Georgia, serif;
+      margin-bottom: 16px;
+      color: #ffffff;
+    }
+
+    .page-hero h1 span {
+      color: #5eead4;
+    }
+
+    .page-hero p {
+      max-width: 680px;
+      margin: 0 auto;
+      color: #c0ded4;
+      font-size: 18px;
+    }
 
     /* PACKAGES CONTENT */
-    .packages-container { max-width: 1320px; margin: auto; padding: 70px 28px; }
-    .tier-block { margin-bottom: 48px; }
+    .packages-container {
+      max-width: 1320px;
+      margin: auto;
+      padding: 70px 28px;
+    }
+
+    .tier-block {
+      margin-bottom: 48px;
+    }
+
     .tier-header {
       display: flex;
       align-items: center;
       gap: 16px;
       margin-bottom: 20px;
     }
+
     .tier-tag {
       font-size: 13px;
       font-weight: 800;
@@ -135,12 +219,19 @@
       text-transform: uppercase;
       color: var(--primary);
     }
-    .tier-line { height: 1px; flex: 1; background: var(--line); }
+
+    .tier-line {
+      height: 1px;
+      flex: 1;
+      background: var(--line);
+    }
+
     .package-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 24px;
     }
+
     .package-card {
       position: relative;
       background: linear-gradient(145deg, #ffffff, #f7fcf9);
@@ -149,15 +240,42 @@
       padding: 30px;
       transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
     }
+
     .package-card:hover {
       transform: translateY(-4px);
       border-color: rgba(13, 90, 63, 0.35);
       box-shadow: 0 16px 45px rgba(13, 90, 63, 0.08);
     }
-    .package-top { display: flex; justify-content: space-between; align-items: center; }
-    .package-label { font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.12em; color: var(--primary-light); }
-    .package-badge { font-size: 11px; background: rgba(15, 122, 87, 0.1); color: var(--primary-light); padding: 4px 10px; border-radius: 999px; font-weight: 700; }
-    .package-amount { font: 700 46px Georgia, serif; color: var(--primary); margin: 20px 0; }
+
+    .package-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .package-label {
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--primary-light);
+    }
+
+    .package-badge {
+      font-size: 11px;
+      background: rgba(15, 122, 87, 0.1);
+      color: var(--primary-light);
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-weight: 700;
+    }
+
+    .package-amount {
+      font: 700 46px Georgia, serif;
+      color: var(--primary);
+      margin: 20px 0;
+    }
+
     .package-details {
       display: flex;
       justify-content: space-between;
@@ -166,7 +284,12 @@
       padding-top: 16px;
       font-size: 14px;
     }
-    .package-details strong { color: var(--primary); font-weight: 700; }
+
+    .package-details strong {
+      color: var(--primary);
+      font-weight: 700;
+    }
+
     .package-btn {
       width: 100%;
       height: 48px;
@@ -179,7 +302,11 @@
       margin-top: 22px;
       transition: transform 0.15s, opacity 0.15s;
     }
-    .package-btn:hover { opacity: 0.95; transform: translateY(-1px); }
+
+    .package-btn:hover {
+      opacity: 0.95;
+      transform: translateY(-1px);
+    }
 
     /* PROFIT CALCULATOR */
     .calc-card {
@@ -193,10 +320,33 @@
       gap: 40px;
       align-items: center;
     }
-    .calc-card h2 { font: 700 36px Georgia, serif; color: #ffffff; margin-bottom: 12px; }
-    .calc-card p { color: #b7dbd0; font-size: 15px; margin-bottom: 24px; }
-    .calc-input-group { margin-bottom: 20px; }
-    .calc-input-group label { display: block; font-size: 12px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: #5eead4; margin-bottom: 8px; }
+
+    .calc-card h2 {
+      font: 700 36px Georgia, serif;
+      color: #ffffff;
+      margin-bottom: 12px;
+    }
+
+    .calc-card p {
+      color: #b7dbd0;
+      font-size: 15px;
+      margin-bottom: 24px;
+    }
+
+    .calc-input-group {
+      margin-bottom: 20px;
+    }
+
+    .calc-input-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #5eead4;
+      margin-bottom: 8px;
+    }
+
     .calc-input {
       width: 100%;
       height: 52px;
@@ -209,7 +359,14 @@
       font-weight: 700;
       outline: none;
     }
-    .calc-quick-btns { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+
+    .calc-quick-btns {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
     .calc-quick-btn {
       padding: 6px 14px;
       border-radius: 8px;
@@ -219,7 +376,11 @@
       font-size: 13px;
       font-weight: 700;
     }
-    .calc-quick-btn:hover { background: rgba(255, 255, 255, 0.2); }
+
+    .calc-quick-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
     .calc-results {
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.12);
@@ -229,10 +390,29 @@
       flex-direction: column;
       gap: 16px;
     }
-    .calc-row { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 12px; }
-    .calc-row:last-child { border-bottom: 0; padding-bottom: 0; }
-    .calc-row span { color: #a4c9be; font-size: 14px; }
-    .calc-row strong { font: 700 22px Georgia, serif; color: #5eead4; }
+
+    .calc-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 12px;
+    }
+
+    .calc-row:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .calc-row span {
+      color: #a4c9be;
+      font-size: 14px;
+    }
+
+    .calc-row strong {
+      font: 700 22px Georgia, serif;
+      color: #5eead4;
+    }
 
     /* FOOTER */
     .footer {
@@ -241,6 +421,7 @@
       padding: 80px 28px 40px;
       border-top: 1px solid rgba(255, 255, 255, 0.08);
     }
+
     .footer-container {
       max-width: 1320px;
       margin: auto;
@@ -250,12 +431,45 @@
       padding-bottom: 60px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     }
-    .footer-brand h4 { font: 700 24px Georgia, serif; color: #ffffff; margin-bottom: 14px; }
-    .footer-brand p { font-size: 14px; line-height: 1.7; max-width: 360px; }
-    .footer-col h5 { color: #ffffff; font-size: 13px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 20px; }
-    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
-    .footer-col a { color: #8dafa3; font-size: 14px; transition: color 0.15s; }
-    .footer-col a:hover { color: #ffffff; }
+
+    .footer-brand h4 {
+      font: 700 24px Georgia, serif;
+      color: #ffffff;
+      margin-bottom: 14px;
+    }
+
+    .footer-brand p {
+      font-size: 14px;
+      line-height: 1.7;
+      max-width: 360px;
+    }
+
+    .footer-col h5 {
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .footer-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .footer-col a {
+      color: #8dafa3;
+      font-size: 14px;
+      transition: color 0.15s;
+    }
+
+    .footer-col a:hover {
+      color: #ffffff;
+    }
+
     .footer-bottom {
       max-width: 1320px;
       margin: 30px auto 0;
@@ -267,15 +481,38 @@
     }
 
     @media (max-width: 900px) {
-      .nav-links { display: none; }
-      .menu-btn { display: grid; place-items: center; }
-      .package-grid { grid-template-columns: 1fr; }
-      .calc-card { grid-template-columns: 1fr; padding: 32px 20px; }
-      .footer-container { grid-template-columns: 1fr; gap: 32px; }
-      .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+      .nav-links {
+        display: none;
+      }
+
+      .menu-btn {
+        display: grid;
+        place-items: center;
+      }
+
+      .package-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .calc-card {
+        grid-template-columns: 1fr;
+        padding: 32px 20px;
+      }
+
+      .footer-container {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+      }
     }
   </style>
 </head>
+
 <body>
 
   <!-- SITE HEADER -->
@@ -317,7 +554,8 @@
   <!-- PAGE HERO -->
   <section class="page-hero">
     <h1>Capital <span>Investment Packages</span></h1>
-    <p>Select your tier to activate 1.00% daily returns, transparent 14-day cashout settlements, and automated portfolio growth.</p>
+    <p>Select your tier to activate 1.00% daily returns, transparent 14-day cashout settlements, and automated portfolio
+      growth.</p>
   </section>
 
   <!-- PACKAGES CONTENT -->
@@ -372,14 +610,16 @@
       </div>
       <div class="package-grid">
         <div class="package-card">
-          <div class="package-top"><span class="package-label">Starter 10</span><span class="package-badge">ACTIVE</span></div>
+          <div class="package-top"><span class="package-label">Starter 10</span><span
+              class="package-badge">ACTIVE</span></div>
           <div class="package-amount">$10</div>
           <div class="package-details"><span>Daily Return</span><strong>1.00% ($0.10/day)</strong></div>
           <div class="package-details" style="margin-top:8px;"><span>Payout Cycle</span><strong>14 Days</strong></div>
           <button class="package-btn" onclick="selectPackage(10)">Select $10 Package →</button>
         </div>
         <div class="package-card">
-          <div class="package-top"><span class="package-label">Starter 25</span><span class="package-badge">ACTIVE</span></div>
+          <div class="package-top"><span class="package-label">Starter 25</span><span
+              class="package-badge">ACTIVE</span></div>
           <div class="package-amount">$25</div>
           <div class="package-details"><span>Daily Return</span><strong>1.00% ($0.25/day)</strong></div>
           <div class="package-details" style="margin-top:8px;"><span>Payout Cycle</span><strong>14 Days</strong></div>
@@ -396,14 +636,16 @@
       </div>
       <div class="package-grid">
         <div class="package-card">
-          <div class="package-top"><span class="package-label">Basic 50</span><span class="package-badge">ACTIVE</span></div>
+          <div class="package-top"><span class="package-label">Basic 50</span><span class="package-badge">ACTIVE</span>
+          </div>
           <div class="package-amount">$50</div>
           <div class="package-details"><span>Daily Return</span><strong>1.00% ($0.50/day)</strong></div>
           <div class="package-details" style="margin-top:8px;"><span>Payout Cycle</span><strong>14 Days</strong></div>
           <button class="package-btn" onclick="selectPackage(50)">Select $50 Package →</button>
         </div>
         <div class="package-card">
-          <div class="package-top"><span class="package-label">Basic 100</span><span class="package-badge">ACTIVE</span></div>
+          <div class="package-top"><span class="package-label">Basic 100</span><span class="package-badge">ACTIVE</span>
+          </div>
           <div class="package-amount">$100</div>
           <div class="package-details"><span>Daily Return</span><strong>1.00% ($1.00/day)</strong></div>
           <div class="package-details" style="margin-top:8px;"><span>Payout Cycle</span><strong>14 Days</strong></div>
@@ -420,14 +662,16 @@
       </div>
       <div class="package-grid">
         <div class="package-card">
-          <div class="package-top"><span class="package-label">Pro 200</span><span class="package-badge">ACTIVE</span></div>
+          <div class="package-top"><span class="package-label">Pro 200</span><span class="package-badge">ACTIVE</span>
+          </div>
           <div class="package-amount">$200</div>
           <div class="package-details"><span>Daily Return</span><strong>1.00% ($2.00/day)</strong></div>
           <div class="package-details" style="margin-top:8px;"><span>Payout Cycle</span><strong>14 Days</strong></div>
           <button class="package-btn" onclick="selectPackage(200)">Select $200 Package →</button>
         </div>
         <div class="package-card">
-          <div class="package-top"><span class="package-label">Pro 300</span><span class="package-badge">ACTIVE</span></div>
+          <div class="package-top"><span class="package-label">Pro 300</span><span class="package-badge">ACTIVE</span>
+          </div>
           <div class="package-amount">$300</div>
           <div class="package-details"><span>Daily Return</span><strong>1.00% ($3.00/day)</strong></div>
           <div class="package-details" style="margin-top:8px;"><span>Payout Cycle</span><strong>14 Days</strong></div>
@@ -444,14 +688,16 @@
       </div>
       <div class="package-grid">
         <div class="package-card">
-          <div class="package-top"><span class="package-label">Premium 500</span><span class="package-badge">POPULAR</span></div>
+          <div class="package-top"><span class="package-label">Premium 500</span><span
+              class="package-badge">POPULAR</span></div>
           <div class="package-amount">$500</div>
           <div class="package-details"><span>Daily Return</span><strong>1.00% ($5.00/day)</strong></div>
           <div class="package-details" style="margin-top:8px;"><span>Payout Cycle</span><strong>14 Days</strong></div>
           <button class="package-btn" onclick="selectPackage(500)">Select $500 Package →</button>
         </div>
         <div class="package-card">
-          <div class="package-top"><span class="package-label">Premium 1,000</span><span class="package-badge">FEATURED</span></div>
+          <div class="package-top"><span class="package-label">Premium 1,000</span><span
+              class="package-badge">FEATURED</span></div>
           <div class="package-amount">$1,000</div>
           <div class="package-details"><span>Daily Return</span><strong>1.00% ($10.00/day)</strong></div>
           <div class="package-details" style="margin-top:8px;"><span>Payout Cycle</span><strong>14 Days</strong></div>
@@ -468,14 +714,16 @@
       </div>
       <div class="package-grid">
         <div class="package-card">
-          <div class="package-top"><span class="package-label">Elite 2,500</span><span class="package-badge">VIP</span></div>
+          <div class="package-top"><span class="package-label">Elite 2,500</span><span class="package-badge">VIP</span>
+          </div>
           <div class="package-amount">$2,500</div>
           <div class="package-details"><span>Daily Return</span><strong>1.00% ($25.00/day)</strong></div>
           <div class="package-details" style="margin-top:8px;"><span>Payout Cycle</span><strong>14 Days</strong></div>
           <button class="package-btn" onclick="selectPackage(2500)">Select $2,500 Package →</button>
         </div>
         <div class="package-card">
-          <div class="package-top"><span class="package-label">Elite 5,000</span><span class="package-badge">VIP</span></div>
+          <div class="package-top"><span class="package-label">Elite 5,000</span><span class="package-badge">VIP</span>
+          </div>
           <div class="package-amount">$5,000</div>
           <div class="package-details"><span>Daily Return</span><strong>1.00% ($50.00/day)</strong></div>
           <div class="package-details" style="margin-top:8px;"><span>Payout Cycle</span><strong>14 Days</strong></div>
@@ -492,11 +740,14 @@
       </div>
       <div class="package-grid" style="grid-template-columns: 1fr;">
         <div class="package-card" style="border: 2px solid #0f7a57;">
-          <div class="package-top"><span class="package-label">Ultimate 10,000</span><span class="package-badge" style="background:#0f7a57;color:#fff;">INSTITUTIONAL</span></div>
+          <div class="package-top"><span class="package-label">Ultimate 10,000</span><span class="package-badge"
+              style="background:#0f7a57;color:#fff;">INSTITUTIONAL</span></div>
           <div class="package-amount">$10,000</div>
           <div class="package-details"><span>Daily Return</span><strong>1.00% ($100.00/day)</strong></div>
-          <div class="package-details" style="margin-top:8px;"><span>14-Day Cycle Payout</span><strong>$1,400.00</strong></div>
-          <div class="package-details" style="margin-top:8px;"><span>Dedicated VIP Support</span><strong>Included</strong></div>
+          <div class="package-details" style="margin-top:8px;"><span>14-Day Cycle
+              Payout</span><strong>$1,400.00</strong></div>
+          <div class="package-details" style="margin-top:8px;"><span>Dedicated VIP
+              Support</span><strong>Included</strong></div>
           <button class="package-btn" onclick="selectPackage(10000)">Select $10,000 Ultimate Package →</button>
         </div>
       </div>
@@ -582,4 +833,5 @@
     updateCalc();
   </script>
 </body>
+
 </html>
