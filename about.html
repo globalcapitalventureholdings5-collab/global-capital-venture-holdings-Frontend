@@ -118,6 +118,7 @@
       border-color: #10b981 !important;
       transform: translateY(-1px);
     }
+    /* MOBILE MENU BUTTON */
     .menu-btn {
       display: none;
       margin-left: auto;
@@ -128,25 +129,106 @@
       background: transparent;
       color: var(--primary);
       font-size: 24px;
+      cursor: pointer;
     }
-    .mobile-menu { display: none; border-top: 1px solid var(--line); padding: 16px 24px 24px; background: #ffffff; }
-    .mobile-menu.open { display: block; }
-    .mobile-menu a {
-      display: block;
-      padding: 12px 0;
-      color: #243831;
+
+    /* BACKDROP OVERLAY FOR MOBILE DRAWER */
+    .nav-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.72);
+      backdrop-filter: blur(4px);
+      z-index: 998;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .nav-backdrop.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* MOBILE DRAWER (SLIDES FROM RIGHT) */
+    .mobile-menu {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 320px;
+      max-width: 86vw;
+      background: #ffffff;
+      z-index: 999;
+      transform: translateX(100%);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: -10px 0 40px rgba(0, 0, 0, 0.3);
+      padding: 24px 20px;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+    .mobile-menu.open {
+      transform: translateX(0);
+    }
+    .mobile-drawer-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 16px;
+      margin-bottom: 16px;
       border-bottom: 1px solid var(--line);
+    }
+    .mobile-drawer-close {
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #f4fbf7;
+      color: var(--primary);
+      font-size: 16px;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+    }
+
+    /* MOBILE USER CARD IN DRAWER */
+    .mobile-user-card {
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: rgba(13, 90, 63, 0.06);
+      border: 1px solid rgba(13, 90, 63, 0.15);
+      margin-bottom: 14px;
+    }
+
+    .mobile-nav-links {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .mobile-nav-links a {
+      display: block;
+      padding: 12px 14px;
+      border-radius: 8px;
+      color: #243831;
       text-transform: uppercase;
       letter-spacing: 0.06em;
       font-size: 13px;
       font-weight: 700;
+      transition: background 0.15s;
     }
+    .mobile-nav-links a:hover, .mobile-nav-links a.active {
+      background: rgba(13, 90, 63, 0.08);
+      color: var(--primary);
+    }
+
     .mobile-auth-group {
       display: flex;
       flex-direction: column;
       gap: 10px;
-      margin-top: 16px;
-      padding-top: 16px;
+      margin-top: auto;
+      padding-top: 20px;
+      border-top: 1px solid var(--line);
     }
     .mobile-btn-signin {
       display: flex !important;
@@ -161,7 +243,6 @@
       font-weight: 800 !important;
       text-transform: uppercase;
       letter-spacing: 0.06em;
-      border-bottom: 1.5px solid rgba(13, 90, 63, 0.35) !important;
     }
     .mobile-btn-signup {
       display: flex !important;
@@ -177,7 +258,6 @@
       text-transform: uppercase;
       letter-spacing: 0.06em;
       box-shadow: 0 4px 14px rgba(13, 90, 63, 0.2);
-      border-bottom: 0 !important;
     }
     .mobile-btn-dashboard {
       display: flex !important;
@@ -192,7 +272,6 @@
       font-weight: 800 !important;
       text-transform: uppercase;
       letter-spacing: 0.06em;
-      border-bottom: 1.5px solid #0f7a57 !important;
     }
 
     /* USER PROFILE CHIP & DROPDOWN */
@@ -453,39 +532,53 @@
         </div>
       </nav>
 
-      <button class="menu-btn" id="menuBtn" type="button" aria-label="Toggle navigation">☰</button>
+      <button class="menu-btn" id="menuBtn" type="button" aria-label="Open navigation menu">☰</button>
+    </div>
+  </header>
+
+  <!-- MOBILE OVERLAY BACKDROP -->
+  <div id="navBackdrop" class="nav-backdrop"></div>
+
+  <!-- MOBILE DRAWER (OVERLAY ON TOP OF PAGE) -->
+  <div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-drawer-header">
+      <div style="font:700 15px Georgia, serif; color:var(--primary); display:flex; align-items:center; gap:8px;">
+        <span class="logo-mark" style="width:32px;height:32px;font-size:16px;">✦</span> GCVH Navigation
+      </div>
+      <button id="mobileCloseBtn" class="mobile-drawer-close" type="button" aria-label="Close navigation">✕</button>
     </div>
 
-    <div class="mobile-menu" id="mobileMenu">
-      <!-- Logged in user profile card at top of mobile menu -->
-      <div class="mobile-user-card nav-user-item" style="display:none;">
-        <div class="mobile-user-avatar user-avatar-sm">GC</div>
-        <div style="flex:1; overflow:hidden;">
-          <strong class="mobile-user-name" style="display:block; font-size:13px; color:#0d5a3f; text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">Private Client</strong>
-          <span class="mobile-user-email" style="display:block; font-size:11px; color:#597368; text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">Active Member</span>
-        </div>
-        <button type="button" class="nav-logout-btn" style="border:1px solid rgba(239,68,68,0.3); background:rgba(239,68,68,0.08); color:#ef4444; border-radius:8px; padding:6px 10px; font-size:11px; font-weight:800; cursor:pointer;">Logout</button>
+    <!-- Logged in user profile card in mobile drawer -->
+    <div class="mobile-user-card nav-user-item" style="display:none;">
+      <div class="mobile-user-avatar user-avatar-sm">GC</div>
+      <div style="flex:1; overflow:hidden;">
+        <strong class="mobile-user-name" style="display:block; font-size:13px; color:var(--primary); text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">Private Client</strong>
+        <span class="mobile-user-email" style="display:block; font-size:11px; color:var(--muted); text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">Active Member</span>
       </div>
+      <button type="button" class="nav-logout-btn" style="border:1px solid rgba(239,68,68,0.3); background:rgba(239,68,68,0.08); color:#ef4444; border-radius:8px; padding:6px 10px; font-size:11px; font-weight:800; cursor:pointer;">Logout</button>
+    </div>
 
+    <div class="mobile-nav-links">
       <a href="index.html">Home</a>
       <a href="packages.html">Packages</a>
       <a href="salary-system.html">Salary System</a>
-      <a href="about.html">About Us</a>
+      <a href="about.html" class="active">About Us</a>
       <a href="blogs.html">Blogs</a>
       <a href="contact.html">Contact</a>
-
-      <!-- Guest actions -->
-      <div class="mobile-auth-group mobile-guest-item">
-        <a href="login.html" class="mobile-btn-signin">Sign In</a>
-        <a href="register.html" class="mobile-btn-signup">Create Account</a>
-      </div>
-
-      <!-- User action -->
-      <div class="mobile-auth-group nav-user-item" style="display:none;">
-        <a href="dashboard.html" class="mobile-btn-dashboard">Go to Dashboard →</a>
-      </div>
     </div>
-  </header>
+
+    <!-- Guest actions -->
+    <div class="mobile-auth-group mobile-guest-item">
+      <a href="login.html" class="mobile-btn-signin">Sign In</a>
+      <a href="register.html" class="mobile-btn-signup">Create Account</a>
+    </div>
+
+    <!-- User action -->
+    <div class="mobile-auth-group nav-user-item" style="display:none;">
+      <a href="dashboard.html" class="mobile-btn-dashboard">Go to Dashboard →</a>
+    </div>
+  </div>
+
 
   <!-- PAGE HERO -->
   <section class="page-hero">
@@ -605,14 +698,6 @@
 
   <script src="config.js"></script>
   <script>
-    const menuBtn = document.getElementById('menuBtn');
-    const mobileMenu = document.getElementById('mobileMenu');
-    if (menuBtn && mobileMenu) {
-      menuBtn.addEventListener('click', () => {
-        mobileMenu.classList.toggle('open');
-      });
-    }
-
     const token = localStorage.getItem('gcvh_customer_token');
     if (token) {
       document.querySelectorAll('.nav-btn-dashboard, #mobileDashboard').forEach(el => el.hidden = false);

@@ -835,32 +835,6 @@
       });
     }
 
-    // Mobile Drawer Handlers
-    const menuBtn = document.getElementById('menuBtn');
-    const mobileMenu = document.getElementById('mobileMenu');
-    const navBackdrop = document.getElementById('navBackdrop');
-    const mobileCloseBtn = document.getElementById('mobileCloseBtn');
-
-    function openMobileDrawer() {
-      mobileMenu.classList.add('open');
-      navBackdrop.classList.add('active');
-      document.body.style.overflow = 'hidden';
-    }
-
-    function closeMobileDrawer() {
-      mobileMenu.classList.remove('open');
-      navBackdrop.classList.remove('active');
-      document.body.style.overflow = '';
-    }
-
-    if (menuBtn) menuBtn.onclick = openMobileDrawer;
-    if (mobileCloseBtn) mobileCloseBtn.onclick = closeMobileDrawer;
-    if (navBackdrop) navBackdrop.onclick = closeMobileDrawer;
-
-    document.querySelectorAll('.mobile-nav-links a, .mobile-auth-group a').forEach(a => {
-      a.addEventListener('click', closeMobileDrawer);
-    });
-
     window.addEventListener('load', () => {
       fetchBlogs(1);
     });

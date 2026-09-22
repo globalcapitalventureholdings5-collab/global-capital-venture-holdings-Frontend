@@ -108,23 +108,68 @@ function initUserDropdown() {
   });
 }
 
-// Helper: Mobile menu toggle
+// Helper: Mobile menu toggle with overlay drawer support
 function initMobileMenu() {
   const menuBtn = document.getElementById('menuBtn');
   const mobileMenu = document.getElementById('mobileMenu');
-  if (menuBtn && mobileMenu) {
-    menuBtn.addEventListener('click', () => {
-      const open = mobileMenu.classList.toggle('open');
-      menuBtn.setAttribute('aria-expanded', String(open));
-    });
-    mobileMenu.querySelectorAll('a').forEach(a => {
-      a.addEventListener('click', () => {
-        if (!a.classList.contains('no-close')) {
-          mobileMenu.classList.remove('open');
-        }
-      });
-    });
+  let navBackdrop = document.getElementById('navBackdrop');
+  const mobileCloseBtn = document.getElementById('mobileCloseBtn');
+
+  if (!mobileMenu) return;
+
+  // Create backdrop element dynamically if not present in HTML
+  if (!navBackdrop) {
+    navBackdrop = document.createElement('div');
+    navBackdrop.id = 'navBackdrop';
+    navBackdrop.className = 'nav-backdrop';
+    document.body.appendChild(navBackdrop);
   }
+
+  function openDrawer() {
+    mobileMenu.classList.add('open');
+    if (navBackdrop) navBackdrop.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    if (menuBtn) menuBtn.setAttribute('aria-expanded', 'true');
+  }
+
+  function closeDrawer() {
+    mobileMenu.classList.remove('open');
+    if (navBackdrop) navBackdrop.classList.remove('active');
+    document.body.style.overflow = '';
+    if (menuBtn) menuBtn.setAttribute('aria-expanded', 'false');
+  }
+
+  if (menuBtn) {
+    menuBtn.onclick = (e) => {
+      e.stopPropagation();
+      if (mobileMenu.classList.contains('open')) {
+        closeDrawer();
+      } else {
+        openDrawer();
+      }
+    };
+  }
+
+  if (mobileCloseBtn) {
+    mobileCloseBtn.onclick = (e) => {
+      e.stopPropagation();
+      closeDrawer();
+    };
+  }
+
+  if (navBackdrop) {
+    navBackdrop.onclick = () => {
+      closeDrawer();
+    };
+  }
+
+  mobileMenu.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      if (!a.classList.contains('no-close')) {
+        closeDrawer();
+      }
+    });
+  });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -132,3 +177,4 @@ document.addEventListener('DOMContentLoaded', () => {
   initUserDropdown();
   syncGlobalNav();
 });
+
