@@ -4,7 +4,7 @@
 const CONFIG = {
   API_URL: (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
     ? 'http://localhost:8080'
-    : 'https://global-capital-venture-holdings-backend-production.up.railway.app'
+    : window.location.origin
 };
 
 const API = CONFIG.API_URL;
