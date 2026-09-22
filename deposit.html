@@ -17,15 +17,15 @@
 </div>
 
 <div class="wrap">
-  <header class="top"><a href="index.html" class="brand"><span class="mark">✦</span><span>Global Capital<br><b>Venture Holdings, Inc.</b></span></a><a class="back" href="index.html#packages">← Packages</a></header>
+  <header class="top"><a href="index.html" class="brand"><span class="mark">✦</span><span>Global Capital<br><b>Venture Holdings, Inc.</b></span></a><a class="back" href="packages.html">← Packages</a></header>
   <section class="card hero"><div class="tag">PACKAGE DEPOSIT</div><h1>Complete Your <span style="color:var(--gold2)">Deposit</span></h1><p>Choose a package, send the exact amount using the configured payment instructions, and submit the transaction ID. Your dashboard remains locked until the payment is verified.</p><div id="amount" class="amount">$0.00</div></section>
   <section class="card"><div class="tag">1 · PAYMENT DETAILS</div><div class="grid" style="margin-top:18px"><div class="field"><label>Asset</label><input id="asset" value="USDT" readonly></div><div class="field"><label>Network</label><input id="network" value="TRX" readonly></div></div><div class="field" style="margin-top:16px"><label>Deposit Address</label><div class="address"><input id="address" readonly placeholder="Loading deposit address…"><button id="copyAddress" class="btn secondary" type="button">Copy</button></div></div><p id="tagRow" class="small" hidden>Tag / Memo: <strong id="tag"></strong></p><p id="instructions" class="notice" style="margin-top:16px">Loading payment instructions…</p><p class="small">Send only the displayed asset over the displayed network. Verify the address and network in your wallet before confirming.</p></section>
   <section class="card"><div class="tag">2 · SUBMIT TRANSACTION</div><div class="grid" style="margin-top:18px"><div class="field"><label>Package Amount</label><input id="amountInput" type="number" readonly></div><div class="field"><label>Transaction ID (TXID)</label><input id="txid" maxlength="200" placeholder="Paste your transaction ID"></div></div><button id="submitDeposit" class="btn primary" type="button" style="margin-top:20px;width:100%">Submit Deposit for Verification</button><div id="status" class="status" style="margin-top:16px"></div></section>
   <p class="small">After submission, the request is reviewed by the administrator. A package is activated only after the deposit is approved by the backend. Do not send funds until you have verified the payment details shown above.</p>
 </div>
+<script src="config.js"></script>
 <script>
 'use strict';
-const API='https://global-capital-venture-holdings-backend-production.up.railway.app';
 const token=localStorage.getItem('gcvh_customer_token');
 if(!token){location.href='login.html?redirect='+encodeURIComponent(location.pathname+location.search);throw new Error('Authentication required');}
 const qs=new URLSearchParams(location.search);

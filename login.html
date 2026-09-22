@@ -1,166 +1,257 @@
 <!doctype html>
 <html lang="en">
-
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>GCVH — Sign In</title>
   <style>
+    :root {
+      --primary: #0d5a3f;
+      --primary-hover: #0f7a57;
+      --bg: #f5fbf8;
+      --card-bg: #ffffff;
+      --text: #0d5a3f;
+      --text-muted: #597368;
+      --border: rgba(13, 90, 63, 0.12);
+      --input-bg: #f8fdfb;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      margin: 0;
-      background: #f5fbf8;
-      color: #0d5a3f;
-      font-family: Inter, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       display: grid;
       place-items: center;
-      min-height: 100vh
+      min-height: 100vh;
+      padding: 24px 16px;
     }
-
     .card {
-      width: min(410px, 92vw);
-      background: #ffffff;
-      border: 1px solid rgba(13, 90, 63, .12);
-      border-radius: 18px;
-      padding: 30px;
-      box-shadow: 0 30px 80px rgba(13, 90, 63, .08)
+      width: min(440px, 100%);
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 36px 30px;
+      box-shadow: 0 30px 80px rgba(13, 90, 63, 0.08);
     }
-
     .logo {
-      width: 50px;
-      height: 50px;
-      border: 1px solid rgba(13, 90, 63, .2);
+      width: 52px;
+      height: 52px;
+      border: 1px solid rgba(13, 90, 63, 0.25);
       border-radius: 50%;
       display: grid;
       place-items: center;
-      color: #0d5a3f;
+      color: var(--primary);
       font: 28px Georgia, serif;
-      margin: 0 auto 14px
+      margin: 0 auto 14px;
+      background: rgba(13, 90, 63, 0.03);
     }
-
     .title {
       text-align: center;
-      font: 700 27px Georgia, serif;
+      font: 700 28px Georgia, serif;
       margin: 0;
-      color: #0d5a3f
+      color: var(--primary);
     }
-
     .sub {
       text-align: center;
-      color: #0f7a57;
-      font-size: 10px;
+      color: var(--primary-hover);
+      font-size: 11px;
       font-weight: 800;
       letter-spacing: 1.5px;
       text-transform: uppercase;
-      margin: 8px 0 25px
+      margin: 8px 0 24px;
     }
-
     .field {
-      margin-bottom: 15px
+      margin-bottom: 16px;
     }
-
     .field label {
       display: block;
-      color: #0d5a3f;
-      font-size: 10px;
+      color: var(--primary);
+      font-size: 11px;
       font-weight: 800;
       letter-spacing: 1px;
       text-transform: uppercase;
-      margin-bottom: 7px
+      margin-bottom: 8px;
     }
-
     .field input {
       width: 100%;
-      height: 46px;
-      box-sizing: border-box;
-      padding: 0 13px;
-      background: #f8fdfb;
-      border: 1px solid rgba(13, 90, 63, .15);
-      border-radius: 9px;
-      color: #0d5a3f;
-      outline: none
+      height: 48px;
+      padding: 0 14px;
+      background: var(--input-bg);
+      border: 1px solid rgba(13, 90, 63, 0.18);
+      border-radius: 10px;
+      color: var(--primary);
+      font-size: 15px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
     }
-
+    .field input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(13, 90, 63, 0.1);
+    }
     .button {
       width: 100%;
-      height: 46px;
+      height: 48px;
       border: 0;
-      border-radius: 9px;
+      border-radius: 10px;
       background: linear-gradient(135deg, #0f7a57, #0d5a3f);
-      font-weight: 900;
+      font-size: 15px;
+      font-weight: 800;
       color: #ffffff;
-      cursor: pointer
+      cursor: pointer;
+      margin-top: 10px;
+      transition: transform 0.15s, opacity 0.15s;
     }
-
+    .button:hover {
+      opacity: 0.95;
+      transform: translateY(-1px);
+    }
+    .button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
     .alert {
       display: none;
-      padding: 11px;
-      border-radius: 9px;
-      margin-bottom: 15px;
-      font-size: 12px
+      padding: 12px 16px;
+      border-radius: 10px;
+      margin-bottom: 18px;
+      font-size: 13px;
+      line-height: 1.5;
     }
-
     .alert.show {
       display: block;
-      background: #edfdf5;
-      border: 1px solid rgba(13, 90, 63, .12);
-      color: #0d5a3f
     }
-
+    .alert.error {
+      background: #fdf2f2;
+      border: 1px solid rgba(220, 38, 38, 0.2);
+      color: #b91c1c;
+    }
+    .alert.success {
+      background: #edfdf5;
+      border: 1px solid rgba(13, 90, 63, 0.2);
+      color: #0d5a3f;
+    }
     .links {
       text-align: center;
-      margin-top: 15px;
-      font-size: 12px
+      margin-top: 20px;
+      font-size: 13px;
+      color: var(--text-muted);
     }
-
     .links a {
-      color: #0f7a57
+      color: var(--primary-hover);
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .links a:hover {
+      text-decoration: underline;
+    }
+    .home-link {
+      display: block;
+      text-align: center;
+      margin-top: 14px;
+      font-size: 12px;
+      color: var(--text-muted);
+      text-decoration: none;
+    }
+    .home-link:hover {
+      color: var(--primary);
     }
   </style>
 </head>
-
 <body>
   <div class="card">
-    <div class="logo">G</div>
+    <div class="logo">✦</div>
     <h1 class="title">Customer Sign In</h1>
     <div class="sub">Global Capital Venture Holdings</div>
+
     <div id="alert" class="alert"></div>
-    <div class="field"><label>Email</label><input id="email" type="email" autocomplete="email"></div>
-    <div class="field"><label>Password</label><input id="password" type="password" autocomplete="current-password">
-    </div><button id="login" class="button" type="button">Sign In</button>
-    <div class="links">New customer? <a href="register.html">Create an account</a></div>
+
+    <div class="field">
+      <label for="email">Email Address</label>
+      <input id="email" type="email" autocomplete="email" placeholder="you@example.com" required>
+    </div>
+
+    <div class="field">
+      <label for="password">Password</label>
+      <input id="password" type="password" autocomplete="current-password" placeholder="••••••••" required>
+    </div>
+
+    <button id="login" class="button" type="button">Sign In</button>
+
+    <div class="links">
+      New customer? <a href="register.html">Create an account</a>
+    </div>
+    <a href="index.html" class="home-link">← Back to Homepage</a>
   </div>
+
+  <script src="config.js"></script>
   <script>
-    // const API='https://globalcapitalventureholdings.com';
-    const API = 'https://globalcapitalventureholdings.com';
-    const e = document.getElementById('alert');
+    const alertEl = document.getElementById('alert');
     const button = document.getElementById('login');
-    function err(t) { e.textContent = t; e.className = 'alert show' }
+
+    function showAlert(msg, isSuccess = false) {
+      alertEl.textContent = msg;
+      alertEl.className = 'alert show ' + (isSuccess ? 'success' : 'error');
+    }
+
+    // Check prefill params
+    const params = new URLSearchParams(location.search);
+    const emailParam = params.get('email');
+    if (emailParam) {
+      document.getElementById('email').value = emailParam;
+    }
+    if (params.get('registered') === '1') {
+      showAlert('Account created successfully! Please enter your password to sign in.', true);
+    }
+
     button.onclick = async () => {
       const email = document.getElementById('email').value.trim().toLowerCase();
       const password = document.getElementById('password').value;
-      if (!email || !password) { err('Please enter your email and password.'); return; }
-      button.disabled = true; button.textContent = 'Signing in...';
+
+      if (!email || !password) {
+        showAlert('Please enter both your email address and password.', false);
+        return;
+      }
+
+      button.disabled = true;
+      button.textContent = 'Signing in...';
+
       try {
-        const r = await fetch(API + '/api/auth/login', {
+        const res = await fetch(API + '/api/auth/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, password })
         });
-        let d = {};
-        try { d = await r.json() } catch { }
-        if (!r.ok) throw new Error(d.error || ('Login failed (' + r.status + ').'));
-        if (!d.token) throw new Error('Login succeeded but no session token was returned.');
-        localStorage.setItem('gcvh_customer_token', d.token);
-        localStorage.setItem('gcvh_customer_user', JSON.stringify(d.user || {}));
-        const params = new URLSearchParams(location.search);
+
+        let data = {};
+        try { data = await res.json(); } catch (e) {}
+
+        if (!res.ok) {
+          throw new Error(data.error || ('Login failed (HTTP ' + res.status + ').'));
+        }
+
+        if (!data.token) {
+          throw new Error('Login succeeded but no authentication token was returned.');
+        }
+
+        localStorage.setItem('gcvh_customer_token', data.token);
+        localStorage.setItem('gcvh_customer_user', JSON.stringify(data.user || {}));
+
+        showAlert('Signed in successfully! Redirecting...', true);
+
         const redirect = params.get('redirect');
-        location.href = (redirect && redirect.startsWith('deposit.html')) ? redirect : 'dashboard.html';
-      } catch (x) {
-        err(x.name === 'TypeError' ? 'Unable to connect to the account server. Please try again.' : x.message);
-        button.disabled = false; button.textContent = 'Sign In';
+        setTimeout(() => {
+          location.href = (redirect && (redirect.startsWith('deposit.html') || redirect.startsWith('dashboard.html') || redirect.startsWith('packages.html')))
+            ? redirect
+            : 'dashboard.html';
+        }, 600);
+
+      } catch (err) {
+        showAlert(err.name === 'TypeError' ? 'Unable to connect to the backend server. Please verify your connection.' : err.message, false);
+        button.disabled = false;
+        button.textContent = 'Sign In';
       }
     };
   </script>
 </body>
-
 </html>

@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>About Us — Global Capital Venture Holdings, Inc.</title>
+  <meta name="description" content="Learn about Global Capital Venture Holdings, Inc., our institutional algorithmic trading strategies, risk management architecture, and wealth preservation mission.">
+  <style>
+    :root {
+      --bg: #ffffff;
+      --panel: #f4fbf7;
+      --primary: #0d5a3f;
+      --primary-light: #0f7a57;
+      --gold: #c59b27;
+      --text: #0d5a3f;
+      --text-dark: #111e19;
+      --muted: #4c7667;
+      --line: rgba(13, 90, 63, 0.12);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text-dark);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.6;
+    }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; cursor: pointer; }
+
+    /* SITE HEADER */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav-container {
+      max-width: 1320px;
+      margin: auto;
+      min-height: 84px;
+      padding: 12px 28px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+    .logo { display: flex; align-items: center; gap: 12px; }
+    .logo-mark {
+      width: 46px;
+      height: 46px;
+      border: 1px solid var(--primary);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: var(--primary-light);
+      font-family: Georgia, serif;
+      font-size: 24px;
+      background: rgba(13, 90, 63, 0.04);
+    }
+    .brand-name { font-family: Georgia, "Times New Roman", serif; font-size: 16px; line-height: 1.1; color: var(--primary); }
+    .brand-name b { color: var(--primary-light); font-weight: 700; }
+    .nav-links { margin-left: auto; display: flex; align-items: center; gap: 6px; }
+    .nav-links a {
+      padding: 10px 14px;
+      border-radius: 8px;
+      color: #243831;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-weight: 700;
+      transition: color 0.15s, background-color 0.15s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--primary); background: rgba(13, 90, 63, 0.06); }
+    .nav-cta {
+      background: linear-gradient(135deg, #0f7a57, #0d5a3f) !important;
+      color: #ffffff !important;
+      padding: 10px 18px !important;
+      border-radius: 8px !important;
+    }
+    .nav-dashboard-link {
+      border: 1px solid var(--primary) !important;
+      color: var(--primary) !important;
+      background: rgba(13, 90, 63, 0.04) !important;
+    }
+    .menu-btn {
+      display: none;
+      margin-left: auto;
+      width: 44px;
+      height: 44px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: transparent;
+      color: var(--primary);
+      font-size: 24px;
+    }
+    .mobile-menu { display: none; border-top: 1px solid var(--line); padding: 16px 24px 24px; background: #ffffff; }
+    .mobile-menu.open { display: block; }
+    .mobile-menu a {
+      display: block;
+      padding: 12px 0;
+      color: #243831;
+      border-bottom: 1px solid var(--line);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    /* PAGE HERO */
+    .page-hero {
+      background: linear-gradient(135deg, #071c14, #0b2e21);
+      color: #ffffff;
+      padding: 70px 28px;
+      text-align: center;
+    }
+    .page-hero h1 { font: 700 clamp(36px, 5vw, 56px)/1.1 Georgia, serif; margin-bottom: 16px; color: #ffffff; }
+    .page-hero h1 span { color: #5eead4; }
+    .page-hero p { max-width: 680px; margin: 0 auto; color: #c0ded4; font-size: 18px; }
+
+    /* ABOUT CONTENT */
+    .about-container { max-width: 1320px; margin: auto; padding: 70px 28px; }
+    .about-story {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 48px;
+      align-items: center;
+      margin-bottom: 70px;
+    }
+    .about-story h2 { font: 700 36px Georgia, serif; color: var(--primary); margin-bottom: 20px; }
+    .about-story p { color: #375349; font-size: 16px; line-height: 1.8; margin-bottom: 16px; }
+
+    .pillars-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+      margin: 60px 0;
+    }
+    .pillar-card {
+      background: #f6fbf8;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 36px 30px;
+    }
+    .pillar-card h3 { font: 700 22px Georgia, serif; color: var(--primary); margin: 16px 0 12px; }
+    .pillar-card p { color: #3f5e53; font-size: 14px; line-height: 1.7; }
+    .pillar-num { font: 700 32px Georgia, serif; color: var(--primary-light); opacity: 0.6; }
+
+    /* STATS BANNER */
+    .stats-banner {
+      background: linear-gradient(145deg, #0b241b, #071912);
+      border-radius: 24px;
+      padding: 50px 40px;
+      color: #ffffff;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 30px;
+      text-align: center;
+    }
+    .stats-banner strong { font: 700 44px Georgia, serif; display: block; color: #5eead4; }
+    .stats-banner span { font-size: 13px; color: #b7dbd0; text-transform: uppercase; letter-spacing: 0.1em; }
+
+    /* FOOTER */
+    .footer {
+      background: #071912;
+      color: #8dafa3;
+      padding: 80px 28px 40px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .footer-container {
+      max-width: 1320px;
+      margin: auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1.2fr;
+      gap: 48px;
+      padding-bottom: 60px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .footer-brand h4 { font: 700 24px Georgia, serif; color: #ffffff; margin-bottom: 14px; }
+    .footer-brand p { font-size: 14px; line-height: 1.7; max-width: 360px; }
+    .footer-col h5 { color: #ffffff; font-size: 13px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 20px; }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+    .footer-col a { color: #8dafa3; font-size: 14px; transition: color 0.15s; }
+    .footer-col a:hover { color: #ffffff; }
+    .footer-bottom {
+      max-width: 1320px;
+      margin: 30px auto 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: #638579;
+    }
+
+    @media (max-width: 900px) {
+      .nav-links { display: none; }
+      .menu-btn { display: grid; place-items: center; }
+      .about-story { grid-template-columns: 1fr; }
+      .pillars-grid { grid-template-columns: 1fr; }
+      .stats-banner { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+      .footer-container { grid-template-columns: 1fr; gap: 32px; }
+      .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SITE HEADER -->
+  <header class="site-header">
+    <div class="nav-container">
+      <a href="index.html" class="logo">
+        <span class="logo-mark">✦</span>
+        <span class="brand-name">Global Capital<br><b>Venture Holdings, Inc.</b></span>
+      </a>
+
+      <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="packages.html">Packages</a>
+        <a href="salary-system.html">Salary System</a>
+        <a href="about.html" class="active">About Us</a>
+        <a href="blogs.html">Blogs</a>
+        <a href="contact.html">Contact</a>
+        <a href="login.html" class="nav-auth-link">Sign In</a>
+        <a href="register.html" class="nav-cta">Create Account</a>
+        <a href="dashboard.html" class="nav-dashboard-link" hidden>Dashboard</a>
+      </nav>
+
+      <button class="menu-btn" id="menuBtn" type="button" aria-label="Toggle navigation">☰</button>
+    </div>
+
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="index.html">Home</a>
+      <a href="packages.html">Packages</a>
+      <a href="salary-system.html">Salary System</a>
+      <a href="about.html">About Us</a>
+      <a href="blogs.html">Blogs</a>
+      <a href="contact.html">Contact</a>
+      <a href="login.html">Sign In</a>
+      <a href="register.html">Create Account</a>
+      <a href="dashboard.html" id="mobileDashboard" hidden>Dashboard</a>
+    </div>
+  </header>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <h1>About <span>Our Organization</span></h1>
+    <p>Pioneering institutional wealth engineering, high-frequency gold arbitrage, and multi-tier leadership capital structures.</p>
+  </section>
+
+  <!-- MAIN ABOUT CONTENT -->
+  <main class="about-container">
+
+    <div class="about-story">
+      <div>
+        <span style="color: var(--primary-light); font-size: 12px; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase;">OUR MISSION</span>
+        <h2>Protecting Capital & <span>Maximizing Compound Yields</span></h2>
+        <p>Global Capital Venture Holdings, Inc. was founded on a commitment to democratizing institutional-grade investment management. By combining proprietary automated quantitative algorithms with disciplined risk buffers, we deliver consistent 1.00% daily yields to retail and institutional partners globally.</p>
+        <p>Our primary liquidity operations center on XAUUSD (Gold/USD spot & futures markets), leveraging cross-exchange arbitrage and low-latency micro-spread capture around the clock.</p>
+      </div>
+      <div style="background: #f6fbf8; border: 1px solid var(--line); border-radius: 20px; padding: 36px;">
+        <h4 style="font: 700 20px Georgia, serif; color: var(--primary); margin-bottom: 12px;">Corporate Values</h4>
+        <ul style="list-style: none; display: flex; flex-direction: column; gap: 14px; font-size: 14px; color: #375349;">
+          <li>🛡️ <strong>Capital Custody:</strong> Segregated multi-signature cold storage for all crypto assets.</li>
+          <li>⚡ <strong>Algorithmic Precision:</strong> 24/7 automated trade execution without emotional bias.</li>
+          <li>🤝 <strong>Partner Prosperity:</strong> Transparent fortnightly payouts and lucrative salary milestones.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 3 PILLARS -->
+    <div style="text-align: center; max-width: 680px; margin: 40px auto 20px;">
+      <span style="color: var(--primary-light); font-size: 12px; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase;">CORE PILLARS</span>
+      <h2 style="font: 700 36px Georgia, serif; color: var(--primary); margin-top: 8px;">The Technology Behind <span>Our Edge</span></h2>
+    </div>
+
+    <div class="pillars-grid">
+      <div class="pillar-card">
+        <div class="pillar-num">01</div>
+        <h3>High-Frequency Arbitrage</h3>
+        <p>Our servers interface with tier-1 liquidity providers to exploit micro-price inefficiencies in physical and synthetic gold trading pairs.</p>
+      </div>
+      <div class="pillar-card">
+        <div class="pillar-num">02</div>
+        <h3>Automated Risk Hedging</h3>
+        <p>Dynamic stop-loss logic and delta-neutral hedging protect portfolio principal against macro market volatility.</p>
+      </div>
+      <div class="pillar-card">
+        <div class="pillar-num">03</div>
+        <h3>Transparent Distribution</h3>
+        <p>Daily earnings accrue directly to investor accounts, with scheduled fortnightly withdrawal settlements in USDT and crypto.</p>
+      </div>
+    </div>
+
+    <!-- STATS BANNER -->
+    <div class="stats-banner">
+      <div>
+        <strong>99.98%</strong>
+        <span>System Uptime</span>
+      </div>
+      <div>
+        <strong>14 Days</strong>
+        <span>Fortnightly Payouts</span>
+      </div>
+      <div>
+        <strong>$15,000</strong>
+        <span>Max Monthly Salary</span>
+      </div>
+      <div>
+        <strong>100%</strong>
+        <span>Cold Storage Custody</span>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- MULTI-PAGE FOOTER -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-brand">
+        <h4>Global Capital Venture Holdings, Inc.</h4>
+        <p>Institutional portfolio growth, real-time algorithmic execution, and premier leadership salary programs.</p>
+      </div>
+
+      <div class="footer-col">
+        <h5>Platform</h5>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="packages.html">Investment Packages</a></li>
+          <li><a href="salary-system.html">Salary System</a></li>
+          <li><a href="dashboard.html">Member Dashboard</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h5>Company</h5>
+        <ul>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="blogs.html">Market Insights</a></li>
+          <li><a href="contact.html">Support & Contact</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h5>Security & Access</h5>
+        <ul>
+          <li><a href="login.html">Client Sign In</a></li>
+          <li><a href="register.html">Create New Account</a></li>
+          <li><a href="deposit.html">Deposit Portal</a></li>
+          <li><a href="admin.html">Admin Gateway</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2026 Global Capital Venture Holdings, Inc. All rights reserved.</span>
+      <span>Risk Warning: Trading financial instruments involves significant risk to capital.</span>
+    </div>
+  </footer>
+
+  <script src="config.js"></script>
+</body>
+</html>

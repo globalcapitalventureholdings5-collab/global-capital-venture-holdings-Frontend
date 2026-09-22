@@ -1,225 +1,636 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#07090b">
-<title>Global Capital Venture Holdings, Inc.</title>
-<meta name="description" content="Global Capital Venture Holdings, Inc.offers professionally managed investment portfolio packages designed to help clients grow and protect their capital. Explore our packages and get started today.">
-<script src="https://s3.tradingview.com/tv.js"></script>
-<style>
-:root{--bg:#ffffff;--panel:#f4fbf7;--gold:#0d5a3f;--gold2:#0f7a57;--text:#0d5a3f;--muted:#4c7667;--line:rgba(13,90,63,.12);--green:#0f7a57}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#ffffff;color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overflow-x:hidden}
-a{color:inherit;text-decoration:none}button{font:inherit}
-.site-header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.94);backdrop-filter:blur(16px);border-bottom:1px solid rgba(13,90,63,.12)}
-.nav-container{max-width:1280px;margin:auto;min-height:82px;padding:12px 28px;display:flex;align-items:center;gap:28px}
-.logo{display:flex;align-items:center;gap:12px;min-width:0}.logo-mark{width:48px;height:48px;border:1px solid var(--gold);border-radius:50%;display:grid;place-items:center;color:var(--gold2);font-family:Georgia,serif;font-size:25px}.brand-name{font-family:Georgia,"Times New Roman",serif;font-size:16px;line-height:1.02;white-space:nowrap}.brand-name b{color:var(--gold2);font-weight:600}
-.nav-links{margin-left:auto;display:flex;align-items:center;gap:8px}.nav-links a{padding:13px 15px;border-radius:10px;color:#1b1b1b;font-size:13px;text-transform:uppercase;letter-spacing:.08em;font-weight:700}.nav-links a:hover{color:#000000}.dashboard-link{border:1px solid rgba(17,17,17,.2);color:#000000!important;background:rgba(17,17,17,.02)}
-.menu-btn{display:none;margin-left:auto;width:48px;height:48px;border:1px solid var(--gold);border-radius:10px;background:transparent;color:#fff;font-size:25px}.mobile-menu{display:none;border-top:1px solid rgba(255,255,255,.07);padding:10px 20px 18px;background:#090b0e}.mobile-menu a{display:block;padding:14px 4px;color:#ddd;border-bottom:1px solid rgba(255,255,255,.05);text-transform:uppercase;letter-spacing:.08em;font-size:13px}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0d5a3f">
+  <title>Global Capital Venture Holdings, Inc. — Wealth Management & Trading Intelligence</title>
+  <meta name="description" content="Global Capital Venture Holdings, Inc. provides institutional-grade portfolio packages, daily ROI, live algorithmic market analytics, and leadership salary programs.">
+  <script src="https://s3.tradingview.com/tv.js"></script>
+  <style>
+    :root {
+      --bg: #ffffff;
+      --panel: #f4fbf7;
+      --panel-card: #ffffff;
+      --primary: #0d5a3f;
+      --primary-dark: #073827;
+      --primary-light: #0f7a57;
+      --gold: #c59b27;
+      --text: #0d5a3f;
+      --text-dark: #111e19;
+      --muted: #4c7667;
+      --line: rgba(13, 90, 63, 0.12);
+      --green: #0f7a57;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text-dark);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; cursor: pointer; }
 
-.hero{position:relative;min-height:calc(100vh - 82px);display:flex;align-items:center;overflow:hidden}
+    /* SITE HEADER */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav-container {
+      max-width: 1320px;
+      margin: auto;
+      min-height: 84px;
+      padding: 12px 28px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .logo-mark {
+      width: 46px;
+      height: 46px;
+      border: 1px solid var(--primary);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: var(--primary-light);
+      font-family: Georgia, serif;
+      font-size: 24px;
+      background: rgba(13, 90, 63, 0.04);
+    }
+    .brand-name {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 16px;
+      line-height: 1.1;
+      color: var(--primary);
+    }
+    .brand-name b {
+      color: var(--primary-light);
+      font-weight: 700;
+    }
+    .nav-links {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .nav-links a {
+      padding: 10px 14px;
+      border-radius: 8px;
+      color: #243831;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-weight: 700;
+      transition: color 0.15s, background-color 0.15s;
+    }
+    .nav-links a:hover, .nav-links a.active {
+      color: var(--primary);
+      background: rgba(13, 90, 63, 0.06);
+    }
+    .nav-cta {
+      background: linear-gradient(135deg, #0f7a57, #0d5a3f) !important;
+      color: #ffffff !important;
+      padding: 10px 18px !important;
+      border-radius: 8px !important;
+    }
+    .nav-dashboard-link {
+      border: 1px solid var(--primary) !important;
+      color: var(--primary) !important;
+      background: rgba(13, 90, 63, 0.04) !important;
+    }
+    .menu-btn {
+      display: none;
+      margin-left: auto;
+      width: 44px;
+      height: 44px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: transparent;
+      color: var(--primary);
+      font-size: 24px;
+    }
+    .mobile-menu {
+      display: none;
+      border-top: 1px solid var(--line);
+      padding: 16px 24px 24px;
+      background: #ffffff;
+    }
+    .mobile-menu.open { display: block; }
+    .mobile-menu a {
+      display: block;
+      padding: 12px 0;
+      color: #243831;
+      border-bottom: 1px solid var(--line);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-size: 13px;
+      font-weight: 700;
+    }
 
-/* TradingView remains a full-screen background; slightly brighter than before */
-.tradingview-background{position:absolute;inset:0;width:100%;height:100%;overflow:hidden;opacity:.50;pointer-events:none;z-index:0}.tradingview-background iframe{max-width:100%!important}#tradingview_chart{width:100%;height:100%}
+    /* HERO */
+    .hero {
+      position: relative;
+      min-height: calc(100vh - 84px);
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      background: #07130e;
+    }
+    .tradingview-background {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0.38;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background: linear-gradient(90deg, rgba(5, 17, 12, 0.94) 0%, rgba(5, 17, 12, 0.82) 50%, rgba(5, 17, 12, 0.6) 100%);
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 1320px;
+      width: 100%;
+      margin: auto;
+      padding: 80px 28px;
+      color: #ffffff;
+    }
+    .live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid rgba(22, 229, 138, 0.3);
+      color: #16e58a;
+      background: rgba(22, 229, 138, 0.08);
+      border-radius: 999px;
+      padding: 9px 16px;
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      font-weight: 700;
+    }
+    .live-dot {
+      width: 8px;
+      height: 8px;
+      background: #16e58a;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #16e58a;
+    }
+    h1 {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(44px, 6.5vw, 84px);
+      line-height: 1.02;
+      letter-spacing: -0.03em;
+      max-width: 900px;
+      margin: 28px 0 24px;
+      color: #ffffff;
+    }
+    h1 span { color: #5eead4; }
+    .hero-content > p {
+      max-width: 680px;
+      font-size: 19px;
+      line-height: 1.7;
+      color: #c0ded4;
+      margin: 0 0 34px;
+    }
+    .hero-buttons {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 56px;
+      padding: 0 32px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 700;
+      transition: transform 0.15s, opacity 0.15s;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-primary {
+      background: linear-gradient(135deg, #0f7a57, #0d5a3f);
+      color: #ffffff;
+      box-shadow: 0 10px 25px rgba(15, 122, 87, 0.35);
+    }
+    .btn-outline {
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.08);
+      color: #ffffff;
+    }
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 160px));
+      gap: 36px;
+      margin-top: 56px;
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+      padding-top: 36px;
+    }
+    .hero-stats div { display: flex; flex-direction: column; gap: 4px; }
+    .hero-stats strong { font-family: Georgia, serif; font-size: 36px; color: #ffffff; }
+    .hero-stats span { font-size: 11px; color: #9bb3ab; text-transform: uppercase; letter-spacing: 0.12em; }
 
-.hero-overlay{position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(7,9,11,.78) 0%,rgba(7,9,11,.68) 38%,rgba(7,9,11,.45) 72%,rgba(7,9,11,.62) 100%),linear-gradient(0deg,rgba(7,9,11,.72),rgba(7,9,11,.18) 38%,rgba(7,9,11,.68))}
-.hero-content{position:relative;z-index:2;max-width:1280px;width:100%;margin:auto;padding:92px 28px 74px}.live-badge{display:inline-flex;align-items:center;gap:10px;border:1px solid rgba(13,90,63,.18);color:var(--green);border-radius:999px;padding:11px 18px;font-size:13px;letter-spacing:.14em;font-weight:600}.live-dot{width:10px;height:10px;background:var(--green);border-radius:50%;box-shadow:0 0 14px rgba(15,122,87,.35)}
-h1{font-family:Georgia,"Times New Roman",serif;font-size:clamp(54px,7.5vw,105px);line-height:.95;letter-spacing:-.045em;max-width:850px;margin:34px 0 30px}h1 span{color:var(--gold2)}.hero-content>p{max-width:700px;font-size:20px;line-height:1.8;color:var(--muted);margin:0 0 36px}
-.hero-buttons{display:flex;gap:14px;flex-wrap:wrap}.btn{display:inline-flex;justify-content:center;align-items:center;min-height:62px;padding:0 30px;border-radius:16px;font-weight:700}.btn-primary{background:linear-gradient(135deg,#0f7a57,#0d5a3f);color:#ffffff;min-width:250px}.btn-outline{border:1px solid rgba(13,90,63,.2);background:rgba(255,255,255,.7);color:var(--text);min-width:250px}
-.hero-stats{display:grid;grid-template-columns:repeat(3,minmax(0,170px));gap:42px;margin-top:64px}.hero-stats div{display:flex;flex-direction:column;gap:7px}.hero-stats strong{font-family:Georgia,serif;font-size:42px}.hero-stats span{font-size:11px;color:#8e9399;text-transform:uppercase;letter-spacing:.13em}
-.packages-section{padding:100px 28px;max-width:1280px;margin:auto}.section-heading{text-align:center;margin-bottom:58px}.section-tag,.tier-kicker{color:var(--gold);font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase}.section-heading h2{font:600 clamp(38px,5vw,60px)/1.05 Georgia,serif;margin:16px 0}.section-heading h2 span{color:var(--gold2)}.section-heading p{color:var(--muted);font-size:17px}
-.package-tier{margin-bottom:48px}.tier-header{display:flex;align-items:center;gap:16px;margin-bottom:18px}.tier-line{height:1px;flex:1;background:linear-gradient(90deg,var(--line),transparent)}.package-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.package-card{position:relative;background:linear-gradient(145deg,#ffffff,#f4fbf7);border:1px solid rgba(13,90,63,.12);border-radius:20px;padding:24px;cursor:pointer;transition:.2s;border-top:1px solid rgba(13,90,63,.1)}.package-card:hover{transform:translateY(-3px);border-color:rgba(13,90,63,.28);box-shadow:0 16px 45px rgba(13,90,63,.08)}.package-top{display:flex;justify-content:space-between;align-items:center}.package-label{font-size:13px;text-transform:uppercase;letter-spacing:.12em;color:var(--green)}.package-status{font-size:10px;color:var(--green);letter-spacing:.12em}.package-amount{font:600 48px Georgia,serif;color:var(--green);margin:22px 0}.package-details{display:flex;justify-content:space-between;color:var(--muted);border-top:1px solid rgba(13,90,63,.12);padding-top:15px}.package-details strong{color:var(--green)}.package-select{width:100%;margin-top:20px;min-height:48px;border:1px solid rgba(13,90,63,.2);border-radius:12px;background:#0d5a3f;color:#fff;cursor:pointer}.popular-badge{position:absolute;right:18px;top:-12px;background:var(--gold2);color:#ffffff;border-radius:999px;padding:5px 10px;font-size:9px;font-weight:800;letter-spacing:.1em}
-.info-section{max-width:1280px;margin:0 auto;padding:0 28px 90px;display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.info-card{padding:28px;border:1px solid rgba(255,255,255,.08);border-radius:20px;background:#0b0e12}.info-icon{color:var(--gold2);font-size:28px}.info-kicker{margin-top:18px;color:var(--gold);font-size:10px;letter-spacing:.18em}.info-card h3{font:600 27px Georgia,serif;margin:10px 0}.info-card p{color:#969ba2;line-height:1.7;margin:0}.footer{border-top:1px solid rgba(255,255,255,.07);padding:38px 28px;text-align:center;color:#777d84;font-size:13px}.footer-logo{font:600 20px Georgia,serif;color:#eee}.footer-logo span{color:var(--gold2)}
-@media(max-width:800px){
-.tradingview-background{opacity:.34;inset:0;width:100vw;height:100%;}
-.hero-overlay{background:linear-gradient(90deg,rgba(7,9,11,.94) 0%,rgba(7,9,11,.84) 55%,rgba(7,9,11,.70) 100%),linear-gradient(0deg,rgba(7,9,11,.92),rgba(7,9,11,.22) 55%,rgba(7,9,11,.68));}
-.hero-content{z-index:2;}
-.nav-container{min-height:72px;padding:9px 14px;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:10px;overflow:hidden}.logo{min-width:0;max-width:100%;gap:9px;overflow:hidden}.logo-mark{width:40px;height:40px;min-width:40px;flex:0 0 40px;font-size:21px}.brand-name{min-width:0;overflow:hidden;white-space:normal;font-size:11px;line-height:1.08}.nav-links{display:none!important}.menu-btn{display:grid;place-items:center;margin-left:0;width:44px;height:44px;min-width:44px;font-size:22px;z-index:3}.mobile-menu.open{display:block}
-.hero{min-height:auto}.hero-content{padding:72px 22px 64px}.live-badge{font-size:11px;padding:10px 14px}h1{font-size:clamp(49px,15vw,76px);line-height:.96;margin:28px 0 24px}.hero-content>p{font-size:17px;line-height:1.65;margin-bottom:28px}.hero-buttons{display:grid;grid-template-columns:1fr;gap:12px}.btn{width:100%;min-height:58px}.hero-stats{grid-template-columns:repeat(3,1fr);gap:12px;margin-top:48px}.hero-stats strong{font-size:32px}.hero-stats span{font-size:9px;line-height:1.35}
-.packages-section{padding:72px 18px}.section-heading{margin-bottom:42px}.section-heading p{font-size:15px;line-height:1.6}.package-grid{grid-template-columns:1fr}.package-card{padding:20px}.package-amount{font-size:42px}.info-section{grid-template-columns:1fr;padding:0 18px 65px}
-}
-@media(max-width:520px){.nav-container{padding-left:12px;padding-right:12px}.logo-mark{width:38px;height:38px;min-width:38px;flex-basis:38px;font-size:20px}.brand-name{font-size:10.5px}.menu-btn{width:42px;height:42px;min-width:42px}.hero-content{padding-left:18px;padding-right:18px}h1{font-size:clamp(44px,14vw,62px)}.hero-stats strong{font-size:28px}.hero-stats span{font-size:8px}}
-@media(min-width:801px) and (max-width:1050px){.nav-links a{padding:10px 8px;font-size:11px}h1{font-size:68px}}
+    /* SECTION BASICS */
+    section { padding: 90px 28px; }
+    .section-container { max-width: 1320px; margin: auto; }
+    .section-heading { text-align: center; max-width: 760px; margin: 0 auto 56px; }
+    .section-tag {
+      color: var(--primary-light);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      display: inline-block;
+      margin-bottom: 12px;
+    }
+    .section-heading h2 {
+      font: 700 clamp(34px, 4.5vw, 54px)/1.1 Georgia, serif;
+      color: var(--primary);
+      margin-bottom: 16px;
+    }
+    .section-heading h2 span { color: var(--primary-light); }
+    .section-heading p { color: var(--muted); font-size: 17px; }
 
-.withdrawal-feed-section{max-width:1280px;margin:0 auto;padding:20px 28px 90px}.withdrawal-feed-head{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;margin-bottom:26px}.withdrawal-feed-head h2{font:600 clamp(34px,4vw,52px)/1.05 Georgia,serif;margin:14px 0 8px}.withdrawal-feed-head h2 span{color:var(--gold2)}.withdrawal-feed-head p{color:var(--muted);margin:0;line-height:1.6}.-badge{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(217,173,75,.4);border-radius:999px;padding:9px 13px;color:var(--gold2);font-size:10px;font-weight:700;letter-spacing:.12em;white-space:nowrap}.-badge i{width:7px;height:7px;border-radius:50%;background:var(--gold2);display:inline-block}.withdrawal-feed{border:1px solid rgba(255,255,255,.08);border-radius:20px;overflow:hidden;background:linear-gradient(145deg,#101419,#090b0e);box-shadow:0 16px 45px rgba(0,0,0,.18)}.withdrawal-feed-top{display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr 1.4fr;padding:15px 20px;color:#858b92;font-size:10px;letter-spacing:.12em;text-transform:uppercase;border-bottom:1px solid rgba(255,255,255,.07)}.withdrawal-row{display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr 1.4fr;padding:17px 20px;align-items:center;border-bottom:1px solid rgba(255,255,255,.055);animation:feedIn .35s ease}.withdrawal-row:last-child{border-bottom:0}.withdrawal-client{font-weight:700;color:#e9ebed}.withdrawal-date{color:#9ca2a8;font-size:12px}.withdrawal-amount{font:600 20px Georgia,serif;color:var(--gold2)}.withdrawal-method{color:#cdd1d5;font-size:12px}.withdrawal-status{color:var(--green);font-size:11px;font-weight:800;letter-spacing:.08em}.withdrawal-ref{color:#737a82;font-size:11px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}.feed-note{text-align:center;color:#70777e;font-size:11px;line-height:1.6;margin-top:14px}.feed-live{color:var(--green);font-weight:700}.withdrawal-empty{padding:30px;text-align:center;color:#888}
-@keyframes feedIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
-@media(max-width:800px){.withdrawal-feed-section{padding:10px 18px 65px}.withdrawal-feed-head{align-items:flex-start;flex-direction:column}.withdrawal-feed-top{display:none}.withdrawal-row{grid-template-columns:1fr auto;gap:8px 14px;padding:16px}.withdrawal-client{grid-column:1}.withdrawal-date{grid-column:1}.withdrawal-amount{grid-column:2;grid-row:1 / span 2;text-align:right}.withdrawal-method{grid-column:1}.withdrawal-status{grid-column:2;grid-row:3;text-align:right}.withdrawal-ref{grid-column:1 / -1}.-badge{align-self:flex-start}}
-</style>
-<style>
-.salary-public{overflow:hidden}.salary-public-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:20px}.salary-public-grid div{padding:15px;border:1px solid rgba(255,255,255,.08);border-radius:12px;background:#090d11}.salary-public-grid strong{display:block;color:#f1d17a;font:600 22px Georgia,serif}.salary-public-grid span{display:block;color:#aeb1b5;font-size:11px;margin-top:5px}.salary-public-note{margin-top:16px!important;font-size:12px!important}@media(max-width:800px){.salary-public-grid{grid-template-columns:repeat(2,1fr)}}
-</style>
+    /* FEATURES GRID */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .feature-card {
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 34px 28px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .feature-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 50px rgba(13, 90, 63, 0.08);
+    }
+    .feature-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 12px;
+      background: rgba(13, 90, 63, 0.06);
+      color: var(--primary);
+      display: grid;
+      place-items: center;
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    .feature-card h3 { font: 700 22px Georgia, serif; color: var(--primary); margin-bottom: 12px; }
+    .feature-card p { color: #496359; font-size: 14px; line-height: 1.7; }
+
+    /* PREVIEW TEASERS */
+    .preview-box {
+      background: linear-gradient(145deg, #0b241b, #071912);
+      border-radius: 24px;
+      padding: 60px 48px;
+      color: #ffffff;
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 40px;
+      align-items: center;
+      margin-top: 40px;
+    }
+    .preview-box h3 { font: 700 clamp(28px, 3.5vw, 42px)/1.15 Georgia, serif; margin-bottom: 16px; color: #ffffff; }
+    .preview-box p { color: #bcdcd2; font-size: 16px; line-height: 1.7; margin-bottom: 28px; }
+
+    /* WITHDRAWAL FEED */
+    .withdrawal-feed-section { background: #f6fbf8; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .withdrawal-feed {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      overflow: hidden;
+      background: #ffffff;
+    }
+    .withdrawal-feed-top {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr 1fr 1fr 1.4fr;
+      padding: 16px 24px;
+      background: #f0f7f4;
+      color: #597368;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--line);
+    }
+    .withdrawal-row {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr 1fr 1fr 1.4fr;
+      padding: 16px 24px;
+      align-items: center;
+      border-bottom: 1px solid var(--line);
+      font-size: 14px;
+    }
+    .withdrawal-row:last-child { border-bottom: 0; }
+    .withdrawal-client { font-weight: 700; color: var(--primary); }
+    .withdrawal-amount { font: 700 18px Georgia, serif; color: var(--primary-light); }
+    .withdrawal-status { color: #0f7a57; font-weight: 800; font-size: 12px; }
+
+    /* FOOTER */
+    .footer {
+      background: #071912;
+      color: #8dafa3;
+      padding: 80px 28px 40px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .footer-container {
+      max-width: 1320px;
+      margin: auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1.2fr;
+      gap: 48px;
+      padding-bottom: 60px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .footer-brand h4 { font: 700 24px Georgia, serif; color: #ffffff; margin-bottom: 14px; }
+    .footer-brand p { font-size: 14px; line-height: 1.7; max-width: 360px; }
+    .footer-col h5 { color: #ffffff; font-size: 13px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 20px; }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+    .footer-col a { color: #8dafa3; font-size: 14px; transition: color 0.15s; }
+    .footer-col a:hover { color: #ffffff; }
+    .footer-bottom {
+      max-width: 1320px;
+      margin: 30px auto 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: #638579;
+    }
+
+    @media (max-width: 900px) {
+      .nav-links { display: none; }
+      .menu-btn { display: grid; place-items: center; }
+      .hero-stats { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+      .features-grid { grid-template-columns: 1fr; }
+      .preview-box { grid-template-columns: 1fr; padding: 36px 24px; }
+      .footer-container { grid-template-columns: 1fr; gap: 32px; }
+      .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+      .withdrawal-feed-top { display: none; }
+      .withdrawal-row { grid-template-columns: 1fr 1fr; gap: 8px; }
+    }
+  </style>
 </head>
 <body>
-<header class="site-header"><div class="nav-container">
-<a href="index.html" class="logo"><span class="logo-mark">✦</span><span class="brand-name">Global Capital<br><b>Venture Holdings, Inc.</b></span></a>
-<nav class="nav-links"><a href="index.html">Home</a><a href="index.html#packages">Packages</a><a href="index.html#salary-system">Salary System</a><a href="login.html">Login</a><a id="registerLink" href="register.html">Create Account</a><a id="dashboardNavButton" class="dashboard-link" href="dashboard.html" hidden>Dashboard</a></nav>
-<button class="menu-btn" id="menuBtn" type="button" aria-label="Open menu" aria-expanded="false">☰</button>
-</div><div class="mobile-menu" id="mobileMenu"><a href="index.html">Home</a><a href="index.html#packages">Packages</a><a href="index.html#salary-system">Salary System</a><a href="login.html">Login</a><a id="mobileRegisterLink" href="register.html">Create Account</a><a id="mobileDashboard" href="dashboard.html" hidden>Dashboard</a></div></header>
-<main>
-<section id="home" class="hero"><div class="tradingview-background"><div id="tradingview_chart"></div></div><div class="hero-overlay"></div><div class="hero-content">
-<div class="live-badge"><span class="live-dot"></span>XAUUSD LIVE MARKET</div>
-<h1>Build Your <span>Global Financial Future.</span></h1>
-<p>Explore investment packages and track portfolio growth through a modern trading dashboard.</p>
-<div class="hero-buttons"><a href="#packages" class="btn btn-primary">Explore Packages <span>&nbsp;→</span></a><a href="blogs.html" class="btn btn-outline">View Blogs <span>&nbsp;→</span></a><a id="heroDashboardButton" href="dashboard.html" class="btn btn-outline" hidden>Open Dashboard <span>&nbsp;→</span></a></div>
-<div class="hero-stats"><div><strong>24/7</strong><span>Market Monitoring</span></div><div><strong>1%</strong><span>Daily ROI</span></div><div><strong>14D</strong><span>Payout Cycle</span></div></div>
-</div></section>
-<section id="packages" class="packages-section">
-    <div class="section-heading">
-      <span class="section-tag">CAPITAL TIERS</span>
-      <h2>Investment <span>Packages</span></h2>
-      <p>Select the capital tier that aligns with your portfolio objectives.</p>
+
+  <!-- NAVIGATION HEADER -->
+  <header class="site-header">
+    <div class="nav-container">
+      <a href="index.html" class="logo">
+        <span class="logo-mark">✦</span>
+        <span class="brand-name">Global Capital<br><b>Venture Holdings, Inc.</b></span>
+      </a>
+
+      <nav class="nav-links">
+        <a href="index.html" class="active">Home</a>
+        <a href="packages.html">Packages</a>
+        <a href="salary-system.html">Salary System</a>
+        <a href="about.html">About Us</a>
+        <a href="blogs.html">Blogs</a>
+        <a href="contact.html">Contact</a>
+        <a href="login.html" class="nav-auth-link">Sign In</a>
+        <a href="register.html" class="nav-cta">Create Account</a>
+        <a href="dashboard.html" class="nav-dashboard-link" hidden>Dashboard</a>
+      </nav>
+
+      <button class="menu-btn" id="menuBtn" type="button" aria-label="Toggle navigation">☰</button>
     </div>
-    <div class="packages-tiers">
-      <div class="package-tier"><div class="tier-header"><span class="tier-kicker">STARTER</span><span class="tier-line"></span></div><div class="package-grid">
-          <article class="package-card" data-package="10" onclick="selectPackage(10)"><div class="package-top"><span class="package-label">Starter</span><span class="package-status">AVAILABLE</span></div><div class="package-amount">$10</div><div class="package-details"><span>Daily return</span><strong>1.00%</strong></div><button class="package-select" type="button">Select Package <span>→</span></button></article>
-          <article class="package-card" data-package="25" onclick="selectPackage(25)"><div class="package-top"><span class="package-label">Starter</span><span class="package-status">AVAILABLE</span></div><div class="package-amount">$25</div><div class="package-details"><span>Daily return</span><strong>1.00%</strong></div><button class="package-select" type="button">Select Package <span>→</span></button></article>
-        </div></div>
-      <div class="package-tier"><div class="tier-header"><span class="tier-kicker">BASIC</span><span class="tier-line"></span></div><div class="package-grid">
-          <article class="package-card" data-package="50" onclick="selectPackage(50)"><div class="package-top"><span class="package-label">Basic</span><span class="package-status">AVAILABLE</span></div><div class="package-amount">$50</div><div class="package-details"><span>Daily return</span><strong>1.00%</strong></div><button class="package-select" type="button">Select Package <span>→</span></button></article>
-          <article class="package-card" data-package="100" onclick="selectPackage(100)"><div class="package-top"><span class="package-label">Basic</span><span class="package-status">AVAILABLE</span></div><div class="package-amount">$100</div><div class="package-details"><span>Daily return</span><strong>1.00%</strong></div><button class="package-select" type="button">Select Package <span>→</span></button></article>
-        </div></div>
-      <div class="package-tier"><div class="tier-header"><span class="tier-kicker">PRO</span><span class="tier-line"></span></div><div class="package-grid">
-          <article class="package-card" data-package="200" onclick="selectPackage(200)"><div class="package-top"><span class="package-label">Pro</span><span class="package-status">AVAILABLE</span></div><div class="package-amount">$200</div><div class="package-details"><span>Daily return</span><strong>1.00%</strong></div><button class="package-select" type="button">Select Package <span>→</span></button></article>
-          <article class="package-card" data-package="300" onclick="selectPackage(300)"><div class="package-top"><span class="package-label">Pro</span><span class="package-status">AVAILABLE</span></div><div class="package-amount">$300</div><div class="package-details"><span>Daily return</span><strong>1.00%</strong></div><button class="package-select" type="button">Select Package <span>→</span></button></article>
-        </div></div>
-      <div class="package-tier"><div class="tier-header"><span class="tier-kicker">PREMIUM</span><span class="tier-line"></span></div><div class="package-grid">
-          <article class="package-card" data-package="500" onclick="selectPackage(500)"><div class="package-top"><span class="package-label">Premium</span><span class="package-status">AVAILABLE</span></div><div class="package-amount">$500</div><div class="package-details"><span>Daily return</span><strong>1.00%</strong></div><button class="package-select" type="button">Select Package <span>→</span></button></article>
-          <article class="package-card featured-package" data-package="1000" onclick="selectPackage(1000)"><span class="popular-badge">SELECTED TIER</span><div class="package-top"><span class="package-label">Premium</span><span class="package-status">AVAILABLE</span></div><div class="package-amount">$1,000</div><div class="package-details"><span>Daily return</span><strong>1.00%</strong></div><button class="package-select" type="button">Select Package <span>→</span></button></article>
-        </div></div>
-      <div class="package-tier"><div class="tier-header"><span class="tier-kicker">ELITE</span><span class="tier-line"></span></div><div class="package-grid">
-          <article class="package-card" data-package="2500" onclick="selectPackage(2500)"><div class="package-top"><span class="package-label">Elite</span><span class="package-status">AVAILABLE</span></div><div class="package-amount">$2,500</div><div class="package-details"><span>Daily return</span><strong>1.00%</strong></div><button class="package-select" type="button">Select Package <span>→</span></button></article>
-          <article class="package-card featured-package" data-package="5000" onclick="selectPackage(5000)"><div class="package-top"><span class="package-label">Elite</span><span class="package-status">AVAILABLE</span></div><div class="package-amount">$5,000</div><div class="package-details"><span>Daily return</span><strong>1.00%</strong></div><button class="package-select" type="button">Select Package <span>→</span></button></article>
-        </div></div>
-      <div class="package-tier"><div class="tier-header"><span class="tier-kicker">ULTIMATE</span><span class="tier-line"></span></div><div class="package-grid">
-          <article class="package-card featured-package" data-package="10000" onclick="selectPackage(10000)"><div class="package-top"><span class="package-label">Ultimate</span><span class="package-status">AVAILABLE</span></div><div class="package-amount">$10,000</div><div class="package-details"><span>Daily return</span><strong>1.00%</strong></div><button class="package-select" type="button">Select Package <span>→</span></button></article>
-        </div></div>
+
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="index.html">Home</a>
+      <a href="packages.html">Packages</a>
+      <a href="salary-system.html">Salary System</a>
+      <a href="about.html">About Us</a>
+      <a href="blogs.html">Blogs</a>
+      <a href="contact.html">Contact</a>
+      <a href="login.html">Sign In</a>
+      <a href="register.html">Create Account</a>
+      <a href="dashboard.html" id="mobileDashboard" hidden>Dashboard</a>
     </div>
-</section>
+  </header>
 
-<section class="withdrawal-feed-section" id="withdrawal-activity">
-  <div class="withdrawal-feed-head">
-    <div><span class="section-tag">WITHDRAWAL ACTIVITY</span><h2>Recent <span>Withdrawals</span></h2><p>Illustrative platform activity </p></div>
-    <div class="-badge"><i></i></div>
-  </div>
-  <div class="withdrawal-feed" id="withdrawalFeed"></div>
-  <div class="feed-note"><span class="feed-live">● LIVE-STYLE FEED</span> · </div>
-</section>
-<section class="info-section"><div class="info-card"><div class="info-icon">◷</div><div class="info-kicker">PORTFOLIO MANAGEMENT</div><h3>Transparent Portfolio</h3><p>Track portfolio activity from your selected investment tier.</p></div><div class="info-card"><div class="info-icon">↗</div><div class="info-kicker">MARKET INTELLIGENCE</div><h3>Live Market Data</h3><p>Monitor XAUUSD market activity through an integrated real-time market view.</p></div><div class="info-card"><div class="info-icon">◇</div><div class="info-kicker">PAYOUT STRUCTURE</div><h3>Fortnightly Cycle</h3><p>Portfolio payouts follow a clearly defined 14-day cycle.</p></div></section>
-</main>
-<section id="salary-system" class="info-card salary-public" style="margin:40px auto;max-width:900px">
-  <div class="info-icon"><span>◷</span></div>
-  <div class="info-copy">
-    <div class="info-kicker">SALARY SYSTEM</div>
-    <h3>Monthly Direct Referral Salary</h3>
-    <p>Qualifying confirmed direct-referral volume can unlock monthly salary tiers. Each tier is based on new referral volume, can remain active for up to 6 months, and is subject to the qualifying referral package's active term.</p>
-    <div class="salary-public-grid">
-      <div><strong>Starter</strong><span>$1,000 direct volume · $50 / month</span></div>
-      <div><strong>Bronze</strong><span>Next $3,000 direct volume · $180 / month</span></div>
-      <div><strong>Silver</strong><span>Next $5,000 direct volume · $300 / month</span></div>
-      <div><strong>Gold</strong><span>Next $10,000 direct volume · $1,200 / month</span></div>
-      <div><strong>Platinum</strong><span>Next $30,000 direct volume · $3,000 / month</span></div>
-      <div><strong>Diamond</strong><span>Next $50,000 direct volume · $5,000 / month</span></div>
-      <div><strong>Elite</strong><span>Next $100,000 direct volume · $15,000 / month</span></div>
+  <!-- HERO SECTION -->
+  <main>
+    <section class="hero">
+      <div class="tradingview-background">
+        <div id="tradingview_chart" style="width:100%;height:100%"></div>
+      </div>
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <div class="live-badge"><span class="live-dot"></span>XAUUSD REAL-TIME ALGORITHMIC TRADING</div>
+        <h1>Build Your <span>Global Financial Future.</span></h1>
+        <p>Institutional portfolio packages with 1.00% daily returns, transparent fortnightly payouts, and leader monthly salary contracts.</p>
+        <div class="hero-buttons">
+          <a href="packages.html" class="btn btn-primary">Explore Investment Packages →</a>
+          <a href="salary-system.html" class="btn btn-outline">View Salary Matrix →</a>
+          <a href="dashboard.html" id="heroDashboardButton" class="btn btn-primary" hidden>Open Dashboard →</a>
+        </div>
+        <div class="hero-stats">
+          <div><strong>1.00%</strong><span>Daily Return</span></div>
+          <div><strong>14 Days</strong><span>Fortnightly Cycle</span></div>
+          <div><strong>$15,000</strong><span>Max Monthly Salary</span></div>
+          <div><strong>24/7</strong><span>Algorithmic Execution</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CORE VALUE HIGHLIGHTS -->
+    <section>
+      <div class="section-container">
+        <div class="section-heading">
+          <span class="section-tag">INVESTMENT EXCELLENCE</span>
+          <h2>A Premier Platform for <span>Wealth Growth</span></h2>
+          <p>Engineered for high-efficiency asset appreciation, disciplined risk hedging, and leadership development.</p>
+        </div>
+
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">💎</div>
+            <h3>Structured Packages</h3>
+            <p>From $10 Starter tiers to $10,000 Ultimate tiers, choose capital allocations designed for consistent compounding yields.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">📈</div>
+            <h3>XAUUSD Live Arbitrage</h3>
+            <p>Continuous proprietary algorithmic scanning and automated trade execution across global gold liquidity pools.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🏆</div>
+            <h3>7-Tier Salary System</h3>
+            <p>Unlock stable monthly recurring salaries from $50 up to $15,000 based on confirmed direct referral milestone volumes.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🔒</div>
+            <h3>Fortnightly Payouts</h3>
+            <p>Automated 14-day earnings settlement directly credited to your crypto balance with prompt blockchain withdrawals.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🌐</div>
+            <h3>Global Compliance</h3>
+            <p>Strict anti-fraud verification, encrypted cold wallet custody, and institutional transparency for every investor.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">⚡</div>
+            <h3>Instant Crypto Funding</h3>
+            <p>Fast deposits via USDT TRC20, BEP20, and Binance Pay with automated transaction tracking.</p>
+          </div>
+        </div>
+
+        <!-- PACKAGES PREVIEW BOX -->
+        <div class="preview-box">
+          <div>
+            <h3>Six Flexible Capital Tiers</h3>
+            <p>Start your wealth creation journey with as little as $10 or deploy institutional capital at $10,000 with dedicated yield management.</p>
+            <a href="packages.html" class="btn btn-primary">Compare All Packages & Calculate Profits →</a>
+          </div>
+          <div style="background: rgba(255,255,255,0.06); padding: 24px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1);">
+            <div style="font-size: 12px; color: #5eead4; letter-spacing: 0.1em; font-weight: 800;">TOP TIER SNAPSHOT</div>
+            <div style="font: 700 36px Georgia, serif; margin: 10px 0; color: #ffffff;">$10,000 <span style="font-size: 16px; font-weight: normal; color: #9bb3ab;">Ultimate</span></div>
+            <div style="font-size: 13px; color: #c0ded4; margin-bottom: 16px;">• 1.00% Daily ROI ($100 / day)<br>• $1,400 Fortnightly Cashout<br>• Priority VIP Support & Strategy</div>
+            <a href="packages.html" style="color: #5eead4; font-weight: 700; font-size: 14px;">Select Package on Packages Page →</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LIVE WITHDRAWAL FEED -->
+    <section class="withdrawal-feed-section">
+      <div class="section-container">
+        <div class="section-heading" style="margin-bottom: 36px;">
+          <span class="section-tag">VERIFIED TRANSACTIONS</span>
+          <h2>Recent Platform <span>Withdrawals</span></h2>
+          <p>Real-time transaction settlement across global network nodes.</p>
+        </div>
+
+        <div class="withdrawal-feed">
+          <div class="withdrawal-feed-top">
+            <div>Client Identifier</div>
+            <div>Date</div>
+            <div>Amount</div>
+            <div>Method</div>
+            <div>Status</div>
+          </div>
+          <div class="withdrawal-row">
+            <div class="withdrawal-client">Client • 7A2F</div>
+            <div>May 20, 2026</div>
+            <div class="withdrawal-amount">$1,250.00</div>
+            <div>USDT · TRC20</div>
+            <div class="withdrawal-status">● COMPLETED</div>
+          </div>
+          <div class="withdrawal-row">
+            <div class="withdrawal-client">Client • 91C4</div>
+            <div>May 19, 2026</div>
+            <div class="withdrawal-amount">$480.00</div>
+            <div>Binance · USDT</div>
+            <div class="withdrawal-status">● COMPLETED</div>
+          </div>
+          <div class="withdrawal-row">
+            <div class="withdrawal-client">Client • B6E1</div>
+            <div>May 18, 2026</div>
+            <div class="withdrawal-amount">$3,500.00</div>
+            <div>USDT · BEP20</div>
+            <div class="withdrawal-status">● COMPLETED</div>
+          </div>
+          <div class="withdrawal-row">
+            <div class="withdrawal-client">Client • 4C72</div>
+            <div>May 18, 2026</div>
+            <div class="withdrawal-amount">$220.00</div>
+            <div>USDT · TRC20</div>
+            <div class="withdrawal-status">● COMPLETED</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- MULTI-PAGE FOOTER -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-brand">
+        <h4>Global Capital Venture Holdings, Inc.</h4>
+        <p>Institutional portfolio growth, real-time algorithmic execution, and premier leadership salary programs.</p>
+      </div>
+
+      <div class="footer-col">
+        <h5>Platform</h5>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="packages.html">Investment Packages</a></li>
+          <li><a href="salary-system.html">Salary System</a></li>
+          <li><a href="dashboard.html">Member Dashboard</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h5>Company</h5>
+        <ul>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="blogs.html">Market Insights</a></li>
+          <li><a href="contact.html">Support & Contact</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h5>Security & Access</h5>
+        <ul>
+          <li><a href="login.html">Client Sign In</a></li>
+          <li><a href="register.html">Create New Account</a></li>
+          <li><a href="deposit.html">Deposit Portal</a></li>
+          <li><a href="admin.html">Admin Gateway</a></li>
+        </ul>
+      </div>
     </div>
-    <p class="salary-public-note">Salary credits are scheduled for the 5th of each month. Previous tier volume is not reused for the next tier.</p>
-  </div>
-</section>
-<footer class="footer"><div class="footer-logo">Global Capital <span>Venture Holdings, Inc.</span></div><p>Professional portfolio and market analytics platform.</p><span>© 2026 Global Capital Venture Holdings, Inc.</span></footer>
-<script>
-const API='https://globalcapitalventureholdings.com';
-const customerToken=localStorage.getItem('gcvh_customer_token');
 
-const ref=new URLSearchParams(location.search).get('ref');
-if(ref){
-  const r='register.html?ref='+encodeURIComponent(ref);
-  document.getElementById('registerLink').href=r;
-  document.getElementById('mobileRegisterLink').href=r;
-}
+    <div class="footer-bottom">
+      <span>© 2026 Global Capital Venture Holdings, Inc. All rights reserved.</span>
+      <span>Risk Warning: Trading financial instruments involves significant risk to capital.</span>
+    </div>
+  </footer>
 
-const menuBtn=document.getElementById('menuBtn');
-const mobileMenu=document.getElementById('mobileMenu');
-menuBtn.addEventListener('click',()=>{
-  const open=mobileMenu.classList.toggle('open');
-  menuBtn.setAttribute('aria-expanded',String(open));
-});
-document.querySelectorAll('.mobile-menu a').forEach(a=>a.addEventListener('click',()=>mobileMenu.classList.remove('open')));
-
-function selectPackage(amount){
-  const value=Number(amount);
-  if(!Number.isFinite(value) || value<=0) return;
-  // A package selection is NOT a purchase and must never unlock the dashboard.
-  localStorage.setItem('gcvh_selected_package',JSON.stringify({amount:value,selectedAt:new Date().toISOString()}));
-  const token=localStorage.getItem('gcvh_customer_token');
-  if(!token){
-    const next='deposit.html?amount='+encodeURIComponent(value);
-    window.location.href='login.html?redirect='+encodeURIComponent(next);
-    return;
-  }
-  window.location.href='deposit.html?amount='+encodeURIComponent(value);
-}
-
-document.querySelectorAll('.package-card').forEach(card=>{
-  card.removeAttribute('onclick');
-  card.addEventListener('click',()=>selectPackage(Number(card.dataset.package)));
-});
-
-async function syncDashboardLinks(){
-  const token=localStorage.getItem('gcvh_customer_token');
-  if(!token)return;
-  try{
-    const r=await fetch(API+'/api/me',{headers:{Authorization:'Bearer '+token},cache:'no-store'});
-    if(!r.ok)return;
-    const d=await r.json();
-    const active=Number(d.principal||0)>0 && (d.package_id!==undefined && d.package_id!==null || Number(d.package_amount||0)>0);
-    if(active){
-      document.getElementById('dashboardNavButton').hidden=false;
-      document.getElementById('heroDashboardButton').hidden=false;
-      document.getElementById('mobileDashboard').hidden=false;
-    }
-  }catch(e){}
-}
-window.addEventListener('load',()=>{
-  syncDashboardLinks();
-  if(window.TradingView){
-    new TradingView.widget({
-      width:'100%',height:'100%',symbol:'OANDA:XAUUSD',interval:'1',timezone:'Etc/UTC',
-      theme:'dark',style:'1',locale:'en',toolbar_bg:'#0a0d10',
-      enable_publishing:false,hide_top_toolbar:true,hide_legend:true,save_image:false,
-      container_id:'tradingview_chart'
+  <script src="config.js"></script>
+  <script>
+    window.addEventListener('load', () => {
+      if (window.TradingView) {
+        new TradingView.widget({
+          width: '100%',
+          height: '100%',
+          symbol: 'OANDA:XAUUSD',
+          interval: '1',
+          timezone: 'Etc/UTC',
+          theme: 'dark',
+          style: '1',
+          locale: 'en',
+          toolbar_bg: '#07130e',
+          enable_publishing: false,
+          hide_top_toolbar: true,
+          hide_legend: true,
+          save_image: false,
+          container_id: 'tradingview_chart'
+        });
+      }
     });
-  }
-});
-const withdrawalData=[
-{client:'Client • 7A2F',date:'Jan 14, 2025',amount:125,method:'USDT · TRC20',status:'PAID',ref:'-WD-250114-7A2F'},
-{client:'Client • 91C4',date:'Feb 03, 2025',amount:480,method:'Binance · USDT',status:'PAID',ref:'-WD-250203-91C4'},
-{client:'Client • 3D18',date:'Mar 21, 2025',amount:75,method:'USDT · TRC20',status:'PAID',ref:'-WD-250321-3D18'},
-{client:'Client • B6E1',date:'Apr 09, 2025',amount:1250,method:'Binance · USDT',status:'PAID',ref:'-WD-250409-B6E1'},
-{client:'Client • 4C72',date:'May 17, 2025',amount:220,method:'USDT · BEP20',status:'PAID',ref:'-WD-250517-4C72'},
-{client:'Client • D903',date:'Jun 28, 2025',amount:850,method:'Binance · USDT',status:'PAID',ref:'-WD-250628-D903'},
-{client:'Client • 5F61',date:'Jul 12, 2025',amount:310,method:'USDT · TRC20',status:'PAID',ref:'-WD-250712-5F61'},
-{client:'Client • A84B',date:'Aug 26, 2025',amount:1450,method:'Binance · USDT',status:'PAID',ref:'-WD-250826-A84B'},
-{client:'Client • 2E77',date:'Sep 08, 2025',amount:95,method:'USDT · TRC20',status:'PAID',ref:'-WD-250908-2E77'},
-{client:'Client • C521',date:'Oct 19, 2025',amount:675,method:'USDT · BEP20',status:'PAID',ref:'-WD-251019-C521'},
-{client:'Client • 88A6',date:'Nov 07, 2025',amount:2300,method:'Binance · USDT',status:'PAID',ref:'-WD-251107-88A6'},
-{client:'Client • E314',date:'Dec 22, 2025',amount:150,method:'USDT · TRC20',status:'PAID',ref:'-WD-251222-E314'},
-{client:'Client • 61B9',date:'Jan 11, 2026',amount:420,method:'USDT · TRC20',status:'PAID',ref:'-WD-260111-61B9'},
-{client:'Client • 0F42',date:'Feb 24, 2026',amount:980,method:'Binance · USDT',status:'PAID',ref:'-WD-260224-0F42'},
-{client:'Client • 73D5',date:'Mar 16, 2026',amount:185,method:'USDT · BEP20',status:'PAID',ref:'-WD-260316-73D5'},
-{client:'Client • C8A1',date:'Apr 29, 2026',amount:1650,method:'Binance · USDT',status:'PAID',ref:'-WD-260429-C8A1'},
-{client:'Client • 42E6',date:'May 18, 2026',amount:340,method:'USDT · TRC20',status:'PAID',ref:'-WD-260518-42E6'},
-{client:'Client • 9B30',date:'Jun 07, 2026',amount:2750,method:'Binance · USDT',status:'PAID',ref:'-WD-260607-9B30'},
-{client:'Client • 5A17',date:'Jul 23, 2026',amount:560,method:'USDT · TRC20',status:'PAID',ref:'-WD-260723-5A17'},
-{client:'Client • F6C2',date:'Aug 18, 2026',amount:1200,method:'Binance · USDT',status:'PAID',ref:'-WD-260818-F6C2'}
-];
-function renderWithdrawalFeed(){
- const el=document.getElementById('withdrawalFeed'); if(!el)return;
- const rows=withdrawalData.slice().reverse().slice(0,8);
- el.innerHTML='<div class="withdrawal-feed-top"><span>Client</span><span>Date</span><span>Amount</span><span>Method</span><span>Reference</span></div>'+rows.map(x=>`<div class="withdrawal-row"><div class="withdrawal-client">${x.client}</div><div class="withdrawal-date">${x.date}</div><div class="withdrawal-amount">$${x.amount.toLocaleString('en-US',{minimumFractionDigits:2})}</div><div class="withdrawal-method">${x.method}</div><div><span class="withdrawal-status">${x.status}</span><div class="withdrawal-ref">${x.ref}</div></div></div>`).join('');
-}
-function rotateWithdrawalFeed(){
- const first=withdrawalData.pop(); withdrawalData.unshift(first); renderWithdrawalFeed();
-}
-renderWithdrawalFeed();
-setInterval(rotateWithdrawalFeed,7000);
-
-</script>
-</body></html>
+  </script>
+</body>
+</html>

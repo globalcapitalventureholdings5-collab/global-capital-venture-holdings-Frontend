@@ -1,99 +1,270 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>GCVH — Create Account</title><style>body{margin:0;background:#f5fbf8;color:#0d5a3f;font-family:Inter,Arial,sans-serif;display:grid;place-items:center;min-height:100vh}.card{width:min(460px,92vw);background:#ffffff;border:1px solid rgba(13,90,63,.12);border-radius:18px;padding:30px;box-shadow:0 30px 80px rgba(13,90,63,.08)}.logo{width:50px;height:50px;border:1px solid rgba(13,90,63,.2);border-radius:50%;display:grid;place-items:center;color:#0d5a3f;font:28px Georgia,serif;margin:0 auto 14px}.title{text-align:center;font:700 27px Georgia,serif;margin:0;color:#0d5a3f}.sub{text-align:center;color:#0f7a57;font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;margin:8px 0 25px}.field{margin-bottom:15px}.field label{display:block;color:#0d5a3f;font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:7px}.field input{width:100%;height:46px;box-sizing:border-box;padding:0 13px;background:#f8fdfb;border:1px solid rgba(13,90,63,.15);border-radius:9px;color:#0d5a3f;outline:none}.button{width:100%;height:46px;border:0;border-radius:9px;background:linear-gradient(135deg,#0f7a57,#0d5a3f);font-weight:900;color:#ffffff;cursor:pointer}.alert{display:none;padding:11px;border-radius:9px;margin-bottom:15px;font-size:12px}.alert.show{display:block}.error{background:#edfdf5;border:1px solid rgba(13,90,63,.12);color:#0d5a3f}.success{background:#edfdf5;border:1px solid rgba(13,90,63,.12);color:#0d5a3f}.ref{display:none;margin:18px 0;padding:15px;border:1px solid rgba(13,90,63,.12);border-radius:11px;background:#f8fdfb}.ref.show{display:block}.refcode{font-weight:900;color:#0d5a3f}.link{word-break:break-all;color:#0d5a3f;font-size:12px;margin:8px 0}.copy{padding:8px 11px;border:1px solid rgba(13,90,63,.15);border-radius:8px;background:#f8fdfb;color:#0d5a3f;cursor:pointer}.footer{text-align:center;color:#0d5a3f;font-size:11px;margin-top:18px;line-height:1.5}.links{text-align:center;margin-top:15px;font-size:12px}.links a{color:#f1d48b}</style></head><body><div class="card"><div class="logo">G</div><h1 class="title">Create Your Account</h1><div class="sub">Global Capital Venture Holdings</div><div id="alert" class="alert"></div><div class="field"><label>Full Name</label><input id="fullName" autocomplete="name"></div><div class="field"><label>Email</label><input id="email" type="email" autocomplete="email"></div><div class="field"><label>Password</label><input id="password" type="password" autocomplete="new-password"></div><div class="field"><label>Referral Code <span style="color:#66737d">(optional)</span></label><input id="referralCode" autocomplete="off"></div><button id="create" class="button" type="button">Create Account</button><div id="ref" class="ref"><div style="font-size:11px;color:#9ba6ae">YOUR REFERRAL CODE</div><div id="refCode" class="refcode"></div><div style="font-size:11px;color:#9ba6ae;margin-top:12px">YOUR REFERRAL LINK</div><div id="refLink" class="link"></div><button id="copy" class="copy" type="button">Copy Referral Link</button></div><div class="links">Already have an account? <a href="login.html">Sign in</a></div><div class="footer">Three-level referral simulation: Level 1 = 10%, Level 2 = 5%, Level 3 = 3%. Demo credits are for testing only and are not real-money commissions.</div></div><script>
-const API='https://global-capital-venture-holdings-backend-production.up.railway.app';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GCVH — Create Account</title>
+  <style>
+    :root {
+      --primary: #0d5a3f;
+      --primary-hover: #0f7a57;
+      --bg: #f5fbf8;
+      --card-bg: #ffffff;
+      --text: #0d5a3f;
+      --text-muted: #597368;
+      --border: rgba(13, 90, 63, 0.12);
+      --input-bg: #f8fdfb;
+      --gold: #d4af37;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      display: grid;
+      place-items: center;
+      min-height: 100vh;
+      padding: 24px 16px;
+    }
+    .card {
+      width: min(480px, 100%);
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 36px 30px;
+      box-shadow: 0 30px 80px rgba(13, 90, 63, 0.08);
+    }
+    .logo {
+      width: 52px;
+      height: 52px;
+      border: 1px solid rgba(13, 90, 63, 0.25);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: var(--primary);
+      font: 28px Georgia, serif;
+      margin: 0 auto 14px;
+      background: rgba(13, 90, 63, 0.03);
+    }
+    .title {
+      text-align: center;
+      font: 700 28px Georgia, serif;
+      margin: 0;
+      color: var(--primary);
+    }
+    .sub {
+      text-align: center;
+      color: var(--primary-hover);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin: 8px 0 24px;
+    }
+    .field {
+      margin-bottom: 16px;
+    }
+    .field label {
+      display: block;
+      color: var(--primary);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .field input {
+      width: 100%;
+      height: 48px;
+      padding: 0 14px;
+      background: var(--input-bg);
+      border: 1px solid rgba(13, 90, 63, 0.18);
+      border-radius: 10px;
+      color: var(--primary);
+      font-size: 15px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .field input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(13, 90, 63, 0.1);
+    }
+    .button {
+      width: 100%;
+      height: 48px;
+      border: 0;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #0f7a57, #0d5a3f);
+      font-size: 15px;
+      font-weight: 800;
+      color: #ffffff;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: transform 0.15s, opacity 0.15s;
+    }
+    .button:hover {
+      opacity: 0.95;
+      transform: translateY(-1px);
+    }
+    .button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .alert {
+      display: none;
+      padding: 12px 16px;
+      border-radius: 10px;
+      margin-bottom: 18px;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .alert.show {
+      display: block;
+    }
+    .alert.error {
+      background: #fdf2f2;
+      border: 1px solid rgba(220, 38, 38, 0.2);
+      color: #b91c1c;
+    }
+    .alert.success {
+      background: #edfdf5;
+      border: 1px solid rgba(13, 90, 63, 0.2);
+      color: #0d5a3f;
+    }
+    .links {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .links a {
+      color: var(--primary-hover);
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .links a:hover {
+      text-decoration: underline;
+    }
+    .home-link {
+      display: block;
+      text-align: center;
+      margin-top: 14px;
+      font-size: 12px;
+      color: var(--text-muted);
+      text-decoration: none;
+    }
+    .home-link:hover {
+      color: var(--primary);
+    }
+    .footer {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 11px;
+      margin-top: 20px;
+      line-height: 1.6;
+      border-top: 1px solid var(--border);
+      padding-top: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo">✦</div>
+    <h1 class="title">Create Your Account</h1>
+    <div class="sub">Global Capital Venture Holdings</div>
 
-const qs=new URLSearchParams(location.search);
-const ref=qs.get('ref');
+    <div id="alert" class="alert"></div>
 
-if(ref){
-  document.getElementById('referralCode').value=ref.toUpperCase();
-}
+    <div class="field">
+      <label for="fullName">Full Name</label>
+      <input id="fullName" type="text" autocomplete="name" placeholder="John Doe" required>
+    </div>
 
-function alertBox(t,ok){
-  const e=document.getElementById('alert');
-  e.textContent=t;
-  e.className='alert show '+(ok?'success':'error');
-}
+    <div class="field">
+      <label for="email">Email Address</label>
+      <input id="email" type="email" autocomplete="email" placeholder="you@example.com" required>
+    </div>
 
-document.getElementById('create').onclick=async()=>{
-  const fullName=document.getElementById('fullName').value.trim();
-  const email=document.getElementById('email').value.trim();
-  const password=document.getElementById('password').value;
-  const referralCode=document.getElementById('referralCode').value.trim();
+    <div class="field">
+      <label for="password">Password</label>
+      <input id="password" type="password" autocomplete="new-password" placeholder="At least 8 characters" required>
+    </div>
 
-  if(!fullName || !email || password.length<8){
-    alertBox('Enter your name, email and a password of at least 8 characters.');
-    return;
-  }
+    <div class="field">
+      <label for="referralCode">Referral Code <span style="color:var(--text-muted);font-weight:normal">(optional)</span></label>
+      <input id="referralCode" type="text" autocomplete="off" placeholder="INVITE-CODE">
+    </div>
 
-  const createButton=document.getElementById('create');
+    <button id="create" class="button" type="button">Create Account</button>
 
-  try{
-    createButton.disabled=true;
-    createButton.textContent='Creating Account...';
+    <div class="links">
+      Already have an account? <a href="login.html">Sign in</a>
+    </div>
+    <a href="index.html" class="home-link">← Back to Homepage</a>
 
-    const r=await fetch(API+'/api/auth/register',{
-      method:'POST',
-      headers:{
-        'Content-Type':'application/json'
-      },
-      body:JSON.stringify({
-        fullName,
-        email,
-        password,
-        referralCode:referralCode || undefined
-      })
-    });
+    <div class="footer">
+      Three-level referral simulation: Level 1 = 10%, Level 2 = 5%, Level 3 = 3%. Direct referral volume contributes toward monthly salary milestones.
+    </div>
+  </div>
 
-    const data=await r.json();
-
-    if(!r.ok){
-      throw new Error(data.error || 'Registration failed.');
+  <script src="config.js"></script>
+  <script>
+    const qs = new URLSearchParams(location.search);
+    const ref = qs.get('ref');
+    if (ref) {
+      document.getElementById('referralCode').value = ref.trim().toUpperCase();
     }
 
-    /*
-     * Registration is complete, but the customer is NOT
-     * automatically logged in. They must use the credentials
-     * they just created on the login page.
-     */
-    alertBox(
-      'Account created successfully. Redirecting you to the login page...',
-      true
-    );
+    function alertBox(text, ok) {
+      const el = document.getElementById('alert');
+      el.textContent = text;
+      el.className = 'alert show ' + (ok ? 'success' : 'error');
+    }
 
-    /*
-     * Pass the email to login.html so the login form can
-     * optionally pre-fill it.
-     */
-    setTimeout(()=>{
-      window.location.href=
-        'login.html?registered=1&email='+
-        encodeURIComponent(email);
-    },1200);
+    document.getElementById('create').onclick = async () => {
+      const fullName = document.getElementById('fullName').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const referralCode = document.getElementById('referralCode').value.trim();
 
-  }catch(e){
-    createButton.disabled=false;
-    createButton.textContent='Create Account';
-    alertBox(e.message || 'Registration failed.');
-  }
-};
+      if (!fullName || !email || password.length < 8) {
+        alertBox('Please provide your name, valid email, and a password of at least 8 characters.', false);
+        return;
+      }
 
-document.getElementById('copy').onclick=async()=>{
-  const link=document.getElementById('refLink').textContent;
+      const createButton = document.getElementById('create');
+      try {
+        createButton.disabled = true;
+        createButton.textContent = 'Creating Account...';
 
-  if(!link)return;
+        const res = await fetch(API + '/api/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            fullName,
+            email,
+            password,
+            referralCode: referralCode || undefined
+          })
+        });
 
-  try{
-    await navigator.clipboard.writeText(link);
-    alertBox('Referral link copied.',true);
-  }catch(e){
-    const temp=document.createElement('textarea');
-    temp.value=link;
-    document.body.appendChild(temp);
-    temp.select();
-    document.execCommand('copy');
-    temp.remove();
+        const data = await res.json();
+        if (!res.ok) {
+          throw new Error(data.error || 'Registration failed.');
+        }
 
-    alertBox('Referral link copied.',true);
-  }
-};
-</script></body></html>
+        alertBox('Account created successfully! Redirecting you to sign in...', true);
+        setTimeout(() => {
+          window.location.href = 'login.html?registered=1&email=' + encodeURIComponent(email);
+        }, 1200);
+
+      } catch (err) {
+        createButton.disabled = false;
+        createButton.textContent = 'Create Account';
+        alertBox(err.message || 'Registration failed.', false);
+      }
+    };
+  </script>
+</body>
+</html>
