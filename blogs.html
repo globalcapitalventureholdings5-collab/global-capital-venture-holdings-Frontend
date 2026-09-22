@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+<title>Blogs | Global Capital Venture Holdings</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --panel: #f6f9f7;
+    --panel-strong: #eef7f1;
+    --text: #0d1117;
+    --muted: #4a5a56;
+    --green: #0d7a58;
+    --green-strong: #085b3d;
+    --line: rgba(13, 122, 88, 0.18);
+    --shadow: 0 18px 45px rgba(13, 22, 18, 0.08);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: Inter, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+  }
+  a { color: inherit; text-decoration: none; }
+  button, input, textarea { font: inherit; }
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+  .site-header { position: sticky; top: 0; z-index: 20; background: rgba(255,255,255,0.96); backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); }
+  .nav { min-height: 78px; display: flex; align-items: center; gap: 20px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; }
+  .brand-mark { width: 42px; height: 42px; border-radius: 50%; border: 1px solid var(--green); display: grid; place-items: center; color: var(--green); font-weight: 700; }
+  .nav-links { margin-left: auto; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .nav-links a { padding: 10px 14px; border-radius: 10px; color: #111827; font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 700; }
+  .nav-links a:hover { background: rgba(13,122,88,0.06); }
+  .header-cta { border: 1px solid rgba(13,122,88,0.2); background: var(--green); color: #fff; border-radius: 12px; padding: 11px 16px; font-weight: 700; }
+  .hero { padding: 58px 0 26px; background: linear-gradient(180deg, #f5faf7 0%, #ffffff 100%); border-bottom: 1px solid var(--line); }
+  .hero-inner { display: flex; align-items: end; justify-content: space-between; gap: 20px; }
+  .eyebrow { display: inline-flex; align-items: center; gap: 8px; color: var(--green); background: rgba(13,122,88,0.06); padding: 8px 12px; border-radius: 999px; border: 1px solid rgba(13,122,88,0.12); letter-spacing: 0.12em; text-transform: uppercase; font-size: 10px; font-weight: 800; }
+  .hero h1 { margin: 18px 0 10px; font-size: clamp(2.4rem, 5vw, 4.4rem); line-height: 1.03; letter-spacing: -0.05em; }
+  .hero p { margin: 0; max-width: 680px; color: var(--muted); line-height: 1.7; font-size: 1.05rem; }
+  .toolbar { display: flex; align-items: center; justify-content: flex-end; margin-top: 24px; }
+  .primary-btn, .ghost-btn, .download-btn { border: none; border-radius: 12px; cursor: pointer; transition: transform 0.15s ease; font-weight: 700; }
+  .primary-btn:hover, .ghost-btn:hover, .download-btn:hover { transform: translateY(-1px); }
+  .primary-btn { background: var(--green); color: #fff; padding: 14px 18px; min-width: 150px; }
+  .ghost-btn { background: #fff; color: var(--green); border: 1px solid rgba(13,122,88,0.18); padding: 13px 18px; min-width: 120px; }
+  .content { padding: 32px 0 70px; }
+  .empty-state { background: var(--panel); border: 1px solid var(--line); border-radius: 18px; padding: 2rem; text-align: center; color: var(--muted); }
+  .blog-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+  .blog-card { background: linear-gradient(180deg, #ffffff 0%, var(--panel) 100%); border: 1px solid var(--line); border-radius: 20px; overflow: hidden; box-shadow: var(--shadow); }
+  .blog-video { width: 100%; height: 260px; background: #101826; object-fit: cover; display: block; border-bottom: 1px solid var(--line); }
+  .blog-body { padding: 22px 22px 18px; }
+  .blog-meta { display: flex; align-items: center; justify-content: space-between; gap: 8px; color: var(--muted); font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; }
+  .blog-title { margin: 16px 0 10px; font-size: clamp(1.5rem, 3vw, 2rem); line-height: 1.2; }
+  .blog-description { margin: 0 0 18px; color: var(--muted); line-height: 1.7; min-height: 88px; }
+  .blog-footer { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .price { display: inline-flex; align-items: center; padding: 9px 12px; background: rgba(13,122,88,0.08); color: var(--green-strong); border: 1px solid rgba(13,122,88,0.12); border-radius: 10px; font-weight: 800; }
+  .download-btn { background: #fff; color: var(--text); border: 1px solid rgba(13,122,88,0.18); padding: 10px 14px; font-weight: 700; }
+  .pagination { margin-top: 30px; display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; }
+  .page-btn { border: 1px solid rgba(13,122,88,0.2); background: #fff; color: var(--text); min-width: 44px; min-height: 42px; border-radius: 12px; font-weight: 700; cursor: pointer; }
+  .page-btn.active { background: var(--green); color: #fff; border-color: var(--green); }
+  .form-wrap { display: none; margin: 24px 0 36px; background: var(--panel); border: 1px solid var(--line); border-radius: 20px; padding: 22px; box-shadow: var(--shadow); }
+  .form-wrap.open { display: block; }
+  .form-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 16px; }
+  .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+  .field { display: flex; flex-direction: column; gap: 8px; }
+  .field.full { grid-column: 1 / -1; }
+  label { font-size: 13px; font-weight: 700; color: var(--muted); }
+  input, textarea { width: 100%; border: 1px solid rgba(13,122,88,0.18); border-radius: 12px; background: white; color: var(--text); padding: 12px 14px; outline: none; }
+  input:focus, textarea:focus { border-color: rgba(13,122,88,0.48); box-shadow: 0 0 0 3px rgba(13,122,88,0.08); }
+  textarea { min-height: 140px; resize: vertical; }
+  .alert { margin-top: 16px; padding: 12px 14px; border-radius: 12px; font-size: 14px; display: none; }
+  .alert.error { display: block; background: rgba(185,28,28,0.08); color: #b91c1c; border: 1px solid rgba(185,28,28,0.16); }
+  .alert.success { display: block; background: rgba(13,122,88,0.08); color: var(--green-strong); border: 1px solid rgba(13,122,88,0.16); }
+  @media (max-width: 860px) { .hero-inner { display: block; } .toolbar { justify-content: flex-start; } .blog-grid { grid-template-columns: 1fr; } .form-grid { grid-template-columns: 1fr; } .nav-links { display: none; } }
+</style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav">
+      <a href="index.html" class="brand">
+        <span class="brand-mark">✦</span>
+        <span>Global Capital Venture Holdings</span>
+      </a>
+      <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="#packages">Packages</a>
+        <a href="#salary-system">Salary System</a>
+        <a href="blogs.html">Blogs</a>
+        <a href="login.html">Login</a>
+        <a href="register.html">Create Account</a>
+      </nav>
+      <button class="header-cta" id="postBlogTrigger" type="button">Post Blog</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-inner">
+        <div>
+          <div class="eyebrow">Community</div>
+          <h1>Blogs & Market Insights</h1>
+          <p>Explore published blogs, watch videos, and share your own content with the community. Each blog can include a title, price, description, and a video upload.</p>
+        </div>
+        <div class="toolbar">
+          <button id="toggleForm" class="primary-btn" type="button">Post Blog</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="content">
+      <div class="container">
+        <div class="form-wrap" id="blogFormWrap">
+          <div class="form-head">
+            <h2 style="margin:0; font-size: clamp(1.5rem, 2vw, 2.2rem);">Create a New Blog</h2>
+            <button class="ghost-btn" id="closeForm" type="button">Close</button>
+          </div>
+
+          <form id="blogForm" enctype="multipart/form-data">
+            <div class="form-grid">
+              <div class="field">
+                <label for="blogName">Blog name</label>
+                <input id="blogName" name="name" type="text" placeholder="Example: Gold Market Strategy" required />
+              </div>
+              <div class="field">
+                <label for="blogPrice">Price</label>
+                <input id="blogPrice" name="price" type="number" min="0" step="0.01" value="0" placeholder="0.00" required />
+              </div>
+              <div class="field full">
+                <label for="blogDescription">Description</label>
+                <textarea id="blogDescription" name="description" placeholder="Write a summary, insights, or strategy details..." required></textarea>
+              </div>
+              <div class="field full">
+                <label for="blogVideo">Video upload</label>
+                <input id="blogVideo" name="video" type="file" accept="video/*" required />
+              </div>
+            </div>
+
+            <div style="display:flex; justify-content:flex-end; gap:12px; margin-top:20px; flex-wrap:wrap;">
+              <button class="ghost-btn" id="cancelForm" type="button">Cancel</button>
+              <button class="primary-btn" type="submit">Publish Blog</button>
+            </div>
+          </form>
+          <div id="blogAlert" class="alert"></div>
+        </div>
+
+        <div id="blogList" class="blog-grid"></div>
+        <div class="pagination" id="pagination"></div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const API = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+      ? 'http://localhost:8080'
+      : 'https://globalcapitalventureholdings.com';
+
+    const state = { page: 1, totalPages: 1, items: [] };
+    const blogList = document.getElementById('blogList');
+    const paginationEl = document.getElementById('pagination');
+    const blogFormWrap = document.getElementById('blogFormWrap');
+    const blogAlert = document.getElementById('blogAlert');
+    const blogForm = document.getElementById('blogForm');
+
+    function setAlert(message, type = 'error') {
+      blogAlert.textContent = message;
+      blogAlert.className = `alert ${type}`;
+    }
+
+    function resolveMedia(url) {
+      if (!url) return '';
+      return /^https?:\/\//i.test(url) ? url : `${API}${url}`;
+    }
+
+    async function fetchBlogs(page = 1) {
+      try {
+        const res = await fetch(`${API}/api/blogs?page=${page}&limit=20`, { cache: 'no-store' });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Unable to load blogs.');
+
+        state.page = Number(data.page || 1);
+        state.totalPages = Number(data.totalPages || 1);
+        state.items = data.items || [];
+        renderBlogs();
+        renderPagination();
+      } catch (error) {
+        blogList.innerHTML = `<div class="empty-state">${error.message}</div>`;
+      }
+    }
+
+    function renderBlogs() {
+      if (!state.items.length) {
+        blogList.innerHTML = '<div class="empty-state">No blog posts have been published yet. Create the first post above.</div>';
+        return;
+      }
+
+      blogList.innerHTML = state.items.map(blog => `
+        <article class="blog-card">
+          <video class="blog-video" controls preload="metadata" src="${resolveMedia(blog.video_url)}"></video>
+          <div class="blog-body">
+            <div class="blog-meta">
+              <span>${blog.author_name || 'Community Member'}</span>
+              <span>${new Date(blog.created_at).toLocaleDateString()}</span>
+            </div>
+            <h3 class="blog-title">${blog.name}</h3>
+            <p class="blog-description">${(blog.description || '').replace(/\n/g, '<br>')}</p>
+            <div class="blog-footer">
+              <span class="price">Price: $${Number(blog.price || 0).toFixed(2)}</span>
+              <a class="download-btn" href="${API}/api/blogs/${blog.id}/download" target="_blank" rel="noopener">Download Video</a>
+            </div>
+          </div>
+        </article>
+      `).join('');
+    }
+
+    function renderPagination() {
+      const pages = [];
+      const total = Math.max(1, state.totalPages);
+      for (let i = 1; i <= total; i++) {
+        pages.push(`<button class="page-btn ${i === state.page ? 'active' : ''}" type="button" data-page="${i}">${i}</button>`);
+      }
+
+      paginationEl.innerHTML = `
+        <button class="page-btn" type="button" data-page="${Math.max(1, state.page - 1)}" ${state.page === 1 ? 'disabled' : ''}>Prev</button>
+        ${pages.join('')}
+        <button class="page-btn" type="button" data-page="${Math.min(total, state.page + 1)}" ${state.page >= total ? 'disabled' : ''}>Next</button>
+      `;
+
+      paginationEl.querySelectorAll('[data-page]').forEach(button => {
+        button.addEventListener('click', () => {
+          const page = Number(button.dataset.page || 1);
+          if (page >= 1) fetchBlogs(page);
+        });
+      });
+    }
+
+    function toggleForm(show) {
+      blogFormWrap.classList.toggle('open', show);
+      if (show) {
+        setAlert('', 'success');
+      }
+    }
+
+    document.getElementById('postBlogTrigger').addEventListener('click', () => {
+      const token = localStorage.getItem('gcvh_customer_token');
+      if (!token) {
+        location.href = `login.html?redirect=${encodeURIComponent(location.pathname)}`;
+        return;
+      }
+      toggleForm(true);
+    });
+
+    document.getElementById('toggleForm').addEventListener('click', () => {
+      const token = localStorage.getItem('gcvh_customer_token');
+      if (!token) {
+        location.href = `login.html?redirect=${encodeURIComponent(location.pathname)}`;
+        return;
+      }
+      toggleForm(true);
+    });
+
+    document.getElementById('closeForm').addEventListener('click', () => toggleForm(false));
+    document.getElementById('cancelForm').addEventListener('click', () => toggleForm(false));
+
+    blogForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const token = localStorage.getItem('gcvh_customer_token');
+      if (!token) {
+        location.href = `login.html?redirect=${encodeURIComponent(location.pathname)}`;
+        return;
+      }
+
+      const formData = new FormData(blogForm);
+      const fileInput = document.getElementById('blogVideo');
+      if (!fileInput.files.length) {
+        setAlert('Please choose a video file to upload.', 'error');
+        return;
+      }
+
+      try {
+        setAlert('Publishing your blog...', 'success');
+        const res = await fetch(`${API}/api/blogs`, {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${token}` },
+          body: formData
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Blog could not be published.');
+
+        blogForm.reset();
+        toggleForm(false);
+        setAlert('Blog published successfully.', 'success');
+        fetchBlogs(1);
+      } catch (error) {
+        setAlert(error.message, 'error');
+      }
+    });
+
+    fetchBlogs(1);
+  </script>
+</body>
+</html>
