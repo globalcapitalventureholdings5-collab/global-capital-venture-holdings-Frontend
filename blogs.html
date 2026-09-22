@@ -4,6 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1.0" />
 <title>Blogs | Global Capital Venture Holdings</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
 <style>
   :root {
     --bg: #ffffff;
@@ -73,7 +74,143 @@
   .alert { margin-top: 16px; padding: 12px 14px; border-radius: 12px; font-size: 14px; display: none; }
   .alert.error { display: block; background: rgba(185,28,28,0.08); color: #b91c1c; border: 1px solid rgba(185,28,28,0.16); }
   .alert.success { display: block; background: rgba(13,122,88,0.08); color: var(--green-strong); border: 1px solid rgba(13,122,88,0.16); }
-  @media (max-width: 860px) { .hero-inner { display: block; } .toolbar { justify-content: flex-start; } .blog-grid { grid-template-columns: 1fr; } .form-grid { grid-template-columns: 1fr; } .nav-links { display: none; } }
+  
+  .nav-btn-signin {
+    border: 1.5px solid rgba(13, 122, 88, 0.35) !important;
+    color: var(--green-strong) !important;
+    background: rgba(13, 122, 88, 0.04) !important;
+    padding: 8px 16px !important;
+    border-radius: 8px !important;
+    font-weight: 800 !important;
+    transition: all 0.15s ease !important;
+  }
+  .nav-btn-signin:hover {
+    background: rgba(13, 122, 88, 0.1) !important;
+    border-color: var(--green) !important;
+    transform: translateY(-1px);
+  }
+  .nav-btn-signup {
+    background: linear-gradient(135deg, #0f7a57, #0d5a3f) !important;
+    color: #ffffff !important;
+    padding: 9px 18px !important;
+    border-radius: 8px !important;
+    font-weight: 800 !important;
+    box-shadow: 0 4px 14px rgba(13, 90, 63, 0.22);
+    transition: all 0.15s ease !important;
+  }
+  .nav-btn-signup:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(13, 90, 63, 0.35);
+    background: linear-gradient(135deg, #129269, #094530) !important;
+    color: #ffffff !important;
+  }
+  .nav-btn-dashboard {
+    background: #081a13 !important;
+    color: #5eead4 !important;
+    border: 1.5px solid #0f7a57 !important;
+    padding: 9px 18px !important;
+    border-radius: 8px !important;
+    font-weight: 800 !important;
+    transition: all 0.15s ease !important;
+  }
+  .nav-btn-dashboard:hover {
+    background: #0d2c20 !important;
+    color: #ffffff !important;
+    border-color: #10b981 !important;
+    transform: translateY(-1px);
+  }
+  .menu-btn {
+    display: none;
+    margin-left: auto;
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--green);
+    font-size: 24px;
+    cursor: pointer;
+  }
+  .mobile-menu {
+    display: none;
+    border-top: 1px solid var(--line);
+    padding: 16px 20px 24px;
+    background: #ffffff;
+  }
+  .mobile-menu.open { display: block; }
+  .mobile-menu a {
+    display: block;
+    padding: 12px 0;
+    color: #243831;
+    border-bottom: 1px solid var(--line);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .mobile-auth-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 16px;
+    padding-top: 16px;
+  }
+  .mobile-btn-signin {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    padding: 13px !important;
+    border: 1.5px solid rgba(13, 90, 63, 0.35) !important;
+    background: rgba(13, 90, 63, 0.05) !important;
+    color: var(--green-strong) !important;
+    border-radius: 10px !important;
+    font-size: 14px !important;
+    font-weight: 800 !important;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    border-bottom: 1.5px solid rgba(13, 90, 63, 0.35) !important;
+  }
+  .mobile-btn-signup {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    padding: 14px !important;
+    border: 0 !important;
+    background: linear-gradient(135deg, #0f7a57, #0d5a3f) !important;
+    color: #ffffff !important;
+    border-radius: 10px !important;
+    font-size: 14px !important;
+    font-weight: 800 !important;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    box-shadow: 0 4px 14px rgba(13, 90, 63, 0.2);
+    border-bottom: 0 !important;
+  }
+  .mobile-btn-dashboard {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    padding: 14px !important;
+    border: 1.5px solid #0f7a57 !important;
+    background: #081a13 !important;
+    color: #5eead4 !important;
+    border-radius: 10px !important;
+    font-size: 14px !important;
+    font-weight: 800 !important;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    border-bottom: 1.5px solid #0f7a57 !important;
+  }
+
+  @media (max-width: 900px) {
+    .hero-inner { display: block; }
+    .toolbar { justify-content: flex-start; }
+    .blog-grid { grid-template-columns: 1fr; }
+    .form-grid { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    .menu-btn { display: grid; place-items: center; }
+    #postBlogTrigger { display: none; }
+  }
 </style>
 </head>
 <body>
@@ -90,10 +227,26 @@
         <a href="about.html">About Us</a>
         <a href="blogs.html" style="color:var(--green)">Blogs</a>
         <a href="contact.html">Contact</a>
-        <a href="login.html">Sign In</a>
-        <a href="register.html" class="header-cta" style="padding:8px 14px;border-radius:8px;">Create Account</a>
+        <a href="login.html" class="nav-btn-signin">Sign In</a>
+        <a href="register.html" class="nav-btn-signup">Create Account</a>
+        <a href="dashboard.html" class="nav-btn-dashboard" hidden>Dashboard</a>
       </nav>
       <button class="header-cta" id="postBlogTrigger" type="button">Post Blog</button>
+      <button class="menu-btn" id="menuBtn" type="button" aria-label="Toggle navigation">☰</button>
+    </div>
+
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="index.html">Home</a>
+      <a href="packages.html">Packages</a>
+      <a href="salary-system.html">Salary System</a>
+      <a href="about.html">About Us</a>
+      <a href="blogs.html">Blogs</a>
+      <a href="contact.html">Contact</a>
+      <div class="mobile-auth-group">
+        <a href="login.html" class="mobile-btn-signin">Sign In</a>
+        <a href="register.html" class="mobile-btn-signup">Create Account</a>
+        <a href="dashboard.html" id="mobileDashboard" class="mobile-btn-dashboard" hidden>Go to Dashboard →</a>
+      </div>
     </div>
   </header>
 
@@ -295,6 +448,19 @@
         setAlert(error.message, 'error');
       }
     });
+
+    const menuBtn = document.getElementById('menuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    if (menuBtn && mobileMenu) {
+      menuBtn.addEventListener('click', () => {
+        mobileMenu.classList.toggle('open');
+      });
+    }
+
+    const token = localStorage.getItem('gcvh_customer_token');
+    if (token) {
+      document.querySelectorAll('.nav-btn-dashboard, #mobileDashboard').forEach(el => el.hidden = false);
+    }
 
     fetchBlogs(1);
   </script>

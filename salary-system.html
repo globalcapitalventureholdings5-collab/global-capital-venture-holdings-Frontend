@@ -64,26 +64,59 @@
     .brand-name b { color: var(--primary-light); font-weight: 700; }
     .nav-links { margin-left: auto; display: flex; align-items: center; gap: 6px; }
     .nav-links a {
-      padding: 10px 14px;
+      padding: 9px 13px;
       border-radius: 8px;
       color: #243831;
       font-size: 13px;
       text-transform: uppercase;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.05em;
       font-weight: 700;
       transition: color 0.15s, background-color 0.15s;
     }
     .nav-links a:hover, .nav-links a.active { color: var(--primary); background: rgba(13, 90, 63, 0.06); }
-    .nav-cta {
-      background: linear-gradient(135deg, #0f7a57, #0d5a3f) !important;
-      color: #ffffff !important;
-      padding: 10px 18px !important;
-      border-radius: 8px !important;
-    }
-    .nav-dashboard-link {
-      border: 1px solid var(--primary) !important;
+    .nav-btn-signin {
+      border: 1.5px solid rgba(13, 90, 63, 0.35) !important;
       color: var(--primary) !important;
       background: rgba(13, 90, 63, 0.04) !important;
+      padding: 9px 18px !important;
+      border-radius: 8px !important;
+      font-weight: 800 !important;
+      transition: all 0.15s ease !important;
+    }
+    .nav-btn-signin:hover {
+      background: rgba(13, 90, 63, 0.1) !important;
+      border-color: var(--primary) !important;
+      transform: translateY(-1px);
+    }
+    .nav-btn-signup {
+      background: linear-gradient(135deg, #0f7a57, #0d5a3f) !important;
+      color: #ffffff !important;
+      padding: 10px 20px !important;
+      border-radius: 8px !important;
+      font-weight: 800 !important;
+      box-shadow: 0 4px 14px rgba(13, 90, 63, 0.22);
+      transition: all 0.15s ease !important;
+    }
+    .nav-btn-signup:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(13, 90, 63, 0.35);
+      background: linear-gradient(135deg, #129269, #094530) !important;
+      color: #ffffff !important;
+    }
+    .nav-btn-dashboard {
+      background: #081a13 !important;
+      color: #5eead4 !important;
+      border: 1.5px solid #0f7a57 !important;
+      padding: 10px 20px !important;
+      border-radius: 8px !important;
+      font-weight: 800 !important;
+      transition: all 0.15s ease !important;
+    }
+    .nav-btn-dashboard:hover {
+      background: #0d2c20 !important;
+      color: #ffffff !important;
+      border-color: #10b981 !important;
+      transform: translateY(-1px);
     }
     .menu-btn {
       display: none;
@@ -107,6 +140,59 @@
       letter-spacing: 0.06em;
       font-size: 13px;
       font-weight: 700;
+    }
+    .mobile-auth-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 16px;
+      padding-top: 16px;
+    }
+    .mobile-btn-signin {
+      display: flex !important;
+      align-items: center;
+      justify-content: center;
+      padding: 13px !important;
+      border: 1.5px solid rgba(13, 90, 63, 0.35) !important;
+      background: rgba(13, 90, 63, 0.05) !important;
+      color: var(--primary) !important;
+      border-radius: 10px !important;
+      font-size: 14px !important;
+      font-weight: 800 !important;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      border-bottom: 1.5px solid rgba(13, 90, 63, 0.35) !important;
+    }
+    .mobile-btn-signup {
+      display: flex !important;
+      align-items: center;
+      justify-content: center;
+      padding: 14px !important;
+      border: 0 !important;
+      background: linear-gradient(135deg, #0f7a57, #0d5a3f) !important;
+      color: #ffffff !important;
+      border-radius: 10px !important;
+      font-size: 14px !important;
+      font-weight: 800 !important;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      box-shadow: 0 4px 14px rgba(13, 90, 63, 0.2);
+      border-bottom: 0 !important;
+    }
+    .mobile-btn-dashboard {
+      display: flex !important;
+      align-items: center;
+      justify-content: center;
+      padding: 14px !important;
+      border: 1.5px solid #0f7a57 !important;
+      background: #081a13 !important;
+      color: #5eead4 !important;
+      border-radius: 10px !important;
+      font-size: 14px !important;
+      font-weight: 800 !important;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      border-bottom: 1.5px solid #0f7a57 !important;
     }
 
     /* PAGE HERO */
@@ -233,9 +319,9 @@
         <a href="about.html">About Us</a>
         <a href="blogs.html">Blogs</a>
         <a href="contact.html">Contact</a>
-        <a href="login.html" class="nav-auth-link">Sign In</a>
-        <a href="register.html" class="nav-cta">Create Account</a>
-        <a href="dashboard.html" class="nav-dashboard-link" hidden>Dashboard</a>
+        <a href="login.html" class="nav-btn-signin">Sign In</a>
+        <a href="register.html" class="nav-btn-signup">Create Account</a>
+        <a href="dashboard.html" class="nav-btn-dashboard" hidden>Dashboard</a>
       </nav>
 
       <button class="menu-btn" id="menuBtn" type="button" aria-label="Toggle navigation">☰</button>
@@ -248,9 +334,11 @@
       <a href="about.html">About Us</a>
       <a href="blogs.html">Blogs</a>
       <a href="contact.html">Contact</a>
-      <a href="login.html">Sign In</a>
-      <a href="register.html">Create Account</a>
-      <a href="dashboard.html" id="mobileDashboard" hidden>Dashboard</a>
+      <div class="mobile-auth-group">
+        <a href="login.html" class="mobile-btn-signin">Sign In</a>
+        <a href="register.html" class="mobile-btn-signup">Create Account</a>
+        <a href="dashboard.html" id="mobileDashboard" class="mobile-btn-dashboard" hidden>Go to Dashboard →</a>
+      </div>
     </div>
   </header>
 
@@ -417,5 +505,19 @@
   </footer>
 
   <script src="config.js"></script>
+  <script>
+    const menuBtn = document.getElementById('menuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    if (menuBtn && mobileMenu) {
+      menuBtn.addEventListener('click', () => {
+        mobileMenu.classList.toggle('open');
+      });
+    }
+
+    const token = localStorage.getItem('gcvh_customer_token');
+    if (token) {
+      document.querySelectorAll('.nav-btn-dashboard, #mobileDashboard').forEach(el => el.hidden = false);
+    }
+  </script>
 </body>
 </html>
