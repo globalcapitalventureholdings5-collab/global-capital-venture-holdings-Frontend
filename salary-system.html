@@ -458,6 +458,45 @@
       margin-top: 8px;
     }
 
+    /* PARTNER CTA BUTTON */
+    .partner-cta-wrap {
+      text-align: center;
+      margin-top: 48px;
+      padding: 0 16px;
+    }
+    .partner-cta-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 16px 36px;
+      font-size: 16px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #0f7a57, #0d5a3f);
+      color: #ffffff;
+      font-weight: 800;
+      text-decoration: none;
+      box-shadow: 0 8px 24px rgba(13, 90, 63, 0.28);
+      transition: all 0.2s ease;
+      max-width: 100%;
+      box-sizing: border-box;
+      line-height: 1.3;
+    }
+    .partner-cta-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(13, 90, 63, 0.4);
+      background: linear-gradient(135deg, #129269, #094530);
+      color: #ffffff;
+    }
+    .partner-cta-btn span.arrow {
+      font-size: 18px;
+      transition: transform 0.2s ease;
+      display: inline-block;
+    }
+    .partner-cta-btn:hover span.arrow {
+      transform: translateX(4px);
+    }
+
     /* FOOTER */
     .footer {
       background: #071912;
@@ -703,8 +742,11 @@
       </div>
     </div>
 
-    <div style="text-align: center; margin-top: 40px;">
-      <a href="register.html" class="btn btn-primary" style="padding: 16px 36px; font-size: 16px; border-radius: 12px; background: linear-gradient(135deg, #0f7a57, #0d5a3f); color: #fff; font-weight: 800;">Join as a Partner & Start Earning →</a>
+    <div class="partner-cta-wrap">
+      <a href="register.html" class="partner-cta-btn">
+        <span>Join as a Partner & Start Earning</span>
+        <span class="arrow">→</span>
+      </a>
     </div>
 
   </main>

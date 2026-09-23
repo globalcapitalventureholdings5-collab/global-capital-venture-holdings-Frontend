@@ -527,17 +527,287 @@
     .sell-signal { color: var(--red); }
     .signal-status-badge {
       display: inline-block;
-      padding: 6px 12px;
+      padding: 6px 14px;
       border-radius: 999px;
       font-size: 11px;
       font-weight: 800;
       background: rgba(243, 207, 122, 0.15);
       color: var(--gold);
+      letter-spacing: 0.05em;
+    }
+    .signal-status-badge.settling {
+      background: rgba(243, 207, 122, 0.2);
+      color: var(--gold);
+      border: 1px solid rgba(243, 207, 122, 0.4);
+      animation: pulseSettling 1.8s infinite ease-in-out;
     }
     .signal-status-badge.completed {
-      background: rgba(16, 185, 129, 0.15);
+      background: rgba(16, 185, 129, 0.18);
       color: var(--primary-green);
+      border: 1px solid rgba(16, 185, 129, 0.35);
     }
+    @keyframes pulseSettling {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.75; transform: scale(0.98); }
+    }
+
+    /* SETTLEMENT TIMER & PROGRESS IN SIGNAL DESK */
+    .settlement-card-box {
+      display: none;
+      background: linear-gradient(145deg, rgba(243, 207, 122, 0.08), rgba(0, 0, 0, 0.3));
+      border: 1px solid rgba(243, 207, 122, 0.3);
+      border-radius: 12px;
+      padding: 16px;
+      margin-top: 14px;
+    }
+    .settlement-card-box.active { display: block; }
+    .settlement-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .settlement-title {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--gold);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .settlement-timer-text {
+      font-family: ui-monospace, SFMono-Regular, monospace;
+      font-size: 16px;
+      font-weight: 800;
+      color: #ffffff;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 4px 10px;
+      border-radius: 6px;
+      border: 1px solid rgba(243, 207, 122, 0.3);
+    }
+    .settlement-bar-track {
+      width: 100%;
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+      overflow: hidden;
+      margin: 10px 0 6px;
+    }
+    .settlement-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #c59b27, #f3cf7a);
+      border-radius: 999px;
+      transition: width 1s linear;
+    }
+    .settlement-note {
+      font-size: 11px;
+      color: #b8d4c9;
+      line-height: 1.4;
+    }
+
+    /* SIGNAL CONFIRMATION MODAL */
+    .signal-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 10000;
+      display: none;
+      place-items: center;
+      padding: 20px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .signal-modal-backdrop.show {
+      display: grid;
+      opacity: 1;
+    }
+    .signal-modal-card {
+      width: min(520px, 100%);
+      background: linear-gradient(160deg, #0d281e, #06150f);
+      border: 1.5px solid rgba(16, 185, 129, 0.4);
+      border-radius: 20px;
+      padding: 32px 28px;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 25px 80px rgba(0, 0, 0, 0.8), 0 0 40px rgba(16, 185, 129, 0.15);
+      transform: scale(0.92);
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .signal-modal-backdrop.show .signal-modal-card {
+      transform: scale(1);
+    }
+    .modal-glow-badge {
+      width: 76px;
+      height: 76px;
+      margin: 0 auto 16px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.3));
+      border: 2px solid var(--primary-green);
+      display: grid;
+      place-items: center;
+      font-size: 34px;
+      color: #ffffff;
+      box-shadow: 0 0 24px rgba(16, 185, 129, 0.45);
+      animation: modalPulse 2s infinite ease-in-out;
+    }
+    @keyframes modalPulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 24px rgba(16, 185, 129, 0.45); }
+      50% { transform: scale(1.06); box-shadow: 0 0 36px rgba(16, 185, 129, 0.7); }
+    }
+    .modal-trade-badge {
+      display: inline-block;
+      font: 700 22px Georgia, serif;
+      color: #ffffff;
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      padding: 8px 18px;
+      border-radius: 10px;
+      margin: 12px 0 16px;
+    }
+    .modal-settle-timer {
+      font-family: ui-monospace, SFMono-Regular, monospace;
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--gold);
+      margin: 8px 0;
+      letter-spacing: 0.05em;
+    }
+    .modal-close-btn {
+      margin-top: 20px;
+      width: 100%;
+      height: 48px;
+      background: linear-gradient(135deg, var(--primary-green), #047857);
+      color: #ffffff;
+      border: 0;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(16, 185, 129, 0.3);
+    }
+    .modal-close-btn:hover {
+      background: linear-gradient(135deg, #12c98d, #059669);
+    }
+
+    /* BLOGS SECTION IN DASHBOARD */
+    .blogs-grid-dashboard {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
+      margin-top: 18px;
+    }
+    .blog-item-card {
+      background: #081710;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+    .blog-item-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(16, 185, 129, 0.4);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+    }
+    .blog-media-wrap {
+      position: relative;
+      width: 100%;
+      height: 180px;
+      background: #040e0a;
+      overflow: hidden;
+    }
+    .blog-media-wrap video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .blog-media-placeholder {
+      width: 100%;
+      height: 100%;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, #0a2118, #040e0a);
+      color: var(--primary-green);
+      font-size: 38px;
+    }
+    .blog-play-overlay {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      background: rgba(0, 0, 0, 0.35);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .blog-play-overlay:hover { background: rgba(0, 0, 0, 0.15); }
+    .play-circle-btn {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(16, 185, 129, 0.9);
+      color: #07120c;
+      display: grid;
+      place-items: center;
+      font-size: 20px;
+      box-shadow: 0 0 16px rgba(16, 185, 129, 0.6);
+    }
+    .blog-body {
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .blog-tag {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 800;
+      color: var(--primary-green);
+      background: rgba(16, 185, 129, 0.1);
+      padding: 4px 8px;
+      border-radius: 6px;
+      margin-bottom: 8px;
+      align-self: flex-start;
+      letter-spacing: 0.08em;
+    }
+    .blog-item-card h3 {
+      font: 700 17px Georgia, serif;
+      color: #ffffff;
+      margin-bottom: 8px;
+      line-height: 1.35;
+    }
+    .blog-item-card p {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-bottom: 14px;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .blog-footer-meta {
+      margin-top: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      padding-top: 12px;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .blog-view-btn {
+      color: var(--primary-green);
+      font-weight: 800;
+      font-size: 12px;
+      background: transparent;
+      border: 0;
+      padding: 4px 0;
+      cursor: pointer;
+    }
+    .blog-view-btn:hover { color: #5eead4; }
 
     /* CHAT PANEL */
     .chat-panel {
@@ -789,12 +1059,13 @@
         <a href="#overview" class="active"><span>▦</span> Portfolio Overview</a>
         <a href="#market"><span>◈</span> Live XAUUSD Market</a>
         <a href="#signals"><span>✦</span> Trading Signals</a>
+        <a href="#blogs"><span>📰</span> Market Insights & Blogs</a>
         <a href="#payout"><span>↗</span> Fortnightly Payout</a>
         <a href="#referrals"><span>%</span> Referral Network</a>
         <a href="#salary"><span>◷</span> Salary Matrix</a>
         <a href="packages.html"><span>💎</span> Investment Packages</a>
         <a href="salary-system.html"><span>🏆</span> Salary System</a>
-        <a href="blogs.html"><span>📰</span> Market Insights</a>
+        <a href="blogs.html"><span>🌐</span> Public Blog Portal ↗</a>
       </nav>
 
       <div class="sidebar-bottom">
@@ -946,6 +1217,20 @@
             <p id="signalNotice" style="margin-top:12px;font-size:12px;color:var(--text-muted);">
               Execute the administrator's daily signal once today to qualify for today's 1% ROI growth.
             </p>
+
+            <!-- 30-MINUTE SETTLEMENT COUNTDOWN CARD -->
+            <div id="settlementBox" class="settlement-card-box">
+              <div class="settlement-header-row">
+                <div class="settlement-title"><span>⏳</span> Profit Settlement in Progress</div>
+                <div id="settlementTimer" class="settlement-timer-text">29:59</div>
+              </div>
+              <div class="settlement-bar-track">
+                <div id="settlementProgressFill" class="settlement-bar-fill"></div>
+              </div>
+              <div class="settlement-note">
+                Your order has been executed. Today's 1.00% ROI profit is settling and will automatically be added to your growth balance in 30 minutes.
+              </div>
+            </div>
           </div>
 
           <div class="chat-panel">
@@ -977,9 +1262,12 @@
           Share your personal referral link. Instant commissions are credited automatically upon confirmed deposits.
         </p>
 
-        <div class="referral-input-group">
-          <input id="referralLink" readonly placeholder="Loading your referral link…">
-          <button id="copyReferral" class="btn btn-primary" type="button">Copy Referral Link</button>
+        <div class="referral-input-group" style="display:flex;gap:10px;flex-wrap:wrap;">
+          <input id="referralLink" readonly placeholder="Loading your referral link…" style="flex:1;min-width:240px;">
+          <button id="copyReferral" class="btn btn-primary" type="button" style="white-space:nowrap;">Copy Link</button>
+          <button id="whatsappShare" class="btn" type="button" style="white-space:nowrap;background:#25d366;color:#ffffff;display:inline-flex;align-items:center;gap:6px;font-weight:800;border:0;">
+            Share WhatsApp
+          </button>
         </div>
 
         <div class="statistics-grid" style="margin-bottom:18px;">
@@ -1081,7 +1369,64 @@
         <div id="tradeHistoryList"></div>
       </section>
 
+      <!-- MARKET INSIGHTS & BLOG POSTS -->
+      <section id="blogs" class="dashboard-card">
+        <div class="card-head">
+          <div>
+            <div class="section-tag">MARKET RESEARCH & INTELLIGENCE</div>
+            <h2>Official <span>Market Blogs & Video Updates</span></h2>
+          </div>
+          <a href="blogs.html" class="btn btn-outline" style="min-height:38px;padding:0 18px;font-size:12px;border-radius:8px;">
+            Public Blog Page ↗
+          </a>
+        </div>
+        <p style="color:var(--text-muted);font-size:13px;margin-bottom:18px;">
+          Direct institutional insights, daily algorithmic market commentary, and video strategy briefings.
+        </p>
+
+        <div id="dashboardBlogsList" class="blogs-grid-dashboard">
+          <div style="padding:32px;text-align:center;color:var(--text-muted);grid-column:1/-1;">Loading market blog posts…</div>
+        </div>
+      </section>
+
     </main>
+  </div>
+
+  <!-- SIGNAL EXECUTION POPUP MODAL -->
+  <div id="signalModal" class="signal-modal-backdrop">
+    <div class="signal-modal-card">
+      <div class="modal-glow-badge">✓</div>
+      <div class="section-tag" style="color:var(--primary-green);">ORDER EXECUTED & CONFIRMED</div>
+      <h2 style="font:700 24px Georgia,serif;color:#fff;margin:8px 0;">Signal Executed Successfully!</h2>
+      <div id="modalTradeText" class="modal-trade-badge">BUY XAUUSD @ Market</div>
+      <p style="color:#b8d4c9;font-size:14px;line-height:1.6;margin-bottom:16px;">
+        Your trade order has been placed into the liquidity engine. Today's <strong>1.00% ROI daily profit</strong> is now in settlement and will automatically be credited to your account growth balance in:
+      </p>
+      <div id="modalCountdown" class="modal-settle-timer">30:00</div>
+      <div style="font-size:11px;color:var(--text-muted);margin-bottom:20px;">
+        Status: <strong style="color:var(--gold);">Order in Position (Settling)</strong> · Estimated Yield: <strong style="color:var(--primary-green);">+1.00% Principal</strong>
+      </div>
+      <button id="modalCloseBtn" class="modal-close-btn" type="button">Understood & Confirm →</button>
+    </div>
+  </div>
+
+  <!-- BLOG ARTICLE & VIDEO DETAIL MODAL -->
+  <div id="blogDetailModal" class="signal-modal-backdrop">
+    <div class="signal-modal-card" style="width:min(680px,100%);text-align:left;max-height:90vh;overflow-y:auto;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;border-bottom:1px solid var(--border);padding-bottom:12px;">
+        <span class="section-tag" id="blogModalTag">MARKET INSIGHT</span>
+        <button id="blogModalClose" style="background:transparent;border:0;color:#ffffff;font-size:22px;cursor:pointer;">✕</button>
+      </div>
+      <h2 id="blogModalTitle" style="font:700 22px Georgia,serif;color:#fff;margin-bottom:10px;"></h2>
+      <div style="font-size:12px;color:var(--text-muted);margin-bottom:16px;" id="blogModalMeta"></div>
+      <div id="blogModalVideoWrap" style="width:100%;border-radius:12px;overflow:hidden;background:#000;margin-bottom:16px;display:none;">
+        <video id="blogModalVideo" controls style="width:100%;max-height:360px;display:block;"></video>
+      </div>
+      <div id="blogModalContent" style="font-size:14px;line-height:1.7;color:#cdded7;white-space:pre-wrap;"></div>
+      <div style="margin-top:20px;text-align:right;">
+        <button id="blogModalDone" class="btn btn-primary" style="min-height:42px;padding:0 22px;font-size:13px;">Close Insight</button>
+      </div>
+    </div>
   </div>
 
   <script src="config.js"></script>
@@ -1204,8 +1549,82 @@
       $('countdown').textContent = `${d}d ${h}h ${m}m ${ss}s`;
     }
 
+    const SETTLE_DURATION = 1800; // 30 minutes in seconds
+    let hasAlertedSettled = false;
+
+    function formatMMSS(totalSec) {
+      const s = Math.max(0, Math.floor(totalSec));
+      const m = Math.floor(s / 60);
+      const rem = s % 60;
+      return `${String(m).padStart(2, '0')}:${String(rem).padStart(2, '0')}`;
+    }
+
+    function playSignalSuccessSound() {
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        const ctx = new AudioCtx();
+        if (ctx.state === 'suspended') ctx.resume();
+        const now = ctx.currentTime;
+        [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, now + i * 0.08);
+          gain.gain.setValueAtTime(0, now + i * 0.08);
+          gain.gain.linearRampToValueAtTime(0.2, now + i * 0.08 + 0.02);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.08 + 0.5);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now + i * 0.08);
+          osc.stop(now + i * 0.08 + 0.55);
+        });
+      } catch (e) {}
+    }
+
+    function playSettlementCompleteSound() {
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        const ctx = new AudioCtx();
+        if (ctx.state === 'suspended') ctx.resume();
+        const now = ctx.currentTime;
+        [587.33, 739.99, 880.00, 1174.66].forEach((freq, i) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, now + i * 0.09);
+          gain.gain.setValueAtTime(0.25, now + i * 0.09);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.09 + 0.7);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now + i * 0.09);
+          osc.stop(now + i * 0.09 + 0.75);
+        });
+      } catch (e) {}
+    }
+
+    function openSignalModal(side, symbol, remainingSec) {
+      $('modalTradeText').textContent = `${side || 'BUY'} ${symbol || 'XAUUSD'} @ Market`;
+      $('modalCountdown').textContent = formatMMSS(remainingSec || SETTLE_DURATION);
+      $('signalModal').classList.add('show');
+      playSignalSuccessSound();
+    }
+
+    function closeSignalModal() {
+      $('signalModal').classList.remove('show');
+    }
+
+    if ($('modalCloseBtn')) $('modalCloseBtn').onclick = closeSignalModal;
+    if ($('signalModal')) {
+      $('signalModal').onclick = (e) => {
+        if (e.target === $('signalModal')) closeSignalModal();
+      };
+    }
+
     function renderSignal() {
-      let done = !!executed[signal.date];
+      const execInfo = executed[signal.date];
+      const isDone = !!execInfo;
       $('signalDate').textContent = new Date(signal.date + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
       $('signalDirection').textContent = signal.direction + ' XAUUSD';
       $('signalDirection').className = 'signal-direction ' + (signal.direction === 'BUY' ? 'buy-signal' : 'sell-signal');
@@ -1213,10 +1632,52 @@
       $('signalEntry').textContent = signal.entry;
       $('signalSL').textContent = signal.sl;
       $('signalTP').textContent = signal.tp;
-      $('signalStatus').textContent = done ? 'Trade Executed' : 'Signal Active';
-      $('signalStatus').className = 'signal-status-badge ' + (done ? 'completed' : '');
-      $('executeSignal').disabled = done;
-      $('signalNotice').textContent = done ? "Today's 1% ROI qualification has been recorded." : "Execute the administrator's daily signal once today to qualify for today's 1% ROI growth.";
+
+      const settlementBox = $('settlementBox');
+      const executeBtn = $('executeSignal');
+
+      if (!isDone) {
+        $('signalStatus').textContent = 'Signal Active';
+        $('signalStatus').className = 'signal-status-badge';
+        executeBtn.disabled = false;
+        executeBtn.textContent = "Execute Today's Signal →";
+        $('signalNotice').textContent = "Execute the administrator's daily signal once today to qualify for today's 1% ROI growth.";
+        if (settlementBox) settlementBox.classList.remove('active');
+        return;
+      }
+
+      executeBtn.disabled = true;
+      const execTime = Number(execInfo.time || Date.now());
+      const elapsedSec = Math.floor((Date.now() - execTime) / 1000);
+      const remainingSec = Math.max(0, SETTLE_DURATION - elapsedSec);
+
+      if ($('modalCountdown')) {
+        $('modalCountdown').textContent = formatMMSS(remainingSec);
+      }
+
+      if (remainingSec > 0) {
+        const pct = Math.min(100, Math.max(0, (elapsedSec / SETTLE_DURATION) * 100));
+        $('signalStatus').textContent = `Settling (${formatMMSS(remainingSec)})`;
+        $('signalStatus').className = 'signal-status-badge settling';
+        executeBtn.textContent = `Order in Settlement (${formatMMSS(remainingSec)})`;
+        $('signalNotice').textContent = `⏳ Order is active in position. Today's 1.00% daily profit will credit in ${formatMMSS(remainingSec)}.`;
+        
+        if (settlementBox) {
+          settlementBox.classList.add('active');
+          $('settlementTimer').textContent = formatMMSS(remainingSec);
+          $('settlementProgressFill').style.width = pct.toFixed(1) + '%';
+        }
+      } else {
+        if (!hasAlertedSettled && elapsedSec < SETTLE_DURATION + 10) {
+          hasAlertedSettled = true;
+          playSettlementCompleteSound();
+        }
+        $('signalStatus').textContent = '● Trade Completed (+1.00% ROI)';
+        $('signalStatus').className = 'signal-status-badge completed';
+        executeBtn.textContent = 'Today’s Trade Completed ✓';
+        $('signalNotice').textContent = "Today's 1.00% ROI profit settlement is completed and credited to your growth balance.";
+        if (settlementBox) settlementBox.classList.remove('active');
+      }
     }
 
     function renderTrades() {
@@ -1225,16 +1686,20 @@
         return;
       }
       $('tradeHistoryList').innerHTML = trades.map(t => {
-        const credited = Number(t.growth_credited || t.growthCredited || 0);
         const date = t.executed_at ? new Date(t.executed_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : (t.date || '—');
         const time = t.executed_at ? new Date(t.executed_at).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }) : (t.time || '—');
         const side = t.side || t.direction || '—';
+        const isSettled = t.status === 'Completed' || (t.executed_at && (Date.now() - new Date(t.executed_at).getTime()) >= SETTLE_DURATION * 1000);
+        const statusText = isSettled ? 'Completed' : 'Settling (30m)';
+        const statusClass = isSettled ? 'green-text' : 'style="color:var(--gold)"';
+        const profitAmount = investment.amount * 0.01;
+        
         return `<div class="trade-history-row">
           <div><strong class="green-text">${side}</strong><br><small style="color:var(--text-muted)">${date}</small></div>
           <div>${t.symbol || t.instrument || 'XAUUSD'}</div>
-          <div>${t.status || 'Executed'}</div>
+          <div><span ${statusClass}>● ${statusText}</span></div>
           <div>${time}</div>
-          <div><strong class="green-text">+${money(credited, 6)}</strong></div>
+          <div><strong class="${isSettled ? 'green-text' : ''}" style="${!isSettled ? 'color:var(--gold)' : ''}">+${money(isSettled ? profitAmount : profitAmount, 2)}</strong></div>
         </div>`;
       }).join('');
     }
@@ -1267,6 +1732,7 @@
       if (!accountActive || executed[signal.date]) return;
       const button = $('executeSignal');
       button.disabled = true;
+      button.textContent = 'Placing Order…';
       try {
         const r = await fetch(API + '/api/signals/today/execute', {
           method: 'POST',
@@ -1279,14 +1745,22 @@
           if (r.status === 409) { await loadTrades(); return; }
           throw new Error(d.error || 'Unable to execute today’s signal.');
         }
-        $('signalStatus').textContent = 'Trade Executed';
-        $('signalStatus').className = 'signal-status-badge completed';
-        $('signalNotice').textContent = "Signal Executed. Today's 1% ROI qualification has been recorded.";
-        addChat('Account Desk', "Signal Executed. Today's XAUUSD trade has been recorded.");
+
+        const now = Date.now();
+        executed[signal.date] = { time: now, direction: signal.direction };
+        localStorage.setItem('globeCapitalExecutedSignals', JSON.stringify(executed));
+
+        addChat('Account Desk', `Signal Executed. Today's ${signal.direction} XAUUSD trade order has been placed. Profit settlement completes in 30 minutes.`);
+        
+        // Open celebratory confirmation modal
+        openSignalModal(signal.direction, signal.instrument, SETTLE_DURATION);
+        
+        renderSignal();
         await loadMe();
         await loadTrades();
       } catch (e) {
         button.disabled = false;
+        button.textContent = "Execute Today's Signal →";
         $('signalNotice').textContent = e.message || 'Unable to execute today’s signal.';
         renderSignal();
       }
@@ -1383,8 +1857,17 @@
         const r = await fetch(API + '/api/referral', { headers: { Authorization: 'Bearer ' + customerToken }, cache: 'no-store' });
         if (!r.ok) throw new Error();
         const x = await r.json();
-        $('referralCode').textContent = x.code || '—';
-        $('referralLink').value = x.link || '';
+        const code = x.code || '';
+        $('referralCode').textContent = code || '—';
+
+        // Construct guaranteed valid absolute URL with domain
+        let absoluteLink = x.link || '';
+        if (!absoluteLink.startsWith('http')) {
+          const origin = (window.location.origin && window.location.origin !== 'null') ? window.location.origin : 'https://globalcapitalventureholdings.com';
+          absoluteLink = `${origin}/register.html?ref=${encodeURIComponent(code)}`;
+        }
+        $('referralLink').value = absoluteLink;
+
         $('referralL1Count').textContent = Number(x.level1_count || 0);
         $('referralL2Count').textContent = Number(x.level2_count || 0);
         $('referralL3Count').textContent = Number(x.level3_count || 0);
@@ -1416,7 +1899,7 @@
         try {
           await navigator.clipboard.writeText(v);
           $('copyReferral').textContent = 'Copied!';
-          setTimeout(() => $('copyReferral').textContent = 'Copy Referral Link', 1500);
+          setTimeout(() => $('copyReferral').textContent = 'Copy Link', 1500);
         } catch (e) {
           $('referralLink').select();
           document.execCommand('copy');
@@ -1424,6 +1907,15 @@
         }
       }
     };
+
+    const waBtn = $('whatsappShare');
+    if (waBtn) {
+      waBtn.onclick = () => {
+        const link = $('referralLink').value;
+        const msg = encodeURIComponent(`Join Global Capital Venture Holdings and build your institutional portfolio with 1.00% daily returns and leadership salary contracts! Sign up here: ${link}`);
+        window.open(`https://api.whatsapp.com/send?text=${msg}`, '_blank');
+      };
+    }
 
     function loadChart() {
       if (window.TradingView) {
@@ -1460,6 +1952,83 @@
       }
     }
 
+    let dashboardBlogs = [];
+    async function loadDashboardBlogs() {
+      const container = $('dashboardBlogsList');
+      if (!container) return;
+      try {
+        const r = await fetch(API + '/api/blogs?limit=6', { cache: 'no-store' });
+        if (!r.ok) throw new Error();
+        const d = await r.json();
+        dashboardBlogs = d.items || [];
+        if (!dashboardBlogs.length) {
+          container.innerHTML = '<div style="padding:32px;text-align:center;color:var(--text-muted);grid-column:1/-1;">No market blog posts published yet. Check back soon for institutional research updates!</div>';
+          return;
+        }
+        container.innerHTML = dashboardBlogs.map(b => {
+          const date = b.created_at ? new Date(b.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'Recent';
+          const safeTitle = String(b.name || 'Market Analysis').replace(/[<>&]/g, c => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' }[c]));
+          const safeDesc = String(b.description || 'Institutional research on algorithmic trading & market liquidity.').replace(/[<>&]/g, c => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' }[c]));
+          const hasVideo = !!b.video_url;
+          const mediaHtml = hasVideo
+            ? `<div class="blog-media-wrap">
+                 <video src="${API + b.video_url}" preload="metadata" muted playsinline></video>
+                 <div class="blog-play-overlay" onclick="viewBlogDetail(${b.id})">
+                   <div class="play-circle-btn">▶</div>
+                 </div>
+               </div>`
+            : `<div class="blog-media-wrap"><div class="blog-media-placeholder">📰</div></div>`;
+
+          return `<div class="blog-item-card">
+            ${mediaHtml}
+            <div class="blog-body">
+              <span class="blog-tag">${hasVideo ? '▶ VIDEO BRIEFING' : '📰 MARKET RESEARCH'}</span>
+              <h3>${safeTitle}</h3>
+              <p>${safeDesc}</p>
+              <div class="blog-footer-meta">
+                <span>By ${b.author_name || 'GCVH Research Desk'} · ${date}</span>
+                <button type="button" class="blog-view-btn" onclick="viewBlogDetail(${b.id})">Read & Watch →</button>
+              </div>
+            </div>
+          </div>`;
+        }).join('');
+      } catch (e) {
+        container.innerHTML = '<div style="padding:24px;text-align:center;color:var(--text-muted);grid-column:1/-1;">Market blogs temporarily unavailable.</div>';
+      }
+    }
+
+    function viewBlogDetail(id) {
+      const b = dashboardBlogs.find(x => Number(x.id) === Number(id));
+      if (!b) return;
+      $('blogModalTitle').textContent = b.name || 'Market Insight';
+      $('blogModalMeta').textContent = `By ${b.author_name || 'GCVH Research Desk'} · ${b.created_at ? new Date(b.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : 'Recent'}`;
+      $('blogModalContent').textContent = b.description || '';
+      const vidWrap = $('blogModalVideoWrap');
+      const vid = $('blogModalVideo');
+      if (b.video_url) {
+        vid.src = API + b.video_url;
+        vidWrap.style.display = 'block';
+      } else {
+        vid.pause();
+        vid.removeAttribute('src');
+        vidWrap.style.display = 'none';
+      }
+      $('blogDetailModal').classList.add('show');
+    }
+
+    function closeBlogDetail() {
+      $('blogDetailModal').classList.remove('show');
+      const vid = $('blogModalVideo');
+      if (vid) { vid.pause(); vid.removeAttribute('src'); }
+    }
+    if ($('blogModalClose')) $('blogModalClose').onclick = closeBlogDetail;
+    if ($('blogModalDone')) $('blogModalDone').onclick = closeBlogDetail;
+    if ($('blogDetailModal')) {
+      $('blogDetailModal').onclick = (e) => {
+        if (e.target === $('blogDetailModal')) closeBlogDetail();
+      };
+    }
+
     window.addEventListener('load', () => {
       loadMe();
       loadTrades();
@@ -1467,12 +2036,15 @@
       loadReferralTree();
       loadSalary();
       loadXauPrice();
+      loadDashboardBlogs();
       setInterval(loadXauPrice, 15000);
       setInterval(refresh, 1000);
+      setInterval(renderSignal, 1000);
       setInterval(loadTrades, 15000);
       setInterval(loadReferral, 15000);
       setInterval(loadReferralTree, 15000);
       setInterval(loadSalary, 60000);
+      setInterval(loadDashboardBlogs, 60000);
       loadChart();
     });
   </script>

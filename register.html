@@ -175,6 +175,14 @@
     <h1 class="title">Create Your Account</h1>
     <div class="sub">Global Capital Venture Holdings</div>
 
+    <div id="referralBanner" style="display:none;background:rgba(13,90,63,0.08);border:1.5px solid rgba(13,90,63,0.25);border-radius:10px;padding:12px 14px;margin-bottom:18px;font-size:13px;color:#0d5a3f;font-weight:700;align-items:center;gap:10px;">
+      <span style="font-size:16px;">✦</span>
+      <div>
+        <span style="display:block;font-size:11px;color:#597368;text-transform:uppercase;letter-spacing:0.08em;">Invited by Partner</span>
+        <span style="font-weight:800;color:#0f7a57;" id="refPartnerCode">GCVH-INVITE</span>
+      </div>
+    </div>
+
     <div id="alert" class="alert"></div>
 
     <div class="field">
@@ -194,7 +202,7 @@
 
     <div class="field">
       <label for="referralCode">Referral Code <span style="color:var(--text-muted);font-weight:normal">(optional)</span></label>
-      <input id="referralCode" type="text" autocomplete="off" placeholder="INVITE-CODE">
+      <input id="referralCode" type="text" autocomplete="off" placeholder="GCVH-XXXXX">
     </div>
 
     <button id="create" class="button" type="button">Create Account</button>
@@ -212,9 +220,23 @@
   <script src="config.js"></script>
   <script>
     const qs = new URLSearchParams(location.search);
-    const ref = qs.get('ref');
+    let ref = qs.get('ref') || qs.get('referral') || qs.get('code') || qs.get('r');
     if (ref) {
-      document.getElementById('referralCode').value = ref.trim().toUpperCase();
+      ref = ref.trim().toUpperCase();
+      sessionStorage.setItem('gcvh_ref_partner', ref);
+    } else {
+      ref = sessionStorage.getItem('gcvh_ref_partner') || '';
+    }
+
+    if (ref) {
+      const codeInput = document.getElementById('referralCode');
+      const banner = document.getElementById('referralBanner');
+      const partnerCode = document.getElementById('refPartnerCode');
+      if (codeInput) codeInput.value = ref;
+      if (banner && partnerCode) {
+        partnerCode.textContent = ref;
+        banner.style.display = 'flex';
+      }
     }
 
     function alertBox(text, ok) {
@@ -254,6 +276,9 @@
         if (!res.ok) {
           throw new Error(data.error || 'Registration failed.');
         }
+
+        // If registered successfully, clear stored session ref
+        sessionStorage.removeItem('gcvh_ref_partner');
 
         alertBox('Account created successfully! Redirecting you to sign in...', true);
         setTimeout(() => {

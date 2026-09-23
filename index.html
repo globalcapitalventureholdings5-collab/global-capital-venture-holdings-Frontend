@@ -419,29 +419,85 @@
       margin-bottom: 14px;
     }
 
+    /* LIVE RATE TICKER BAR */
+    .hero-ticker-wrap {
+      width: 100%;
+      background: rgba(4, 16, 11, 0.85);
+      border-bottom: 1px solid rgba(22, 229, 138, 0.18);
+      backdrop-filter: blur(10px);
+      overflow: hidden;
+      position: relative;
+      z-index: 5;
+      padding: 8px 0;
+    }
+    .ticker-track {
+      display: flex;
+      width: max-content;
+      animation: tickerScroll 28s linear infinite;
+    }
+    .ticker-track:hover {
+      animation-play-state: paused;
+    }
+    @keyframes tickerScroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .ticker-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 22px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #c9e4d9;
+      white-space: nowrap;
+      border-right: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .ticker-item .sym { color: #ffffff; font-weight: 800; }
+    .ticker-item .val { color: #5eead4; font-family: ui-monospace, SFMono-Regular, monospace; }
+    .ticker-item .up { color: #10b981; }
+    .ticker-item .down { color: #ef4444; }
+    .ticker-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 6px #10b981;
+      display: inline-block;
+    }
+
     /* HERO */
     .hero {
       position: relative;
       min-height: calc(100vh - 84px);
       display: flex;
-      align-items: center;
+      flex-direction: column;
+      justify-content: center;
       overflow: hidden;
-      background: #07130e;
+      background: #06140e;
     }
-    .tradingview-background {
+    .hero-clean-bg {
       position: absolute;
       inset: 0;
       width: 100%;
       height: 100%;
-      opacity: 0.38;
       pointer-events: none;
       z-index: 0;
+      background:
+        radial-gradient(circle at 80% 20%, rgba(16, 185, 129, 0.15) 0%, transparent 45%),
+        radial-gradient(circle at 20% 80%, rgba(15, 122, 87, 0.12) 0%, transparent 45%),
+        linear-gradient(135deg, rgba(6, 20, 14, 0.96) 0%, rgba(4, 14, 10, 0.98) 100%);
     }
-    .hero-overlay {
+    .hero-grid-pattern {
       position: absolute;
       inset: 0;
+      background-image: 
+        linear-gradient(rgba(16, 185, 129, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(16, 185, 129, 0.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+      opacity: 0.85;
+      pointer-events: none;
       z-index: 1;
-      background: linear-gradient(90deg, rgba(5, 17, 12, 0.94) 0%, rgba(5, 17, 12, 0.82) 50%, rgba(5, 17, 12, 0.6) 100%);
     }
     .hero-content {
       position: relative;
@@ -449,7 +505,7 @@
       max-width: 1320px;
       width: 100%;
       margin: auto;
-      padding: 80px 28px;
+      padding: 60px 28px 80px;
       color: #ffffff;
     }
     .live-badge {
@@ -464,6 +520,7 @@
       font-size: 12px;
       letter-spacing: 0.14em;
       font-weight: 700;
+      margin-bottom: 8px;
     }
     .live-dot {
       width: 8px;
@@ -471,6 +528,11 @@
       background: #16e58a;
       border-radius: 50%;
       box-shadow: 0 0 10px #16e58a;
+      animation: pulseDot 2s infinite;
+    }
+    @keyframes pulseDot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
     }
     h1 {
       font-family: Georgia, "Times New Roman", serif;
@@ -766,11 +828,30 @@
 
   <!-- HERO SECTION -->
   <main>
-    <section class="hero">
-      <div class="tradingview-background">
-        <div id="tradingview_chart" style="width:100%;height:100%"></div>
+    <!-- LIVE RATES TICKER TAPE -->
+    <div class="hero-ticker-wrap">
+      <div class="ticker-track" id="heroTickerTrack">
+        <div class="ticker-item"><span class="ticker-dot"></span><span class="sym">XAU/USD (Gold)</span> <span class="val" id="tickerXAU">$2,738.50</span> <span class="up">+0.84% ▲</span></div>
+        <div class="ticker-item"><span class="ticker-dot"></span><span class="sym">BTC/USDT</span> <span class="val" id="tickerBTC">$96,850.00</span> <span class="up">+2.30% ▲</span></div>
+        <div class="ticker-item"><span class="ticker-dot"></span><span class="sym">ETH/USDT</span> <span class="val" id="tickerETH">$2,795.20</span> <span class="up">+1.65% ▲</span></div>
+        <div class="ticker-item"><span class="ticker-dot"></span><span class="sym">EUR/USD</span> <span class="val">1.0862</span> <span class="up">+0.14% ▲</span></div>
+        <div class="ticker-item"><span class="ticker-dot"></span><span class="sym">GBP/USD</span> <span class="val">1.2995</span> <span class="up">+0.22% ▲</span></div>
+        <div class="ticker-item"><span class="ticker-dot"></span><span class="sym">SOL/USDT</span> <span class="val">$194.80</span> <span class="up">+3.40% ▲</span></div>
+        <div class="ticker-item"><span class="ticker-dot"></span><span class="sym">USD/JPY</span> <span class="val">152.18</span> <span class="down">-0.08% ▼</span></div>
+        <!-- Duplicated items for seamless infinite marquee loop -->
+        <div class="ticker-item"><span class="ticker-dot"></span><span class="sym">XAU/USD (Gold)</span> <span class="val" id="tickerXAU2">$2,738.50</span> <span class="up">+0.84% ▲</span></div>
+        <div class="ticker-item"><span class="ticker-dot"></span><span class="sym">BTC/USDT</span> <span class="val" id="tickerBTC2">$96,850.00</span> <span class="up">+2.30% ▲</span></div>
+        <div class="ticker-item"><span class="ticker-dot"></span><span class="sym">ETH/USDT</span> <span class="val" id="tickerETH2">$2,795.20</span> <span class="up">+1.65% ▲</span></div>
+        <div class="ticker-item"><span class="ticker-dot"></span><span class="sym">EUR/USD</span> <span class="val">1.0862</span> <span class="up">+0.14% ▲</span></div>
+        <div class="ticker-item"><span class="ticker-dot"></span><span class="sym">GBP/USD</span> <span class="val">1.2995</span> <span class="up">+0.22% ▲</span></div>
+        <div class="ticker-item"><span class="ticker-dot"></span><span class="sym">SOL/USDT</span> <span class="val">$194.80</span> <span class="up">+3.40% ▲</span></div>
+        <div class="ticker-item"><span class="ticker-dot"></span><span class="sym">USD/JPY</span> <span class="val">152.18</span> <span class="down">-0.08% ▼</span></div>
       </div>
-      <div class="hero-overlay"></div>
+    </div>
+
+    <section class="hero">
+      <div class="hero-clean-bg"></div>
+      <div class="hero-grid-pattern"></div>
       <div class="hero-content">
         <div class="live-badge"><span class="live-dot"></span>XAUUSD REAL-TIME ALGORITHMIC TRADING</div>
         <h1>Build Your <span>Global Financial Future.</span></h1>
@@ -949,25 +1030,50 @@
       document.querySelectorAll('.nav-btn-dashboard, #mobileDashboard').forEach(el => el.hidden = false);
     }
 
+    async function updateLiveTicker() {
+      try {
+        const r = await fetch('https://api.gold-api.com/price/XAU', { cache: 'no-store' });
+        if (r.ok) {
+          const d = await r.json();
+          const p = Number(d.price);
+          if (Number.isFinite(p)) {
+            const formatted = '$' + p.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            const el1 = document.getElementById('tickerXAU');
+            const el2 = document.getElementById('tickerXAU2');
+            if (el1) el1.textContent = formatted;
+            if (el2) el2.textContent = formatted;
+          }
+        }
+      } catch (e) {}
+
+      try {
+        const r = await fetch('https://api.binance.com/api/v3/ticker/price?symbols=["BTCUSDT","ETHUSDT"]', { cache: 'no-store' });
+        if (r.ok) {
+          const d = await r.json();
+          d.forEach(item => {
+            const p = Number(item.price);
+            if (Number.isFinite(p)) {
+              const formatted = '$' + p.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+              if (item.symbol === 'BTCUSDT') {
+                const el1 = document.getElementById('tickerBTC');
+                const el2 = document.getElementById('tickerBTC2');
+                if (el1) el1.textContent = formatted;
+                if (el2) el2.textContent = formatted;
+              } else if (item.symbol === 'ETHUSDT') {
+                const el1 = document.getElementById('tickerETH');
+                const el2 = document.getElementById('tickerETH2');
+                if (el1) el1.textContent = formatted;
+                if (el2) el2.textContent = formatted;
+              }
+            }
+          });
+        }
+      } catch (e) {}
+    }
+
     window.addEventListener('load', () => {
-      if (window.TradingView) {
-        new TradingView.widget({
-          width: '100%',
-          height: '100%',
-          symbol: 'OANDA:XAUUSD',
-          interval: '1',
-          timezone: 'Etc/UTC',
-          theme: 'dark',
-          style: '1',
-          locale: 'en',
-          toolbar_bg: '#07130e',
-          enable_publishing: false,
-          hide_top_toolbar: true,
-          hide_legend: true,
-          save_image: false,
-          container_id: 'tradingview_chart'
-        });
-      }
+      updateLiveTicker();
+      setInterval(updateLiveTicker, 15000);
     });
   </script>
 </body>
