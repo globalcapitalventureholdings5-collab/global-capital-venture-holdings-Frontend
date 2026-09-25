@@ -118,13 +118,13 @@ button{cursor:pointer}
 
 <section id="deposits" class="card section">
 <div class="section-head"><div class="section-title">Deposit Requests</div><div class="section-sub">Verify customer funding before package activation.</div></div>
-<div class="table-wrap"><table><thead><tr><th>ID</th><th>Customer</th><th>Amount</th><th>Asset</th><th>Network</th><th>TXID</th><th>Status</th><th>Action</th></tr></thead><tbody id="depositRows"></tbody></table></div>
+<div class="table-wrap"><table><thead><tr><th>ID</th><th>Customer</th><th>Amount</th><th>Method</th><th>TXID / Reference</th><th>Proof Screenshot</th><th>Status</th><th>Action</th></tr></thead><tbody id="depositRows"></tbody></table></div>
 </section>
 
 <section id="withdrawals" class="card section">
-<div id="manual-withdrawal-notice" style="margin:0 18px 14px;padding:12px 14px;border:1px solid rgba(230,198,111,.22);border-radius:10px;background:rgba(230,198,111,.06);color:#d9c989;font-size:12px;line-height:1.5"><strong>Manual payout:</strong> Copy the customer's destination, send the requested amount yourself, then click <b>Mark Paid</b> and enter the blockchain transaction ID or payment reference. This panel never sends withdrawals through Binance.</div>
+<div id="manual-withdrawal-notice" style="margin:0 18px 14px;padding:12px 14px;border:1px solid rgba(230,198,111,.22);border-radius:10px;background:rgba(230,198,111,.06);color:#d9c989;font-size:12px;line-height:1.5"><strong>Manual payout:</strong> Copy the customer's destination address/UID, send the requested net amount (after 10% fee), then click <b>Mark Paid</b> and enter the transaction ID. First withdrawal is unlocked anytime; subsequent withdrawals unlock after 15 days.</div>
 <div class="section-head"><div class="section-title">Withdrawal Requests</div><div class="section-sub">Approve or reject customer withdrawals.</div></div>
-<div class="table-wrap"><table><thead><tr><th>ID</th><th>Customer</th><th>Amount</th><th>Asset</th><th>Network</th><th>Destination</th><th>Status</th><th>Action</th></tr></thead><tbody id="withdrawalRows"></tbody></table></div>
+<div class="table-wrap"><table><thead><tr><th>ID</th><th>Customer</th><th>Gross Amount</th><th>Fee (10%)</th><th>Net Payout</th><th>Method</th><th>Destination</th><th>Status</th><th>Action</th></tr></thead><tbody id="withdrawalRows"></tbody></table></div>
 </section>
 
 <section id="customers" class="card section">
@@ -264,12 +264,18 @@ async function loadDashboard() {
     $("balanceRows").innerHTML = '<div class="balance"><div class="coin">BINANCE</div><div class="amount">Manual refresh</div><div class="muted">Use the refresh button below to request the current account balance.</div></div>';
 
     $("depositRows").innerHTML = deposits.length ? deposits.map(function(d) {
-      return '<tr><td>#'+escapeHtml(d.id)+'</td><td><b>'+escapeHtml(d.full_name)+'</b><br><span class="muted">'+escapeHtml(d.email)+'</span></td><td>'+escapeHtml(d.amount)+'</td><td>'+escapeHtml(d.asset)+'</td><td>'+escapeHtml(d.network)+'</td><td>'+escapeHtml(d.txid)+'</td><td><span class="badge '+escapeHtml(d.status)+'">'+escapeHtml(d.status)+'</span></td><td>'+(d.status==="pending"?'<button class="action approve" onclick="approveDeposit('+Number(d.id)+')">Approve</button>':'—')+'</td></tr>';
+      const proofHtml = d.proof_image
+        ? '<a href="'+escapeHtml(API+d.proof_image)+'" target="_blank" style="color:var(--gold2);font-weight:bold;text-decoration:underline;">View Proof ↗</a>'
+        : '<span class="muted">No file</span>';
+      return '<tr><td>#'+escapeHtml(d.id)+'</td><td><b>'+escapeHtml(d.full_name)+'</b><br><span class="muted">'+escapeHtml(d.email)+'</span></td><td>$'+Number(d.amount).toFixed(2)+'</td><td><span class="badge">'+escapeHtml(d.network || d.asset || 'USDT')+'</span></td><td><div style="max-width:180px;word-break:break-all">'+escapeHtml(d.txid)+'</div></td><td>'+proofHtml+'</td><td><span class="badge '+escapeHtml(d.status)+'">'+escapeHtml(d.status)+'</span></td><td>'+(d.status==="pending"?'<button class="action approve" onclick="approveDeposit('+Number(d.id)+')">Approve</button>':'—')+'</td></tr>';
     }).join("") : '<tr><td colspan="8"><div class="empty">No deposit requests.</div></td></tr>';
 
     $("withdrawalRows").innerHTML = withdrawals.length ? withdrawals.map(function(w) {
-      return '<tr><td>#'+escapeHtml(w.id)+'</td><td><b>'+escapeHtml(w.full_name)+'</b><br><span class="muted">'+escapeHtml(w.email)+'</span></td><td>'+escapeHtml(w.amount)+'</td><td>'+escapeHtml(w.asset)+'</td><td>'+escapeHtml(w.network)+'</td><td><div style="max-width:260px;word-break:break-all">'+escapeHtml(w.destination)+'</div></td><td><span class="badge '+escapeHtml(w.status)+'">'+escapeHtml(w.status)+'</span></td><td>'+(w.status==="pending"?'<div class="actions"><button class="action approve" onclick="processWithdrawal('+Number(w.id)+',\'approve\')">Mark Paid</button><button class="action reject" onclick="processWithdrawal('+Number(w.id)+',\'reject\')">Reject</button></div>':'—')+'</td></tr>';
-    }).join("") : '<tr><td colspan="8"><div class="empty">No withdrawal requests.</div></td></tr>';
+      const gross = Number(w.amount || 0);
+      const fee = Number(w.fee_amount || (gross * 0.10));
+      const net = Number(w.net_amount || (gross - fee));
+      return '<tr><td>#'+escapeHtml(w.id)+'</td><td><b>'+escapeHtml(w.full_name)+'</b><br><span class="muted">'+escapeHtml(w.email)+'</span></td><td>$'+gross.toFixed(2)+'</td><td><span style="color:var(--red)">-$'+fee.toFixed(2)+'</span></td><td><strong style="color:var(--green)">$'+net.toFixed(2)+'</strong></td><td><span class="badge">'+escapeHtml(w.network || w.asset || 'USDT')+'</span></td><td><div style="max-width:260px;word-break:break-all">'+escapeHtml(w.destination)+'</div></td><td><span class="badge '+escapeHtml(w.status)+'">'+escapeHtml(w.status)+'</span></td><td>'+(w.status==="pending"?'<div class="actions"><button class="action approve" onclick="processWithdrawal('+Number(w.id)+',\'approve\')">Mark Paid</button><button class="action reject" onclick="processWithdrawal('+Number(w.id)+',\'reject\')">Reject</button></div>':'—')+'</td></tr>';
+    }).join("") : '<tr><td colspan="9"><div class="empty">No withdrawal requests.</div></td></tr>';
 
     $("referralRows").innerHTML = referrals.length ? referrals.map(function(r) {
       return '<tr><td>#'+escapeHtml(r.id)+'</td><td><b>'+escapeHtml(r.referrer_name)+'</b><br><span class="muted">'+escapeHtml(r.referrer_email)+'</span></td><td><b>'+escapeHtml(r.referred_name)+'</b><br><span class="muted">'+escapeHtml(r.referred_email)+'</span></td><td>#'+escapeHtml(r.deposit_id)+'</td><td>'+escapeHtml(r.amount)+'</td><td><span class="badge confirmed">'+escapeHtml(r.status)+'</span></td><td>'+escapeHtml(r.created_at)+'</td></tr>';

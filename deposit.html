@@ -1,66 +1,589 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#07090b">
 <title>Complete Deposit | Global Capital Venture Holdings, Inc.</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
 <style>
-:root{--bg:#07090b;--panel:#0d1116;--gold:#d9ad4b;--gold2:#f1d17a;--text:#f5f5f2;--muted:#aeb1b5;--green:#16e58b;--red:#ff6b6b;--line:rgba(255,255,255,.08)}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.wrap{max-width:900px;margin:auto;padding:30px 18px 70px}.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}.brand{display:flex;gap:12px;align-items:center;color:#fff;text-decoration:none}.mark{width:44px;height:44px;border:1px solid var(--gold);border-radius:50%;display:grid;place-items:center;color:var(--gold2);font:24px Georgia,serif}.brand b{color:var(--gold2)}.back{color:#cfd3d7;text-decoration:none}.card{border:1px solid var(--line);background:linear-gradient(145deg,#101419,#090b0e);border-radius:22px;padding:28px;margin-bottom:18px}.tag{color:var(--gold);font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase}.hero h1{font:600 clamp(38px,6vw,62px)/1.05 Georgia,serif;margin:12px 0}.hero p{color:var(--muted);line-height:1.7}.amount{font:600 54px Georgia,serif;color:var(--gold2);margin:12px 0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.field{display:flex;flex-direction:column;gap:8px}.field label{font-size:12px;color:#9da3aa;text-transform:uppercase;letter-spacing:.1em}.field input,.field select{width:100%;min-height:50px;border:1px solid #303943;border-radius:11px;background:#080b0e;color:#fff;padding:0 14px;font:inherit}.address{display:flex;gap:10px;align-items:stretch}.address input{flex:1}.btn{min-height:52px;padding:0 22px;border-radius:12px;border:1px solid var(--gold);cursor:pointer;font-weight:700}.primary{background:linear-gradient(135deg,#f0cf78,#cfa447);color:#111}.secondary{background:transparent;color:#fff}.notice{padding:15px;border-radius:12px;background:rgba(217,173,75,.07);border:1px solid rgba(217,173,75,.2);color:#ddd;line-height:1.6}.status{display:none;padding:18px;border-radius:14px;border:1px solid rgba(22,229,139,.3);background:rgba(22,229,139,.06);color:#dfffee}.error{color:#ffb3b3;border-color:rgba(255,107,107,.35);background:rgba(255,107,107,.06)}.small{font-size:12px;color:#818991;line-height:1.6}@media(max-width:650px){.grid{grid-template-columns:1fr}.address{flex-direction:column}.top{align-items:flex-start}.amount{font-size:46px}}
+:root {
+  --bg: #07090b;
+  --panel: #0d1116;
+  --panel-card: #10151c;
+  --gold: #d9ad4b;
+  --gold2: #f1d17a;
+  --text: #f5f5f2;
+  --muted: #aeb1b5;
+  --green: #16e58b;
+  --red: #ff6b6b;
+  --line: rgba(255, 255, 255, 0.08);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  line-height: 1.5;
+}
+.wrap {
+  max-width: 900px;
+  margin: auto;
+  padding: 30px 18px 70px;
+}
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+.brand {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  color: #fff;
+  text-decoration: none;
+}
+.mark {
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--gold);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: var(--gold2);
+  font: 24px Georgia, serif;
+}
+.brand b { color: var(--gold2); }
+.back { color: #cfd3d7; text-decoration: none; font-size: 13px; font-weight: 700; }
+.back:hover { color: #fff; }
+
+.deposit-warning {
+  margin: 0 0 20px;
+  padding: 18px 22px;
+  border: 1px solid rgba(217, 173, 75, 0.3);
+  border-radius: 14px;
+  background: rgba(217, 173, 75, 0.06);
+  color: #e8d7ab;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.deposit-warning strong { color: var(--gold2); display: block; margin-bottom: 4px; }
+
+.card {
+  border: 1px solid var(--line);
+  background: linear-gradient(145deg, #101419, #090b0e);
+  border-radius: 20px;
+  padding: 26px;
+  margin-bottom: 20px;
+}
+.tag {
+  color: var(--gold);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.hero h1 {
+  font: 700 clamp(32px, 5vw, 50px)/1.1 Georgia, serif;
+  margin: 10px 0;
+}
+.hero p { color: var(--muted); line-height: 1.6; font-size: 14px; }
+.amount-badge {
+  display: inline-block;
+  font: 700 48px Georgia, serif;
+  color: var(--gold2);
+  margin: 12px 0 6px;
+}
+
+/* METHOD TABS */
+.methods-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin: 16px 0;
+}
+.method-btn {
+  padding: 14px 12px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1.5px solid var(--line);
+  color: #c9d2d9;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.method-btn:hover {
+  background: rgba(217, 173, 75, 0.08);
+  border-color: rgba(217, 173, 75, 0.4);
+  color: #fff;
+}
+.method-btn.active {
+  background: linear-gradient(145deg, rgba(217, 173, 75, 0.18), rgba(217, 173, 75, 0.06));
+  border-color: var(--gold);
+  color: #fff;
+  box-shadow: 0 0 20px rgba(217, 173, 75, 0.2);
+}
+.method-icon { font-size: 20px; }
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.field label {
+  font-size: 11px;
+  color: #9da3aa;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 800;
+}
+.field input, .field select {
+  width: 100%;
+  height: 48px;
+  border: 1px solid #303943;
+  border-radius: 10px;
+  background: #080b0e;
+  color: #fff;
+  padding: 0 14px;
+  font-size: 14px;
+  outline: none;
+}
+.field input:focus { border-color: var(--gold); }
+.address-box {
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+}
+.address-box input { flex: 1; font-family: ui-monospace, SFMono-Regular, monospace; font-size: 13px; color: var(--gold2); }
+
+.upload-zone {
+  border: 2px dashed rgba(217, 173, 75, 0.35);
+  border-radius: 14px;
+  padding: 22px;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+.upload-zone:hover {
+  border-color: var(--gold);
+  background: rgba(217, 173, 75, 0.04);
+}
+.upload-zone input[type="file"] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+}
+.upload-preview {
+  display: none;
+  align-items: center;
+  gap: 14px;
+  margin-top: 14px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: rgba(22, 229, 139, 0.08);
+  border: 1px solid rgba(22, 229, 139, 0.25);
+}
+.upload-preview img {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.btn {
+  min-height: 50px;
+  padding: 0 22px;
+  border-radius: 10px;
+  border: 1px solid var(--gold);
+  cursor: pointer;
+  font-weight: 800;
+  font-size: 14px;
+  transition: all 0.15s ease;
+}
+.primary {
+  background: linear-gradient(135deg, #f0cf78, #cfa447);
+  color: #111;
+  border: 0;
+  box-shadow: 0 4px 18px rgba(217, 173, 75, 0.25);
+}
+.primary:hover {
+  background: linear-gradient(135deg, #fce096, #dbae4e);
+  transform: translateY(-1px);
+}
+.secondary {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+.secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.notice {
+  padding: 14px 16px;
+  border-radius: 10px;
+  background: rgba(217, 173, 75, 0.08);
+  border: 1px solid rgba(217, 173, 75, 0.22);
+  color: #ddd;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.status {
+  display: none;
+  padding: 18px;
+  border-radius: 12px;
+  border: 1px solid rgba(22, 229, 139, 0.35);
+  background: rgba(22, 229, 139, 0.08);
+  color: #dfffee;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.status.error {
+  color: #ffb3b3;
+  border-color: rgba(255, 107, 107, 0.4);
+  background: rgba(255, 107, 107, 0.08);
+}
+.small { font-size: 12px; color: #818991; line-height: 1.6; }
+
+@media (max-width: 650px) {
+  .methods-grid { grid-template-columns: 1fr; }
+  .grid { grid-template-columns: 1fr; }
+  .address-box { flex-direction: column; }
+  .amount-badge { font-size: 38px; }
+}
 </style>
 </head>
 <body>
-<div class="deposit-warning" style="margin:20px 0;padding:24px;border:1px solid rgba(212,176,90,.45);border-radius:12px;background:#0b0f13;">
-  <strong>IMPORTANT — 180-DAY CAPITAL LOCK</strong>
-  <p>Once your deposit is confirmed, the package/capital amount will be subject to a 180-day lock period beginning on the confirmation date.</p>
-  <p>The package principal cannot be withdrawn during this 180-day period. Please review the withdrawal terms carefully before submitting your deposit.</p>
-</div>
 
 <div class="wrap">
-  <header class="top"><a href="index.html" class="brand"><span class="mark">✦</span><span>Global Capital<br><b>Venture Holdings, Inc.</b></span></a><a class="back" href="packages.html">← Packages</a></header>
-  <section class="card hero"><div class="tag">PACKAGE DEPOSIT</div><h1>Complete Your <span style="color:var(--gold2)">Deposit</span></h1><p>Choose a package, send the exact amount using the configured payment instructions, and submit the transaction ID. Your dashboard remains locked until the payment is verified.</p><div id="amount" class="amount">$0.00</div></section>
-  <section class="card"><div class="tag">1 · PAYMENT DETAILS</div><div class="grid" style="margin-top:18px"><div class="field"><label>Asset</label><input id="asset" value="USDT" readonly></div><div class="field"><label>Network</label><input id="network" value="TRX" readonly></div></div><div class="field" style="margin-top:16px"><label>Deposit Address</label><div class="address"><input id="address" readonly placeholder="Loading deposit address…"><button id="copyAddress" class="btn secondary" type="button">Copy</button></div></div><p id="tagRow" class="small" hidden>Tag / Memo: <strong id="tag"></strong></p><p id="instructions" class="notice" style="margin-top:16px">Loading payment instructions…</p><p class="small">Send only the displayed asset over the displayed network. Verify the address and network in your wallet before confirming.</p></section>
-  <section class="card"><div class="tag">2 · SUBMIT TRANSACTION</div><div class="grid" style="margin-top:18px"><div class="field"><label>Package Amount</label><input id="amountInput" type="number" readonly></div><div class="field"><label>Transaction ID (TXID)</label><input id="txid" maxlength="200" placeholder="Paste your transaction ID"></div></div><button id="submitDeposit" class="btn primary" type="button" style="margin-top:20px;width:100%">Submit Deposit for Verification</button><div id="status" class="status" style="margin-top:16px"></div></section>
-  <p class="small">After submission, the request is reviewed by the administrator. A package is activated only after the deposit is approved by the backend. Do not send funds until you have verified the payment details shown above.</p>
+  <header class="top">
+    <a href="index.html" class="brand">
+      <span class="mark">✦</span>
+      <span>Global Capital<br><b>Venture Holdings, Inc.</b></span>
+    </a>
+    <a class="back" href="packages.html">← Choose Package</a>
+  </header>
+
+  <div class="deposit-warning">
+    <strong>IMPORTANT — 180-DAY CAPITAL LOCK & WITHDRAWAL POLICY</strong>
+    Once your deposit is confirmed, the package principal is committed for a 180-day term. All daily trade growth (1.00%), 3-level referral commissions, and monthly leadership salaries can be withdrawn anytime on your first withdrawal, and every 15 days thereafter.
+  </div>
+
+  <section class="card hero">
+    <div class="tag">PACKAGE DEPOSIT</div>
+    <h1>Complete Your <span style="color:var(--gold2)">Deposit</span></h1>
+    <p>Select your preferred payment method (BEP20, TRC20, or Binance UID), transfer the exact amount, and submit the Transaction ID along with your payment proof screenshot.</p>
+    <div id="amountDisplay" class="amount-badge">$0.00</div>
+  </section>
+
+  <section class="card">
+    <div class="tag">1 · SELECT PAYMENT METHOD</div>
+    
+    <div class="methods-grid">
+      <button type="button" class="method-btn active" data-method="BEP20">
+        <span class="method-icon">🟡</span>
+        <span>USDT (BEP20)</span>
+        <small style="font-size:10px;color:var(--muted);">BNB Smart Chain</small>
+      </button>
+      <button type="button" class="method-btn" data-method="TRC20">
+        <span class="method-icon">🔴</span>
+        <span>USDT (TRC20)</span>
+        <small style="font-size:10px;color:var(--muted);">TRON Network</small>
+      </button>
+      <button type="button" class="method-btn" data-method="UID">
+        <span class="method-icon">💎</span>
+        <span>Binance UID</span>
+        <small style="font-size:10px;color:var(--muted);">Binance Pay</small>
+      </button>
+    </div>
+
+    <div class="field" style="margin-top:16px">
+      <label id="depositAddressLabel">USDT Deposit Address (BEP20)</label>
+      <div class="address-box">
+        <input id="depositAddress" readonly placeholder="Loading payment address…">
+        <button id="copyAddressBtn" class="btn secondary" type="button">Copy Address</button>
+      </div>
+    </div>
+
+    <p id="paymentInstructions" class="notice" style="margin-top:16px">
+      Send the exact package amount to this deposit address.
+    </p>
+    <p class="small" style="margin-top:10px;">
+      Double-check the network and address in your wallet before confirming the transfer.
+    </p>
+  </section>
+
+  <section class="card">
+    <div class="tag">2 · SUBMIT TRANSACTION DETAILS & PROOF</div>
+
+    <form id="depositForm" style="display:flex;flex-direction:column;gap:18px;margin-top:16px;">
+      <div class="grid">
+        <div class="field">
+          <label>Package Amount ($ USD)</label>
+          <input id="packageAmountInput" type="number" readonly>
+        </div>
+        <div class="field">
+          <label>Transaction ID (TXID) / Reference <span style="color:#ef4444;">*</span></label>
+          <input id="txidInput" name="txid" required placeholder="Paste your blockchain TXID or Binance Pay ID">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Payment Proof Screenshot (Optional / Recommended)</label>
+        <div class="upload-zone" id="uploadZone">
+          <input type="file" id="proofInput" name="proof" accept="image/jpeg,image/png,image/webp,image/jpg">
+          <div style="font-size:28px;margin-bottom:6px;">📸</div>
+          <strong style="color:var(--gold2);font-size:14px;display:block;">Click to browse or drop payment screenshot</strong>
+          <span style="font-size:11px;color:var(--muted);">Supports JPG, PNG, WEBP (Max 15MB)</span>
+        </div>
+
+        <div id="uploadPreview" class="upload-preview">
+          <img id="previewImg" src="" alt="Proof Preview">
+          <div style="flex:1;overflow:hidden;">
+            <strong id="previewFileName" style="display:block;font-size:12px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">screenshot.png</strong>
+            <span id="previewFileSize" style="font-size:11px;color:var(--muted);">1.2 MB</span>
+          </div>
+          <button type="button" id="removeProofBtn" style="background:transparent;border:0;color:#ef4444;font-size:14px;cursor:pointer;">✕ Remove</button>
+        </div>
+      </div>
+
+      <button id="submitDepositBtn" class="btn primary" type="submit" style="width:100%;margin-top:8px;">
+        Submit Deposit for Verification →
+      </button>
+
+      <div id="statusBox" class="status"></div>
+    </form>
+  </section>
+
+  <p class="small">
+    After submission, your deposit is reviewed by the verification team. Once verified, your portfolio dashboard unlocks immediately and your package begins generating 1.00% daily returns.
+  </p>
 </div>
+
 <script src="config.js"></script>
 <script>
 'use strict';
-const token=localStorage.getItem('gcvh_customer_token');
-if(!token){location.href='login.html?redirect='+encodeURIComponent(location.pathname+location.search);throw new Error('Authentication required');}
-const qs=new URLSearchParams(location.search);
-let amount=Number(qs.get('amount')||0);
-try{const saved=JSON.parse(localStorage.getItem('gcvh_selected_package')||'null');if(!amount&&saved)amount=Number(saved.amount)}catch(e){}
-const allowed=[10,25,50,100,200,300,500,1000,2500,5000,10000];
-if(!allowed.includes(amount)){location.href='index.html#packages';throw new Error('Invalid package');}
-const $=id=>document.getElementById(id);
-$('amount').textContent='$'+amount.toLocaleString('en-US');$('amountInput').value=amount;
-function status(text,error=false){const el=$('status');el.style.display='block';el.className='status'+(error?' error':'');el.textContent=text}
-async function loadFunding(){
-  try{
-    const r=await fetch(API+'/api/funding-info',{cache:'no-store'});const d=await r.json();
-    if(!r.ok)throw new Error(d.error||'Unable to load deposit details.');
-    $('asset').value=d.asset||'USDT';$('network').value=d.network||'TRX';$('address').value=d.address||'';$('instructions').textContent=d.instructions||'Send the exact package amount to this deposit address, then submit your transaction ID for verification.';
-    if(d.tag){$('tag').textContent=d.tag;$('tagRow').hidden=false}
-    if(!d.address){$('submitDeposit').disabled=true;status('Deposit address is not available yet. Please contact the account administrator.',true)}
-  }catch(e){status(e.message||'Unable to load deposit details.',true)}
+const token = localStorage.getItem('gcvh_customer_token');
+if (!token) {
+  location.href = 'login.html?redirect=' + encodeURIComponent(location.pathname + location.search);
+  throw new Error('Authentication required');
 }
-$('copyAddress').onclick=async()=>{const v=$('address').value;if(v){try{await navigator.clipboard.writeText(v);$('copyAddress').textContent='Copied';setTimeout(()=>$('copyAddress').textContent='Copy',1500)}catch(e){$('address').select();document.execCommand('copy')}}};
-$('submitDeposit').onclick=async()=>{
-  const txid=$('txid').value.trim();if(!txid){status('Enter the transaction ID (TXID) before submitting.',true);return}
-  $('submitDeposit').disabled=true;$('submitDeposit').textContent='Submitting…';
-  try{
-    const body={amount:amount,asset:$('asset').value,network:$('network').value,txid:txid,packageAmount:amount};
-    const r=await fetch(API+'/api/deposits',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify(body)});
-    const text=await r.text();let d={};try{d=text?JSON.parse(text):{}}catch(e){}
-    if(r.status===401){localStorage.removeItem('gcvh_customer_token');location.href='login.html';return}
-    if(!r.ok)throw new Error(d.error||'Deposit submission failed.');
-    localStorage.setItem('gcvh_pending_deposit',JSON.stringify({amount,txid,submittedAt:new Date().toISOString()}));
-    status('Deposit submitted successfully. Your payment is pending verification. The dashboard will unlock only after the administrator approves the deposit.');
-    $('txid').disabled=true;$('submitDeposit').textContent='Deposit Submitted';
-    const back=document.createElement('a');back.href='dashboard.html';back.className='btn secondary';back.style.display='block';back.style.textAlign='center';back.style.marginTop='12px';back.textContent='Check Dashboard Status';$('status').appendChild(back);
-  }catch(e){$('submitDeposit').disabled=false;$('submitDeposit').textContent='Submit Deposit for Verification';status(e.message||'Deposit submission failed.',true)}
+
+const qs = new URLSearchParams(location.search);
+let amount = Number(qs.get('amount') || 0);
+try {
+  const saved = JSON.parse(localStorage.getItem('gcvh_selected_package') || 'null');
+  if (!amount && saved) amount = Number(saved.amount);
+} catch (e) {}
+
+const allowed = [10, 25, 50, 100, 200, 300, 500, 1000, 2500, 5000, 10000];
+if (!allowed.includes(amount)) {
+  location.href = 'packages.html';
+  throw new Error('Invalid package amount');
+}
+
+const $ = id => document.getElementById(id);
+$('amountDisplay').textContent = '$' + amount.toLocaleString('en-US');
+$('packageAmountInput').value = amount;
+
+let fundingData = null;
+let currentMethod = 'BEP20';
+
+const DEFAULT_ADDRESSES = {
+  BEP20: {
+    label: 'USDT Deposit Address (BEP20 / BSC)',
+    address: '0x985794aEca35f629199343B06C1e457f97805187',
+    instructions: 'Send the exact amount of $' + amount + ' USDT (BEP20) to this BNB Smart Chain address.'
+  },
+  TRC20: {
+    label: 'USDT Deposit Address (TRC20 / TRON)',
+    address: 'TL7yY898v3vA1Xv3R8V9g2W8K9z8X7Xy8Z',
+    instructions: 'Send the exact amount of $' + amount + ' USDT (TRC20) to this Tron network address.'
+  },
+  UID: {
+    label: 'Binance UID / Pay ID',
+    address: '839201948',
+    instructions: 'Transfer the exact amount of $' + amount + ' USDT via Binance Pay to this Binance UID.'
+  }
 };
+
+function selectMethod(method) {
+  currentMethod = method;
+  document.querySelectorAll('.method-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.method === method);
+  });
+
+  const mData = (fundingData && fundingData.methods)
+    ? fundingData.methods.find(m => m.id === method)
+    : null;
+
+  const fallback = DEFAULT_ADDRESSES[method] || DEFAULT_ADDRESSES.BEP20;
+  const address = (mData && mData.address) ? mData.address : fallback.address;
+  const label = (mData && mData.name) ? `${mData.name} Address / UID` : fallback.label;
+  const instructions = (mData && mData.instructions) ? mData.instructions : fallback.instructions;
+
+  $('depositAddressLabel').textContent = label;
+  $('depositAddress').value = address;
+  $('paymentInstructions').textContent = instructions;
+}
+
+document.querySelectorAll('.method-btn').forEach(btn => {
+  btn.onclick = () => selectMethod(btn.dataset.method);
+});
+
+async function loadFunding() {
+  try {
+    const r = await fetch(API + '/api/funding-info', { cache: 'no-store' });
+    if (r.ok) {
+      fundingData = await r.json();
+    }
+  } catch (e) {}
+  selectMethod(currentMethod);
+}
+
+$('copyAddressBtn').onclick = async () => {
+  const v = $('depositAddress').value;
+  if (v) {
+    try {
+      await navigator.clipboard.writeText(v);
+      $('copyAddressBtn').textContent = 'Copied!';
+      setTimeout(() => $('copyAddressBtn').textContent = 'Copy Address', 1500);
+    } catch (e) {
+      $('depositAddress').select();
+      document.execCommand('copy');
+      $('copyAddressBtn').textContent = 'Copied!';
+    }
+  }
+};
+
+// Proof File Preview
+const proofInput = $('proofInput');
+const uploadPreview = $('uploadPreview');
+const previewImg = $('previewImg');
+const previewFileName = $('previewFileName');
+const previewFileSize = $('previewFileSize');
+const removeProofBtn = $('removeProofBtn');
+
+if (proofInput) {
+  proofInput.onchange = () => {
+    const file = proofInput.files && proofInput.files[0];
+    if (file) {
+      previewFileName.textContent = file.name;
+      previewFileSize.textContent = (file.size / (1024 * 1024)).toFixed(2) + ' MB';
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        previewImg.src = e.target.result;
+        uploadPreview.style.display = 'flex';
+      };
+      reader.readAsDataURL(file);
+    } else {
+      uploadPreview.style.display = 'none';
+    }
+  };
+}
+
+if (removeProofBtn) {
+  removeProofBtn.onclick = () => {
+    proofInput.value = '';
+    uploadPreview.style.display = 'none';
+    previewImg.src = '';
+  };
+}
+
+function showStatus(text, isError = false) {
+  const el = $('statusBox');
+  el.style.display = 'block';
+  el.className = 'status' + (isError ? ' error' : '');
+  el.textContent = text;
+}
+
+$('depositForm').onsubmit = async (e) => {
+  e.preventDefault();
+  const txid = $('txidInput').value.trim();
+  if (!txid) {
+    showStatus('Please enter the Transaction ID (TXID) or reference.', true);
+    return;
+  }
+
+  const submitBtn = $('submitDepositBtn');
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Submitting Deposit…';
+
+  try {
+    const formData = new FormData();
+    formData.append('amount', amount);
+    formData.append('packageAmount', amount);
+    formData.append('asset', 'USDT');
+    formData.append('network', currentMethod);
+    formData.append('txid', txid);
+
+    if (proofInput.files && proofInput.files[0]) {
+      formData.append('proof', proofInput.files[0]);
+    }
+
+    const r = await fetch(API + '/api/deposits', {
+      method: 'POST',
+      headers: { Authorization: 'Bearer ' + token },
+      body: formData
+    });
+
+    const d = await r.json().catch(() => ({}));
+    if (r.status === 401) {
+      localStorage.removeItem('gcvh_customer_token');
+      location.href = 'login.html';
+      return;
+    }
+
+    if (!r.ok) {
+      throw new Error(d.error || 'Deposit submission failed.');
+    }
+
+    localStorage.setItem('gcvh_pending_deposit', JSON.stringify({
+      amount,
+      txid,
+      network: currentMethod,
+      submittedAt: new Date().toISOString()
+    }));
+
+    showStatus('✓ Deposit submitted successfully! Your payment is pending administrator verification. The dashboard will unlock immediately upon approval.');
+    $('txidInput').disabled = true;
+    submitBtn.textContent = 'Deposit Submitted Successfully';
+
+    const dashLink = document.createElement('a');
+    dashLink.href = 'dashboard.html';
+    dashLink.className = 'btn secondary';
+    dashLink.style.display = 'block';
+    dashLink.style.textAlign = 'center';
+    dashLink.style.marginTop = '14px';
+    dashLink.textContent = 'Go to Dashboard →';
+    $('statusBox').appendChild(dashLink);
+
+  } catch (err) {
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Submit Deposit for Verification →';
+    showStatus(err.message || 'Deposit submission failed.', true);
+  }
+};
+
 loadFunding();
 </script>
-</body></html>
+</body>
+</html>
