@@ -465,7 +465,17 @@ body {
     </form>
   </section>
 
-  <p class="small">
+  <div class="card" style="margin-top:20px;padding:18px 22px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;background:rgba(217,173,75,0.05);border-color:rgba(217,173,75,0.2);">
+    <div>
+      <div style="font-size:11px;font-weight:800;color:var(--gold);text-transform:uppercase;letter-spacing:0.08em;">Need Assistance With Your Deposit?</div>
+      <div style="font-size:13px;color:#cdd5dc;margin-top:3px;">Our institutional funding desk is available 24/7 to assist with payment verification.</div>
+    </div>
+    <a href="mailto:globalcapitalventureholdings5@gmail.com" class="btn secondary" style="font-size:12px;min-height:38px;padding:0 16px;display:inline-flex;align-items:center;gap:6px;text-decoration:none;">
+      <span>✉</span> globalcapitalventureholdings5@gmail.com
+    </a>
+  </div>
+
+  <p class="small" style="margin-top:16px;">
     After submission, your deposit is reviewed by the verification team. Once verified, your portfolio dashboard unlocks immediately and your package begins generating 1.00% daily returns.
   </p>
 </div>
@@ -519,19 +529,19 @@ let currentMethod = 'BEP20';
 
 const DEFAULT_ADDRESSES = {
   BEP20: {
-    label: 'USDT Deposit Address (BEP20 / BSC)',
-    address: '0x985794aEca35f629199343B06C1e457f97805187',
+    label: 'USDT Deposit Address (BEP20 / BNB Smart Chain)',
+    address: '0xda9362094e07897b9fbcad372d353bcfec2cd88c',
     instructions: (amt) => 'Send the exact amount of $' + amt + ' USDT (BEP20) to this BNB Smart Chain address.'
   },
   TRC20: {
-    label: 'USDT Deposit Address (TRC20 / TRON)',
-    address: 'TL7yY898v3vA1Xv3R8V9g2W8K9z8X7Xy8Z',
+    label: 'USDT Deposit Address (TRC20 / TRON Network)',
+    address: 'TLYNo7HqiDBMzRPuuSPu3SQsL1Fx9gfD5w',
     instructions: (amt) => 'Send the exact amount of $' + amt + ' USDT (TRC20) to this Tron network address.'
   },
   UID: {
-    label: 'Binance UID / Pay ID',
-    address: '839201948',
-    instructions: (amt) => 'Transfer the exact amount of $' + amt + ' USDT via Binance Pay to this Binance UID.'
+    label: 'Binance UID / Pay ID (UID: 55868490)',
+    address: '55868490',
+    instructions: (amt) => 'Transfer the exact amount of $' + amt + ' USDT via Binance Pay to this Binance UID (55868490).'
   }
 };
 
@@ -575,16 +585,18 @@ async function loadFunding() {
 $('copyAddressBtn').onclick = async () => {
   const v = $('depositAddress').value;
   if (v) {
-    try {
-      await navigator.clipboard.writeText(v);
-      $('copyAddressBtn').textContent = 'Copied!';
-      setTimeout(() => $('copyAddressBtn').textContent = 'Copy Address', 1500);
-    } catch (e) {
-      $('depositAddress').select();
-      document.execCommand('copy');
-      $('copyAddressBtn').textContent = 'Copied!';
-      setTimeout(() => $('copyAddressBtn').textContent = 'Copy Address', 1500);
+    if (typeof window.copyToClipboard === 'function') {
+      window.copyToClipboard(v, 'Address copied to clipboard!');
+    } else {
+      try {
+        await navigator.clipboard.writeText(v);
+      } catch (e) {
+        $('depositAddress').select();
+        document.execCommand('copy');
+      }
     }
+    $('copyAddressBtn').textContent = 'Copied!';
+    setTimeout(() => $('copyAddressBtn').textContent = 'Copy Address', 1500);
   }
 };
 

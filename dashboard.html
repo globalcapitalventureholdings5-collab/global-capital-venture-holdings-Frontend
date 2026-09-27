@@ -1114,9 +1114,156 @@
 
     @keyframes dashSpin { 100% { transform: rotate(360deg); } }
 
+    /* USER DETAILS & OFFICIAL WALLETS SECTION */
+    .user-account-section {
+      margin-bottom: 24px;
+    }
+    .user-info-banner {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 14px;
+      padding: 18px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: rgba(0, 0, 0, 0.25);
+      margin-bottom: 20px;
+    }
+    .user-info-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 0;
+    }
+    .user-info-item .item-label {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .user-info-item .item-value {
+      font-size: 14px;
+      font-weight: 700;
+      color: #ffffff;
+      word-break: break-all;
+      overflow-wrap: anywhere;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .copy-pill-btn {
+      padding: 3px 8px;
+      border-radius: 6px;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      background: rgba(16, 185, 129, 0.1);
+      color: var(--primary-green);
+      font-size: 10px;
+      font-weight: 800;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s ease;
+    }
+    .copy-pill-btn:hover {
+      background: var(--primary-green);
+      color: #07120c;
+    }
+    .wallets-display-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .wallet-card-item {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: all 0.2s ease;
+      min-width: 0;
+    }
+    .wallet-card-item:hover {
+      border-color: rgba(16, 185, 129, 0.4);
+      background: rgba(16, 185, 129, 0.03);
+    }
+    .wallet-card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .wallet-card-title {
+      font-weight: 800;
+      font-size: 13px;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .wallet-badge-pill {
+      font-size: 10px;
+      font-weight: 900;
+      padding: 3px 8px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      white-space: nowrap;
+    }
+    .badge-trc { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+    .badge-bep { background: rgba(243, 207, 122, 0.15); color: var(--gold); border: 1px solid rgba(243, 207, 122, 0.3); }
+    .badge-uid { background: rgba(16, 185, 129, 0.15); color: var(--primary-green); border: 1px solid rgba(16, 185, 129, 0.3); }
+    .wallet-address-container {
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-family: ui-monospace, SFMono-Regular, monospace;
+      font-size: 12px;
+      color: #e2ede8;
+      word-break: break-all;
+      overflow-wrap: anywhere;
+      line-height: 1.4;
+      user-select: all;
+    }
+    .btn-copy-wallet {
+      width: 100%;
+      height: 40px;
+      border-radius: 9px;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      margin-top: auto;
+    }
+    .btn-copy-wallet:hover {
+      background: var(--primary-green);
+      color: #07120c;
+    }
+    .corporate-support-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 16px 20px;
+      border-radius: 14px;
+      background: rgba(243, 207, 122, 0.05);
+      border: 1px solid rgba(243, 207, 122, 0.22);
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
     /* RESPONSIVENESS */
     @media (max-width: 1150px) {
       .statistics-grid { grid-template-columns: repeat(2, 1fr); }
+      .wallets-display-grid { grid-template-columns: repeat(2, 1fr); }
     }
     @media (max-width: 1050px) {
       .signal-layout { grid-template-columns: 1fr; }
@@ -1148,6 +1295,7 @@
       }
       .market-price-row { grid-template-columns: 1fr; }
       .statistics-grid { grid-template-columns: 1fr; }
+      .wallets-display-grid { grid-template-columns: 1fr; }
       .signal-details-grid { grid-template-columns: repeat(2, 1fr); }
       .payout-card-row { flex-direction: column; align-items: flex-start; }
       .payout-card-row button { width: 100%; }
@@ -1191,6 +1339,7 @@
 
       <nav class="sidebar-navigation">
         <a href="dashboard.html" class="active"><span>▦</span> Portfolio Overview</a>
+        <a href="#userDetailsSection"><span>👤</span> User & Wallet Details</a>
         <a href="dashboard-signals.html"><span>⚡</span> Daily Signals & 1% ROI</a>
         <a href="dashboard-market.html"><span>◈</span> Live XAUUSD Terminal</a>
         <a href="dashboard-earnings.html"><span>📈</span> Earnings & ROI Ledger</a>
@@ -1218,11 +1367,86 @@
 
     <!-- LOCKED DASHBOARD STATE -->
     <div id="dashboardLocked" class="dashboard-locked" hidden>
-      <div class="locked-card">
+      <div class="locked-card" style="width:min(840px, 100%);">
         <div class="locked-icon-badge">🔒</div>
         <div class="section-tag">ACCOUNT NOT ACTIVATED</div>
         <h1>Your Dashboard is Locked</h1>
-        <p id="lockedMessage">Your account is registered, but no investment package has been activated yet. Select a package, complete the deposit, and wait for administrator verification. The dashboard will unlock after approval.</p>
+        <p id="lockedMessage">Your account is registered, but no investment package has been activated yet. Transfer your package amount to our official settlement wallets below, submit your TXID on the deposit page, and wait for administrator verification.</p>
+        
+        <!-- LOCKED USER & WALLET DETAILS -->
+        <div style="margin:24px 0 20px;text-align:left;">
+          <div class="user-info-banner">
+            <div class="user-info-item">
+              <span class="item-label">Account UID</span>
+              <div class="item-value">
+                <span id="lockedUserUid">55868490</span>
+                <button type="button" class="copy-pill-btn" onclick="copyValue('55868490', 'UID Copied!')">Copy</button>
+              </div>
+            </div>
+            <div class="user-info-item">
+              <span class="item-label">Client Name</span>
+              <div class="item-value" id="lockedUserName">Private Client</div>
+            </div>
+            <div class="user-info-item">
+              <span class="item-label">Account Email</span>
+              <div class="item-value" id="lockedUserEmail">client@gcvh.com</div>
+            </div>
+            <div class="user-info-item">
+              <span class="item-label">Status</span>
+              <div class="item-value" style="color:var(--gold);">● Awaiting Deposit</div>
+            </div>
+          </div>
+
+          <div style="font-size:11px;font-weight:800;color:var(--gold);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:12px;">
+            Official Funding & Deposit Wallets
+          </div>
+          
+          <div class="wallets-display-grid">
+            <div class="wallet-card-item">
+              <div class="wallet-card-top">
+                <span class="wallet-card-title">🔴 USDT (TRC20)</span>
+                <span class="wallet-badge-pill badge-trc">TRON Network</span>
+              </div>
+              <div class="wallet-address-container" id="lockedTrc20">TLYNo7HqiDBMzRPuuSPu3SQsL1Fx9gfD5w</div>
+              <button type="button" class="btn-copy-wallet" onclick="copyWalletAddr('TLYNo7HqiDBMzRPuuSPu3SQsL1Fx9gfD5w', this)">
+                <span>📋</span> Copy TRC20 Wallet
+              </button>
+            </div>
+
+            <div class="wallet-card-item">
+              <div class="wallet-card-top">
+                <span class="wallet-card-title">🟡 USDT (BEP20)</span>
+                <span class="wallet-badge-pill badge-bep">BNB Smart Chain</span>
+              </div>
+              <div class="wallet-address-container" id="lockedBep20">0xda9362094e07897b9fbcad372d353bcfec2cd88c</div>
+              <button type="button" class="btn-copy-wallet" onclick="copyWalletAddr('0xda9362094e07897b9fbcad372d353bcfec2cd88c', this)">
+                <span>📋</span> Copy BEP20 Wallet
+              </button>
+            </div>
+
+            <div class="wallet-card-item">
+              <div class="wallet-card-top">
+                <span class="wallet-card-title">💎 Binance Pay UID</span>
+                <span class="wallet-badge-pill badge-uid">Binance Pay</span>
+              </div>
+              <div class="wallet-address-container" id="lockedBinanceUid">55868490</div>
+              <button type="button" class="btn-copy-wallet" onclick="copyWalletAddr('55868490', this)">
+                <span>📋</span> Copy Binance UID
+              </button>
+            </div>
+          </div>
+
+          <div class="corporate-support-bar">
+            <div>
+              <div style="font-size:11px;font-weight:800;color:var(--gold);text-transform:uppercase;">Institutional Help & Support</div>
+              <div style="font-size:12px;color:#cbd5e1;margin-top:2px;">Contact customer desk for assistance: <strong>globalcapitalventureholdings5@gmail.com</strong></div>
+            </div>
+            <a href="mailto:globalcapitalventureholdings5@gmail.com" class="btn btn-outline" style="font-size:12px;min-height:36px;padding:0 14px;border-color:rgba(243,207,122,0.4);color:var(--gold);">
+              <span>✉</span> Email Support Desk
+            </a>
+          </div>
+        </div>
+
         <div class="locked-actions" style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:24px;">
           <a class="btn btn-primary" href="deposit.html" style="background:linear-gradient(135deg,var(--gold),#a88132);color:#07120c;font-weight:900;text-transform:uppercase;">↓ Complete Deposit / Fund Account →</a>
           <a class="btn btn-outline" href="packages.html" style="border:1px solid var(--border);color:#fff;">View Investment Packages</a>
@@ -1251,6 +1475,118 @@
           <div class="status-indicator">
             <span class="live-dot"></span>
             <span id="headerAccountStatus">Checking account...</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- USER INFORMATION & OFFICIAL FUNDING WALLETS SECTION -->
+      <section id="userDetailsSection" class="dashboard-card user-account-section">
+        <div class="card-head">
+          <div>
+            <div class="section-tag">ACCOUNT DETAILS & OFFICIAL WALLETS</div>
+            <h2>User Profile & <span>Payment Methods</span></h2>
+          </div>
+          <div class="status-indicator">
+            <span class="live-dot"></span>
+            <span id="profileActiveBadge">VERIFIED CLIENT</span>
+          </div>
+        </div>
+
+        <div class="user-info-banner">
+          <div class="user-info-item">
+            <span class="item-label">Account UID</span>
+            <div class="item-value">
+              <span id="displayUserUid">55868490</span>
+              <button type="button" class="copy-pill-btn" onclick="copyValue(document.getElementById('displayUserUid').textContent, 'UID Copied!')">Copy</button>
+            </div>
+          </div>
+          <div class="user-info-item">
+            <span class="item-label">Client Name</span>
+            <div class="item-value" id="displayUserName">Private Client</div>
+          </div>
+          <div class="user-info-item">
+            <span class="item-label">Email Address</span>
+            <div class="item-value" id="displayUserEmail">client@gcvh.com</div>
+          </div>
+          <div class="user-info-item">
+            <span class="item-label">Active Package</span>
+            <div class="item-value" id="displayUserPackage" style="color:var(--gold);">$100 Starter</div>
+          </div>
+          <div class="user-info-item">
+            <span class="item-label">Referral Code</span>
+            <div class="item-value">
+              <span id="displayRefCode">—</span>
+              <button type="button" class="copy-pill-btn" onclick="copyValue(document.getElementById('displayRefCode').textContent, 'Referral code copied!')">Copy</button>
+            </div>
+          </div>
+          <div class="user-info-item">
+            <span class="item-label">Account Verification</span>
+            <div class="item-value" style="color:var(--primary-green);">● Active & Protected</div>
+          </div>
+        </div>
+
+        <div style="margin-bottom:14px;">
+          <div style="font-size:11px;font-weight:800;color:var(--gold);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:4px;">
+            Official Platform Funding & Settlement Wallets
+          </div>
+          <p style="font-size:12px;color:var(--text-muted);line-height:1.5;">
+            Use these verified official addresses for all package deposits and account funding. Click copy to copy directly to clipboard.
+          </p>
+        </div>
+
+        <div class="wallets-display-grid">
+          <!-- TRC20 -->
+          <div class="wallet-card-item">
+            <div class="wallet-card-top">
+              <span class="wallet-card-title">🔴 USDT (TRC20)</span>
+              <span class="wallet-badge-pill badge-trc">TRON Network</span>
+            </div>
+            <div class="wallet-address-container" id="dashTrc20">TLYNo7HqiDBMzRPuuSPu3SQsL1Fx9gfD5w</div>
+            <button type="button" class="btn-copy-wallet" onclick="copyWalletAddr('TLYNo7HqiDBMzRPuuSPu3SQsL1Fx9gfD5w', this)">
+              <span>📋</span> Copy TRC20 Wallet
+            </button>
+          </div>
+
+          <!-- BEP20 -->
+          <div class="wallet-card-item">
+            <div class="wallet-card-top">
+              <span class="wallet-card-title">🟡 USDT (BEP20)</span>
+              <span class="wallet-badge-pill badge-bep">BNB Smart Chain</span>
+            </div>
+            <div class="wallet-address-container" id="dashBep20">0xda9362094e07897b9fbcad372d353bcfec2cd88c</div>
+            <button type="button" class="btn-copy-wallet" onclick="copyWalletAddr('0xda9362094e07897b9fbcad372d353bcfec2cd88c', this)">
+              <span>📋</span> Copy BEP20 Wallet
+            </button>
+          </div>
+
+          <!-- Binance UID -->
+          <div class="wallet-card-item">
+            <div class="wallet-card-top">
+              <span class="wallet-card-title">💎 Binance UID</span>
+              <span class="wallet-badge-pill badge-uid">Binance Pay</span>
+            </div>
+            <div class="wallet-address-container" id="dashBinanceUid">55868490</div>
+            <button type="button" class="btn-copy-wallet" onclick="copyWalletAddr('55868490', this)">
+              <span>📋</span> Copy Binance UID
+            </button>
+          </div>
+        </div>
+
+        <!-- CORPORATE SUPPORT AREA -->
+        <div class="corporate-support-bar">
+          <div>
+            <div style="font-size:11px;font-weight:800;color:var(--gold);text-transform:uppercase;letter-spacing:0.08em;">Dedicated Corporate Support Desk</div>
+            <div style="font-size:13px;color:#cdd5dc;margin-top:2px;">
+              For institutional inquiries, deposits, or account support: <a href="mailto:globalcapitalventureholdings5@gmail.com" style="color:var(--gold);font-weight:700;text-decoration:underline;">globalcapitalventureholdings5@gmail.com</a>
+            </div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:center;">
+            <a href="mailto:globalcapitalventureholdings5@gmail.com" class="btn btn-gold" style="font-size:12px;min-height:38px;padding:0 16px;text-decoration:none;display:inline-flex;align-items:center;gap:6px;">
+              <span>✉</span> Send Email
+            </a>
+            <button type="button" class="btn btn-outline" style="font-size:12px;min-height:38px;padding:0 14px;" onclick="copyValue('globalcapitalventureholdings5@gmail.com', 'Support email copied!')">
+              Copy Email
+            </button>
           </div>
         </div>
       </section>
@@ -2228,6 +2564,43 @@
     $('sendChat').onclick = () => { let v = $('chatInput').value.trim(); if (v) { addChat('You', v); $('chatInput').value = ''; } };
     $('chatInput').addEventListener('keydown', e => { if (e.key === 'Enter') $('sendChat').click(); });
 
+    window.copyValue = async function(val, successMsg) {
+      if (!val) return;
+      if (typeof window.copyToClipboard === 'function') {
+        window.copyToClipboard(val, successMsg || 'Copied to clipboard!');
+      } else {
+        try {
+          await navigator.clipboard.writeText(val);
+        } catch (e) {
+          const t = document.createElement('textarea');
+          t.value = val;
+          document.body.appendChild(t);
+          t.select();
+          document.execCommand('copy');
+          document.body.removeChild(t);
+        }
+        if (typeof window.showToast === 'function') {
+          window.showToast(successMsg || 'Copied to clipboard!', 'success');
+        }
+      }
+    };
+
+    window.copyWalletAddr = async function(addr, btn) {
+      if (!addr) return;
+      await window.copyValue(addr, 'Wallet address copied to clipboard!');
+      if (btn) {
+        const orig = btn.innerHTML;
+        btn.innerHTML = '<span>✓</span> Copied!';
+        btn.style.background = 'var(--primary-green)';
+        btn.style.color = '#07120c';
+        setTimeout(() => {
+          btn.innerHTML = orig;
+          btn.style.background = '';
+          btn.style.color = '';
+        }, 1800);
+      }
+    };
+
     // Load User Account
     async function loadMe() {
       try {
@@ -2244,6 +2617,22 @@
         const principal = Number(d.principal || 0);
         const packageAmount = Number(d.package_amount || 0);
         accountActive = principal > 0 || packageAmount > 0;
+
+        const userName = d.full_name || 'Private Client';
+        const userEmail = d.email || 'client@gcvh.com';
+        const userUid = d.uid || d.id || '55868490';
+        const refCode = d.referral_code || '—';
+        const pkgText = d.tier ? ('$' + Number(d.package_amount || principal || 100).toLocaleString('en-US') + ' ' + d.tier) : (principal > 0 ? '$' + principal.toLocaleString('en-US') + ' Active' : 'No Active Package');
+
+        if ($('lockedUserName')) $('lockedUserName').textContent = userName;
+        if ($('lockedUserEmail')) $('lockedUserEmail').textContent = userEmail;
+        if ($('lockedUserUid')) $('lockedUserUid').textContent = userUid;
+
+        if ($('displayUserName')) $('displayUserName').textContent = userName;
+        if ($('displayUserEmail')) $('displayUserEmail').textContent = userEmail;
+        if ($('displayUserUid')) $('displayUserUid').textContent = userUid;
+        if ($('displayUserPackage')) $('displayUserPackage').textContent = pkgText;
+        if ($('displayRefCode')) $('displayRefCode').textContent = refCode;
 
         if (!accountActive) {
           showLocked('Your account is registered, but no investment package has been activated yet. Select a package, complete the deposit, and wait for administrator verification. The dashboard will unlock after approval.');
@@ -2264,7 +2653,7 @@
           withdrawalLocked: !!d.withdrawal_locked
         };
 
-        if ($('sidebarUserName')) $('sidebarUserName').textContent = d.full_name || 'Private Client';
+        if ($('sidebarUserName')) $('sidebarUserName').textContent = userName;
         if ($('packageTierName')) $('packageTierName').textContent = d.tier ? `${d.tier} Package` : 'Active';
         if ($('qualifiedDaysCount')) $('qualifiedDaysCount').textContent = `${d.qualified_days || 0} Clicks Qualified`;
         if ($('modalAvailableAmount')) $('modalAvailableAmount').textContent = money(investment.availableWithdrawal, 2);
