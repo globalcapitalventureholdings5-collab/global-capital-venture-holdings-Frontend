@@ -7,15 +7,16 @@ const CONFIG = {
       const custom = localStorage.getItem('gcvh_api_endpoint');
       if (custom && custom.trim()) return custom.trim().replace(/\/+$/, '');
     } catch (e) {}
-    if (window.location.protocol === 'file:' || !window.location.hostname) {
-      return (typeof navigator !== 'undefined' && navigator.userAgent && navigator.userAgent.includes('Android'))
-        ? 'http://10.0.2.2:8080'
-        : 'http://localhost:8080';
+    if (window.location.protocol === 'file:' || !window.location.hostname || window.location.origin === 'null') {
+      return 'https://globalcapitalventureholdings.com';
     }
-    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+    if ((window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') && window.location.port === '8080') {
       return 'http://localhost:8080';
     }
-    return window.location.origin;
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+      return 'https://globalcapitalventureholdings.com';
+    }
+    return window.location.origin || 'https://globalcapitalventureholdings.com';
   })(),
   TRC20_WALLET: 'TLYNo7HqiDBMzRPuuSPu3SQsL1Fx9gfD5w',
   BEP20_WALLET: '0xda9362094e07897b9fbcad372d353bcfec2cd88c',
