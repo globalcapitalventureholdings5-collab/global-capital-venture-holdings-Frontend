@@ -253,15 +253,21 @@ a{color:inherit;text-decoration:none}
 
   async function loadBlogs() {
     try {
-      const res = await fetch(`${window.GCVH_CONFIG.API_BASE_URL}/admin/blogs`, {
+      const baseUrl = (window.GCVH_CONFIG && window.GCVH_CONFIG.API_BASE_URL) ? window.GCVH_CONFIG.API_BASE_URL : (typeof API !== 'undefined' ? API : '');
+      let res = await fetch(`${baseUrl}/admin/blogs`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
+      if (!res.ok) {
+        res = await fetch(`${baseUrl}/blogs?limit=200`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+      }
       if (!res.ok) throw new Error('Failed to load blogs');
       const data = await res.json();
-      allBlogs = data.blogs || [];
+      allBlogs = Array.isArray(data) ? data : (data.blogs || data.items || []);
       render();
     } catch (err) {
-      showAlert(err.message, true);
+      showAlert(err.message || 'Failed to load blogs', true);
     }
   }
 
@@ -284,7 +290,7 @@ a{color:inherit;text-decoration:none}
     const q = (document.getElementById('searchInput').value || '').toLowerCase().trim();
     const filtered = allBlogs.filter(b => {
       if (!q) return true;
-      const title = (b.title || '').toLowerCase();
+      const title = (b.name || b.title || '').toLowerCase();
       const desc = (b.description || '').toLowerCase();
       const author = (b.author || b.author_name || b.author_email || '').toLowerCase();
       return title.includes(q) || desc.includes(q) || author.includes(q);
@@ -295,10 +301,15 @@ a{color:inherit;text-decoration:none}
       return;
     }
 
+    const baseUrl = (window.GCVH_CONFIG && window.GCVH_CONFIG.API_BASE_URL) ? window.GCVH_CONFIG.API_BASE_URL : (typeof API !== 'undefined' ? API : '');
+    const cleanHost = baseUrl.replace(/\/api\/?$/, '');
+
     tbody.innerHTML = filtered.map(b => {
-      const vidUrl = b.video_url ? (b.video_url.startsWith('http') ? b.video_url : `${window.GCVH_CONFIG.API_BASE_URL.replace('/api','')}${b.video_url}`) : '';
+      const vidUrl = b.video_url ? (b.video_url.startsWith('http') ? b.video_url : `${cleanHost}${b.video_url.startsWith('/') ? '' : '/'}${b.video_url}`) : '';
       const authorName = b.author || b.author_name || (b.user_id ? `User #${b.user_id}` : 'GCVH Institutional Desk');
       const authorEmail = b.author_email ? `<div class="muted">${b.author_email}</div>` : (b.user_id ? '<div class="muted">Member Submission</div>' : '<div class="muted" style="color:var(--green)">Verified Editorial</div>');
+      const itemTitle = b.name || b.title || 'Market Research';
+      const itemPrice = b.price !== undefined ? b.price : (b.valuation || 'Market Brief');
 
       return `
         <tr>
@@ -309,14 +320,14 @@ a{color:inherit;text-decoration:none}
             ` : '<span class="muted">No media</span>'}
           </td>
           <td style="max-width:320px;">
-            <div style="font-weight:700;color:#fff;font-size:12px">${b.title}</div>
+            <div style="font-weight:700;color:#fff;font-size:12px">${itemTitle}</div>
             <div class="muted" style="margin-top:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${b.description || ''}</div>
           </td>
           <td>
             <b>${authorName}</b>
             ${authorEmail}
           </td>
-          <td style="font-weight:800;color:var(--gold2)">${b.price || b.valuation || 'Market Brief'}</td>
+          <td style="font-weight:800;color:var(--gold2)">$${Number(itemPrice || 0).toLocaleString('en-US')}</td>
           <td class="muted">${new Date(b.created_at || Date.now()).toLocaleDateString()}</td>
           <td>
             <div class="actions">
@@ -334,8 +345,8 @@ a{color:inherit;text-decoration:none}
     const blog = allBlogs.find(b => b.id == id);
     if (!blog) return;
     document.getElementById('editBlogId').value = blog.id;
-    document.getElementById('editTitle').value = blog.title || '';
-    document.getElementById('editValuation').value = blog.price || blog.valuation || '';
+    document.getElementById('editTitle').value = blog.name || blog.title || '';
+    document.getElementById('editValuation').value = blog.price !== undefined ? blog.price : (blog.valuation || '');
     document.getElementById('editDescription').value = blog.description || '';
     document.getElementById('editVideoFile').value = '';
     document.getElementById('editModal').classList.add('open');
@@ -350,6 +361,7 @@ a{color:inherit;text-decoration:none}
     const id = document.getElementById('editBlogId').value;
     const formData = new FormData();
     formData.append('title', document.getElementById('editTitle').value.trim());
+    formData.append('name', document.getElementById('editTitle').value.trim());
     formData.append('price', document.getElementById('editValuation').value.trim());
     formData.append('description', document.getElementById('editDescription').value.trim());
     
@@ -357,7 +369,8 @@ a{color:inherit;text-decoration:none}
     if (file) formData.append('video', file);
 
     try {
-      const res = await fetch(`${window.GCVH_CONFIG.API_BASE_URL}/blogs/${id}`, {
+      const baseUrl = (window.GCVH_CONFIG && window.GCVH_CONFIG.API_BASE_URL) ? window.GCVH_CONFIG.API_BASE_URL : (typeof API !== 'undefined' ? API : '');
+      const res = await fetch(`${baseUrl}/admin/blogs/${id}`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -365,7 +378,7 @@ a{color:inherit;text-decoration:none}
         body: formData
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.message || 'Edit failed');
+      if (!res.ok) throw new Error(data.error || data.message || 'Edit failed');
       showAlert(`Publication #${id} updated successfully!`);
       closeEdit();
       loadBlogs();
@@ -381,14 +394,15 @@ a{color:inherit;text-decoration:none}
     }
 
     try {
-      const res = await fetch(`${window.GCVH_CONFIG.API_BASE_URL}/blogs/${id}`, {
+      const baseUrl = (window.GCVH_CONFIG && window.GCVH_CONFIG.API_BASE_URL) ? window.GCVH_CONFIG.API_BASE_URL : (typeof API !== 'undefined' ? API : '');
+      const res = await fetch(`${baseUrl}/admin/blogs/${id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
         }
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.message || 'Delete failed');
+      if (!res.ok) throw new Error(data.error || data.message || 'Delete failed');
       showAlert(`Publication #${id} and video media deleted successfully!`);
       loadBlogs();
     } catch (err) {
@@ -412,13 +426,15 @@ a{color:inherit;text-decoration:none}
 
     const formData = new FormData();
     formData.append('title', document.getElementById('createTitle').value.trim());
+    formData.append('name', document.getElementById('createTitle').value.trim());
     formData.append('price', document.getElementById('createValuation').value.trim());
     formData.append('description', document.getElementById('createDescription').value.trim());
     formData.append('author', 'GCVH Institutional Desk');
     formData.append('video', file);
 
     try {
-      const res = await fetch(`${window.GCVH_CONFIG.API_BASE_URL}/blogs`, {
+      const baseUrl = (window.GCVH_CONFIG && window.GCVH_CONFIG.API_BASE_URL) ? window.GCVH_CONFIG.API_BASE_URL : (typeof API !== 'undefined' ? API : '');
+      const res = await fetch(`${baseUrl}/admin/blogs`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -426,7 +442,7 @@ a{color:inherit;text-decoration:none}
         body: formData
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.message || 'Failed to publish');
+      if (!res.ok) throw new Error(data.error || data.message || 'Failed to publish');
       showAlert('✓ Video publication successfully posted to global market feed!');
       closeCreate();
       document.getElementById('createForm').reset();
