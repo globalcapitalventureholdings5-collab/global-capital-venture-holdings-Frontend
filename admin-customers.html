@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GCVH — Admin Customer Accounts Desk</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<style>
+*{box-sizing:border-box}
+:root{--bg:#070a0d;--panel:#0e141a;--panel2:#111920;--line:#222c35;--gold:#d5ad5a;--gold2:#f1d48b;--text:#f4f6f8;--muted:#7f8b94;--green:#38d99a;--red:#ff647f}
+html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:Inter,Arial,sans-serif}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+a{color:inherit;text-decoration:none}
+
+.app{min-height:100vh;display:flex}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:250px;background:#090d11;border-right:1px solid var(--line);padding:23px 15px;display:flex;flex-direction:column;overflow-y:auto;z-index:10}
+.side-brand{display:flex;align-items:center;gap:10px;padding:0 10px 24px;border-bottom:1px solid var(--line)}
+.side-logo{width:36px;height:36px;border:1px solid #d5ad5a70;border-radius:50%;display:grid;place-items:center;color:var(--gold2);font:21px Georgia,serif}
+.side-name{font:700 15px Georgia,serif}.side-sub{color:var(--gold);font-size:7px;font-weight:900;letter-spacing:1.4px;text-transform:uppercase;margin-top:3px}
+.nav-group{margin-top:20px}.nav-label{padding:0 10px 8px;color:#59656f;font-size:8px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase}
+.nav{display:flex;align-items:center;width:100%;padding:11px 12px;margin:2px 0;border:1px solid transparent;border-radius:9px;background:transparent;color:#9da8b0;text-align:left;font-size:11px;font-weight:800;transition:all 0.15s ease}
+.nav:hover,.nav.active{background:#ffffff06;border-color:var(--line);color:var(--gold2)}
+.nav-icon{display:inline-block;width:24px;color:var(--gold);font-size:13px}
+.side-bottom{margin-top:auto;padding-top:16px}
+.secure{padding:12px;border-radius:10px;border:1px solid #38d99a25;background:#38d99a08;color:#75b79d;font-size:9px;line-height:1.5;margin-bottom:10px}
+
+.main{margin-left:250px;width:calc(100% - 250px);min-width:0}
+.header{height:76px;position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;padding:0 31px;background:#080c0fee;backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.kicker{color:var(--gold);font-size:8px;font-weight:900;letter-spacing:1.7px;text-transform:uppercase}
+.header h1{font:700 21px Georgia,serif;margin:4px 0 0}
+.header-right{display:flex;align-items:center;gap:10px}
+.connected{display:flex;align-items:center;gap:7px;padding:8px 11px;border:1px solid #38d99a28;border-radius:30px;color:var(--green);font-size:9px;font-weight:900}
+.connected i{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green)}
+.refresh{padding:9px 14px;border:1px solid var(--line);border-radius:8px;background:#ffffff05;color:#cbd2d6;font-size:10px;font-weight:900;transition:all 0.15s ease}
+.refresh:hover{background:rgba(255,255,255,0.1);color:#fff}
+
+.content{padding:30px;max-width:1500px}
+.card{background:linear-gradient(145deg,#10171e,#0b1014);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.section{margin-bottom:24px}
+.section-head{padding:18px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.section-title{font:700 18px Georgia,serif}.section-sub{color:var(--muted);font-size:10px;margin-top:4px}
+
+.stats-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.stat-box{padding:18px;background:#10171e;border:1px solid var(--line);border-radius:12px}
+.stat-label{font-size:9px;color:var(--muted);font-weight:900;letter-spacing:1px;text-transform:uppercase}
+.stat-val{font-size:24px;font-weight:800;color:#fff;margin-top:6px}
+
+.search-bar{display:flex;gap:10px;padding:14px 20px;border-bottom:1px solid var(--line);background:rgba(255,255,255,0.01)}
+.search-input{flex:1;max-width:400px;padding:8px 14px;border-radius:8px;border:1px solid var(--line);background:#070a0d;color:#fff;font-size:12px}
+
+.table-wrap{overflow:auto}table{width:100%;min-width:1000px;border-collapse:collapse}th{padding:12px 15px;background:#ffffff03;color:#64717b;font-size:9px;letter-spacing:1px;text-transform:uppercase;text-align:left;white-space:nowrap}td{padding:13px 15px;border-top:1px solid #ffffff07;font-size:11px;color:#cdd3d7}td b{color:#f1f3f4}tr:hover td{background:#ffffff02}
+.muted{color:#71808a;font-size:10px}.badge{display:inline-block;padding:4px 8px;border-radius:30px;background:#d5ad5a15;color:var(--gold2);font-size:9px;font-weight:900;text-transform:uppercase}
+.empty{padding:40px;text-align:center;color:#61707a;font-size:12px}
+.alert{display:none;padding:12px;border-radius:9px;margin-bottom:15px;font-size:12px}
+.alert.show{display:block}.alert.error{background:#ff647f12;border:1px solid #ff647f35;color:#ff9aae}.alert.success{background:#38d99a12;border:1px solid #38d99a35;color:#7ce7ba}
+
+@media(max-width:900px){.stats-bar{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:768px){.sidebar{display:none}.main{margin-left:0;width:100%}.header{padding:0 15px}.content{padding:20px 15px}.stats-bar{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="app">
+<aside class="sidebar">
+  <div class="side-brand">
+    <div class="side-logo">G</div>
+    <div>
+      <div class="side-name">Global Capital</div>
+      <div class="side-sub">Admin Center</div>
+    </div>
+  </div>
+  
+  <div class="nav-group">
+    <div class="nav-label">Core Navigation</div>
+    <a class="nav" href="admin.html"><span class="nav-icon">◆</span>Overview</a>
+    <a class="nav" href="admin-deposits.html"><span class="nav-icon">↓</span>Deposits Portal</a>
+    <a class="nav" href="admin-withdrawals.html"><span class="nav-icon">↑</span>Withdrawals</a>
+    <a class="nav active" href="admin-customers.html"><span class="nav-icon">◈</span>Customer Accounts</a>
+    <a class="nav" href="admin-referrals.html"><span class="nav-icon">%</span>Referrals & Rewards</a>
+    <a class="nav" href="admin-signals.html"><span class="nav-icon">⌁</span>Daily Signals Desk</a>
+    <a class="nav" href="admin-blogs.html"><span class="nav-icon">🎬</span>Blogs & Video Manager</a>
+  </div>
+  
+  <div class="nav-group">
+    <div class="nav-label">Infrastructure</div>
+    <a class="nav" href="admin-binance.html"><span class="nav-icon">◇</span>Binance API Monitor</a>
+  </div>
+  
+  <div class="side-bottom">
+    <div class="secure">● Multi-Page Admin Session<br>Global Capital Venture Holdings</div>
+    <button id="signOut" class="nav" type="button" style="color:#ff849a;"><span class="nav-icon">↪</span>Sign Out</button>
+  </div>
+</aside>
+
+<main class="main">
+<header class="header">
+  <div>
+    <div class="kicker">Institutional Registry</div>
+    <h1>Customer & Member Directory</h1>
+  </div>
+  <div class="header-right">
+    <div class="connected"><i></i>Backend Online</div>
+    <button id="refresh" class="refresh" type="button">↻ Refresh Directory</button>
+  </div>
+</header>
+
+<div class="content">
+  <div id="appAlert" class="alert"></div>
+
+  <div class="stats-bar">
+    <div class="stat-box">
+      <div class="stat-label">Total Accounts</div>
+      <div id="statTotalUsers" class="stat-val">0</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">Active Funded Investors</div>
+      <div id="statActiveUsers" class="stat-val" style="color:var(--green);">0</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">Total Principal Holdings</div>
+      <div id="statTotalPrincipal" class="stat-val" style="color:var(--gold2);">$0.00</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">Total Wallet Reserves</div>
+      <div id="statTotalBalance" class="stat-val">$0.00</div>
+    </div>
+  </div>
+
+  <div class="card section">
+    <div class="section-head">
+      <div>
+        <div class="section-title">Investor Profiles & Balance Ledger</div>
+        <div class="section-sub">Overview of institutional and retail participants across all tiers.</div>
+      </div>
+    </div>
+
+    <div class="search-bar">
+      <input id="searchInput" type="text" class="search-input" placeholder="🔍 Search by name, email, or referral code...">
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Investor Name</th>
+            <th>Email</th>
+            <th>Referral Code</th>
+            <th>Active Package</th>
+            <th>Principal Deposit</th>
+            <th>Available Balance</th>
+            <th>Registered Date</th>
+          </tr>
+        </thead>
+        <tbody id="customersBody">
+          <tr><td colspan="8" class="empty">Loading customer registry...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+</main>
+</div>
+
+<script src="config.js"></script>
+<script>
+(() => {
+  const token = localStorage.getItem('gcvh_admin_token') || sessionStorage.getItem('gcvh_admin_token');
+  if (!token) {
+    window.location.href = 'admin.html';
+    return;
+  }
+
+  let allUsers = [];
+
+  function showAlert(msg, isError = false) {
+    const el = document.getElementById('appAlert');
+    if (!el) return;
+    el.textContent = msg;
+    el.className = `alert show ${isError ? 'error' : 'success'}`;
+    setTimeout(() => { el.className = 'alert'; }, 6000);
+  }
+
+  async function loadCustomers() {
+    try {
+      const res = await fetch(`${window.GCVH_CONFIG.API_BASE_URL}/admin/customers`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (!res.ok) throw new Error('Failed to load customers');
+      const data = await res.json();
+      allUsers = data.customers || data.users || [];
+      render();
+    } catch (err) {
+      showAlert(err.message, true);
+    }
+  }
+
+  function render() {
+    const tbody = document.getElementById('customersBody');
+    if (!tbody) return;
+
+    let activeCount = 0;
+    let totalPrincipal = 0;
+    let totalBalance = 0;
+
+    allUsers.forEach(u => {
+      const dep = Number(u.principal_deposit || u.total_deposited || 0);
+      const bal = Number(u.balance || 0);
+      if (dep > 0) activeCount++;
+      totalPrincipal += dep;
+      totalBalance += bal;
+    });
+
+    document.getElementById('statTotalUsers').textContent = allUsers.length;
+    document.getElementById('statActiveUsers').textContent = activeCount;
+    document.getElementById('statTotalPrincipal').textContent = `$${totalPrincipal.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
+    document.getElementById('statTotalBalance').textContent = `$${totalBalance.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
+
+    const q = (document.getElementById('searchInput').value || '').toLowerCase().trim();
+    const filtered = allUsers.filter(u => {
+      if (!q) return true;
+      const name = (u.full_name || '').toLowerCase();
+      const email = (u.email || '').toLowerCase();
+      const ref = (u.referral_code || '').toLowerCase();
+      return name.includes(q) || email.includes(q) || ref.includes(q);
+    });
+
+    if (!filtered.length) {
+      tbody.innerHTML = `<tr><td colspan="8" class="empty">No customers found matching "${q}".</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = filtered.map(u => {
+      const dep = Number(u.principal_deposit || u.total_deposited || 0);
+      const bal = Number(u.balance || 0);
+      return `
+        <tr>
+          <td><b>#${u.id}</b></td>
+          <td><b>${u.full_name || 'Member'}</b></td>
+          <td class="muted">${u.email || ''}</td>
+          <td><span style="font-family:monospace;color:var(--gold2);font-weight:700">${u.referral_code || '-'}</span></td>
+          <td><span class="badge">${u.package_name || (dep > 0 ? 'Active Tier' : 'Unfunded')}</span></td>
+          <td style="font-weight:700;color:#fff">$${dep.toFixed(2)}</td>
+          <td style="font-weight:800;color:var(--green)">$${bal.toFixed(2)}</td>
+          <td class="muted">${new Date(u.created_at || Date.now()).toLocaleDateString()}</td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  document.getElementById('searchInput').oninput = render;
+  document.getElementById('refresh').onclick = loadCustomers;
+  document.getElementById('signOut').onclick = () => {
+    localStorage.removeItem('gcvh_admin_token');
+    sessionStorage.removeItem('gcvh_admin_token');
+    window.location.href = 'admin.html';
+  };
+
+  loadCustomers();
+})();
+</script>
+</body>
+</html>

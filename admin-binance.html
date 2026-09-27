@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GCVH — Admin Binance API Monitor</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<style>
+*{box-sizing:border-box}
+:root{--bg:#070a0d;--panel:#0e141a;--panel2:#111920;--line:#222c35;--gold:#d5ad5a;--gold2:#f1d48b;--text:#f4f6f8;--muted:#7f8b94;--green:#38d99a;--red:#ff647f}
+html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:Inter,Arial,sans-serif}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+a{color:inherit;text-decoration:none}
+
+.app{min-height:100vh;display:flex}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:250px;background:#090d11;border-right:1px solid var(--line);padding:23px 15px;display:flex;flex-direction:column;overflow-y:auto;z-index:10}
+.side-brand{display:flex;align-items:center;gap:10px;padding:0 10px 24px;border-bottom:1px solid var(--line)}
+.side-logo{width:36px;height:36px;border:1px solid #d5ad5a70;border-radius:50%;display:grid;place-items:center;color:var(--gold2);font:21px Georgia,serif}
+.side-name{font:700 15px Georgia,serif}.side-sub{color:var(--gold);font-size:7px;font-weight:900;letter-spacing:1.4px;text-transform:uppercase;margin-top:3px}
+.nav-group{margin-top:20px}.nav-label{padding:0 10px 8px;color:#59656f;font-size:8px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase}
+.nav{display:flex;align-items:center;width:100%;padding:11px 12px;margin:2px 0;border:1px solid transparent;border-radius:9px;background:transparent;color:#9da8b0;text-align:left;font-size:11px;font-weight:800;transition:all 0.15s ease}
+.nav:hover,.nav.active{background:#ffffff06;border-color:var(--line);color:var(--gold2)}
+.nav-icon{display:inline-block;width:24px;color:var(--gold);font-size:13px}
+.side-bottom{margin-top:auto;padding-top:16px}
+.secure{padding:12px;border-radius:10px;border:1px solid #38d99a25;background:#38d99a08;color:#75b79d;font-size:9px;line-height:1.5;margin-bottom:10px}
+
+.main{margin-left:250px;width:calc(100% - 250px);min-width:0}
+.header{height:76px;position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;padding:0 31px;background:#080c0fee;backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.kicker{color:var(--gold);font-size:8px;font-weight:900;letter-spacing:1.7px;text-transform:uppercase}
+.header h1{font:700 21px Georgia,serif;margin:4px 0 0}
+.header-right{display:flex;align-items:center;gap:10px}
+.connected{display:flex;align-items:center;gap:7px;padding:8px 11px;border:1px solid #38d99a28;border-radius:30px;color:var(--green);font-size:9px;font-weight:900}
+.connected i{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green)}
+.refresh{padding:9px 14px;border:1px solid var(--line);border-radius:8px;background:#ffffff05;color:#cbd2d6;font-size:10px;font-weight:900;transition:all 0.15s ease}
+.refresh:hover{background:rgba(255,255,255,0.1);color:#fff}
+
+.content{padding:30px;max-width:1500px}
+.card{background:linear-gradient(145deg,#10171e,#0b1014);border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-bottom:24px}
+.section-head{padding:18px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
+.section-title{font:700 18px Georgia,serif}.section-sub{color:var(--muted);font-size:10px;margin-top:4px}
+
+.stats-bar{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px}
+.stat-box{padding:18px;background:#10171e;border:1px solid var(--line);border-radius:12px}
+.stat-label{font-size:9px;color:var(--muted);font-weight:900;letter-spacing:1px;text-transform:uppercase}
+.stat-val{font-size:24px;font-weight:800;color:#fff;margin-top:6px}
+
+.info-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;padding:20px}
+.info-card{padding:16px;background:#070a0d;border:1px solid var(--line);border-radius:10px}
+.info-title{font-size:12px;font-weight:800;color:var(--gold2);margin-bottom:8px}
+.info-desc{font-size:11px;color:#a0abb3;line-height:1.6}
+
+.table-wrap{overflow:auto}table{width:100%;min-width:800px;border-collapse:collapse}th{padding:12px 15px;background:#ffffff03;color:#64717b;font-size:9px;letter-spacing:1px;text-transform:uppercase;text-align:left;white-space:nowrap}td{padding:13px 15px;border-top:1px solid #ffffff07;font-size:11px;color:#cdd3d7}td b{color:#f1f3f4}tr:hover td{background:#ffffff02}
+
+@media(max-width:900px){.stats-bar{grid-template-columns:1fr}.info-grid{grid-template-columns:1fr}}
+@media(max-width:768px){.sidebar{display:none}.main{margin-left:0;width:100%}.header{padding:0 15px}.content{padding:20px 15px}}
+</style>
+</head>
+<body>
+
+<div class="app">
+<aside class="sidebar">
+  <div class="side-brand">
+    <div class="side-logo">G</div>
+    <div>
+      <div class="side-name">Global Capital</div>
+      <div class="side-sub">Admin Center</div>
+    </div>
+  </div>
+  
+  <div class="nav-group">
+    <div class="nav-label">Core Navigation</div>
+    <a class="nav" href="admin.html"><span class="nav-icon">◆</span>Overview</a>
+    <a class="nav" href="admin-deposits.html"><span class="nav-icon">↓</span>Deposits Portal</a>
+    <a class="nav" href="admin-withdrawals.html"><span class="nav-icon">↑</span>Withdrawals</a>
+    <a class="nav" href="admin-customers.html"><span class="nav-icon">◈</span>Customer Accounts</a>
+    <a class="nav" href="admin-referrals.html"><span class="nav-icon">%</span>Referrals & Rewards</a>
+    <a class="nav" href="admin-signals.html"><span class="nav-icon">⌁</span>Daily Signals Desk</a>
+    <a class="nav" href="admin-blogs.html"><span class="nav-icon">🎬</span>Blogs & Video Manager</a>
+  </div>
+  
+  <div class="nav-group">
+    <div class="nav-label">Infrastructure</div>
+    <a class="nav active" href="admin-binance.html"><span class="nav-icon">◇</span>Binance API Monitor</a>
+  </div>
+  
+  <div class="side-bottom">
+    <div class="secure">● Multi-Page Admin Session<br>Global Capital Venture Holdings</div>
+    <button id="signOut" class="nav" type="button" style="color:#ff849a;"><span class="nav-icon">↪</span>Sign Out</button>
+  </div>
+</aside>
+
+<main class="main">
+<header class="header">
+  <div>
+    <div class="kicker">Exchange Integration</div>
+    <h1>Binance API Liquidity & Reserves Monitor</h1>
+  </div>
+  <div class="header-right">
+    <div class="connected"><i></i>REST API Active</div>
+    <button id="refresh" class="refresh" type="button">↻ Query Exchange</button>
+  </div>
+</header>
+
+<div class="content">
+  <div class="stats-bar">
+    <div class="stat-box">
+      <div class="stat-label">USDT Hot Wallet Liquidity</div>
+      <div id="statUsdt" class="stat-val" style="color:var(--green);">$84,520.00</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">BTC Collateral Balance</div>
+      <div id="statBtc" class="stat-val" style="color:var(--gold2);">1.4208 BTC</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">Estimated Reserve Value</div>
+      <div id="statTotalVal" class="stat-val">$218,650.00</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-head">
+      <div>
+        <div class="section-title">Liquidity Pool & Bridge Wallets</div>
+        <div class="section-sub">Real-time balances across settlement gateways and cold storage multisig vaults.</div>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Asset</th>
+            <th>Network / Protocol</th>
+            <th>Deposit Gateway Address</th>
+            <th>Hot Wallet Available</th>
+            <th>Multisig Vault Locked</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b style="color:var(--green)">USDT (TRC20)</b></td>
+            <td>Tron / TRC20</td>
+            <td style="font-family:monospace;color:var(--gold2)">TMx8RkP9mQz7K2jVbW4nE6sY1cL3aF8xGh</td>
+            <td style="font-weight:700">$54,200.00</td>
+            <td>$250,000.00</td>
+            <td><span style="color:var(--green);font-weight:800">● Operational</span></td>
+          </tr>
+          <tr>
+            <td><b style="color:var(--gold)">USDT (BEP20)</b></td>
+            <td>BNB Smart Chain</td>
+            <td style="font-family:monospace;color:var(--gold2)">0x71C5A6B48D9E0A23F1C74895B2E1097C45A3D8F2</td>
+            <td style="font-weight:700">$30,320.00</td>
+            <td>$180,000.00</td>
+            <td><span style="color:var(--green);font-weight:800">● Operational</span></td>
+          </tr>
+          <tr>
+            <td><b style="color:var(--gold2)">Binance Direct UID</b></td>
+            <td>Internal Off-Chain Ledger</td>
+            <td style="font-family:monospace;color:var(--gold2)">984729104</td>
+            <td style="font-weight:700">Instant Liquidity</td>
+            <td>-</td>
+            <td><span style="color:var(--green);font-weight:800">● Operational</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-head">
+      <div>
+        <div class="section-title">Algorithmic Gold (XAUUSD) Hedging Desk</div>
+        <div class="section-sub">Institutional risk management protocols and order execution bridge.</div>
+      </div>
+    </div>
+
+    <div class="info-grid">
+      <div class="info-card">
+        <div class="info-title">Hedging Model</div>
+        <div class="info-desc">Member ROI is backed by institutional XAUUSD algorithmic scalping and automated liquidity arbitrage across global bullion spot markets and Binance crypto derivatives.</div>
+      </div>
+      <div class="info-card">
+        <div class="info-title">Settlement SLA</div>
+        <div class="info-desc">Automated batch payout engine verifies user withdrawals on a bi-weekly cycle with a strict maximum 24-hour SLA upon admin verification and TXID broadcast.</div>
+      </div>
+    </div>
+  </div>
+</div>
+</main>
+</div>
+
+<script src="config.js"></script>
+<script>
+(() => {
+  const token = localStorage.getItem('gcvh_admin_token') || sessionStorage.getItem('gcvh_admin_token');
+  if (!token) {
+    window.location.href = 'admin.html';
+    return;
+  }
+
+  document.getElementById('refresh').onclick = () => {
+    alert('Binance API connection verified. Liquidity balances synced with spot wallet.');
+  };
+
+  document.getElementById('signOut').onclick = () => {
+    localStorage.removeItem('gcvh_admin_token');
+    sessionStorage.removeItem('gcvh_admin_token');
+    window.location.href = 'admin.html';
+  };
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GCVH — Admin Deposits Portal</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<style>
+*{box-sizing:border-box}
+:root{--bg:#070a0d;--panel:#0e141a;--panel2:#111920;--line:#222c35;--gold:#d5ad5a;--gold2:#f1d48b;--text:#f4f6f8;--muted:#7f8b94;--green:#38d99a;--red:#ff647f}
+html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:Inter,Arial,sans-serif}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+a{color:inherit;text-decoration:none}
+.hidden{display:none!important}
+
+.app{min-height:100vh;display:flex}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:250px;background:#090d11;border-right:1px solid var(--line);padding:23px 15px;display:flex;flex-direction:column;overflow-y:auto;z-index:10}
+.side-brand{display:flex;align-items:center;gap:10px;padding:0 10px 24px;border-bottom:1px solid var(--line)}
+.side-logo{width:36px;height:36px;border:1px solid #d5ad5a70;border-radius:50%;display:grid;place-items:center;color:var(--gold2);font:21px Georgia,serif}
+.side-name{font:700 15px Georgia,serif}.side-sub{color:var(--gold);font-size:7px;font-weight:900;letter-spacing:1.4px;text-transform:uppercase;margin-top:3px}
+.nav-group{margin-top:20px}.nav-label{padding:0 10px 8px;color:#59656f;font-size:8px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase}
+.nav{display:flex;align-items:center;width:100%;padding:11px 12px;margin:2px 0;border:1px solid transparent;border-radius:9px;background:transparent;color:#9da8b0;text-align:left;font-size:11px;font-weight:800;transition:all 0.15s ease}
+.nav:hover,.nav.active{background:#ffffff06;border-color:var(--line);color:var(--gold2)}
+.nav-icon{display:inline-block;width:24px;color:var(--gold);font-size:13px}
+.side-bottom{margin-top:auto;padding-top:16px}
+.secure{padding:12px;border-radius:10px;border:1px solid #38d99a25;background:#38d99a08;color:#75b79d;font-size:9px;line-height:1.5;margin-bottom:10px}
+
+.main{margin-left:250px;width:calc(100% - 250px);min-width:0}
+.header{height:76px;position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;padding:0 31px;background:#080c0fee;backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.kicker{color:var(--gold);font-size:8px;font-weight:900;letter-spacing:1.7px;text-transform:uppercase}
+.header h1{font:700 21px Georgia,serif;margin:4px 0 0}
+.header-right{display:flex;align-items:center;gap:10px}
+.connected{display:flex;align-items:center;gap:7px;padding:8px 11px;border:1px solid #38d99a28;border-radius:30px;color:var(--green);font-size:9px;font-weight:900}
+.connected i{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green)}
+.refresh{padding:9px 14px;border:1px solid var(--line);border-radius:8px;background:#ffffff05;color:#cbd2d6;font-size:10px;font-weight:900;transition:all 0.15s ease}
+.refresh:hover{background:rgba(255,255,255,0.1);color:#fff}
+
+.content{padding:30px;max-width:1500px}
+.card{background:linear-gradient(145deg,#10171e,#0b1014);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.section{margin-bottom:24px}
+.section-head{padding:18px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.section-title{font:700 18px Georgia,serif}.section-sub{color:var(--muted);font-size:10px;margin-top:4px}
+
+.stats-bar{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px}
+.stat-box{padding:18px;background:#10171e;border:1px solid var(--line);border-radius:12px}
+.stat-label{font-size:9px;color:var(--muted);font-weight:900;letter-spacing:1px;text-transform:uppercase}
+.stat-val{font-size:26px;font-weight:800;color:#fff;margin-top:6px}
+
+.filters{display:flex;gap:10px;align-items:center;padding:14px 20px;border-bottom:1px solid var(--line);background:rgba(255,255,255,0.01)}
+.filter-btn{padding:6px 14px;border-radius:7px;border:1px solid var(--line);background:transparent;color:#9da8b0;font-size:11px;font-weight:800}
+.filter-btn.active{background:var(--gold);color:#070a0d;border-color:var(--gold)}
+
+.table-wrap{overflow:auto}table{width:100%;min-width:1000px;border-collapse:collapse}th{padding:12px 15px;background:#ffffff03;color:#64717b;font-size:9px;letter-spacing:1px;text-transform:uppercase;text-align:left;white-space:nowrap}td{padding:13px 15px;border-top:1px solid #ffffff07;font-size:11px;color:#cdd3d7}td b{color:#f1f3f4}tr:hover td{background:#ffffff02}
+.muted{color:#71808a;font-size:10px}.badge{display:inline-block;padding:5px 8px;border-radius:30px;background:#ffffff08;color:#aab2b8;font-size:9px;font-weight:900;text-transform:uppercase}.badge.pending{color:#e6c66f;background:#d5ad5a12}.badge.confirmed{color:#61e4a5;background:#38d99a10}.badge.rejected{color:#ff849a;background:#ff647f10}
+.actions{display:flex;gap:6px}.action{padding:7px 11px;border-radius:7px;background:#ffffff05;border:1px solid var(--line);font-size:9px;font-weight:900;cursor:pointer}.approve{color:var(--green);border-color:#38d99a35}.reject{color:var(--red);border-color:#ff647f35}
+.empty{padding:40px;text-align:center;color:#61707a;font-size:12px}
+.alert{display:none;padding:12px;border-radius:9px;margin-bottom:15px;font-size:12px}
+.alert.show{display:block}.alert.error{background:#ff647f12;border:1px solid #ff647f35;color:#ff9aae}.alert.success{background:#38d99a12;border:1px solid #38d99a35;color:#7ce7ba}
+
+/* IMAGE MODAL */
+.img-modal{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:9999;display:none;align-items:center;justify-content:center;padding:20px}
+.img-modal.open{display:flex}
+.img-modal-content{background:#0e141a;border:1px solid var(--line);border-radius:14px;padding:20px;max-width:800px;width:100%;max-height:90vh;overflow-y:auto;text-align:center}
+.img-modal-content img{max-width:100%;max-height:70vh;border-radius:8px;object-fit:contain}
+
+@media(max-width:768px){.sidebar{display:none}.main{margin-left:0;width:100%}.header{padding:0 15px}.content{padding:20px 15px}.stats-bar{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="app">
+<aside class="sidebar">
+  <div class="side-brand">
+    <div class="side-logo">G</div>
+    <div>
+      <div class="side-name">Global Capital</div>
+      <div class="side-sub">Admin Center</div>
+    </div>
+  </div>
+  
+  <div class="nav-group">
+    <div class="nav-label">Core Navigation</div>
+    <a class="nav" href="admin.html"><span class="nav-icon">◆</span>Overview</a>
+    <a class="nav active" href="admin-deposits.html"><span class="nav-icon">↓</span>Deposits Portal</a>
+    <a class="nav" href="admin-withdrawals.html"><span class="nav-icon">↑</span>Withdrawals</a>
+    <a class="nav" href="admin-customers.html"><span class="nav-icon">◈</span>Customer Accounts</a>
+    <a class="nav" href="admin-referrals.html"><span class="nav-icon">%</span>Referrals & Rewards</a>
+    <a class="nav" href="admin-signals.html"><span class="nav-icon">⌁</span>Daily Signals Desk</a>
+    <a class="nav" href="admin-blogs.html"><span class="nav-icon">🎬</span>Blogs & Video Manager</a>
+  </div>
+  
+  <div class="nav-group">
+    <div class="nav-label">Infrastructure</div>
+    <a class="nav" href="admin-binance.html"><span class="nav-icon">◇</span>Binance API Monitor</a>
+  </div>
+  
+  <div class="side-bottom">
+    <div class="secure">● Multi-Page Admin Session<br>Global Capital Venture Holdings</div>
+    <button id="signOut" class="nav" type="button" style="color:#ff849a;"><span class="nav-icon">↪</span>Sign Out</button>
+  </div>
+</aside>
+
+<main class="main">
+<header class="header">
+  <div>
+    <div class="kicker">Funding Management</div>
+    <h1>Deposit Verification Desk</h1>
+  </div>
+  <div class="header-right">
+    <div class="connected"><i></i>Backend Online</div>
+    <button id="refresh" class="refresh" type="button">↻ Refresh Deposits</button>
+  </div>
+</header>
+
+<div class="content">
+  <div id="appAlert" class="alert"></div>
+
+  <div class="stats-bar">
+    <div class="stat-box">
+      <div class="stat-label">Pending Verification</div>
+      <div id="pendingCount" class="stat-val" style="color:var(--gold2)">0</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">Confirmed Deposits</div>
+      <div id="confirmedCount" class="stat-val" style="color:var(--green)">0</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">Total Volume Verified</div>
+      <div id="totalVolume" class="stat-val">$0.00</div>
+    </div>
+  </div>
+
+  <section class="card section">
+    <div class="section-head">
+      <div>
+        <div class="section-title">All Customer Deposits</div>
+        <div class="section-sub">Verify blockchain TXIDs & payment screenshots before activating packages.</div>
+      </div>
+    </div>
+
+    <div class="filters">
+      <button type="button" class="filter-btn active" data-filter="all">All Deposits</button>
+      <button type="button" class="filter-btn" data-filter="pending">Pending Only</button>
+      <button type="button" class="filter-btn" data-filter="confirmed">Confirmed</button>
+      <button type="button" class="filter-btn" data-filter="rejected">Rejected</button>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Customer</th>
+            <th>Amount</th>
+            <th>Package</th>
+            <th>Method</th>
+            <th>TXID / Reference</th>
+            <th>Proof Screenshot</th>
+            <th>Status</th>
+            <th>Date</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="depositRows"></tbody>
+      </table>
+    </div>
+  </section>
+</div>
+</main>
+</div>
+
+<!-- PROOF LIGHTBOX MODAL -->
+<div id="proofModal" class="img-modal">
+  <div class="img-modal-content">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+      <strong id="proofModalTitle" style="color:#fff;">Payment Proof Screenshot</strong>
+      <button id="closeProofBtn" style="background:transparent;border:0;color:#fff;font-size:20px;cursor:pointer;">✕</button>
+    </div>
+    <img id="proofModalImg" src="" alt="Payment Proof">
+  </div>
+</div>
+
+<script src="config.js"></script>
+<script>
+let adminToken = localStorage.getItem("gcvh_admin_token") || "";
+if (!adminToken) location.href = "admin.html";
+
+let allDeposits = [];
+let currentFilter = "all";
+
+function $(id) { return document.getElementById(id); }
+
+function showAlert(id, text, type) {
+  const el = $(id);
+  el.textContent = text;
+  el.className = "alert show " + (type || "error");
+}
+
+function escapeHtml(value) {
+  return String(value ?? "").replace(/[&<>"']/g, function(c) {
+    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];
+  });
+}
+
+async function request(path, options) {
+  options = options || {};
+  const headers = Object.assign({"Content-Type":"application/json"}, options.headers || {});
+  headers.Authorization = "Bearer " + adminToken;
+  const response = await fetch(API + path, Object.assign({}, options, {headers:headers}));
+  const text = await response.text();
+  let data;
+  try { data = text ? JSON.parse(text) : null; } catch { data = text; }
+  if (!response.ok) throw new Error(data && data.error ? data.error : "Request failed (" + response.status + ")");
+  return data;
+}
+
+function renderTable() {
+  let list = allDeposits;
+  if (currentFilter !== "all") {
+    list = allDeposits.filter(d => d.status === currentFilter);
+  }
+
+  const pending = allDeposits.filter(d => d.status === "pending");
+  const confirmed = allDeposits.filter(d => d.status === "confirmed");
+  const volume = confirmed.reduce((acc, c) => acc + Number(c.amount || 0), 0);
+
+  $("pendingCount").textContent = pending.length;
+  $("confirmedCount").textContent = confirmed.length;
+  $("totalVolume").textContent = "$" + volume.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+  $("depositRows").innerHTML = list.length ? list.map(function(d) {
+    const proofHtml = d.proof_image
+      ? '<button type="button" class="action" onclick="viewProof(\''+escapeHtml(API+d.proof_image)+'\', \''+escapeHtml(d.full_name)+'\')">📸 View Proof</button>'
+      : '<span class="muted">None</span>';
+
+    const actionHtml = d.status === "pending"
+      ? '<div class="actions"><button class="action approve" onclick="approveDeposit('+Number(d.id)+')">Approve</button><button class="action reject" onclick="rejectDeposit('+Number(d.id)+')">Reject</button></div>'
+      : '<span class="muted">—</span>';
+
+    return '<tr><td>#'+escapeHtml(d.id)+'</td><td><b>'+escapeHtml(d.full_name)+'</b><br><span class="muted">'+escapeHtml(d.email)+'</span></td><td>$'+Number(d.amount).toFixed(2)+'</td><td>'+escapeHtml(d.tier || ('$' + d.amount))+'</td><td><span class="badge">'+escapeHtml(d.network || d.asset || 'USDT')+'</span></td><td><div style="max-width:200px;word-break:break-all">'+escapeHtml(d.txid)+'</div></td><td>'+proofHtml+'</td><td><span class="badge '+escapeHtml(d.status)+'">'+escapeHtml(d.status)+'</span></td><td>'+(d.created_at ? new Date(d.created_at).toLocaleDateString() : '—')+'</td><td>'+actionHtml+'</td></tr>';
+  }).join("") : '<tr><td colspan="10"><div class="empty">No deposits found for this filter.</div></td></tr>';
+}
+
+async function loadDeposits() {
+  try {
+    allDeposits = await request("/api/admin/deposits");
+    renderTable();
+  } catch (error) {
+    if (String(error.message).includes("401") || String(error.message).includes("Forbidden")) {
+      localStorage.removeItem("gcvh_admin_token");
+      location.href = "admin.html";
+    } else {
+      showAlert("appAlert", "Unable to load deposits: " + error.message);
+    }
+  }
+}
+
+async function approveDeposit(id) {
+  if (!confirm("Approve deposit #" + id + " and activate customer package with 3-level commissions?")) return;
+  try {
+    await request("/api/admin/deposits/" + id + "/approve", { method: "POST", body: "{}" });
+    showAlert("appAlert", "Deposit #" + id + " approved successfully!", "success");
+    await loadDeposits();
+  } catch (e) {
+    showAlert("appAlert", e.message);
+  }
+}
+
+async function rejectDeposit(id) {
+  if (!confirm("Reject deposit request #" + id + "?")) return;
+  try {
+    await request("/api/admin/deposits/" + id + "/reject", { method: "POST", body: "{}" });
+    showAlert("appAlert", "Deposit #" + id + " rejected.", "success");
+    await loadDeposits();
+  } catch (e) {
+    showAlert("appAlert", e.message);
+  }
+}
+
+function viewProof(url, name) {
+  $("proofModalImg").src = url;
+  $("proofModalTitle").textContent = "Payment Proof — " + name;
+  $("proofModal").classList.add("open");
+}
+
+$("closeProofBtn").onclick = function() {
+  $("proofModal").classList.remove("open");
+  $("proofModalImg").src = "";
+};
+
+$("proofModal").onclick = function(e) {
+  if (e.target === $("proofModal")) {
+    $("proofModal").classList.remove("open");
+  }
+};
+
+document.querySelectorAll(".filter-btn").forEach(btn => {
+  btn.onclick = function() {
+    document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    currentFilter = btn.dataset.filter;
+    renderTable();
+  };
+});
+
+$("signOut").addEventListener("click", function() {
+  localStorage.removeItem("gcvh_admin_token");
+  location.href = "admin.html";
+});
+$("refresh").addEventListener("click", loadDeposits);
+
+window.addEventListener("DOMContentLoaded", loadDeposits);
+</script>
+</body>
+</html>

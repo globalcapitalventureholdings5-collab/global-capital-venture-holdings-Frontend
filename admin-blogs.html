@@ -1,0 +1,451 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GCVH — Admin Blogs & Video Management Desk</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<style>
+*{box-sizing:border-box}
+:root{--bg:#070a0d;--panel:#0e141a;--panel2:#111920;--line:#222c35;--gold:#d5ad5a;--gold2:#f1d48b;--text:#f4f6f8;--muted:#7f8b94;--green:#38d99a;--red:#ff647f}
+html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:Inter,Arial,sans-serif}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+a{color:inherit;text-decoration:none}
+
+.app{min-height:100vh;display:flex}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:250px;background:#090d11;border-right:1px solid var(--line);padding:23px 15px;display:flex;flex-direction:column;overflow-y:auto;z-index:10}
+.side-brand{display:flex;align-items:center;gap:10px;padding:0 10px 24px;border-bottom:1px solid var(--line)}
+.side-logo{width:36px;height:36px;border:1px solid #d5ad5a70;border-radius:50%;display:grid;place-items:center;color:var(--gold2);font:21px Georgia,serif}
+.side-name{font:700 15px Georgia,serif}.side-sub{color:var(--gold);font-size:7px;font-weight:900;letter-spacing:1.4px;text-transform:uppercase;margin-top:3px}
+.nav-group{margin-top:20px}.nav-label{padding:0 10px 8px;color:#59656f;font-size:8px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase}
+.nav{display:flex;align-items:center;width:100%;padding:11px 12px;margin:2px 0;border:1px solid transparent;border-radius:9px;background:transparent;color:#9da8b0;text-align:left;font-size:11px;font-weight:800;transition:all 0.15s ease}
+.nav:hover,.nav.active{background:#ffffff06;border-color:var(--line);color:var(--gold2)}
+.nav-icon{display:inline-block;width:24px;color:var(--gold);font-size:13px}
+.side-bottom{margin-top:auto;padding-top:16px}
+.secure{padding:12px;border-radius:10px;border:1px solid #38d99a25;background:#38d99a08;color:#75b79d;font-size:9px;line-height:1.5;margin-bottom:10px}
+
+.main{margin-left:250px;width:calc(100% - 250px);min-width:0}
+.header{height:76px;position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;padding:0 31px;background:#080c0fee;backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.kicker{color:var(--gold);font-size:8px;font-weight:900;letter-spacing:1.7px;text-transform:uppercase}
+.header h1{font:700 21px Georgia,serif;margin:4px 0 0}
+.header-right{display:flex;align-items:center;gap:10px}
+.connected{display:flex;align-items:center;gap:7px;padding:8px 11px;border:1px solid #38d99a28;border-radius:30px;color:var(--green);font-size:9px;font-weight:900}
+.connected i{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green)}
+.refresh{padding:9px 14px;border:1px solid var(--line);border-radius:8px;background:#ffffff05;color:#cbd2d6;font-size:10px;font-weight:900;transition:all 0.15s ease}
+.refresh:hover{background:rgba(255,255,255,0.1);color:#fff}
+
+.content{padding:30px;max-width:1500px}
+.card{background:linear-gradient(145deg,#10171e,#0b1014);border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-bottom:24px}
+.section-head{padding:18px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.section-title{font:700 18px Georgia,serif}.section-sub{color:var(--muted);font-size:10px;margin-top:4px}
+
+.stats-bar{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px}
+.stat-box{padding:18px;background:#10171e;border:1px solid var(--line);border-radius:12px}
+.stat-label{font-size:9px;color:var(--muted);font-weight:900;letter-spacing:1px;text-transform:uppercase}
+.stat-val{font-size:24px;font-weight:800;color:#fff;margin-top:6px}
+
+.search-bar{display:flex;gap:10px;padding:14px 20px;border-bottom:1px solid var(--line);background:rgba(255,255,255,0.01)}
+.search-input{flex:1;max-width:400px;padding:8px 14px;border-radius:8px;border:1px solid var(--line);background:#070a0d;color:#fff;font-size:12px}
+
+.table-wrap{overflow:auto}table{width:100%;min-width:1000px;border-collapse:collapse}th{padding:12px 15px;background:#ffffff03;color:#64717b;font-size:9px;letter-spacing:1px;text-transform:uppercase;text-align:left;white-space:nowrap}td{padding:13px 15px;border-top:1px solid #ffffff07;font-size:11px;color:#cdd3d7}td b{color:#f1f3f4}tr:hover td{background:#ffffff02}
+.muted{color:#71808a;font-size:10px}.badge{display:inline-block;padding:4px 8px;border-radius:30px;background:#d5ad5a15;color:var(--gold2);font-size:9px;font-weight:900;text-transform:uppercase}
+.actions{display:flex;gap:6px}.action{padding:7px 11px;border-radius:7px;background:#ffffff05;border:1px solid var(--line);font-size:10px;font-weight:800;cursor:pointer}
+.edit-btn{color:var(--gold2);border-color:#d5ad5a35}.delete-btn{color:var(--red);border-color:#ff647f35}
+.empty{padding:40px;text-align:center;color:#61707a;font-size:12px}
+.alert{display:none;padding:12px;border-radius:9px;margin-bottom:15px;font-size:12px}
+.alert.show{display:block}.alert.error{background:#ff647f12;border:1px solid #ff647f35;color:#ff9aae}.alert.success{background:#38d99a12;border:1px solid #38d99a35;color:#7ce7ba}
+
+/* MODAL */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:9999;display:none;align-items:center;justify-content:center;padding:20px}
+.modal.open{display:flex}
+.modal-content{background:#0e141a;border:1px solid var(--line);border-radius:14px;padding:24px;max-width:560px;width:100%;max-height:90vh;overflow-y:auto}
+.form-group{margin-bottom:14px}
+.form-label{display:block;font-size:10px;font-weight:900;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px}
+.form-input{width:100%;padding:10px 14px;background:#070a0d;border:1px solid var(--line);border-radius:8px;color:#fff;font-size:12px}
+
+@media(max-width:900px){.stats-bar{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:768px){.sidebar{display:none}.main{margin-left:0;width:100%}.header{padding:0 15px}.content{padding:20px 15px}.stats-bar{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="app">
+<aside class="sidebar">
+  <div class="side-brand">
+    <div class="side-logo">G</div>
+    <div>
+      <div class="side-name">Global Capital</div>
+      <div class="side-sub">Admin Center</div>
+    </div>
+  </div>
+  
+  <div class="nav-group">
+    <div class="nav-label">Core Navigation</div>
+    <a class="nav" href="admin.html"><span class="nav-icon">◆</span>Overview</a>
+    <a class="nav" href="admin-deposits.html"><span class="nav-icon">↓</span>Deposits Portal</a>
+    <a class="nav" href="admin-withdrawals.html"><span class="nav-icon">↑</span>Withdrawals</a>
+    <a class="nav" href="admin-customers.html"><span class="nav-icon">◈</span>Customer Accounts</a>
+    <a class="nav" href="admin-referrals.html"><span class="nav-icon">%</span>Referrals & Rewards</a>
+    <a class="nav" href="admin-signals.html"><span class="nav-icon">⌁</span>Daily Signals Desk</a>
+    <a class="nav active" href="admin-blogs.html"><span class="nav-icon">🎬</span>Blogs & Video Manager</a>
+  </div>
+  
+  <div class="nav-group">
+    <div class="nav-label">Infrastructure</div>
+    <a class="nav" href="admin-binance.html"><span class="nav-icon">◇</span>Binance API Monitor</a>
+  </div>
+  
+  <div class="side-bottom">
+    <div class="secure">● Multi-Page Admin Session<br>Global Capital Venture Holdings</div>
+    <button id="signOut" class="nav" type="button" style="color:#ff849a;"><span class="nav-icon">↪</span>Sign Out</button>
+  </div>
+</aside>
+
+<main class="main">
+<header class="header">
+  <div>
+    <div class="kicker">Content Governance</div>
+    <h1>Blogs & Video Publications Desk</h1>
+  </div>
+  <div class="header-right">
+    <button id="createBlogBtn" class="refresh" type="button" style="background:linear-gradient(135deg,var(--gold),#a88132);color:#070a0d;border:none;">+ New Blog / Video</button>
+    <button id="refresh" class="refresh" type="button">↻ Refresh Content</button>
+  </div>
+</header>
+
+<div class="content">
+  <div id="appAlert" class="alert"></div>
+
+  <div class="stats-bar">
+    <div class="stat-box">
+      <div class="stat-label">Total Published Briefings</div>
+      <div id="statTotalBlogs" class="stat-val">0</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">Member Uploads</div>
+      <div id="statUserBlogs" class="stat-val" style="color:var(--gold2);">0</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">Editorial Institutional Posts</div>
+      <div id="statAdminBlogs" class="stat-val" style="color:var(--green);">0</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-head">
+      <div>
+        <div class="section-title">Institutional Media & Research Feed</div>
+        <div class="section-sub">Full administrative oversight. Delete or edit any user-submitted or editorial video posts.</div>
+      </div>
+    </div>
+
+    <div class="search-bar">
+      <input id="searchInput" type="text" class="search-input" placeholder="🔍 Search publications by title, author, or keywords...">
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Video / Media</th>
+            <th>Title & Synopsis</th>
+            <th>Author</th>
+            <th>Valuation</th>
+            <th>Date</th>
+            <th>Management Actions</th>
+          </tr>
+        </thead>
+        <tbody id="blogsBody">
+          <tr><td colspan="7" class="empty">Loading media registry...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+</main>
+</div>
+
+<!-- EDIT BLOG MODAL -->
+<div id="editModal" class="modal">
+  <div class="modal-content">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <h3 style="margin:0;font:700 18px Georgia,serif;color:var(--gold2)">Edit Publication Content</h3>
+      <button id="closeEditModal" style="background:none;border:none;color:var(--muted);font-size:20px;">✕</button>
+    </div>
+    <form id="editForm">
+      <input type="hidden" id="editBlogId">
+      <div class="form-group">
+        <label class="form-label">Publication Title</label>
+        <input id="editTitle" type="text" class="form-input" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Asset Valuation / Target (e.g. $2,680/oz)</label>
+        <input id="editValuation" type="text" class="form-input">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Description / Market Analysis</label>
+        <textarea id="editDescription" class="form-input" rows="4" required></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Replace Video Media File (Optional)</label>
+        <input id="editVideoFile" type="file" class="form-input" accept="video/mp4,video/webm,video/quicktime">
+      </div>
+      <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px;">
+        <button type="button" id="cancelEditBtn" class="action">Cancel</button>
+        <button type="submit" class="action edit-btn" style="background:#d5ad5a20;padding:10px 20px;font-size:12px;">Save Changes</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- CREATE BLOG MODAL -->
+<div id="createModal" class="modal">
+  <div class="modal-content">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <h3 style="margin:0;font:700 18px Georgia,serif;color:var(--gold2)">Publish New Video Briefing</h3>
+      <button id="closeCreateModal" style="background:none;border:none;color:var(--muted);font-size:20px;">✕</button>
+    </div>
+    <form id="createForm">
+      <div class="form-group">
+        <label class="form-label">Briefing Title</label>
+        <input id="createTitle" type="text" class="form-input" placeholder="e.g. XAUUSD Breakout Macro Report" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Asset Valuation / Target</label>
+        <input id="createValuation" type="text" class="form-input" placeholder="e.g. $2,700/oz">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Analysis / Thesis Description</label>
+        <textarea id="createDescription" class="form-input" rows="4" placeholder="Detailed institutional insights..." required></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Upload Video MP4/WebM (Required)</label>
+        <input id="createVideoFile" type="file" class="form-input" accept="video/mp4,video/webm,video/quicktime" required>
+      </div>
+      <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px;">
+        <button type="button" id="cancelCreateBtn" class="action">Cancel</button>
+        <button type="submit" class="action" style="background:linear-gradient(135deg,var(--gold),#a88132);color:#070a0d;font-weight:900;padding:10px 20px;font-size:12px;border:none;">Publish Briefing</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="config.js"></script>
+<script>
+(() => {
+  const token = localStorage.getItem('gcvh_admin_token') || sessionStorage.getItem('gcvh_admin_token');
+  if (!token) {
+    window.location.href = 'admin.html';
+    return;
+  }
+
+  let allBlogs = [];
+
+  function showAlert(msg, isError = false) {
+    const el = document.getElementById('appAlert');
+    if (!el) return;
+    el.textContent = msg;
+    el.className = `alert show ${isError ? 'error' : 'success'}`;
+    setTimeout(() => { el.className = 'alert'; }, 6000);
+  }
+
+  async function loadBlogs() {
+    try {
+      const res = await fetch(`${window.GCVH_CONFIG.API_BASE_URL}/admin/blogs`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (!res.ok) throw new Error('Failed to load blogs');
+      const data = await res.json();
+      allBlogs = data.blogs || [];
+      render();
+    } catch (err) {
+      showAlert(err.message, true);
+    }
+  }
+
+  function render() {
+    const tbody = document.getElementById('blogsBody');
+    if (!tbody) return;
+
+    let userCount = 0;
+    let adminCount = 0;
+
+    allBlogs.forEach(b => {
+      if (b.user_id) userCount++;
+      else adminCount++;
+    });
+
+    document.getElementById('statTotalBlogs').textContent = allBlogs.length;
+    document.getElementById('statUserBlogs').textContent = userCount;
+    document.getElementById('statAdminBlogs').textContent = adminCount;
+
+    const q = (document.getElementById('searchInput').value || '').toLowerCase().trim();
+    const filtered = allBlogs.filter(b => {
+      if (!q) return true;
+      const title = (b.title || '').toLowerCase();
+      const desc = (b.description || '').toLowerCase();
+      const author = (b.author || b.author_name || b.author_email || '').toLowerCase();
+      return title.includes(q) || desc.includes(q) || author.includes(q);
+    });
+
+    if (!filtered.length) {
+      tbody.innerHTML = `<tr><td colspan="7" class="empty">No video publications found.</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = filtered.map(b => {
+      const vidUrl = b.video_url ? (b.video_url.startsWith('http') ? b.video_url : `${window.GCVH_CONFIG.API_BASE_URL.replace('/api','')}${b.video_url}`) : '';
+      const authorName = b.author || b.author_name || (b.user_id ? `User #${b.user_id}` : 'GCVH Institutional Desk');
+      const authorEmail = b.author_email ? `<div class="muted">${b.author_email}</div>` : (b.user_id ? '<div class="muted">Member Submission</div>' : '<div class="muted" style="color:var(--green)">Verified Editorial</div>');
+
+      return `
+        <tr>
+          <td><b>#${b.id}</b></td>
+          <td style="width:140px;">
+            ${vidUrl ? `
+              <video src="${vidUrl}" controls style="width:130px;height:75px;border-radius:6px;background:#000;object-fit:cover;"></video>
+            ` : '<span class="muted">No media</span>'}
+          </td>
+          <td style="max-width:320px;">
+            <div style="font-weight:700;color:#fff;font-size:12px">${b.title}</div>
+            <div class="muted" style="margin-top:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${b.description || ''}</div>
+          </td>
+          <td>
+            <b>${authorName}</b>
+            ${authorEmail}
+          </td>
+          <td style="font-weight:800;color:var(--gold2)">${b.price || b.valuation || 'Market Brief'}</td>
+          <td class="muted">${new Date(b.created_at || Date.now()).toLocaleDateString()}</td>
+          <td>
+            <div class="actions">
+              <button class="action edit-btn" onclick="openEditBlog(${b.id})">✏️ Edit</button>
+              <button class="action delete-btn" onclick="deleteBlog(${b.id})">🗑️ Delete</button>
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  // Edit logic
+  window.openEditBlog = (id) => {
+    const blog = allBlogs.find(b => b.id == id);
+    if (!blog) return;
+    document.getElementById('editBlogId').value = blog.id;
+    document.getElementById('editTitle').value = blog.title || '';
+    document.getElementById('editValuation').value = blog.price || blog.valuation || '';
+    document.getElementById('editDescription').value = blog.description || '';
+    document.getElementById('editVideoFile').value = '';
+    document.getElementById('editModal').classList.add('open');
+  };
+
+  const closeEdit = () => document.getElementById('editModal').classList.remove('open');
+  document.getElementById('closeEditModal').onclick = closeEdit;
+  document.getElementById('cancelEditBtn').onclick = closeEdit;
+
+  document.getElementById('editForm').onsubmit = async (e) => {
+    e.preventDefault();
+    const id = document.getElementById('editBlogId').value;
+    const formData = new FormData();
+    formData.append('title', document.getElementById('editTitle').value.trim());
+    formData.append('price', document.getElementById('editValuation').value.trim());
+    formData.append('description', document.getElementById('editDescription').value.trim());
+    
+    const file = document.getElementById('editVideoFile').files[0];
+    if (file) formData.append('video', file);
+
+    try {
+      const res = await fetch(`${window.GCVH_CONFIG.API_BASE_URL}/blogs/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+        body: formData
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || 'Edit failed');
+      showAlert(`Publication #${id} updated successfully!`);
+      closeEdit();
+      loadBlogs();
+    } catch (err) {
+      showAlert(err.message, true);
+    }
+  };
+
+  // Delete logic
+  window.deleteBlog = async (id) => {
+    if (!confirm(`Are you sure you want to permanently delete publication #${id} and its associated media? This action cannot be undone.`)) {
+      return;
+    }
+
+    try {
+      const res = await fetch(`${window.GCVH_CONFIG.API_BASE_URL}/blogs/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || 'Delete failed');
+      showAlert(`Publication #${id} and video media deleted successfully!`);
+      loadBlogs();
+    } catch (err) {
+      showAlert(err.message, true);
+    }
+  };
+
+  // Create modal logic
+  const closeCreate = () => document.getElementById('createModal').classList.remove('open');
+  document.getElementById('createBlogBtn').onclick = () => document.getElementById('createModal').classList.add('open');
+  document.getElementById('closeCreateModal').onclick = closeCreate;
+  document.getElementById('cancelCreateBtn').onclick = closeCreate;
+
+  document.getElementById('createForm').onsubmit = async (e) => {
+    e.preventDefault();
+    const file = document.getElementById('createVideoFile').files[0];
+    if (!file) {
+      alert('Please select a video file.');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('title', document.getElementById('createTitle').value.trim());
+    formData.append('price', document.getElementById('createValuation').value.trim());
+    formData.append('description', document.getElementById('createDescription').value.trim());
+    formData.append('author', 'GCVH Institutional Desk');
+    formData.append('video', file);
+
+    try {
+      const res = await fetch(`${window.GCVH_CONFIG.API_BASE_URL}/blogs`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+        body: formData
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || 'Failed to publish');
+      showAlert('✓ Video publication successfully posted to global market feed!');
+      closeCreate();
+      document.getElementById('createForm').reset();
+      loadBlogs();
+    } catch (err) {
+      showAlert(err.message, true);
+    }
+  };
+
+  document.getElementById('searchInput').oninput = render;
+  document.getElementById('refresh').onclick = loadBlogs;
+  document.getElementById('signOut').onclick = () => {
+    localStorage.removeItem('gcvh_admin_token');
+    sessionStorage.removeItem('gcvh_admin_token');
+    window.location.href = 'admin.html';
+  };
+
+  loadBlogs();
+})();
+</script>
+</body>
+</html>

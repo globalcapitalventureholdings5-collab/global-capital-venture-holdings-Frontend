@@ -125,21 +125,6 @@
       background: linear-gradient(135deg, #129269, #094530) !important;
       color: #ffffff !important;
     }
-    .nav-btn-dashboard {
-      background: #081a13 !important;
-      color: #5eead4 !important;
-      border: 1.5px solid #0f7a57 !important;
-      padding: 10px 20px !important;
-      border-radius: 8px !important;
-      font-weight: 800 !important;
-      transition: all 0.15s ease !important;
-    }
-    .nav-btn-dashboard:hover {
-      background: #0d2c20 !important;
-      color: #ffffff !important;
-      border-color: #10b981 !important;
-      transform: translateY(-1px);
-    }
 
     /* USER PROFILE CHIP & DROPDOWN */
     .user-nav-profile {
@@ -154,97 +139,104 @@
       padding: 5px 12px 5px 6px;
       border-radius: 999px;
       background: rgba(13, 90, 63, 0.06);
-      border: 1.5px solid rgba(13, 90, 63, 0.22);
-      color: #0d5a3f;
+      border: 1.5px solid rgba(13, 90, 63, 0.18);
+      color: var(--primary-dark);
       cursor: pointer;
+      font-size: 13px;
+      font-weight: 700;
       transition: all 0.15s ease;
     }
     .user-chip-btn:hover {
       background: rgba(13, 90, 63, 0.12);
-      border-color: #0d5a3f;
+      border-color: var(--primary);
     }
     .user-avatar-sm {
-      width: 34px;
-      height: 34px;
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
       background: linear-gradient(135deg, #0f7a57, #073827);
       color: #ffffff;
-      font-weight: 800;
-      font-size: 13px;
-      display: grid;
-      place-items: center;
-      box-shadow: 0 2px 6px rgba(13, 90, 63, 0.25);
-      flex-shrink: 0;
-    }
-    .user-text-meta {
-      display: flex;
-      flex-direction: column;
-      text-align: left;
-      line-height: 1.15;
-    }
-    .user-text-name {
       font-size: 12px;
       font-weight: 800;
-      color: #0d5a3f;
-      max-width: 120px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      box-shadow: 0 2px 6px rgba(13, 90, 63, 0.25);
     }
-    .user-text-email {
-      font-size: 10px;
-      color: #597368;
-      max-width: 120px;
+    .user-text-name {
+      max-width: 130px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      font-weight: 700;
+    }
+    .user-arrow-down {
+      font-size: 9px;
+      color: var(--primary-light);
     }
     .user-dropdown-menu {
       position: absolute;
-      top: calc(100% + 10px);
+      top: calc(100% + 8px);
       right: 0;
-      min-width: 220px;
+      width: 240px;
       background: #ffffff;
-      border: 1px solid rgba(13, 90, 63, 0.16);
+      border: 1px solid var(--line);
       border-radius: 12px;
       box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
       padding: 6px;
+      z-index: 1000;
       display: none;
       flex-direction: column;
-      gap: 3px;
-      z-index: 500;
+      gap: 2px;
     }
-    .user-dropdown-menu.show { display: flex; }
-    .user-dropdown-menu a, .user-dropdown-menu button {
+    .user-dropdown-menu.show {
       display: flex;
-      align-items: center;
-      gap: 10px;
+    }
+    .user-dropdown-header {
+      padding: 10px 12px 8px;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 4px;
+    }
+    .user-dropdown-header strong {
+      display: block;
+      font-size: 13px;
+      color: var(--primary-dark);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .user-dropdown-header span {
+      display: block;
+      font-size: 11px;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .user-dropdown-item {
       padding: 9px 12px;
       border-radius: 8px;
+      color: #243831;
       font-size: 13px;
-      font-weight: 700;
-      color: #1a2f26;
-      border: 0;
-      background: transparent;
-      text-decoration: none;
-      width: 100%;
-      text-align: left;
-      cursor: pointer;
-      transition: background 0.15s;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.15s, color 0.15s;
     }
-    .user-dropdown-menu a:hover, .user-dropdown-menu button:hover {
+    .user-dropdown-item:hover {
       background: rgba(13, 90, 63, 0.08);
-      color: #0d5a3f;
+      color: var(--primary);
     }
-    .user-dropdown-menu .logout-action {
-      color: #b91c1c;
-      border-top: 1px solid rgba(13, 90, 63, 0.08);
+    .user-dropdown-item.logout-link {
+      color: #dc2626;
+      border-top: 1px solid var(--line);
       margin-top: 4px;
       padding-top: 9px;
     }
-    .user-dropdown-menu .logout-action:hover {
-      background: rgba(185, 28, 28, 0.08);
-      color: #991b1b;
+    .user-dropdown-item.logout-link:hover {
+      background: rgba(220, 38, 38, 0.08);
+      color: #b91c1c;
     }
 
     /* MOBILE MENU BUTTON */
@@ -318,89 +310,87 @@
       place-items: center;
       cursor: pointer;
     }
-
-    /* MOBILE USER CARD IN DRAWER */
     .mobile-user-card {
       align-items: center;
       gap: 12px;
       padding: 12px 14px;
       border-radius: 12px;
-      background: rgba(13, 90, 63, 0.06);
-      border: 1px solid rgba(13, 90, 63, 0.15);
-      margin-bottom: 14px;
+      background: rgba(13, 90, 63, 0.05);
+      border: 1px solid var(--line);
+      margin-bottom: 16px;
     }
-
+    .mobile-user-avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #0f7a57, #073827);
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: 800;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+    }
+    .mobile-user-details strong {
+      display: block;
+      font-size: 13px;
+      color: var(--primary-dark);
+    }
+    .mobile-user-details span {
+      display: block;
+      font-size: 11px;
+      color: var(--muted);
+    }
     .mobile-nav-links {
       display: flex;
       flex-direction: column;
-      gap: 2px;
+      gap: 4px;
     }
     .mobile-nav-links a {
-      display: block;
       padding: 12px 14px;
       border-radius: 8px;
       color: #243831;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      font-size: 13px;
+      font-size: 14px;
       font-weight: 700;
-      transition: background 0.15s;
     }
     .mobile-nav-links a:hover, .mobile-nav-links a.active {
-      background: rgba(13, 90, 63, 0.08);
       color: var(--primary);
+      background: rgba(13, 90, 63, 0.06);
     }
-
     .mobile-auth-group {
+      margin-top: auto;
       display: flex;
       flex-direction: column;
       gap: 10px;
-      margin-top: auto;
       padding-top: 20px;
       border-top: 1px solid var(--line);
     }
     .mobile-btn-signin {
-      display: flex !important;
-      align-items: center;
-      justify-content: center;
+      text-align: center;
       padding: 13px !important;
       border: 1.5px solid rgba(13, 90, 63, 0.35) !important;
-      background: rgba(13, 90, 63, 0.05) !important;
       color: var(--primary) !important;
+      background: rgba(13, 90, 63, 0.04) !important;
       border-radius: 10px !important;
-      font-size: 14px !important;
       font-weight: 800 !important;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
     }
     .mobile-btn-signup {
-      display: flex !important;
-      align-items: center;
-      justify-content: center;
+      text-align: center;
       padding: 14px !important;
-      border: 0 !important;
       background: linear-gradient(135deg, #0f7a57, #0d5a3f) !important;
       color: #ffffff !important;
       border-radius: 10px !important;
-      font-size: 14px !important;
       font-weight: 800 !important;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
       box-shadow: 0 4px 14px rgba(13, 90, 63, 0.2);
     }
     .mobile-btn-dashboard {
-      display: flex !important;
-      align-items: center;
-      justify-content: center;
+      text-align: center;
       padding: 14px !important;
-      border: 1.5px solid #0f7a57 !important;
       background: #081a13 !important;
       color: #5eead4 !important;
+      border: 1.5px solid #0f7a57 !important;
       border-radius: 10px !important;
-      font-size: 14px !important;
       font-weight: 800 !important;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
     }
 
     /* PAGE HERO */
@@ -470,13 +460,117 @@
       transform: translateY(-2px);
     }
 
+    /* PROMOTIONAL / AD BANNER */
+    .blog-promo-banner {
+      background: linear-gradient(135deg, rgba(13, 90, 63, 0.12), rgba(197, 155, 39, 0.12));
+      border: 1.5px solid rgba(13, 90, 63, 0.2);
+      border-radius: 20px;
+      padding: 28px 32px;
+      margin-bottom: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .blog-promo-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: #c59b27;
+      color: #071912;
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .blog-promo-banner h3 {
+      font: 700 22px Georgia, serif;
+      color: var(--primary-dark);
+      margin-bottom: 4px;
+    }
+    .blog-promo-banner p {
+      color: var(--muted);
+      font-size: 14px;
+      max-width: 680px;
+    }
+
+    /* FILTER TABS */
+    .blog-filter-tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .blog-filter-tab {
+      padding: 9px 18px;
+      border-radius: 10px;
+      border: 1.5px solid var(--line);
+      background: #ffffff;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .blog-filter-tab:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+    .blog-filter-tab.active {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+      box-shadow: 0 4px 14px rgba(13, 90, 63, 0.2);
+    }
+
+    /* AUTHOR ACTIONS (EDIT / DELETE) */
+    .blog-author-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px dashed var(--line);
+    }
+    .blog-btn-action {
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 800;
+      border: 1px solid var(--line);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.15s ease;
+    }
+    .blog-btn-edit {
+      background: rgba(13, 90, 63, 0.08);
+      color: var(--primary);
+      border-color: rgba(13, 90, 63, 0.25);
+    }
+    .blog-btn-edit:hover {
+      background: var(--primary);
+      color: #ffffff;
+    }
+    .blog-btn-delete {
+      background: rgba(239, 68, 68, 0.08);
+      color: #dc2626;
+      border-color: rgba(239, 68, 68, 0.25);
+    }
+    .blog-btn-delete:hover {
+      background: #dc2626;
+      color: #ffffff;
+    }
+
     /* BLOGS TOOLBAR & ACTION HEADER */
     .blogs-toolbar {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 20px;
-      margin-bottom: 36px;
+      margin-bottom: 24px;
       padding-bottom: 24px;
       border-bottom: 1px solid var(--line);
       flex-wrap: wrap;
@@ -603,6 +697,8 @@
       font-size: 14px;
       flex: 1;
     }
+
+    /* BLOG FOOTER & DOWNLOAD */
     .blog-footer {
       display: flex;
       align-items: center;
@@ -679,9 +775,7 @@
       grid-column: 1 / -1;
     }
 
-    /* ==========================================================================
-       ADD POST MODAL DIALOG (GLASSMORPHISM & PREMIUM STYLING)
-       ========================================================================== */
+    /* MODAL GLASSMORPHISM */
     .post-modal-backdrop {
       position: fixed;
       inset: 0;
@@ -750,9 +844,8 @@
       transition: all 0.15s ease;
     }
     .post-modal-close:hover {
-      background: rgba(239, 68, 68, 0.25);
-      color: #ef4444;
-      border-color: #ef4444;
+      background: rgba(255, 255, 255, 0.18);
+      color: #ffffff;
     }
     .post-modal-title {
       font: 700 24px Georgia, serif;
@@ -760,197 +853,170 @@
       margin-bottom: 6px;
     }
     .post-modal-desc {
-      color: #92b8aa;
+      color: #9abdb2;
       font-size: 13px;
-      line-height: 1.55;
       margin-bottom: 22px;
+      line-height: 1.5;
     }
-    .post-modal-form {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
+
     .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 7px;
+      margin-bottom: 18px;
     }
     .form-group label {
+      display: block;
       font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 0.04em;
+      font-weight: 800;
       text-transform: uppercase;
-      color: #c0ded4;
+      letter-spacing: 0.06em;
+      color: #5eead4;
+      margin-bottom: 7px;
     }
-    .form-group label .req { color: #f87171; }
+    .form-group label .req {
+      color: #f87171;
+    }
     .form-group input[type="text"],
     .form-group input[type="number"],
     .form-group textarea {
       width: 100%;
-      background: rgba(4, 18, 13, 0.75);
-      border: 1.5px solid rgba(94, 234, 212, 0.2);
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(94, 234, 212, 0.2);
       border-radius: 12px;
       padding: 12px 16px;
       color: #ffffff;
       font-size: 14px;
-      font-family: inherit;
       outline: none;
       transition: border-color 0.2s, box-shadow 0.2s;
     }
     .form-group input:focus,
     .form-group textarea:focus {
       border-color: #5eead4;
-      box-shadow: 0 0 0 3px rgba(94, 234, 212, 0.15);
+      box-shadow: 0 0 16px rgba(94, 234, 212, 0.2);
+      background: rgba(255, 255, 255, 0.09);
     }
-    .form-grid-2 {
+    .form-group textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .form-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 16px;
     }
-    @media (max-width: 600px) {
-      .form-grid-2 { grid-template-columns: 1fr; }
+    @media (max-width: 768px) {
+      .form-row { grid-template-columns: 1fr; }
+      .blog-grid { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+      .menu-btn { display: grid; place-items: center; }
     }
-    .input-with-prefix {
-      position: relative;
-      display: flex;
-      align-items: center;
-    }
-    .input-prefix {
-      position: absolute;
-      left: 14px;
-      color: #5eead4;
-      font-weight: 700;
-      font-size: 14px;
-      pointer-events: none;
-    }
-    .input-with-prefix input {
-      padding-left: 30px !important;
-    }
+
     .file-upload-box {
-      border: 1.5px dashed rgba(94, 234, 212, 0.3);
+      border: 1.5px dashed rgba(94, 234, 212, 0.35);
       border-radius: 12px;
-      padding: 12px 14px;
-      background: rgba(4, 18, 13, 0.5);
+      padding: 18px 16px;
+      text-align: center;
+      background: rgba(16, 185, 129, 0.04);
+      cursor: pointer;
+      position: relative;
       transition: all 0.2s ease;
     }
     .file-upload-box:hover {
       border-color: #5eead4;
-      background: rgba(13, 90, 63, 0.15);
+      background: rgba(16, 185, 129, 0.09);
     }
     .file-upload-box input[type="file"] {
       width: 100%;
-      color: #92b8aa;
-      font-size: 12px;
       cursor: pointer;
+      color: #a7d3c5;
+      font-size: 13px;
     }
+
     .file-selected-info {
       display: flex;
       align-items: center;
       gap: 10px;
-      background: rgba(94, 234, 212, 0.08);
+      background: rgba(94, 234, 212, 0.1);
       border: 1px solid rgba(94, 234, 212, 0.25);
       border-radius: 10px;
-      padding: 10px 14px;
-      font-size: 13px;
+      padding: 8px 14px;
+      margin-top: 8px;
+      font-size: 12px;
       color: #5eead4;
     }
-    .file-name {
-      font-weight: 700;
+    .file-selected-info .file-name {
+      flex: 1;
+      white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      white-space: nowrap;
-      flex: 1;
+      font-weight: 700;
     }
-    .file-size {
-      font-size: 11px;
-      color: #92b8aa;
-    }
-    .post-alert {
-      padding: 12px 16px;
-      border-radius: 10px;
-      font-size: 13px;
-      font-weight: 600;
-      line-height: 1.4;
-    }
-    .post-alert.error {
-      background: rgba(239, 68, 68, 0.18);
-      border: 1px solid rgba(239, 68, 68, 0.4);
-      color: #fca5a5;
-    }
-    .post-alert.success {
-      background: rgba(16, 185, 129, 0.18);
-      border: 1px solid rgba(16, 185, 129, 0.4);
-      color: #6ee7b7;
-    }
+
     .post-modal-actions {
       display: flex;
       align-items: center;
       justify-content: flex-end;
       gap: 12px;
-      margin-top: 6px;
-      padding-top: 16px;
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
     }
     .btn-cancel-post {
-      background: transparent;
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.08);
       color: #c0ded4;
-      padding: 11px 20px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 12px 22px;
       border-radius: 10px;
-      font-size: 13px;
       font-weight: 700;
+      font-size: 13px;
       cursor: pointer;
-      transition: background 0.15s;
+      transition: all 0.15s ease;
     }
     .btn-cancel-post:hover {
-      background: rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.15);
       color: #ffffff;
     }
     .btn-submit-post {
-      background: linear-gradient(135deg, #0f7a57, #0d5a3f);
-      color: #ffffff;
-      border: 1.5px solid rgba(94, 234, 212, 0.4);
-      padding: 12px 24px;
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #041a12;
+      border: 0;
+      padding: 12px 26px;
       border-radius: 10px;
-      font-size: 13px;
       font-weight: 800;
+      font-size: 13px;
       cursor: pointer;
+      box-shadow: 0 4px 16px rgba(16, 185, 129, 0.35);
+      transition: all 0.15s ease;
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      box-shadow: 0 4px 18px rgba(13, 90, 63, 0.3);
-      transition: all 0.2s ease;
     }
     .btn-submit-post:hover {
-      background: linear-gradient(135deg, #129269, #094530);
-      border-color: #5eead4;
       transform: translateY(-1px);
-      box-shadow: 0 8px 25px rgba(13, 90, 63, 0.45);
+      box-shadow: 0 6px 22px rgba(16, 185, 129, 0.45);
+      background: linear-gradient(135deg, #34d399, #10b981);
     }
     .btn-submit-post:disabled {
       opacity: 0.6;
       cursor: not-allowed;
       transform: none;
     }
-    .spinner-icon {
-      animation: rotate 1s linear infinite;
-      width: 16px;
-      height: 16px;
-      display: inline-block;
-      vertical-align: middle;
+
+    .post-alert {
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-size: 13px;
+      margin-bottom: 16px;
+      display: none;
     }
-    .spinner-icon circle {
-      stroke: currentColor;
-      stroke-linecap: round;
-      animation: dash 1.5s ease-in-out infinite;
+    .post-alert.error {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.35);
+      color: #fca5a5;
     }
-    @keyframes rotate {
-      100% { transform: rotate(360deg); }
-    }
-    @keyframes dash {
-      0% { stroke-dasharray: 1, 150; stroke-dashoffset: 0; }
-      50% { stroke-dasharray: 90, 150; stroke-dashoffset: -35; }
-      100% { stroke-dasharray: 90, 150; stroke-dashoffset: -124; }
+    .post-alert.success {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      color: #6ee7b7;
     }
 
     /* FOOTER */
@@ -958,39 +1024,56 @@
       background: #071912;
       color: #8dafa3;
       padding: 80px 28px 40px;
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      border-top: 1px solid var(--line);
     }
     .footer-container {
       max-width: 1320px;
       margin: auto;
       display: grid;
-      grid-template-columns: 2fr 1fr 1fr 1.2fr;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
       gap: 48px;
-      padding-bottom: 60px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     }
-    .footer-brand h4 { font: 700 24px Georgia, serif; color: #ffffff; margin-bottom: 14px; }
-    .footer-brand p { font-size: 14px; line-height: 1.7; max-width: 360px; }
-    .footer-col h5 { color: #ffffff; font-size: 13px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 20px; }
-    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
-    .footer-col a { color: #8dafa3; font-size: 14px; transition: color 0.15s; }
+    .footer-brand h4 {
+      font: 700 20px Georgia, serif;
+      color: #ffffff;
+      margin-bottom: 12px;
+    }
+    .footer-brand p {
+      font-size: 14px;
+      line-height: 1.7;
+      max-width: 320px;
+    }
+    .footer-col h5 {
+      color: #ffffff;
+      font-size: 13px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    .footer-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .footer-col a {
+      color: #8dafa3;
+      font-size: 14px;
+      transition: color 0.15s;
+    }
     .footer-col a:hover { color: #ffffff; }
     .footer-bottom {
       max-width: 1320px;
-      margin: 30px auto 0;
+      margin: 40px auto 0;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
       display: flex;
       justify-content: space-between;
       align-items: center;
       font-size: 12px;
       color: #638579;
-    }
-
-    @media (max-width: 900px) {
-      .nav-links { display: none; }
-      .menu-btn { display: grid; place-items: center; }
-      .blog-grid { grid-template-columns: 1fr; }
-      .footer-container { grid-template-columns: 1fr; gap: 32px; }
-      .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+      flex-wrap: wrap;
+      gap: 12px;
     }
   </style>
 </head>
@@ -1008,67 +1091,72 @@
         <a href="index.html">Home</a>
         <a href="packages.html">Packages</a>
         <a href="salary-system.html">Salary System</a>
-        <a href="about.html">About Us</a>
+        <a href="deposit.html" style="color:var(--gold);font-weight:700;">Deposit</a>
         <a href="blogs.html" class="active">Blogs</a>
+        <a href="about.html">About</a>
         <a href="contact.html">Contact</a>
 
-        <!-- Guest state -->
+        <!-- Guest links -->
         <a href="login.html" class="nav-btn-signin nav-guest-item">Sign In</a>
-        <a href="register.html" class="nav-btn-signup nav-guest-item">Create Account</a>
+        <a href="register.html" class="nav-btn-signup nav-guest-item">Join Now</a>
 
-        <!-- Logged in state -->
+        <!-- Logged in state CTA -->
+        <a href="deposit.html" class="nav-btn-deposit nav-user-item" style="display:none;background:linear-gradient(135deg,var(--gold),#a88132);color:#07120c;font-weight:800;padding:8px 16px;border-radius:8px;text-decoration:none;">+ Deposit</a>
         <a href="dashboard.html" class="nav-btn-dashboard nav-user-item" style="display:none;">Dashboard</a>
 
-        <div class="user-nav-profile nav-user-item" style="display:none;">
-          <button type="button" class="user-chip-btn" id="userNavChip" aria-label="User Account Menu">
+        <!-- User profile dropdown -->
+        <div class="user-nav-profile" style="display:none;">
+          <div class="user-chip-btn" id="userNavChip">
             <div class="user-avatar-sm">GC</div>
-            <div class="user-text-meta">
-              <span class="user-text-name">Private Client</span>
-              <span class="user-text-email">user@domain.com</span>
-            </div>
-            <span style="font-size:10px; opacity:0.6; margin-left:2px;">▼</span>
-          </button>
+            <span class="user-text-name">Private Client</span>
+            <span class="user-arrow-down">▼</span>
+          </div>
           <div class="user-dropdown-menu" id="userNavDropdown">
-            <a href="dashboard.html"><span>▦</span> Member Dashboard</a>
-            <a href="packages.html"><span>💎</span> Investment Packages</a>
-            <a href="salary-system.html"><span>🏆</span> Salary System</a>
-            <button type="button" class="nav-logout-btn logout-action"><span>🚪</span> Sign Out / Logout</button>
+            <div class="user-dropdown-header">
+              <strong class="user-text-name">Private Client</strong>
+              <span class="user-text-email">client@globalcapital.com</span>
+            </div>
+            <a href="dashboard.html" class="user-dropdown-item">◫ Portfolio Dashboard</a>
+            <a href="dashboard-videos.html" class="user-dropdown-item">🎬 My Video Manager</a>
+            <a href="deposit.html" class="user-dropdown-item">↓ Make a Deposit</a>
+            <a href="packages.html" class="user-dropdown-item">◈ Investment Packages</a>
+            <a href="#" class="user-dropdown-item logout-link nav-logout-btn">↪ Sign Out</a>
           </div>
         </div>
       </nav>
 
-      <button class="menu-btn" id="menuBtn" type="button" aria-label="Open navigation menu">☰</button>
+      <button class="menu-btn" id="mobileMenuBtn" aria-label="Toggle menu">☰</button>
     </div>
   </header>
 
-  <!-- MOBILE OVERLAY BACKDROP -->
-  <div id="navBackdrop" class="nav-backdrop"></div>
+  <!-- BACKDROP OVERLAY FOR MOBILE DRAWER -->
+  <div class="nav-backdrop" id="navBackdrop"></div>
 
-  <!-- MOBILE DRAWER (OVERLAY ON TOP OF PAGE) -->
+  <!-- MOBILE DRAWER (SLIDES FROM LEFT) -->
   <div class="mobile-menu" id="mobileMenu">
     <div class="mobile-drawer-header">
-      <div style="font:700 15px Georgia, serif; color:var(--primary); display:flex; align-items:center; gap:8px;">
-        <span class="logo-mark" style="width:32px;height:32px;font-size:16px;">✦</span> GCVH Navigation
+      <div class="logo">
+        <span class="logo-mark">✦</span>
+        <span class="brand-name">Global Capital<br><b>Venture Holdings</b></span>
       </div>
-      <button id="mobileCloseBtn" class="mobile-drawer-close" type="button" aria-label="Close navigation">✕</button>
+      <button class="mobile-drawer-close" id="mobileCloseBtn">✕</button>
     </div>
 
-    <!-- Logged in user profile card in mobile drawer -->
-    <div class="mobile-user-card nav-user-item" style="display:none;">
-      <div class="mobile-user-avatar user-avatar-sm">GC</div>
-      <div style="flex:1; overflow:hidden;">
-        <strong class="mobile-user-name" style="display:block; font-size:13px; color:var(--primary); text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">Private Client</strong>
-        <span class="mobile-user-email" style="display:block; font-size:11px; color:var(--muted); text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">Active Member</span>
+    <!-- User card in drawer -->
+    <div class="mobile-user-card" style="display:none;">
+      <div class="mobile-user-avatar">GC</div>
+      <div class="mobile-user-details">
+        <strong class="mobile-user-name">Private Client</strong>
+        <span class="mobile-user-email">client@globalcapital.com</span>
       </div>
-      <button type="button" class="nav-logout-btn" style="border:1px solid rgba(239,68,68,0.3); background:rgba(239,68,68,0.08); color:#ef4444; border-radius:8px; padding:6px 10px; font-size:11px; font-weight:800; cursor:pointer;">Logout</button>
     </div>
 
     <div class="mobile-nav-links">
       <a href="index.html">Home</a>
       <a href="packages.html">Packages</a>
       <a href="salary-system.html">Salary System</a>
+      <a href="blogs.html" class="active">Blogs & Research</a>
       <a href="about.html">About Us</a>
-      <a href="blogs.html" class="active">Blogs</a>
       <a href="contact.html">Contact</a>
     </div>
 
@@ -1081,78 +1169,92 @@
     <!-- User action -->
     <div class="mobile-auth-group nav-user-item" style="display:none;">
       <a href="dashboard.html" class="mobile-btn-dashboard">Go to Dashboard →</a>
+      <a href="#" class="mobile-btn-signin" id="mobileLogoutBtn" style="margin-top:8px;">Sign Out</a>
     </div>
   </div>
 
-  <!-- HERO SECTION -->
-  <main>
-    <section class="page-hero">
-      <div class="eyebrow">RESEARCH & INSIGHTS</div>
-      <h1>Blogs & <span>Market Insights</span></h1>
-      <p>Explore real-time algorithmic market analysis, trading insights, and technical research from the Global Capital community.</p>
-      
-      <!-- HERO ADD POST BUTTON (VISIBLE WHEN LOGGED IN) -->
-      <div class="hero-actions nav-user-item" style="display:none;">
-        <button type="button" class="btn-hero-add-post" id="heroAddPostBtn">
-          <span style="font-size:18px; line-height:1;">✍️</span>
-          <span>Publish Market Research / + Add Post</span>
-        </button>
-      </div>
-    </section>
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <div class="eyebrow">✦ Institutional Research Desk</div>
+    <h1>Market Insights & <span>Video Intelligence</span></h1>
+    <p>Explore algorithmic strategies, real-time gold (XAUUSD) technical breakdowns, and community video intelligence.</p>
+    <div class="hero-actions">
+      <button class="btn-hero-add-post" id="heroAddPostBtn" type="button">
+        <span>✍️</span>
+        <span>+ Publish Video Briefing</span>
+      </button>
+    </div>
+  </section>
 
-    <section class="blogs-container">
-      <!-- TOOLBAR WITH ADD POST BUTTON -->
-      <div class="blogs-toolbar">
-        <div class="blogs-toolbar-info">
-          <h2>Institutional Research & Insights</h2>
-          <p>Real-time video briefings, valuation reports, and strategy breakdowns.</p>
-        </div>
-        <button type="button" id="openAddPostBtn" class="btn-add-post nav-user-item" style="display:none;">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-          <span>+ Add New Post</span>
-        </button>
-      </div>
+  <!-- MAIN BLOGS CONTAINER -->
+  <main class="blogs-container">
 
-      <div id="blogList" class="blog-grid">
-        <div class="empty-state">Loading published research and market insights...</div>
+    <!-- PROMOTIONAL / AD BANNER -->
+    <div class="blog-promo-banner">
+      <div>
+        <span class="blog-promo-badge">COMMUNITY CONTENT INCENTIVE</span>
+        <h3>Share Your Market Insights & Video Briefings</h3>
+        <p>Publish your trading analyses and strategies. You have complete control to edit or delete your uploaded content anytime.</p>
       </div>
-      <div class="pagination" id="pagination"></div>
-    </section>
+      <a href="packages.html" class="download-btn" style="white-space:nowrap;">Explore Packages →</a>
+    </div>
+
+    <!-- TOOLBAR & FILTER TABS -->
+    <div class="blogs-toolbar">
+      <div class="blogs-toolbar-info">
+        <h2>Published Briefings & Research</h2>
+        <p>Access high-definition institutional video briefings and analytical reports.</p>
+      </div>
+      <button class="btn-add-post" id="openAddPostBtn" type="button">
+        <span>🎬</span>
+        <span>+ Add New Video Post</span>
+      </button>
+    </div>
+
+    <!-- FILTER TABS (ALL vs MY POSTS) -->
+    <div class="blog-filter-tabs" id="blogFilterTabs">
+      <button type="button" class="blog-filter-tab active" data-filter="all" id="tabAllBlogs">All Market Insights</button>
+      <button type="button" class="blog-filter-tab" data-filter="mine" id="tabMyBlogs" style="display:none;">🎬 My Uploaded Videos & Posts</button>
+    </div>
+
+    <!-- BLOG POSTS GRID -->
+    <div id="blogList" class="blog-grid">
+      <div class="empty-state">Loading market insights and video briefings…</div>
+    </div>
+
+    <!-- PAGINATION -->
+    <div class="pagination" id="pagination"></div>
   </main>
 
-  <!-- ADD POST MODAL DIALOG -->
-  <div id="addPostModal" class="post-modal-backdrop" aria-hidden="true">
+  <!-- CREATE BLOG POST MODAL -->
+  <div class="post-modal-backdrop" id="addPostModal">
     <div class="post-modal-dialog">
       <div class="post-modal-header">
-        <span class="post-modal-badge">✦ COMMUNITY DESK</span>
-        <button type="button" class="post-modal-close" id="closeAddPostModal" aria-label="Close modal">✕</button>
+        <span class="post-modal-badge">✦ PUBLISH RESEARCH</span>
+        <button type="button" class="post-modal-close" id="closeAddPostModal">✕</button>
       </div>
+      <h3 class="post-modal-title">Publish New Video Post</h3>
+      <p class="post-modal-desc">Share an institutional market briefing, algorithmic analysis, or strategy breakdown with the Global Capital community.</p>
 
-      <h2 class="post-modal-title">Create & Publish Blog Post</h2>
-      <p class="post-modal-desc">Share your technical analysis, trading video breakdown, or portfolio insights with verified Global Capital investors.</p>
+      <div id="postFormAlert" class="post-alert"></div>
 
-      <form id="addPostForm" class="post-modal-form">
-        <div id="postFormAlert" class="post-alert" style="display:none;"></div>
-
-        <div class="form-group">
-          <label for="postTitle">Post Title / Research Topic <span class="req">*</span></label>
-          <input type="text" id="postTitle" name="name" required placeholder="e.g. Gold & BTC Liquidity Sweep Analysis — Q3 Outlook" maxlength="250" autocomplete="off">
-        </div>
-
-        <div class="form-grid-2">
+      <form id="addPostForm" enctype="multipart/form-data">
+        <div class="form-row">
           <div class="form-group">
-            <label for="postPrice">Estimated Valuation / Asset ($)</label>
-            <div class="input-with-prefix">
-              <span class="input-prefix">$</span>
-              <input type="number" id="postPrice" name="price" step="0.01" min="0" placeholder="0.00" value="0.00">
-            </div>
+            <label for="postTitle">Research Title <span class="req">*</span></label>
+            <input type="text" id="postTitle" name="name" required placeholder="e.g., Gold Breakout Analysis (XAUUSD)">
           </div>
 
           <div class="form-group">
-            <label for="postVideo">Video Attachment (.mp4, .mov, .webm) <span class="req">*</span></label>
-            <div class="file-upload-box">
-              <input type="file" id="postVideo" name="video" accept="video/mp4,video/webm,video/quicktime,video/x-msvideo,video/x-matroska" required>
-            </div>
+            <label for="postPrice">Valuation / Reference ($ USD)</label>
+            <input type="number" id="postPrice" name="price" step="0.01" min="0" value="0.00" placeholder="0.00">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="postVideo">Video Attachment (.mp4, .mov, .webm) <span class="req">*</span></label>
+          <div class="file-upload-box">
+            <input type="file" id="postVideo" name="video" accept="video/mp4,video/webm,video/quicktime,video/x-msvideo,video/x-matroska" required>
           </div>
         </div>
 
@@ -1172,9 +1274,65 @@
           <button type="submit" class="btn-submit-post" id="submitAddPostBtn">
             <span class="btn-submit-text">Publish Post Now →</span>
             <span class="btn-submit-spinner" style="display:none;">
-              <svg class="spinner-icon" viewBox="0 0 50 50"><circle cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle></svg>
               Uploading & Publishing...
             </span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- EDIT BLOG POST MODAL -->
+  <div class="post-modal-backdrop" id="editPostModal">
+    <div class="post-modal-dialog">
+      <div class="post-modal-header">
+        <span class="post-modal-badge" style="color:#5eead4;background:rgba(94,234,212,0.12);border-color:rgba(94,234,212,0.3);">✏️ EDIT VIDEO POST</span>
+        <button type="button" class="post-modal-close" id="closeEditPostModal">✕</button>
+      </div>
+      <h3 class="post-modal-title">Edit Your Post</h3>
+      <p class="post-modal-desc">Update the title, description, valuation, or optionally replace the uploaded video file.</p>
+
+      <div id="editFormAlert" class="post-alert"></div>
+
+      <form id="editPostForm" enctype="multipart/form-data">
+        <input type="hidden" id="editPostId" name="id">
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="editPostTitle">Research Title <span class="req">*</span></label>
+            <input type="text" id="editPostTitle" name="name" required placeholder="e.g., Gold Breakout Analysis">
+          </div>
+
+          <div class="form-group">
+            <label for="editPostPrice">Valuation / Reference ($ USD)</label>
+            <input type="number" id="editPostPrice" name="price" step="0.01" min="0" value="0.00" placeholder="0.00">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="editPostVideo">Replace Video File (Optional)</label>
+          <div class="file-upload-box">
+            <input type="file" id="editPostVideo" name="video" accept="video/mp4,video/webm,video/quicktime,video/x-msvideo,video/x-matroska">
+          </div>
+          <small style="font-size:11px;color:#9abdb2;margin-top:4px;display:block;">Leave blank to keep existing video file.</small>
+        </div>
+
+        <div id="editFileSelectedPreview" class="file-selected-info" style="display:none;">
+          <span style="font-size:18px;">🎬</span>
+          <span class="file-name" id="editFileNamePreview">No file selected</span>
+          <span class="file-size" id="editFileSizePreview">0 MB</span>
+        </div>
+
+        <div class="form-group">
+          <label for="editPostDescription">Insight & Research Description <span class="req">*</span></label>
+          <textarea id="editPostDescription" name="description" required rows="5" placeholder="Detail the technical rationale..."></textarea>
+        </div>
+
+        <div class="post-modal-actions">
+          <button type="button" class="btn-cancel-post" id="cancelEditPostBtn">Cancel</button>
+          <button type="submit" class="btn-submit-post" id="submitEditPostBtn">
+            <span class="btn-submit-text">Save Changes →</span>
+            <span class="btn-submit-spinner" style="display:none;">Saving Updates...</span>
           </button>
         </div>
       </form>
@@ -1228,9 +1386,12 @@
   <script src="config.js"></script>
   <script>
     'use strict';
-    const state = { page: 1, totalPages: 1, items: [] };
+    const state = { page: 1, totalPages: 1, items: [], currentFilter: 'all' };
     const blogList = document.getElementById('blogList');
     const paginationEl = document.getElementById('pagination');
+
+    let currentUserId = null;
+    let isAdmin = false;
 
     // Add Post Modal Elements
     const addPostModal = document.getElementById('addPostModal');
@@ -1246,6 +1407,18 @@
     const fileSizePreview = document.getElementById('fileSizePreview');
     const submitAddPostBtn = document.getElementById('submitAddPostBtn');
 
+    // Edit Post Modal Elements
+    const editPostModal = document.getElementById('editPostModal');
+    const closeEditPostModal = document.getElementById('closeEditPostModal');
+    const cancelEditPostBtn = document.getElementById('cancelEditPostBtn');
+    const editPostForm = document.getElementById('editPostForm');
+    const editFormAlert = document.getElementById('editFormAlert');
+    const editPostVideoInput = document.getElementById('editPostVideo');
+    const editFileSelectedPreview = document.getElementById('editFileSelectedPreview');
+    const editFileNamePreview = document.getElementById('editFileNamePreview');
+    const editFileSizePreview = document.getElementById('editFileSizePreview');
+    const submitEditPostBtn = document.getElementById('submitEditPostBtn');
+
     function resolveMedia(url) {
       if (!url) return '';
       return /^https?:\/\//i.test(url) ? url : `${API}${url}`;
@@ -1255,9 +1428,35 @@
       return String(str || '').replace(/[<>&]/g, c => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' }[c]));
     }
 
+    async function checkUserSession() {
+      const token = getCustomerToken();
+      const adminToken = localStorage.getItem('gcvh_admin_token');
+      isAdmin = Boolean(adminToken);
+
+      if (token) {
+        try {
+          const res = await fetch(`${API}/api/me`, {
+            headers: { Authorization: `Bearer ${token}` },
+            cache: 'no-store'
+          });
+          if (res.ok) {
+            const data = await res.json();
+            currentUserId = data.id;
+            const tabMyBlogs = document.getElementById('tabMyBlogs');
+            if (tabMyBlogs) tabMyBlogs.style.display = 'inline-block';
+          }
+        } catch (e) {}
+      }
+    }
+
     async function fetchBlogs(page = 1) {
       try {
-        const res = await fetch(`${API}/api/blogs?page=${page}&limit=20`, { cache: 'no-store' });
+        let url = `${API}/api/blogs?page=${page}&limit=20`;
+        if (state.currentFilter === 'mine' && currentUserId) {
+          url += `&user_id=${currentUserId}`;
+        }
+
+        const res = await fetch(url, { cache: 'no-store' });
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || 'Unable to load blogs.');
 
@@ -1273,12 +1472,17 @@
 
     function renderBlogs() {
       if (!state.items.length) {
-        blogList.innerHTML = '<div class="empty-state">No market insight articles or videos are currently published. Click <b>+ Add New Post</b> above to publish the first insight!</div>';
+        const msg = state.currentFilter === 'mine'
+          ? 'You have not published any videos yet. Click <b>+ Add New Video Post</b> to upload your first briefing!'
+          : 'No market insight articles or videos are currently published. Click <b>+ Add New Post</b> above to publish the first insight!';
+        blogList.innerHTML = `<div class="empty-state">${msg}</div>`;
         return;
       }
 
       blogList.innerHTML = state.items.map(blog => {
         const hasVideo = Boolean(blog.video_url && blog.video_url.trim());
+        const isOwner = (currentUserId && Number(blog.user_id) === Number(currentUserId)) || isAdmin;
+
         const mediaHtml = hasVideo
           ? `<div class="blog-video-wrap">
                <video class="blog-video" controls preload="metadata" src="${resolveMedia(blog.video_url)}"></video>
@@ -1290,8 +1494,19 @@
                </div>
              </div>`;
 
+        const authorActions = isOwner
+          ? `<div class="blog-author-actions">
+               <button class="blog-btn-action blog-btn-edit" type="button" onclick="openEditModal(${blog.id})">
+                 <span>✏️</span> Edit Post
+               </button>
+               <button class="blog-btn-action blog-btn-delete" type="button" onclick="deleteBlog(${blog.id})">
+                 <span>🗑️</span> Delete Video
+               </button>
+             </div>`
+          : '';
+
         return `
-          <article class="blog-card">
+          <article class="blog-card" id="blogCard-${blog.id}">
             ${mediaHtml}
             <div class="blog-body">
               <div class="blog-meta">
@@ -1300,10 +1515,13 @@
               </div>
               <h3 class="blog-title">${escapeHtml(blog.name || 'Market Report')}</h3>
               <p class="blog-description">${escapeHtml(blog.description || '').replace(/\n/g, '<br>')}</p>
+              
               <div class="blog-footer">
                 <span class="price">Valuation: $${Number(blog.price || 0).toFixed(2)}</span>
                 ${hasVideo ? `<a class="download-btn" href="${API}/api/blogs/${blog.id}/download" target="_blank" rel="noopener">Download Video ↓</a>` : ''}
               </div>
+
+              ${authorActions}
             </div>
           </article>
         `;
@@ -1335,11 +1553,21 @@
       });
     }
 
+    // Filter tab clicks
+    document.querySelectorAll('.blog-filter-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.blog-filter-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        state.currentFilter = tab.dataset.filter;
+        fetchBlogs(1);
+      });
+    });
+
     // Modal Handlers
     function openModal() {
-      const token = getCustomerToken();
+      const token = getCustomerToken() || localStorage.getItem('gcvh_admin_token');
       if (!token) {
-        if (confirm('You must be signed in to add a blog post. Would you like to sign in now?')) {
+        if (confirm('You must be signed in to add a video post. Would you like to sign in now?')) {
           location.href = 'login.html';
         }
         return;
@@ -1377,19 +1605,10 @@
     if (closeAddPostModal) closeAddPostModal.addEventListener('click', closeModal);
     if (cancelAddPostBtn) cancelAddPostBtn.addEventListener('click', closeModal);
 
-    // Close on backdrop click
     addPostModal.addEventListener('click', (e) => {
       if (e.target === addPostModal) closeModal();
     });
 
-    // Close on Escape key
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && addPostModal.classList.contains('open')) {
-        closeModal();
-      }
-    });
-
-    // File selection preview
     if (postVideoInput) {
       postVideoInput.addEventListener('change', () => {
         const file = postVideoInput.files && postVideoInput.files[0];
@@ -1403,11 +1622,11 @@
       });
     }
 
-    // Form Submission
+    // Add Post Form Submission
     if (addPostForm) {
       addPostForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const token = getCustomerToken();
+        const token = getCustomerToken() || localStorage.getItem('gcvh_admin_token');
         if (!token) {
           alert('Session expired. Please sign in again.');
           location.href = 'login.html';
@@ -1419,23 +1638,16 @@
         const description = document.getElementById('postDescription').value.trim();
         const videoFile = postVideoInput.files && postVideoInput.files[0];
 
-        if (!title) {
+        if (!title || !description) {
           postFormAlert.className = 'post-alert error';
-          postFormAlert.textContent = 'Please enter a post title.';
-          postFormAlert.style.display = 'block';
-          return;
-        }
-
-        if (!description) {
-          postFormAlert.className = 'post-alert error';
-          postFormAlert.textContent = 'Please enter a research description.';
+          postFormAlert.textContent = 'Please enter a title and description.';
           postFormAlert.style.display = 'block';
           return;
         }
 
         if (!videoFile) {
           postFormAlert.className = 'post-alert error';
-          postFormAlert.textContent = 'Please attach a video file for this research briefing.';
+          postFormAlert.textContent = 'Please attach a video file for this briefing.';
           postFormAlert.style.display = 'block';
           return;
         }
@@ -1452,20 +1664,15 @@
         try {
           const res = await fetch(`${API}/api/blogs`, {
             method: 'POST',
-            headers: {
-              'Authorization': `Bearer ${token}`
-            },
+            headers: { 'Authorization': `Bearer ${token}` },
             body: formData
           });
 
           const data = await res.json();
-
-          if (!res.ok) {
-            throw new Error(data.error || 'Failed to publish post. Please check your video size and try again.');
-          }
+          if (!res.ok) throw new Error(data.error || 'Failed to publish post.');
 
           postFormAlert.className = 'post-alert success';
-          postFormAlert.textContent = '✓ Blog post and video briefing published successfully!';
+          postFormAlert.textContent = '✓ Video post published successfully!';
           postFormAlert.style.display = 'block';
 
           setTimeout(() => {
@@ -1482,7 +1689,147 @@
       });
     }
 
-    window.addEventListener('load', () => {
+    // =========================================================================
+    // EDIT & DELETE ACTIONS
+    // =========================================================================
+    window.openEditModal = async function(id) {
+      const blog = state.items.find(b => Number(b.id) === Number(id));
+      if (!blog) {
+        alert('Blog item not found.');
+        return;
+      }
+
+      document.getElementById('editPostId').value = blog.id;
+      document.getElementById('editPostTitle').value = blog.name || '';
+      document.getElementById('editPostPrice').value = Number(blog.price || 0).toFixed(2);
+      document.getElementById('editPostDescription').value = blog.description || '';
+      editPostVideoInput.value = '';
+      editFileSelectedPreview.style.display = 'none';
+      editFormAlert.style.display = 'none';
+
+      editPostModal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      document.getElementById('editPostTitle').focus();
+    };
+
+    function closeEditModal() {
+      editPostModal.classList.remove('open');
+      document.body.style.overflow = '';
+      editPostForm.reset();
+      editFileSelectedPreview.style.display = 'none';
+      editFormAlert.style.display = 'none';
+    }
+
+    if (closeEditPostModal) closeEditPostModal.addEventListener('click', closeEditModal);
+    if (cancelEditPostBtn) cancelEditPostBtn.addEventListener('click', closeEditModal);
+    editPostModal.addEventListener('click', (e) => {
+      if (e.target === editPostModal) closeEditModal();
+    });
+
+    if (editPostVideoInput) {
+      editPostVideoInput.addEventListener('change', () => {
+        const file = editPostVideoInput.files && editPostVideoInput.files[0];
+        if (file) {
+          editFileNamePreview.textContent = file.name;
+          editFileSizePreview.textContent = (file.size / (1024 * 1024)).toFixed(2) + ' MB';
+          editFileSelectedPreview.style.display = 'flex';
+        } else {
+          editFileSelectedPreview.style.display = 'none';
+        }
+      });
+    }
+
+    if (editPostForm) {
+      editPostForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const token = getCustomerToken() || localStorage.getItem('gcvh_admin_token');
+        if (!token) {
+          alert('Session expired. Please sign in again.');
+          location.href = 'login.html';
+          return;
+        }
+
+        const id = document.getElementById('editPostId').value;
+        const title = document.getElementById('editPostTitle').value.trim();
+        const price = document.getElementById('editPostPrice').value.trim() || '0';
+        const description = document.getElementById('editPostDescription').value.trim();
+        const videoFile = editPostVideoInput.files && editPostVideoInput.files[0];
+
+        if (!title || !description) {
+          editFormAlert.className = 'post-alert error';
+          editFormAlert.textContent = 'Title and description are required.';
+          editFormAlert.style.display = 'block';
+          return;
+        }
+
+        const formData = new FormData();
+        formData.append('name', title);
+        formData.append('price', price);
+        formData.append('description', description);
+        if (videoFile) {
+          formData.append('video', videoFile);
+        }
+
+        submitEditPostBtn.disabled = true;
+        editFormAlert.style.display = 'none';
+
+        try {
+          const res = await fetch(`${API}/api/blogs/${id}`, {
+            method: 'PUT',
+            headers: { 'Authorization': `Bearer ${token}` },
+            body: formData
+          });
+
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error || 'Failed to update post.');
+
+          editFormAlert.className = 'post-alert success';
+          editFormAlert.textContent = '✓ Video post updated successfully!';
+          editFormAlert.style.display = 'block';
+
+          setTimeout(() => {
+            closeEditModal();
+            fetchBlogs(state.page);
+          }, 1000);
+        } catch (err) {
+          editFormAlert.className = 'post-alert error';
+          editFormAlert.textContent = err.message || 'Unable to update post.';
+          editFormAlert.style.display = 'block';
+          submitEditPostBtn.disabled = false;
+        }
+      });
+    }
+
+    window.deleteBlog = async function(id) {
+      if (!confirm('Are you sure you want to permanently delete this video / post? This action cannot be undone.')) {
+        return;
+      }
+
+      const token = getCustomerToken() || localStorage.getItem('gcvh_admin_token');
+      if (!token) {
+        alert('Authentication required.');
+        location.href = 'login.html';
+        return;
+      }
+
+      try {
+        const res = await fetch(`${API}/api/blogs/${id}`, {
+          method: 'DELETE',
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Failed to delete post.');
+
+        alert('✓ Video post deleted successfully.');
+        fetchBlogs(state.page);
+      } catch (err) {
+        alert(err.message || 'Unable to delete post.');
+      }
+    };
+
+    window.addEventListener('load', async () => {
+      await checkUserSession();
       fetchBlogs(1);
     });
   </script>

@@ -2,12 +2,25 @@
  * Global Capital Venture Holdings - Global Configuration & Utilities
  */
 const CONFIG = {
-  API_URL: (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
-    ? 'http://localhost:8080'
-    : window.location.origin
+  API_URL: (() => {
+    try {
+      const custom = localStorage.getItem('gcvh_api_endpoint');
+      if (custom && custom.trim()) return custom.trim().replace(/\/+$/, '');
+    } catch (e) {}
+    if (window.location.protocol === 'file:' || !window.location.hostname) {
+      return (typeof navigator !== 'undefined' && navigator.userAgent && navigator.userAgent.includes('Android'))
+        ? 'http://10.0.2.2:8080'
+        : 'http://localhost:8080';
+    }
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+      return 'http://localhost:8080';
+    }
+    return window.location.origin;
+  })()
 };
 
 const API = CONFIG.API_URL;
+window.GCVH_CONFIG = window.GCVH_CONFIG || { API_BASE_URL: CONFIG.API_URL + '/api' };
 
 // Helper: Get stored auth token
 function getCustomerToken() {

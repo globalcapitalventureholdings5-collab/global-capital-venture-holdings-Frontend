@@ -4,12 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>GCVH — Admin Control Center</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
 <style>
 *{box-sizing:border-box}
 :root{--bg:#070a0d;--panel:#0e141a;--panel2:#111920;--line:#222c35;--gold:#d5ad5a;--gold2:#f1d48b;--text:#f4f6f8;--muted:#7f8b94;--green:#38d99a;--red:#ff647f}
 html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:Inter,Arial,sans-serif}
-button,input{font:inherit}
+button,input,select,textarea{font:inherit}
 button{cursor:pointer}
+a{color:inherit;text-decoration:none}
 .hidden{display:none!important}
 
 .login{min-height:100vh;display:grid;place-items:center;padding:24px;background:radial-gradient(circle at 50% 15%,#d5ad5a18,transparent 34%),#070a0d}
@@ -19,43 +21,84 @@ button{cursor:pointer}
 .login-sub{text-align:center;color:var(--gold);font-size:9px;font-weight:800;letter-spacing:2px;text-transform:uppercase;margin:8px 0 28px}
 .field{margin-bottom:17px}
 .field label{display:block;color:#9ba6ae;font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:7px}
-.field input{display:block;width:100%;height:46px;padding:0 13px;border:1px solid var(--line);border-radius:9px;background:#070a0d;color:#fff;outline:none;box-shadow:none;appearance:none}
-.field input:focus{border-color:#d5ad5a80;outline:none}
+.field input{display:block;width:100%;height:46px;padding:0 13px;border:1px solid var(--line);border-radius:9px;background:#070a0d;color:#fff;outline:none}
+.field input:focus{border-color:#d5ad5a80}
 .login-button{display:block;width:100%;height:46px;border:0;border-radius:9px;background:linear-gradient(135deg,var(--gold2),#b98d3e);color:#171209;font-weight:900}
-.alert{display:none;padding:11px;border-radius:9px;margin-bottom:15px;font-size:10px}
+.alert{display:none;padding:11px;border-radius:9px;margin-bottom:15px;font-size:11px}
 .alert.show{display:block}.alert.error{background:#ff647f12;border:1px solid #ff647f35;color:#ff9aae}.alert.success{background:#38d99a12;border:1px solid #38d99a35;color:#7ce7ba}
 
 .app{min-height:100vh;display:flex}
-.sidebar{position:fixed;left:0;top:0;bottom:0;width:245px;background:#090d11;border-right:1px solid var(--line);padding:23px 15px;display:flex;flex-direction:column}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:250px;background:#090d11;border-right:1px solid var(--line);padding:23px 15px;display:flex;flex-direction:column;overflow-y:auto;z-index:10}
 .side-brand{display:flex;align-items:center;gap:10px;padding:0 10px 24px;border-bottom:1px solid var(--line)}
 .side-logo{width:36px;height:36px;border:1px solid #d5ad5a70;border-radius:50%;display:grid;place-items:center;color:var(--gold2);font:21px Georgia,serif}
 .side-name{font:700 15px Georgia,serif}.side-sub{color:var(--gold);font-size:7px;font-weight:900;letter-spacing:1.4px;text-transform:uppercase;margin-top:3px}
-.nav-group{margin-top:24px}.nav-label{padding:0 10px 8px;color:#59656f;font-size:8px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase}
-.nav{display:block;width:100%;padding:11px 12px;margin:2px 0;border:1px solid transparent;border-radius:9px;background:transparent;color:#9da8b0;text-align:left;font-size:10px;font-weight:800}
+.nav-group{margin-top:20px}.nav-label{padding:0 10px 8px;color:#59656f;font-size:8px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase}
+.nav{display:flex;align-items:center;width:100%;padding:11px 12px;margin:2px 0;border:1px solid transparent;border-radius:9px;background:transparent;color:#9da8b0;text-align:left;font-size:11px;font-weight:800;transition:all 0.15s ease}
 .nav:hover,.nav.active{background:#ffffff06;border-color:var(--line);color:var(--gold2)}
-.nav-icon{display:inline-block;width:22px;color:var(--gold)}
-.side-bottom{margin-top:auto}.secure{padding:12px;border-radius:10px;border:1px solid #38d99a25;background:#38d99a08;color:#75b79d;font-size:9px;line-height:1.5}
-.main{margin-left:245px;width:calc(100% - 245px);min-width:0}
+.nav-icon{display:inline-block;width:24px;color:var(--gold);font-size:13px}
+.side-bottom{margin-top:auto;padding-top:16px}
+.secure{padding:12px;border-radius:10px;border:1px solid #38d99a25;background:#38d99a08;color:#75b79d;font-size:9px;line-height:1.5;margin-bottom:10px}
+.main{margin-left:250px;width:calc(100% - 250px);min-width:0}
 .header{height:76px;position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;padding:0 31px;background:#080c0fee;backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
 .kicker{color:var(--gold);font-size:8px;font-weight:900;letter-spacing:1.7px;text-transform:uppercase}
 .header h1{font:700 21px Georgia,serif;margin:4px 0 0}
 .header-right{display:flex;align-items:center;gap:10px}
 .connected{display:flex;align-items:center;gap:7px;padding:8px 11px;border:1px solid #38d99a28;border-radius:30px;color:var(--green);font-size:9px;font-weight:900}
 .connected i{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green)}
-.refresh,.logout{padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:#ffffff05;color:#cbd2d6;font-size:9px;font-weight:900}
+.refresh,.logout{padding:9px 14px;border:1px solid var(--line);border-radius:8px;background:#ffffff05;color:#cbd2d6;font-size:10px;font-weight:900;transition:all 0.15s ease}
+.refresh:hover,.logout:hover{background:rgba(255,255,255,0.1);color:#fff}
 .content{padding:30px;max-width:1500px}
-.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-bottom:20px}
-.card{background:linear-gradient(145deg,#10171e,#0b1014);border:1px solid var(--line);border-radius:14px;overflow:hidden}
-.kpi{padding:18px}.kpi-label{color:var(--muted);font-size:8px;font-weight:900;letter-spacing:1px;text-transform:uppercase}.kpi-value{font-size:28px;font-weight:850;margin-top:8px}.kpi-foot{color:#59656f;font-size:9px;margin-top:4px}
-.section{margin-bottom:18px;scroll-margin-top:95px}.section-head{padding:18px 20px;border-bottom:1px solid var(--line)}
-.section-title{font:700 18px Georgia,serif}.section-sub{color:var(--muted);font-size:9px;margin-top:4px}
-.table-wrap{overflow:auto}table{width:100%;min-width:900px;border-collapse:collapse}th{padding:12px 15px;background:#ffffff03;color:#64717b;font-size:8px;letter-spacing:1px;text-transform:uppercase;text-align:left;white-space:nowrap}td{padding:13px 15px;border-top:1px solid #ffffff07;font-size:10px;color:#cdd3d7}td b{color:#f1f3f4}tr:hover td{background:#ffffff02}
-.muted{color:#71808a;font-size:9px}.badge{display:inline-block;padding:5px 8px;border-radius:30px;background:#ffffff08;color:#aab2b8;font-size:8px;font-weight:900;text-transform:uppercase}.badge.pending{color:#e6c66f;background:#d5ad5a12}.badge.confirmed,.badge.paid{color:#61e4a5;background:#38d99a10}.badge.rejected{color:#ff849a;background:#ff647f10}
-.actions{display:flex;gap:6px}.action{padding:7px 9px;border-radius:7px;background:#ffffff05;border:1px solid var(--line);font-size:8px;font-weight:900}.approve{color:var(--green);border-color:#38d99a35}.reject{color:var(--red);border-color:#ff647f35}
-.empty{padding:30px;text-align:center;color:#61707a;font-size:10px}
-.balances{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;padding:18px}.balance{padding:15px;border:1px solid var(--line);border-radius:11px;background:#ffffff03}.coin{color:var(--gold);font-weight:900;font-size:12px}.amount{font-size:20px;font-weight:850;margin-top:7px}
-@media(max-width:1050px){.cards{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:720px){.sidebar{display:none}.field{min-width:0}#signals [style*="grid-template-columns:repeat(2"]{grid-template-columns:1fr!important}#signals [style*="grid-template-columns:repeat(3"]{grid-template-columns:1fr!important}.main{margin-left:0;width:100%}.header{padding:0 15px}.connected{display:none}.content{padding:20px 15px}.cards{grid-template-columns:1fr 1fr}}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+.card{background:linear-gradient(145deg,#10171e,#0b1014);border:1px solid var(--line);border-radius:14px;overflow:hidden;transition:transform 0.15s, border-color 0.15s}
+.card.interactive:hover{transform:translateY(-2px);border-color:rgba(213,173,90,0.4)}
+.kpi{padding:20px}.kpi-label{color:var(--muted);font-size:9px;font-weight:900;letter-spacing:1px;text-transform:uppercase}.kpi-value{font-size:28px;font-weight:850;margin-top:8px;color:#fff}.kpi-foot{color:#59656f;font-size:10px;margin-top:4px}
+.section{margin-bottom:24px}.section-head{padding:18px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.section-title{font:700 18px Georgia,serif}.section-sub{color:var(--muted);font-size:10px;margin-top:4px}
+.view-all-link{color:var(--gold2);font-size:11px;font-weight:800;text-decoration:none}
+.view-all-link:hover{text-decoration:underline}
+
+/* QUICK ACTION GRID */
+.quick-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.quick-card {
+  padding: 22px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: linear-gradient(145deg, #10171e, #0b1014);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 12px;
+}
+.quick-card h3 { font: 700 16px Georgia, serif; color: #fff; margin: 0; }
+.quick-card p { font-size: 11px; color: var(--muted); margin: 0; line-height: 1.5; }
+.quick-btn {
+  align-self: flex-start;
+  padding: 8px 14px;
+  border-radius: 8px;
+  background: rgba(213, 173, 90, 0.1);
+  border: 1px solid rgba(213, 173, 90, 0.3);
+  color: var(--gold2);
+  font-size: 11px;
+  font-weight: 800;
+  text-decoration: none;
+}
+.quick-btn:hover {
+  background: var(--gold);
+  color: #070a0d;
+}
+
+.table-wrap{overflow:auto}table{width:100%;min-width:900px;border-collapse:collapse}th{padding:12px 15px;background:#ffffff03;color:#64717b;font-size:8px;letter-spacing:1px;text-transform:uppercase;text-align:left;white-space:nowrap}td{padding:13px 15px;border-top:1px solid #ffffff07;font-size:11px;color:#cdd3d7}td b{color:#f1f3f4}tr:hover td{background:#ffffff02}
+.muted{color:#71808a;font-size:10px}.badge{display:inline-block;padding:5px 8px;border-radius:30px;background:#ffffff08;color:#aab2b8;font-size:9px;font-weight:900;text-transform:uppercase}.badge.pending{color:#e6c66f;background:#d5ad5a12}.badge.confirmed,.badge.paid{color:#61e4a5;background:#38d99a10}.badge.rejected{color:#ff849a;background:#ff647f10}
+.actions{display:flex;gap:6px}.action{padding:7px 11px;border-radius:7px;background:#ffffff05;border:1px solid var(--line);font-size:9px;font-weight:900;cursor:pointer}.approve{color:var(--green);border-color:#38d99a35}.reject{color:var(--red);border-color:#ff647f35}
+.empty{padding:30px;text-align:center;color:#61707a;font-size:11px}
+
+@media(max-width:1100px){.cards{grid-template-columns:repeat(2,1fr)}.quick-grid{grid-template-columns:1fr}}
+@media(max-width:768px){.sidebar{display:none}.main{margin-left:0;width:100%}.header{padding:0 15px}.content{padding:20px 15px}.cards{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
@@ -68,11 +111,11 @@ button{cursor:pointer}
     <div id="loginAlert" class="alert"></div>
     <div class="field">
       <label for="adminUsername">Username</label>
-      <input id="adminUsername" type="text">
+      <input id="adminUsername" type="text" placeholder="admin">
     </div>
     <div class="field">
       <label for="adminPassword">Password</label>
-      <input id="adminPassword" type="password">
+      <input id="adminPassword" type="password" placeholder="••••••••">
     </div>
     <button id="signIn" class="login-button" type="button">Secure Sign In</button>
   </div>
@@ -80,105 +123,158 @@ button{cursor:pointer}
 
 <section id="appScreen" class="app hidden">
 <aside class="sidebar">
-  <div class="side-brand"><div class="side-logo">G</div><div><div class="side-name">Global Capital</div><div class="side-sub">Venture Holdings</div></div></div>
-  <div class="nav-group"><div class="nav-label">Management</div>
-    <button class="nav active" data-target="overview"><span class="nav-icon">◆</span>Overview</button>
-    <button class="nav" data-target="deposits"><span class="nav-icon">↓</span>Deposits</button>
-    <button class="nav" data-target="withdrawals"><span class="nav-icon">↑</span>Withdrawals</button>
-    <button class="nav" data-target="customers"><span class="nav-icon">◈</span>Customers</button>
-    <button class="nav" data-target="referrals"><span class="nav-icon">%</span>Referrals</button>
-    <button class="nav" data-target="signals"><span class="nav-icon">⌁</span>Signals</button>
+  <div class="side-brand">
+    <div class="side-logo">G</div>
+    <div>
+      <div class="side-name">Global Capital</div>
+      <div class="side-sub">Admin Center</div>
+    </div>
   </div>
-  <div class="nav-group"><div class="nav-label">Infrastructure</div>
-    <button class="nav" data-target="binance"><span class="nav-icon">◇</span>Binance</button>
+  
+  <div class="nav-group">
+    <div class="nav-label">Core Navigation</div>
+    <a class="nav active" href="admin.html"><span class="nav-icon">◆</span>Overview</a>
+    <a class="nav" href="admin-deposits.html"><span class="nav-icon">↓</span>Deposits Portal</a>
+    <a class="nav" href="admin-withdrawals.html"><span class="nav-icon">↑</span>Withdrawals</a>
+    <a class="nav" href="admin-customers.html"><span class="nav-icon">◈</span>Customer Accounts</a>
+    <a class="nav" href="admin-referrals.html"><span class="nav-icon">%</span>Referrals & Rewards</a>
+    <a class="nav" href="admin-signals.html"><span class="nav-icon">⌁</span>Daily Signals Desk</a>
+    <a class="nav" href="admin-blogs.html"><span class="nav-icon">🎬</span>Blogs & Video Manager</a>
   </div>
+  
+  <div class="nav-group">
+    <div class="nav-label">Infrastructure</div>
+    <a class="nav" href="admin-binance.html"><span class="nav-icon">◇</span>Binance API Monitor</a>
+  </div>
+  
   <div class="side-bottom">
-    <div class="secure">● Secure admin session<br>Authenticated through the Railway backend.</div>
-    <button id="signOut" class="nav" type="button"><span class="nav-icon">↪</span>Sign out</button>
+    <div class="secure">● Multi-Page Admin Session<br>Global Capital Venture Holdings</div>
+    <button id="signOut" class="nav" type="button" style="color:#ff849a;"><span class="nav-icon">↪</span>Sign Out</button>
   </div>
 </aside>
 
 <main class="main">
 <header class="header">
-  <div><div class="kicker">Control Center</div><h1>Administration</h1></div>
-  <div class="header-right"><div class="connected"><i></i>Backend connected</div><button id="refresh" class="refresh" type="button">Refresh</button></div>
+  <div>
+    <div class="kicker">Command Center</div>
+    <h1>Master Administration</h1>
+  </div>
+  <div class="header-right">
+    <div class="connected"><i></i>Backend Online</div>
+    <button id="refresh" class="refresh" type="button">↻ Refresh Data</button>
+  </div>
 </header>
 
 <div class="content">
-<div id="appAlert" class="alert"></div>
+  <div id="appAlert" class="alert"></div>
 
-<section id="overview" class="section">
-<div class="cards">
-  <div class="card kpi"><div class="kpi-label">Customers</div><div id="customersCount" class="kpi-value">—</div><div class="kpi-foot">Registered accounts</div></div>
-  <div class="card kpi"><div class="kpi-label">Pending Deposits</div><div id="depositsCount" class="kpi-value">—</div><div class="kpi-foot">Awaiting verification</div></div>
-  <div class="card kpi"><div class="kpi-label">Pending Withdrawals</div><div id="withdrawalsCount" class="kpi-value">—</div><div class="kpi-foot">Awaiting action</div></div>
-  <div class="card kpi"><div class="kpi-label">Binance API</div><div id="binanceStatus" class="kpi-value" style="font-size:20px">Checking</div><div class="kpi-foot">Read-only account connection</div></div>
-</div>
-</section>
-
-<section id="deposits" class="card section">
-<div class="section-head"><div class="section-title">Deposit Requests</div><div class="section-sub">Verify customer funding before package activation.</div></div>
-<div class="table-wrap"><table><thead><tr><th>ID</th><th>Customer</th><th>Amount</th><th>Method</th><th>TXID / Reference</th><th>Proof Screenshot</th><th>Status</th><th>Action</th></tr></thead><tbody id="depositRows"></tbody></table></div>
-</section>
-
-<section id="withdrawals" class="card section">
-<div id="manual-withdrawal-notice" style="margin:0 18px 14px;padding:12px 14px;border:1px solid rgba(230,198,111,.22);border-radius:10px;background:rgba(230,198,111,.06);color:#d9c989;font-size:12px;line-height:1.5"><strong>Manual payout:</strong> Copy the customer's destination address/UID, send the requested net amount (after 10% fee), then click <b>Mark Paid</b> and enter the transaction ID. First withdrawal is unlocked anytime; subsequent withdrawals unlock after 15 days.</div>
-<div class="section-head"><div class="section-title">Withdrawal Requests</div><div class="section-sub">Approve or reject customer withdrawals.</div></div>
-<div class="table-wrap"><table><thead><tr><th>ID</th><th>Customer</th><th>Gross Amount</th><th>Fee (10%)</th><th>Net Payout</th><th>Method</th><th>Destination</th><th>Status</th><th>Action</th></tr></thead><tbody id="withdrawalRows"></tbody></table></div>
-</section>
-
-<section id="customers" class="card section">
-<div class="section-head"><div class="section-title">Customers</div><div class="section-sub">Account and package overview.</div></div>
-<div class="table-wrap"><table><thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Status</th><th>Package</th><th>Referral Code</th><th>Principal</th><th>Available Withdrawal</th></tr></thead><tbody id="customerRows"></tbody></table></div>
-</section>
-
-<section id="referrals" class="card section">
-<div class="section-head"><div class="section-title">Referral Rewards</div><div class="section-sub">10% commission credited when a referred customer's deposit is confirmed.</div></div>
-<div class="table-wrap"><table><thead><tr><th>ID</th><th>Referrer</th><th>Referred Customer</th><th>Deposit</th><th>Commission</th><th>Status</th><th>Date</th></tr></thead><tbody id="referralRows"></tbody></table></div>
-</section>
-
-<section id="signals" class="card section">
-<div class="section-head"><div class="section-title">XAUUSD Daily Signal</div><div class="section-sub">Publish or update the customer-facing trading signal. Only one signal is stored per active date.</div></div>
-<div style="padding:20px">
-  <div id="signalAlert" class="alert"></div>
-  <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px">
-    <div class="field"><label for="signalSide">Direction</label><select id="signalSide" style="display:block;width:100%;height:46px;padding:0 13px;border:1px solid var(--line);border-radius:9px;background:#070a0d;color:#fff;outline:none"><option value="BUY">BUY</option><option value="SELL">SELL</option></select></div>
-    <div class="field"><label for="signalDate">Active Date</label><input id="signalDate" type="date"></div>
-    <div class="field"><label for="signalEntry">Entry</label><input id="signalEntry" type="number" step="any" placeholder="e.g. 3350.50"></div>
-    <div class="field"><label for="signalStopLoss">Stop Loss</label><input id="signalStopLoss" type="number" step="any" placeholder="e.g. 3325.00"></div>
-    <div class="field"><label for="signalTakeProfit">Take Profit</label><input id="signalTakeProfit" type="number" step="any" placeholder="e.g. 3400.00"></div>
-    <div class="field" style="grid-column:1/-1"><label for="signalMessage">Message / Analysis</label><textarea id="signalMessage" rows="4" placeholder="Add the customer-facing explanation for today's signal..." style="display:block;width:100%;padding:13px;border:1px solid var(--line);border-radius:9px;background:#070a0d;color:#fff;outline:none;resize:vertical"></textarea></div>
+  <!-- KPI SUMMARY CARDS -->
+  <div class="cards">
+    <a href="admin-customers.html" class="card kpi interactive">
+      <div class="kpi-label">Total Customers</div>
+      <div id="customersCount" class="kpi-value">—</div>
+      <div class="kpi-foot">Registered client accounts →</div>
+    </a>
+    <a href="admin-deposits.html" class="card kpi interactive">
+      <div class="kpi-label">Pending Deposits</div>
+      <div id="depositsCount" class="kpi-value" style="color:var(--gold2)">—</div>
+      <div class="kpi-foot">Awaiting proof verification →</div>
+    </a>
+    <a href="admin-withdrawals.html" class="card kpi interactive">
+      <div class="kpi-label">Pending Withdrawals</div>
+      <div id="withdrawalsCount" class="kpi-value" style="color:var(--green)">—</div>
+      <div class="kpi-foot">Awaiting payout processing →</div>
+    </a>
+    <a href="admin-blogs.html" class="card kpi interactive">
+      <div class="kpi-label">Published Videos</div>
+      <div id="blogsCount" class="kpi-value">—</div>
+      <div class="kpi-foot">Community research posts →</div>
+    </a>
   </div>
-  <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:4px">
-    <button id="publishSignal" class="login-button" type="button" style="width:auto;padding:0 22px">Publish / Update Signal</button>
-    <button id="loadTodaySignal" class="refresh" type="button">Load Today's Signal</button>
-  </div>
-  <div id="currentSignal" style="margin-top:18px;padding:15px;border:1px solid var(--line);border-radius:11px;background:#ffffff03">
-    <div class="muted">No signal loaded.</div>
-  </div>
-</div>
-</section>
 
-<section id="binance" class="card section">
-<div class="section-head">
-  <div class="section-title">Binance Account</div>
-  <div class="section-sub">Balances are fetched only when you manually request them. No automatic polling.</div>
-</div>
-<div style="padding:18px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap">
-  <div>
-    <div id="binanceFetchStatus" class="muted">Not requested yet.</div>
-    <div class="muted" style="margin-top:5px">A 30-second cooldown prevents accidental repeated Binance REST requests.</div>
+  <!-- MULTI-PAGE MANAGEMENT PORTALS QUICK ACCESS -->
+  <div class="quick-grid">
+    <div class="quick-card">
+      <div>
+        <h3>💳 Deposit Verification Desk</h3>
+        <p>Review customer deposit submissions, inspect blockchain TXIDs, verify payment screenshots, and approve or reject package activations.</p>
+      </div>
+      <a href="admin-deposits.html" class="quick-btn">Manage Deposits →</a>
+    </div>
+
+    <div class="quick-card">
+      <div>
+        <h3>💸 Withdrawal Processing Desk</h3>
+        <p>Review gross withdrawal requests, inspect automatic 10% fee deductions, send net payouts to customer wallet addresses, and mark paid or reject.</p>
+      </div>
+      <a href="admin-withdrawals.html" class="quick-btn">Manage Withdrawals →</a>
+    </div>
+
+    <div class="quick-card">
+      <div>
+        <h3>🎬 Blog & Video Management</h3>
+        <p>Full control over community-uploaded market videos. Inspect uploaded videos, edit post content, or delete inappropriate content.</p>
+      </div>
+      <a href="admin-blogs.html" class="quick-btn">Manage Video Posts →</a>
+    </div>
   </div>
-  <button id="binanceRefresh" class="refresh" type="button">Refresh Binance Balance</button>
-</div>
-<div id="balanceRows" class="balances">
-  <div class="balance">
-    <div class="coin">BINANCE</div>
-    <div class="amount">—</div>
-    <div class="muted">Click “Refresh Binance Balance” to request balances.</div>
-  </div>
-</div>
-</section>
+
+  <!-- RECENT PENDING DEPOSITS PREVIEW -->
+  <section class="card section">
+    <div class="section-head">
+      <div>
+        <div class="section-title">Pending Deposit Queue</div>
+        <div class="section-sub">Latest customer deposits awaiting administrator approval.</div>
+      </div>
+      <a href="admin-deposits.html" class="view-all-link">Open Full Deposits Desk →</a>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Customer</th>
+            <th>Amount</th>
+            <th>Method</th>
+            <th>TXID / Reference</th>
+            <th>Proof</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="pendingDepositRows"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- RECENT PENDING WITHDRAWALS PREVIEW -->
+  <section class="card section">
+    <div class="section-head">
+      <div>
+        <div class="section-title">Pending Withdrawal Queue</div>
+        <div class="section-sub">Latest customer payout requests requiring manual settlement.</div>
+      </div>
+      <a href="admin-withdrawals.html" class="view-all-link">Open Full Withdrawals Desk →</a>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Customer</th>
+            <th>Gross Amount</th>
+            <th>Fee (10%)</th>
+            <th>Net Payout</th>
+            <th>Destination</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="pendingWithdrawalRows"></tbody>
+      </table>
+    </div>
+  </section>
+
 </div>
 </main>
 </section>
@@ -214,8 +310,8 @@ async function request(path, options) {
 }
 
 async function signIn() {
-  const username = $("adminUsername").value;
-  const password = $("adminPassword").value;
+  const username = $("adminUsername").value.trim();
+  const password = $("adminPassword").value.trim();
   if (!username || !password) {
     showAlert("loginAlert", "Enter your username and password.");
     return;
@@ -249,238 +345,79 @@ async function loadDashboard() {
       request("/api/admin/users"),
       request("/api/admin/deposits"),
       request("/api/admin/withdrawals"),
-      request("/api/admin/referrals")
+      request("/api/admin/blogs").catch(() => [])
     ]);
 
     const users = results[0] || [];
     const deposits = results[1] || [];
     const withdrawals = results[2] || [];
-    const referrals = results[3] || [];
+    const blogs = results[3] || [];
+
+    const pendingDeposits = deposits.filter(x => x.status === "pending");
+    const pendingWithdrawals = withdrawals.filter(x => x.status === "pending");
 
     $("customersCount").textContent = users.length;
-    $("depositsCount").textContent = deposits.filter(function(x){return x.status==="pending";}).length;
-    $("withdrawalsCount").textContent = withdrawals.filter(function(x){return x.status==="pending";}).length;
-    $("binanceStatus").textContent = "Ready";
-    $("balanceRows").innerHTML = '<div class="balance"><div class="coin">BINANCE</div><div class="amount">Manual refresh</div><div class="muted">Use the refresh button below to request the current account balance.</div></div>';
+    $("depositsCount").textContent = pendingDeposits.length;
+    $("withdrawalsCount").textContent = pendingWithdrawals.length;
+    $("blogsCount").textContent = blogs.length;
 
-    $("depositRows").innerHTML = deposits.length ? deposits.map(function(d) {
+    $("pendingDepositRows").innerHTML = pendingDeposits.length ? pendingDeposits.slice(0, 5).map(function(d) {
       const proofHtml = d.proof_image
         ? '<a href="'+escapeHtml(API+d.proof_image)+'" target="_blank" style="color:var(--gold2);font-weight:bold;text-decoration:underline;">View Proof ↗</a>'
-        : '<span class="muted">No file</span>';
-      return '<tr><td>#'+escapeHtml(d.id)+'</td><td><b>'+escapeHtml(d.full_name)+'</b><br><span class="muted">'+escapeHtml(d.email)+'</span></td><td>$'+Number(d.amount).toFixed(2)+'</td><td><span class="badge">'+escapeHtml(d.network || d.asset || 'USDT')+'</span></td><td><div style="max-width:180px;word-break:break-all">'+escapeHtml(d.txid)+'</div></td><td>'+proofHtml+'</td><td><span class="badge '+escapeHtml(d.status)+'">'+escapeHtml(d.status)+'</span></td><td>'+(d.status==="pending"?'<button class="action approve" onclick="approveDeposit('+Number(d.id)+')">Approve</button>':'—')+'</td></tr>';
-    }).join("") : '<tr><td colspan="8"><div class="empty">No deposit requests.</div></td></tr>';
+        : '<span class="muted">None</span>';
+      return '<tr><td>#'+escapeHtml(d.id)+'</td><td><b>'+escapeHtml(d.full_name)+'</b><br><span class="muted">'+escapeHtml(d.email)+'</span></td><td>$'+Number(d.amount).toFixed(2)+'</td><td><span class="badge">'+escapeHtml(d.network || d.asset || 'USDT')+'</span></td><td><div style="max-width:180px;word-break:break-all">'+escapeHtml(d.txid)+'</div></td><td>'+proofHtml+'</td><td><span class="badge '+escapeHtml(d.status)+'">'+escapeHtml(d.status)+'</span></td><td><div class="actions"><button class="action approve" onclick="approveDeposit('+Number(d.id)+')">Approve</button><button class="action reject" onclick="rejectDeposit('+Number(d.id)+')">Reject</button></div></td></tr>';
+    }).join("") : '<tr><td colspan="8"><div class="empty">No pending deposit requests. All accounts are up to date.</div></td></tr>';
 
-    $("withdrawalRows").innerHTML = withdrawals.length ? withdrawals.map(function(w) {
+    $("pendingWithdrawalRows").innerHTML = pendingWithdrawals.length ? pendingWithdrawals.slice(0, 5).map(function(w) {
       const gross = Number(w.amount || 0);
       const fee = Number(w.fee_amount || (gross * 0.10));
       const net = Number(w.net_amount || (gross - fee));
-      return '<tr><td>#'+escapeHtml(w.id)+'</td><td><b>'+escapeHtml(w.full_name)+'</b><br><span class="muted">'+escapeHtml(w.email)+'</span></td><td>$'+gross.toFixed(2)+'</td><td><span style="color:var(--red)">-$'+fee.toFixed(2)+'</span></td><td><strong style="color:var(--green)">$'+net.toFixed(2)+'</strong></td><td><span class="badge">'+escapeHtml(w.network || w.asset || 'USDT')+'</span></td><td><div style="max-width:260px;word-break:break-all">'+escapeHtml(w.destination)+'</div></td><td><span class="badge '+escapeHtml(w.status)+'">'+escapeHtml(w.status)+'</span></td><td>'+(w.status==="pending"?'<div class="actions"><button class="action approve" onclick="processWithdrawal('+Number(w.id)+',\'approve\')">Mark Paid</button><button class="action reject" onclick="processWithdrawal('+Number(w.id)+',\'reject\')">Reject</button></div>':'—')+'</td></tr>';
-    }).join("") : '<tr><td colspan="9"><div class="empty">No withdrawal requests.</div></td></tr>';
+      return '<tr><td>#'+escapeHtml(w.id)+'</td><td><b>'+escapeHtml(w.full_name)+'</b><br><span class="muted">'+escapeHtml(w.email)+'</span></td><td>$'+gross.toFixed(2)+'</td><td><span style="color:var(--red)">-$'+fee.toFixed(2)+'</span></td><td><strong style="color:var(--green)">$'+net.toFixed(2)+'</strong></td><td><div style="max-width:240px;word-break:break-all">'+escapeHtml(w.destination)+'</div></td><td><span class="badge '+escapeHtml(w.status)+'">'+escapeHtml(w.status)+'</span></td><td><div class="actions"><a href="admin-withdrawals.html" class="action approve">Process Payout</a></div></td></tr>';
+    }).join("") : '<tr><td colspan="8"><div class="empty">No pending withdrawal requests.</div></td></tr>';
 
-    $("referralRows").innerHTML = referrals.length ? referrals.map(function(r) {
-      return '<tr><td>#'+escapeHtml(r.id)+'</td><td><b>'+escapeHtml(r.referrer_name)+'</b><br><span class="muted">'+escapeHtml(r.referrer_email)+'</span></td><td><b>'+escapeHtml(r.referred_name)+'</b><br><span class="muted">'+escapeHtml(r.referred_email)+'</span></td><td>#'+escapeHtml(r.deposit_id)+'</td><td>'+escapeHtml(r.amount)+'</td><td><span class="badge confirmed">'+escapeHtml(r.status)+'</span></td><td>'+escapeHtml(r.created_at)+'</td></tr>';
-    }).join("") : '<tr><td colspan="7"><div class="empty">No referral rewards yet.</div></td></tr>';
-
-    $("customerRows").innerHTML = users.length ? users.map(function(u) {
-      return '<tr><td>#'+escapeHtml(u.id)+'</td><td><b>'+escapeHtml(u.full_name)+'</b></td><td>'+escapeHtml(u.email)+'</td><td><span class="badge">'+escapeHtml(u.status)+'</span></td><td>'+escapeHtml(u.tier || "—")+'</td><td>'+escapeHtml(u.referral_code || "—")+'</td><td>'+escapeHtml(u.principal ?? "0")+'</td><td>'+escapeHtml(u.available_withdrawal ?? "0")+'</td></tr>';
-    }).join("") : '<tr><td colspan="8"><div class="empty">No customers.</div></td></tr>';
-
-  } catch(error) {
-    if (/401|expired|invalid/i.test(error.message)) {
+  } catch (error) {
+    if (String(error.message).includes("401") || String(error.message).includes("Forbidden")) {
       signOut();
-      showAlert("loginAlert", "Your admin session expired. Please sign in again.");
     } else {
-      showAlert("appAlert", error.message);
+      showAlert("appAlert", "Unable to load dashboard data: " + error.message);
     }
-  }
-}
-
-
-let binanceLastFetch = 0;
-let binanceFetchBusy = false;
-
-async function refreshBinanceBalance() {
-  const now = Date.now();
-  const remaining = 30000 - (now - binanceLastFetch);
-
-  if (binanceFetchBusy) return;
-
-  if (remaining > 0) {
-    const seconds = Math.ceil(remaining / 1000);
-    showAlert("appAlert", "Please wait " + seconds + " seconds before requesting Binance again.");
-    return;
-  }
-
-  binanceFetchBusy = true;
-  $("binanceRefresh").disabled = true;
-  $("binanceRefresh").style.opacity = "0.55";
-  $("binanceFetchStatus").textContent = "Requesting Binance balance…";
-
-  try {
-    const account = await request("/api/admin/binance/account");
-    binanceLastFetch = Date.now();
-
-    const balances = account.balances || [];
-    $("binanceStatus").textContent = "Connected";
-
-    $("balanceRows").innerHTML = balances.length
-      ? balances.map(function(x) {
-          return '<div class="balance"><div class="coin">' +
-            escapeHtml(x.asset) +
-            '</div><div class="amount">' +
-            escapeHtml(x.free) +
-            '</div><div class="muted">Free · Locked ' +
-            escapeHtml(x.locked) +
-            '</div></div>';
-        }).join("")
-      : '<div class="balance"><div class="coin">BINANCE</div><div class="amount">0</div><div class="muted">No non-zero balances returned.</div></div>';
-
-    $("binanceFetchStatus").textContent =
-      "Balance fetched successfully at " + new Date().toLocaleTimeString() + ".";
-    showAlert("appAlert", "Binance balance refreshed.", "success");
-  } catch (error) {
-    $("binanceFetchStatus").textContent = "Binance request failed: " + error.message;
-    showAlert("appAlert", error.message);
-  } finally {
-    binanceFetchBusy = false;
-    $("binanceRefresh").disabled = false;
-    $("binanceRefresh").style.opacity = "1";
-  }
-}
-
-function localDateString() {
-  const d = new Date();
-  const y = d.getFullYear();
-  const m = String(d.getMonth()+1).padStart(2,"0");
-  const day = String(d.getDate()).padStart(2,"0");
-  return y+"-"+m+"-"+day;
-}
-
-function renderSignal(signal) {
-  const box = $("currentSignal");
-  if (!signal) {
-    box.innerHTML = '<div class="muted">No signal found for this date.</div>';
-    return;
-  }
-  box.innerHTML = '<div style="display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap"><div><div class="muted">XAUUSD · '+escapeHtml(signal.active_date)+'</div><div style="font-size:22px;font-weight:900;margin-top:6px">'+escapeHtml(signal.side)+'</div></div><span class="badge confirmed">Published</span></div>' +
-    '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:15px">' +
-    '<div><div class="muted">Entry</div><b>'+escapeHtml(signal.entry ?? "—")+'</b></div>' +
-    '<div><div class="muted">Stop Loss</div><b>'+escapeHtml(signal.stop_loss ?? "—")+'</b></div>' +
-    '<div><div class="muted">Take Profit</div><b>'+escapeHtml(signal.take_profit ?? "—")+'</b></div></div>' +
-    (signal.message ? '<div style="margin-top:14px;color:#cdd3d7;font-size:11px;line-height:1.6">'+escapeHtml(signal.message)+'</div>' : '');
-}
-
-async function loadTodaySignal() {
-  try {
-    const date = $("signalDate").value || localDateString();
-    $("signalDate").value = date;
-    const signal = await request("/api/signals/today");
-    if (signal && String(signal.active_date).slice(0,10) === date) {
-      $("signalSide").value = signal.side || "BUY";
-      $("signalEntry").value = signal.entry ?? "";
-      $("signalStopLoss").value = signal.stop_loss ?? "";
-      $("signalTakeProfit").value = signal.take_profit ?? "";
-      $("signalMessage").value = signal.message || "";
-      renderSignal(signal);
-    } else {
-      renderSignal(null);
-    }
-  } catch (error) {
-    showAlert("signalAlert", error.message);
-  }
-}
-
-async function publishSignal() {
-  const activeDate = $("signalDate").value;
-  const side = $("signalSide").value;
-  if (!activeDate) { showAlert("signalAlert", "Select an active date."); return; }
-  try {
-    const signal = await request("/api/admin/signals", {
-      method:"POST",
-      body:JSON.stringify({
-        side,
-        entry: $("signalEntry").value === "" ? null : Number($("signalEntry").value),
-        stopLoss: $("signalStopLoss").value === "" ? null : Number($("signalStopLoss").value),
-        takeProfit: $("signalTakeProfit").value === "" ? null : Number($("signalTakeProfit").value),
-        message: $("signalMessage").value.trim() || null,
-        activeDate
-      })
-    });
-    renderSignal(signal);
-    showAlert("signalAlert", "Signal published successfully.", "success");
-  } catch (error) {
-    showAlert("signalAlert", error.message);
   }
 }
 
 async function approveDeposit(id) {
-  if (!confirm("Approve this deposit and activate the customer's package?")) return;
+  if (!confirm("Approve this deposit of ID #" + id + " and activate the package?")) return;
   try {
-    await request("/api/admin/deposits/"+id+"/approve", {method:"POST",body:"{}"});
-    showAlert("appAlert","Deposit approved and package activated.","success");
+    await request("/api/admin/deposits/" + id + "/approve", { method: "POST", body: "{}" });
+    showAlert("appAlert", "Deposit #" + id + " approved successfully.", "success");
     await loadDashboard();
-  } catch(error) { showAlert("appAlert",error.message); }
+  } catch (e) {
+    showAlert("appAlert", e.message);
+  }
 }
 
-async function processWithdrawal(id, action) {
-  if (action === "approve") {
-    if (!confirm("Have you already sent this withdrawal manually to the customer's destination?\n\nOnly continue after the payment has actually been sent.")) return;
-
-    const providerId = prompt("Enter the blockchain transaction ID or payment reference:", "");
-    if (providerId === null || !providerId.trim()) {
-      showAlert("appAlert", "Payment reference / transaction ID is required.");
-      return;
-    }
-
-    const note = prompt("Admin note (optional):", "Paid manually by admin");
-    if (note === null) return;
-
-    try {
-      await request("/api/admin/withdrawals/"+id+"/process", {
-        method:"POST",
-        body:JSON.stringify({action:"approve",providerId:providerId.trim(),note:note.trim()})
-      });
-      showAlert("appAlert","Withdrawal marked as paid manually.","success");
-      await loadDashboard();
-    } catch(error) { showAlert("appAlert",error.message); }
-    return;
-  }
-
-  if (!confirm("Reject this withdrawal request and release the reserved funds back to the customer?")) return;
-  const note = prompt("Reason for rejection (optional):", "Rejected by admin");
-  if (note === null) return;
-
+async function rejectDeposit(id) {
+  if (!confirm("Reject this deposit request #" + id + "?")) return;
   try {
-    await request("/api/admin/withdrawals/"+id+"/process", {
-      method:"POST",
-      body:JSON.stringify({action:"reject",note:note.trim()})
-    });
-    showAlert("appAlert","Withdrawal rejected and funds released.","success");
+    await request("/api/admin/deposits/" + id + "/reject", { method: "POST", body: "{}" });
+    showAlert("appAlert", "Deposit #" + id + " rejected.", "success");
     await loadDashboard();
-  } catch(error) { showAlert("appAlert",error.message); }
+  } catch (e) {
+    showAlert("appAlert", e.message);
+  }
 }
 
 $("signIn").addEventListener("click", signIn);
+$("adminPassword").addEventListener("keydown", function(e) { if (e.key === "Enter") signIn(); });
 $("signOut").addEventListener("click", signOut);
 $("refresh").addEventListener("click", loadDashboard);
-$("binanceRefresh").addEventListener("click", refreshBinanceBalance);
-$("publishSignal").addEventListener("click", publishSignal);
-$("loadTodaySignal").addEventListener("click", loadTodaySignal);
-$("signalDate").value = localDateString();
 
-document.querySelectorAll("[data-target]").forEach(function(button) {
-  button.addEventListener("click", function() {
-    document.getElementById(button.dataset.target).scrollIntoView({behavior:"smooth"});
-    document.querySelectorAll(".nav").forEach(function(x){x.classList.remove("active");});
-    button.classList.add("active");
-  });
+window.addEventListener("DOMContentLoaded", function() {
+  if (adminToken) {
+    $("loginScreen").classList.add("hidden");
+    $("appScreen").classList.remove("hidden");
+    loadDashboard();
+  }
 });
-
-if (adminToken) {
-  $("loginScreen").classList.add("hidden");
-  $("appScreen").classList.remove("hidden");
-  loadDashboard();
-}
 </script>
 </body>
 </html>

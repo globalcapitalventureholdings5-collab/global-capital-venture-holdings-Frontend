@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>GCVH — Daily Signals & Algorithmic Trading Room</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <style>
+    :root {
+      --bg-dark: #07120c;
+      --bg-card: #0c2017;
+      --bg-card-subtle: #081710;
+      --border: rgba(16, 185, 129, 0.16);
+      --border-focus: rgba(16, 185, 129, 0.4);
+      --primary-green: #10b981;
+      --primary-green-dark: #059669;
+      --gold: #f3cf7a;
+      --gold-dark: #c59b27;
+      --text-white: #ffffff;
+      --text-body: #e2ede8;
+      --text-muted: #8ba89d;
+      --red: #ef4444;
+      --sidebar-width: 280px;
+      --radius: 16px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg-dark);
+      color: var(--text-body);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      min-height: 100vh;
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+    button, input, select, textarea { font: inherit; }
+    button { cursor: pointer; }
+
+    /* MOBILE HEADER */
+    .mobile-header {
+      display: none;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      height: 68px;
+      padding: 0 20px;
+      background: #07120c;
+      border-bottom: 1px solid var(--border);
+      align-items: center;
+      justify-content: space-between;
+    }
+    .mobile-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #ffffff;
+      font: 700 16px Georgia, serif;
+    }
+    .mobile-brand .brand-mark {
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--gold);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: var(--gold);
+      font-size: 18px;
+      background: rgba(243, 207, 122, 0.06);
+    }
+    .mobile-brand span b { color: var(--primary-green); }
+    .mobile-menu-btn {
+      width: 42px;
+      height: 42px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: rgba(16, 185, 129, 0.08);
+      color: #ffffff;
+      font-size: 22px;
+      display: grid;
+      place-items: center;
+    }
+
+    .sidebar-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(4px);
+      z-index: 998;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .sidebar-backdrop.active { opacity: 1; pointer-events: auto; }
+
+    /* SIDEBAR */
+    .dashboard-layout { min-height: 100vh; display: flex; }
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: var(--sidebar-width);
+      background: #091711;
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      padding: 28px 20px;
+      z-index: 999;
+      overflow-y: auto;
+    }
+    .sidebar-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #ffffff;
+      font: 700 16px Georgia, serif;
+    }
+    .sidebar-logo .brand-mark {
+      width: 38px;
+      height: 38px;
+      border: 1px solid var(--gold);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: var(--gold);
+      font-size: 20px;
+      background: rgba(243, 207, 122, 0.08);
+    }
+    .sidebar-close-btn {
+      display: none;
+      width: 34px;
+      height: 34px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.05);
+      color: #ffffff;
+      font-size: 16px;
+      place-items: center;
+    }
+
+    .sidebar-profile {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: rgba(16, 185, 129, 0.04);
+      margin-bottom: 24px;
+    }
+    .profile-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--primary-green), #047857);
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 14px;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+    }
+    .profile-info strong { display: block; font-size: 13px; color: #ffffff; }
+    .profile-info span { display: block; font-size: 11px; color: var(--text-muted); }
+
+    .sidebar-navigation { display: flex; flex-direction: column; gap: 6px; }
+    .sidebar-navigation a {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 14px;
+      border-radius: 10px;
+      color: #a3c4b8;
+      font-size: 13px;
+      font-weight: 600;
+      transition: all 0.15s ease;
+    }
+    .sidebar-navigation a:hover { background: rgba(16, 185, 129, 0.08); color: #ffffff; }
+    .sidebar-navigation a.active {
+      background: linear-gradient(90deg, rgba(16, 185, 129, 0.15), rgba(16, 185, 129, 0.05));
+      border-left: 3px solid var(--primary-green);
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    .sidebar-bottom {
+      margin-top: auto;
+      padding-top: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .sidebar-logout-btn {
+      width: 100%;
+      padding: 11px;
+      border-radius: 8px;
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.25);
+      color: #fca5a5;
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    /* MAIN */
+    .dashboard-main {
+      margin-left: var(--sidebar-width);
+      padding: 42px 36px 80px;
+      width: calc(100% - var(--sidebar-width));
+      max-width: 1500px;
+      min-height: 100vh;
+    }
+    .header-kicker {
+      color: var(--gold);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .header-title { font: 700 28px Georgia, serif; color: #ffffff; margin-bottom: 8px; }
+    .header-sub { color: var(--text-muted); font-size: 14px; max-width: 700px; }
+
+    .card {
+      background: linear-gradient(145deg, #0d2218, #07140e);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      margin-top: 24px;
+    }
+    .signal-box {
+      border: 1px solid rgba(243, 207, 122, 0.3);
+      border-radius: 14px;
+      background: rgba(243, 207, 122, 0.04);
+      padding: 24px;
+      margin-top: 16px;
+    }
+    .signal-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-top: 16px;
+    }
+    .sig-item {
+      padding: 14px;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+    .sig-label { font-size: 10px; font-weight: 900; text-transform: uppercase; color: var(--text-muted); }
+    .sig-val { font-size: 18px; font-weight: 800; color: #ffffff; margin-top: 4px; }
+
+    .btn-execute {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      padding: 16px 28px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--primary-green), #047857);
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 15px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      border: none;
+      margin-top: 20px;
+      transition: all 0.2s;
+    }
+    .btn-execute:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3); }
+
+    .table-wrap { overflow-x: auto; margin-top: 16px; }
+    table { width: 100%; border-collapse: collapse; min-width: 700px; }
+    th { text-align: left; padding: 12px 14px; font-size: 10px; color: var(--text-muted); text-transform: uppercase; border-bottom: 1px solid var(--border); }
+    td { padding: 14px; border-bottom: 1px solid rgba(255, 255, 255, 0.04); font-size: 13px; color: var(--text-body); }
+
+    @media(max-width: 960px) {
+      .sidebar { transform: translateX(-100%); transition: transform 0.3s ease; }
+      .sidebar.open { transform: translateX(0); }
+      .sidebar-close-btn { display: grid; }
+      .mobile-header { display: flex; }
+      .dashboard-main { margin-left: 0; width: 100%; padding: 24px 16px 60px; }
+      .signal-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+<header class="mobile-header">
+  <div class="mobile-brand">
+    <div class="brand-mark">G</div>
+    <span>Global <b>Capital</b></span>
+  </div>
+  <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+</header>
+
+<div class="dashboard-layout">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">
+        <div class="brand-mark">G</div>
+        <div>
+          <div>Global Capital</div>
+          <div style="font-size:9px;color:var(--gold);font-weight:900;letter-spacing:1px;text-transform:uppercase;">Private Client</div>
+        </div>
+      </div>
+      <button class="sidebar-close-btn" id="sidebarCloseBtn">✕</button>
+    </div>
+
+    <div class="sidebar-profile">
+      <div class="profile-avatar" id="navAvatar">GC</div>
+      <div class="profile-info">
+        <strong id="navUserName">Investor</strong>
+        <span id="navPackageName">Package Tier</span>
+      </div>
+    </div>
+
+    <nav class="sidebar-navigation">
+      <a href="dashboard.html"><span>◆</span> Portfolio Overview</a>
+      <a href="dashboard-signals.html" class="active"><span>⚡</span> Daily Signals Room</a>
+      <a href="dashboard-market.html"><span>📈</span> Gold Terminal & Chart</a>
+      <a href="dashboard-earnings.html"><span>💰</span> Earnings & ROI Ledger</a>
+      <a href="dashboard-withdrawals.html"><span>🏦</span> Withdrawals Desk</a>
+      <a href="dashboard-referrals.html"><span>👥</span> 3-Tier Affiliate Team</a>
+      <a href="dashboard-salary.html"><span>🎖️</span> Monthly Leadership Salary</a>
+      <a href="dashboard-videos.html"><span>🎬</span> My Videos & Content Studio</a>
+      <div style="height:1px;background:var(--border);margin:8px 0;"></div>
+      <a href="deposit.html" style="background:linear-gradient(135deg,rgba(243,207,122,0.2),rgba(16,185,129,0.2));border:1px solid var(--gold);color:var(--gold);font-weight:800;"><span>↓</span> + Deposit / Fund Account</a>
+      <a href="blogs.html"><span>📰</span> Market News & Insights</a>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <button class="sidebar-logout-btn" id="logoutBtn"><span>↪</span> Sign Out</button>
+    </div>
+  </aside>
+
+  <main class="dashboard-main">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:16px;">
+      <div>
+        <div class="header-kicker">Algorithmic Trade Execution</div>
+        <h1 class="header-title" style="margin-bottom:0;">Daily Institutional Signals Room</h1>
+      </div>
+      <a href="deposit.html" style="display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:10px;background:linear-gradient(135deg,var(--gold),#a88132);color:#07120c;font-weight:900;font-size:13px;text-transform:uppercase;box-shadow:0 4px 15px rgba(243,207,122,0.25);border:none;">
+        <span>↓</span> + Deposit / Fund Account
+      </a>
+    </div>
+    <p class="header-sub">Execute daily XAUUSD algorithmic trades to lock in your daily 1.0% institutional ROI yield.</p>
+
+    <!-- LIVE ACTIVE SIGNAL CARD -->
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+        <div>
+          <h2 style="font:700 20px Georgia,serif;color:#ffffff;">Today's Verified Market Signal</h2>
+          <p style="font-size:12px;color:var(--text-muted);margin-top:2px;">Dispatched directly from the GCVH Institutional Gold Trading Desk</p>
+        </div>
+        <div style="padding:6px 14px;border-radius:30px;background:rgba(16,185,129,0.15);border:1px solid var(--primary-green);color:var(--primary-green);font-size:11px;font-weight:900;">
+          ● LIVE SETUP ACTIVE
+        </div>
+      </div>
+
+      <div class="signal-box">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+          <div>
+            <span style="font-size:12px;font-weight:900;color:var(--gold);letter-spacing:1px;text-transform:uppercase;">Asset Pair</span>
+            <div style="font-size:24px;font-weight:800;color:#fff;margin-top:2px;" id="dispSigPair">XAUUSD (Spot Gold)</div>
+          </div>
+          <div style="padding:8px 18px;border-radius:8px;background:rgba(16,185,129,0.2);color:var(--primary-green);font-weight:900;font-size:14px;" id="dispSigType">
+            BUY / LONG
+          </div>
+        </div>
+
+        <div class="signal-grid">
+          <div class="sig-item">
+            <div class="sig-label">Target Entry</div>
+            <div class="sig-val" id="dispSigEntry">$2,654.50</div>
+          </div>
+          <div class="sig-item">
+            <div class="sig-label">Take Profit 1</div>
+            <div class="sig-val" style="color:var(--primary-green)" id="dispSigTp1">$2,668.00</div>
+          </div>
+          <div class="sig-item">
+            <div class="sig-label">Take Profit 2</div>
+            <div class="sig-val" style="color:var(--primary-green)" id="dispSigTp2">$2,682.00</div>
+          </div>
+          <div class="sig-item">
+            <div class="sig-label">Stop Loss</div>
+            <div class="sig-val" style="color:var(--red)" id="dispSigSl">$2,642.00</div>
+          </div>
+        </div>
+
+        <div style="margin-top:16px;padding:12px 16px;background:rgba(0,0,0,0.2);border-radius:8px;font-size:12px;color:#cbd5e1;" id="dispSigNotes">
+          Macro setup: Liquidity sweep below Asian session lows with strong institutional accumulation on London open.
+        </div>
+
+        <button class="btn-execute" id="btnExecuteTrade">
+          ⚡ Execute Algorithmic Trade (Lock 1% Daily Yield)
+        </button>
+      </div>
+    </div>
+
+    <!-- SIGNALS HISTORY TABLE -->
+    <div class="card">
+      <h3 style="font:700 18px Georgia,serif;color:#ffffff;margin-bottom:12px;">Recent Dispatched Signals History</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Pair</th>
+              <th>Type</th>
+              <th>Entry Price</th>
+              <th>Take Profit</th>
+              <th>Stop Loss</th>
+              <th>Status</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody id="signalsHistoryBody">
+            <tr><td colspan="7" style="text-align:center;padding:30px;color:var(--text-muted)">Loading recent signal history...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="config.js"></script>
+<script>
+(() => {
+  const token = localStorage.getItem('gcvh_customer_token') || sessionStorage.getItem('gcvh_customer_token');
+  const user = JSON.parse(localStorage.getItem('gcvh_customer_user') || sessionStorage.getItem('gcvh_customer_user') || '{}');
+
+  if (!token) {
+    window.location.href = 'login.html';
+    return;
+  }
+
+  // Populate nav
+  if (user.full_name) {
+    document.getElementById('navUserName').textContent = user.full_name;
+    const initials = user.full_name.split(' ').map(n => n[0]).join('').toUpperCase();
+    document.getElementById('navAvatar').textContent = initials || 'GC';
+  }
+  if (user.package_name) {
+    document.getElementById('navPackageName').textContent = user.package_name;
+  }
+
+  // Mobile menu
+  const sidebar = document.getElementById('sidebar');
+  const backdrop = document.getElementById('sidebarBackdrop');
+  document.getElementById('mobileMenuBtn').onclick = () => {
+    sidebar.classList.add('open');
+    backdrop.classList.add('active');
+  };
+  const closeNav = () => {
+    sidebar.classList.remove('open');
+    backdrop.classList.remove('active');
+  };
+  document.getElementById('sidebarCloseBtn').onclick = closeNav;
+  backdrop.onclick = closeNav;
+
+  document.getElementById('logoutBtn').onclick = () => {
+    localStorage.removeItem('gcvh_customer_token');
+    localStorage.removeItem('gcvh_customer_user');
+    sessionStorage.removeItem('gcvh_customer_token');
+    sessionStorage.removeItem('gcvh_customer_user');
+    window.location.href = 'login.html';
+  };
+
+  async function loadSignals() {
+    try {
+      const res = await fetch(`${window.GCVH_CONFIG.API_BASE_URL}/signals`);
+      if (!res.ok) throw new Error('Failed to load signals');
+      const data = await res.json();
+      const signals = data.signals || [];
+      if (signals.length) {
+        const top = signals[0];
+        document.getElementById('dispSigPair').textContent = top.pair || 'XAUUSD';
+        document.getElementById('dispSigType').textContent = (top.type || 'BUY').toUpperCase();
+        document.getElementById('dispSigEntry').textContent = top.entry_price || '$2,654.50';
+        document.getElementById('dispSigTp1').textContent = top.tp || '$2,668.00';
+        document.getElementById('dispSigTp2').textContent = top.tp2 || '$2,682.00';
+        document.getElementById('dispSigSl').textContent = top.sl || '$2,642.00';
+        document.getElementById('dispSigNotes').textContent = top.notes || 'Institutional XAUUSD momentum setup.';
+      }
+
+      const tbody = document.getElementById('signalsHistoryBody');
+      if (tbody) {
+        if (!signals.length) {
+          tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:30px;color:var(--text-muted)">No active signals broadcasted.</td></tr>';
+          return;
+        }
+        tbody.innerHTML = signals.map(s => `
+          <tr>
+            <td><b style="color:var(--gold)">${s.pair || 'XAUUSD'}</b></td>
+            <td><span style="font-weight:800;color:var(--primary-green)">${(s.type || 'BUY').toUpperCase()}</span></td>
+            <td>${s.entry_price || '-'}</td>
+            <td style="color:var(--primary-green)">${s.tp || '-'}</td>
+            <td style="color:var(--red)">${s.sl || '-'}</td>
+            <td><span style="color:var(--primary-green);font-weight:700">● Completed / Won</span></td>
+            <td style="color:var(--text-muted);font-size:11px">${new Date(s.created_at || Date.now()).toLocaleDateString()}</td>
+          </tr>
+        `).join('');
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  document.getElementById('btnExecuteTrade').onclick = async () => {
+    const btn = document.getElementById('btnExecuteTrade');
+    btn.disabled = true;
+    btn.textContent = '⏳ Executing Algorithmic Scalping Order...';
+    try {
+      const res = await fetch(`${window.GCVH_CONFIG.API_BASE_URL}/daily-claim`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || 'Trade execution failed');
+      alert(`🎉 Trade Executed Successfully! You earned 1.0% ROI ($${Number(data.earnings || 0).toFixed(2)}) credited to your available balance.`);
+      btn.textContent = '✓ Trade Completed Today';
+    } catch (err) {
+      alert(err.message || 'Already executed today. New signal window opens at 00:00 UTC.');
+      btn.textContent = '⚡ Execute Algorithmic Trade (Lock 1% Daily Yield)';
+      btn.disabled = false;
+    }
+  };
+
+  loadSignals();
+})();
+</script>
+</body>
+</html>

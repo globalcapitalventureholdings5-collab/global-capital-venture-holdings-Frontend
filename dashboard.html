@@ -1190,17 +1190,18 @@
       </div>
 
       <nav class="sidebar-navigation">
-        <a href="#overview" class="active"><span>▦</span> Portfolio Overview</a>
-        <a href="#market"><span>◈</span> Live XAUUSD Market</a>
-        <a href="#signals"><span>✦</span> Daily Clicking & Signals</a>
-        <a href="#earnings"><span>📈</span> Account Earnings History</a>
-        <a href="#payout"><span>↗</span> Fortnightly Withdrawals</a>
-        <a href="#referrals"><span>%</span> Referral Network (3-Level)</a>
-        <a href="#salary"><span>◷</span> Monthly Salary Matrix</a>
-        <a href="#blogs"><span>📰</span> Market Insights & Blogs</a>
+        <a href="dashboard.html" class="active"><span>▦</span> Portfolio Overview</a>
+        <a href="dashboard-signals.html"><span>⚡</span> Daily Signals & 1% ROI</a>
+        <a href="dashboard-market.html"><span>◈</span> Live XAUUSD Terminal</a>
+        <a href="dashboard-earnings.html"><span>📈</span> Earnings & ROI Ledger</a>
+        <a href="dashboard-withdrawals.html"><span>↗</span> Fortnightly Withdrawals</a>
+        <a href="dashboard-referrals.html"><span>%</span> 3-Tier Affiliate Team</a>
+        <a href="dashboard-salary.html"><span>◷</span> Monthly Salary Matrix</a>
+        <a href="dashboard-videos.html"><span>🎬</span> My Videos & Content Studio</a>
+        <div style="height:1px;background:var(--border);margin:8px 0;"></div>
+        <a href="deposit.html" style="color:var(--gold);"><span>↓</span> Fund Investment (Deposit)</a>
         <a href="packages.html"><span>💎</span> Investment Packages</a>
-        <a href="salary-system.html"><span>🏆</span> Salary System</a>
-        <a href="blogs.html"><span>🌐</span> Public Blog Portal ↗</a>
+        <a href="blogs.html"><span>📰</span> Community & News Briefings</a>
       </nav>
 
       <div class="sidebar-bottom">
@@ -1222,9 +1223,10 @@
         <div class="section-tag">ACCOUNT NOT ACTIVATED</div>
         <h1>Your Dashboard is Locked</h1>
         <p id="lockedMessage">Your account is registered, but no investment package has been activated yet. Select a package, complete the deposit, and wait for administrator verification. The dashboard will unlock after approval.</p>
-        <div class="locked-actions">
-          <a class="btn btn-primary" href="packages.html">Choose an Investment Package →</a>
-          <a class="btn btn-outline" href="index.html">← Return to Website</a>
+        <div class="locked-actions" style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:24px;">
+          <a class="btn btn-primary" href="deposit.html" style="background:linear-gradient(135deg,var(--gold),#a88132);color:#07120c;font-weight:900;text-transform:uppercase;">↓ Complete Deposit / Fund Account →</a>
+          <a class="btn btn-outline" href="packages.html" style="border:1px solid var(--border);color:#fff;">View Investment Packages</a>
+          <a class="btn btn-outline" href="index.html" style="border:1px solid rgba(255,255,255,0.1);color:var(--text-muted);">← Return to Website</a>
         </div>
       </div>
     </div>
@@ -1233,15 +1235,23 @@
     <main class="dashboard-main" id="dashboardMain" style="display:none">
 
       <!-- HEADER -->
-      <section class="dashboard-header">
+      <section class="dashboard-header" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;margin-bottom:28px;">
         <div>
           <div class="section-tag">PRIVATE CLIENT AREA</div>
-          <h1>Portfolio <span>Overview</span></h1>
+          <h1 style="margin:4px 0 6px;">Portfolio <span>Overview</span></h1>
           <p>Real-time package balance, growth analytics, and daily algorithmic trading execution.</p>
         </div>
-        <div class="status-indicator">
-          <span class="live-dot"></span>
-          <span id="headerAccountStatus">Checking account...</span>
+        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+          <a href="deposit.html" class="btn" style="background:linear-gradient(135deg,var(--gold),#a88132);color:#07120c;font-weight:900;padding:12px 22px;border-radius:10px;text-decoration:none;font-size:13px;display:inline-flex;align-items:center;gap:8px;box-shadow:0 4px 15px rgba(243,207,122,0.3);text-transform:uppercase;">
+            <span>↓</span> + Deposit Funds
+          </a>
+          <a href="dashboard-withdrawals.html" class="btn" style="background:rgba(255,255,255,0.06);border:1px solid var(--border);color:#ffffff;font-weight:800;padding:12px 18px;border-radius:10px;text-decoration:none;font-size:13px;display:inline-flex;align-items:center;gap:6px;">
+            <span>↗</span> Withdraw
+          </a>
+          <div class="status-indicator">
+            <span class="live-dot"></span>
+            <span id="headerAccountStatus">Checking account...</span>
+          </div>
         </div>
       </section>
 

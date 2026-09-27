@@ -27,7 +27,7 @@ body {
   line-height: 1.5;
 }
 .wrap {
-  max-width: 900px;
+  max-width: 920px;
   margin: auto;
   padding: 30px 18px 70px;
 }
@@ -55,12 +55,40 @@ body {
   font: 24px Georgia, serif;
 }
 .brand b { color: var(--gold2); }
-.back { color: #cfd3d7; text-decoration: none; font-size: 13px; font-weight: 700; }
+.back { color: #cfd3d7; text-decoration: none; font-size: 13px; font-weight: 700; transition: color 0.2s; }
 .back:hover { color: #fff; }
+
+.deposit-ad-banner {
+  margin: 0 0 20px;
+  padding: 18px 22px;
+  border: 1px solid rgba(217, 173, 75, 0.35);
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(217, 173, 75, 0.12), rgba(13, 90, 63, 0.15));
+  color: #f1ebd8;
+  font-size: 13px;
+  line-height: 1.6;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.deposit-ad-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: var(--gold);
+  color: #07090b;
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 6px;
+}
 
 .deposit-warning {
   margin: 0 0 20px;
-  padding: 18px 22px;
+  padding: 16px 20px;
   border: 1px solid rgba(217, 173, 75, 0.3);
   border-radius: 14px;
   background: rgba(217, 173, 75, 0.06);
@@ -85,15 +113,48 @@ body {
   text-transform: uppercase;
 }
 .hero h1 {
-  font: 700 clamp(32px, 5vw, 50px)/1.1 Georgia, serif;
+  font: 700 clamp(28px, 4vw, 44px)/1.1 Georgia, serif;
   margin: 10px 0;
 }
 .hero p { color: var(--muted); line-height: 1.6; font-size: 14px; }
 .amount-badge {
   display: inline-block;
-  font: 700 48px Georgia, serif;
+  font: 700 44px Georgia, serif;
   color: var(--gold2);
   margin: 12px 0 6px;
+}
+
+/* PACKAGE QUICK SELECTOR */
+.pkg-selector-wrap {
+  margin-top: 14px;
+}
+.pkg-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+.pkg-chip {
+  padding: 8px 14px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--line);
+  color: #cbd5e1;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.pkg-chip:hover {
+  background: rgba(217, 173, 75, 0.1);
+  border-color: rgba(217, 173, 75, 0.4);
+  color: #fff;
+}
+.pkg-chip.active {
+  background: var(--gold);
+  color: #07090b;
+  border-color: var(--gold);
+  box-shadow: 0 0 12px rgba(217, 173, 75, 0.3);
 }
 
 /* METHOD TABS */
@@ -267,7 +328,7 @@ body {
   .methods-grid { grid-template-columns: 1fr; }
   .grid { grid-template-columns: 1fr; }
   .address-box { flex-direction: column; }
-  .amount-badge { font-size: 38px; }
+  .amount-badge { font-size: 36px; }
 }
 </style>
 </head>
@@ -279,8 +340,21 @@ body {
       <span class="mark">✦</span>
       <span>Global Capital<br><b>Venture Holdings, Inc.</b></span>
     </a>
-    <a class="back" href="packages.html">← Choose Package</a>
+    <div style="display:flex;gap:14px;align-items:center;">
+      <a class="back" href="dashboard.html">◫ Dashboard</a>
+      <a class="back" href="packages.html">← Packages</a>
+    </div>
   </header>
+
+  <!-- PROMOTIONAL / AD PARTNER BANNER -->
+  <div class="deposit-ad-banner">
+    <div>
+      <span class="deposit-ad-badge">VIP INSTITUTIONAL ALLOCATION</span>
+      <div style="font-weight:700;font-size:14px;color:#fff;">100% Capital Protection & Instant Daily Payout Protocol</div>
+      <div style="font-size:12px;color:#d0d7de;margin-top:2px;">All verified package deposits automatically qualify for 1.00% daily returns, 3-tier affiliate commissions, and monthly leadership tiers.</div>
+    </div>
+    <a href="salary-system.html" class="btn secondary" style="font-size:11px;min-height:36px;padding:0 14px;white-space:nowrap;">View Salary Plan →</a>
+  </div>
 
   <div class="deposit-warning">
     <strong>IMPORTANT — 180-DAY CAPITAL LOCK & WITHDRAWAL POLICY</strong>
@@ -290,8 +364,26 @@ body {
   <section class="card hero">
     <div class="tag">PACKAGE DEPOSIT</div>
     <h1>Complete Your <span style="color:var(--gold2)">Deposit</span></h1>
-    <p>Select your preferred payment method (BEP20, TRC20, or Binance UID), transfer the exact amount, and submit the Transaction ID along with your payment proof screenshot.</p>
-    <div id="amountDisplay" class="amount-badge">$0.00</div>
+    <p>Select your package amount and payment method (BEP20, TRC20, or Binance UID), transfer the exact amount, and submit the Transaction ID along with your payment proof screenshot.</p>
+    
+    <div class="pkg-selector-wrap">
+      <label style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;font-weight:800;display:block;">Select Package Amount</label>
+      <div class="pkg-chips" id="packageChips">
+        <button type="button" class="pkg-chip" data-val="10">$10</button>
+        <button type="button" class="pkg-chip" data-val="25">$25</button>
+        <button type="button" class="pkg-chip" data-val="50">$50</button>
+        <button type="button" class="pkg-chip" data-val="100">$100</button>
+        <button type="button" class="pkg-chip" data-val="200">$200</button>
+        <button type="button" class="pkg-chip" data-val="300">$300</button>
+        <button type="button" class="pkg-chip" data-val="500">$500</button>
+        <button type="button" class="pkg-chip" data-val="1000">$1,000</button>
+        <button type="button" class="pkg-chip" data-val="2500">$2,500</button>
+        <button type="button" class="pkg-chip" data-val="5000">$5,000</button>
+        <button type="button" class="pkg-chip" data-val="10000">$10,000</button>
+      </div>
+    </div>
+
+    <div id="amountDisplay" class="amount-badge">$100.00</div>
   </section>
 
   <section class="card">
@@ -395,14 +487,32 @@ try {
 } catch (e) {}
 
 const allowed = [10, 25, 50, 100, 200, 300, 500, 1000, 2500, 5000, 10000];
-if (!allowed.includes(amount)) {
-  location.href = 'packages.html';
-  throw new Error('Invalid package amount');
+if (!amount || !allowed.includes(amount)) {
+  amount = 100; // Default to $100 if none chosen
 }
 
 const $ = id => document.getElementById(id);
-$('amountDisplay').textContent = '$' + amount.toLocaleString('en-US');
-$('packageAmountInput').value = amount;
+
+function setPackageAmount(newVal) {
+  amount = Number(newVal);
+  $('amountDisplay').textContent = '$' + amount.toLocaleString('en-US') + '.00';
+  $('packageAmountInput').value = amount;
+  localStorage.setItem('gcvh_selected_package', JSON.stringify({ amount: amount }));
+
+  document.querySelectorAll('.pkg-chip').forEach(btn => {
+    btn.classList.toggle('active', Number(btn.dataset.val) === amount);
+  });
+
+  if (typeof updateInstructions === 'function') {
+    updateInstructions();
+  }
+}
+
+document.querySelectorAll('.pkg-chip').forEach(btn => {
+  btn.onclick = () => setPackageAmount(btn.dataset.val);
+});
+
+setPackageAmount(amount);
 
 let fundingData = null;
 let currentMethod = 'BEP20';
@@ -411,38 +521,41 @@ const DEFAULT_ADDRESSES = {
   BEP20: {
     label: 'USDT Deposit Address (BEP20 / BSC)',
     address: '0x985794aEca35f629199343B06C1e457f97805187',
-    instructions: 'Send the exact amount of $' + amount + ' USDT (BEP20) to this BNB Smart Chain address.'
+    instructions: (amt) => 'Send the exact amount of $' + amt + ' USDT (BEP20) to this BNB Smart Chain address.'
   },
   TRC20: {
     label: 'USDT Deposit Address (TRC20 / TRON)',
     address: 'TL7yY898v3vA1Xv3R8V9g2W8K9z8X7Xy8Z',
-    instructions: 'Send the exact amount of $' + amount + ' USDT (TRC20) to this Tron network address.'
+    instructions: (amt) => 'Send the exact amount of $' + amt + ' USDT (TRC20) to this Tron network address.'
   },
   UID: {
     label: 'Binance UID / Pay ID',
     address: '839201948',
-    instructions: 'Transfer the exact amount of $' + amount + ' USDT via Binance Pay to this Binance UID.'
+    instructions: (amt) => 'Transfer the exact amount of $' + amt + ' USDT via Binance Pay to this Binance UID.'
   }
 };
+
+function updateInstructions() {
+  const mData = (fundingData && fundingData.methods)
+    ? fundingData.methods.find(m => m.id === currentMethod)
+    : null;
+
+  const fallback = DEFAULT_ADDRESSES[currentMethod] || DEFAULT_ADDRESSES.BEP20;
+  const address = (mData && mData.address) ? mData.address : fallback.address;
+  const label = (mData && mData.name) ? `${mData.name} Address / UID` : fallback.label;
+  const instructions = (mData && mData.instructions) ? mData.instructions : (typeof fallback.instructions === 'function' ? fallback.instructions(amount) : fallback.instructions);
+
+  $('depositAddressLabel').textContent = label;
+  $('depositAddress').value = address;
+  $('paymentInstructions').textContent = instructions;
+}
 
 function selectMethod(method) {
   currentMethod = method;
   document.querySelectorAll('.method-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.method === method);
   });
-
-  const mData = (fundingData && fundingData.methods)
-    ? fundingData.methods.find(m => m.id === method)
-    : null;
-
-  const fallback = DEFAULT_ADDRESSES[method] || DEFAULT_ADDRESSES.BEP20;
-  const address = (mData && mData.address) ? mData.address : fallback.address;
-  const label = (mData && mData.name) ? `${mData.name} Address / UID` : fallback.label;
-  const instructions = (mData && mData.instructions) ? mData.instructions : fallback.instructions;
-
-  $('depositAddressLabel').textContent = label;
-  $('depositAddress').value = address;
-  $('paymentInstructions').textContent = instructions;
+  updateInstructions();
 }
 
 document.querySelectorAll('.method-btn').forEach(btn => {
@@ -470,6 +583,7 @@ $('copyAddressBtn').onclick = async () => {
       $('depositAddress').select();
       document.execCommand('copy');
       $('copyAddressBtn').textContent = 'Copied!';
+      setTimeout(() => $('copyAddressBtn').textContent = 'Copy Address', 1500);
     }
   }
 };
@@ -563,7 +677,7 @@ $('depositForm').onsubmit = async (e) => {
       submittedAt: new Date().toISOString()
     }));
 
-    showStatus('✓ Deposit submitted successfully! Your payment is pending administrator verification. The dashboard will unlock immediately upon approval.');
+    showStatus('✓ Deposit submitted successfully! Your payment of $' + amount + ' is pending administrator verification. The dashboard will unlock immediately upon approval.');
     $('txidInput').disabled = true;
     submitBtn.textContent = 'Deposit Submitted Successfully';
 

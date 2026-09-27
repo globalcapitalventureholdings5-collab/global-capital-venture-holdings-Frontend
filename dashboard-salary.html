@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>GCVH — Monthly Leadership Salary & Career Matrix</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <style>
+    :root {
+      --bg-dark: #07120c;
+      --bg-card: #0c2017;
+      --bg-card-subtle: #081710;
+      --border: rgba(16, 185, 129, 0.16);
+      --border-focus: rgba(16, 185, 129, 0.4);
+      --primary-green: #10b981;
+      --primary-green-dark: #059669;
+      --gold: #f3cf7a;
+      --gold-dark: #c59b27;
+      --text-white: #ffffff;
+      --text-body: #e2ede8;
+      --text-muted: #8ba89d;
+      --red: #ef4444;
+      --sidebar-width: 280px;
+      --radius: 16px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg-dark);
+      color: var(--text-body);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      min-height: 100vh;
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+    button, input, select, textarea { font: inherit; }
+    button { cursor: pointer; }
+
+    /* MOBILE HEADER */
+    .mobile-header {
+      display: none;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      height: 68px;
+      padding: 0 20px;
+      background: #07120c;
+      border-bottom: 1px solid var(--border);
+      align-items: center;
+      justify-content: space-between;
+    }
+    .mobile-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #ffffff;
+      font: 700 16px Georgia, serif;
+    }
+    .mobile-brand .brand-mark {
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--gold);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: var(--gold);
+      font-size: 18px;
+      background: rgba(243, 207, 122, 0.06);
+    }
+    .mobile-brand span b { color: var(--primary-green); }
+    .mobile-menu-btn {
+      width: 42px;
+      height: 42px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: rgba(16, 185, 129, 0.08);
+      color: #ffffff;
+      font-size: 22px;
+      display: grid;
+      place-items: center;
+    }
+
+    .sidebar-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(4px);
+      z-index: 998;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .sidebar-backdrop.active { opacity: 1; pointer-events: auto; }
+
+    /* SIDEBAR */
+    .dashboard-layout { min-height: 100vh; display: flex; }
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: var(--sidebar-width);
+      background: #091711;
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      padding: 28px 20px;
+      z-index: 999;
+      overflow-y: auto;
+    }
+    .sidebar-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #ffffff;
+      font: 700 16px Georgia, serif;
+    }
+    .sidebar-logo .brand-mark {
+      width: 38px;
+      height: 38px;
+      border: 1px solid var(--gold);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: var(--gold);
+      font-size: 20px;
+      background: rgba(243, 207, 122, 0.08);
+    }
+    .sidebar-close-btn {
+      display: none;
+      width: 34px;
+      height: 34px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.05);
+      color: #ffffff;
+      font-size: 16px;
+      place-items: center;
+    }
+
+    .sidebar-profile {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: rgba(16, 185, 129, 0.04);
+      margin-bottom: 24px;
+    }
+    .profile-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--primary-green), #047857);
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 14px;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+    }
+    .profile-info strong { display: block; font-size: 13px; color: #ffffff; }
+    .profile-info span { display: block; font-size: 11px; color: var(--text-muted); }
+
+    .sidebar-navigation { display: flex; flex-direction: column; gap: 6px; }
+    .sidebar-navigation a {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 14px;
+      border-radius: 10px;
+      color: #a3c4b8;
+      font-size: 13px;
+      font-weight: 600;
+      transition: all 0.15s ease;
+    }
+    .sidebar-navigation a:hover { background: rgba(16, 185, 129, 0.08); color: #ffffff; }
+    .sidebar-navigation a.active {
+      background: linear-gradient(90deg, rgba(16, 185, 129, 0.15), rgba(16, 185, 129, 0.05));
+      border-left: 3px solid var(--primary-green);
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    .sidebar-bottom {
+      margin-top: auto;
+      padding-top: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .sidebar-logout-btn {
+      width: 100%;
+      padding: 11px;
+      border-radius: 8px;
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.25);
+      color: #fca5a5;
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    /* MAIN */
+    .dashboard-main {
+      margin-left: var(--sidebar-width);
+      padding: 42px 36px 80px;
+      width: calc(100% - var(--sidebar-width));
+      max-width: 1500px;
+      min-height: 100vh;
+    }
+    .header-kicker {
+      color: var(--gold);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .header-title { font: 700 28px Georgia, serif; color: #ffffff; margin-bottom: 8px; }
+    .header-sub { color: var(--text-muted); font-size: 14px; max-width: 700px; }
+
+    .card {
+      background: linear-gradient(145deg, #0d2218, #07140e);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      margin-top: 24px;
+    }
+
+    .salary-matrix-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .salary-card {
+      background: #091711;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+      position: relative;
+      overflow: hidden;
+    }
+    .salary-card.active-rank {
+      border-color: var(--gold);
+      background: linear-gradient(145deg, #132d20, #0c1c14);
+      box-shadow: 0 0 30px rgba(243, 207, 122, 0.15);
+    }
+    .rank-name { font: 700 18px Georgia, serif; color: #ffffff; }
+    .rank-stipend { font-size: 26px; font-weight: 800; color: var(--primary-green); margin: 6px 0; }
+    .rank-req { font-size: 11px; color: var(--text-muted); line-height: 1.5; }
+
+    @media(max-width: 960px) {
+      .sidebar { transform: translateX(-100%); transition: transform 0.3s ease; }
+      .sidebar.open { transform: translateX(0); }
+      .sidebar-close-btn { display: grid; }
+      .mobile-header { display: flex; }
+      .dashboard-main { margin-left: 0; width: 100%; padding: 24px 16px 60px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+<header class="mobile-header">
+  <div class="mobile-brand">
+    <div class="brand-mark">G</div>
+    <span>Global <b>Capital</b></span>
+  </div>
+  <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+</header>
+
+<div class="dashboard-layout">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">
+        <div class="brand-mark">G</div>
+        <div>
+          <div>Global Capital</div>
+          <div style="font-size:9px;color:var(--gold);font-weight:900;letter-spacing:1px;text-transform:uppercase;">Private Client</div>
+        </div>
+      </div>
+      <button class="sidebar-close-btn" id="sidebarCloseBtn">✕</button>
+    </div>
+
+    <div class="sidebar-profile">
+      <div class="profile-avatar" id="navAvatar">GC</div>
+      <div class="profile-info">
+        <strong id="navUserName">Investor</strong>
+        <span id="navPackageName">Package Tier</span>
+      </div>
+    </div>
+
+    <nav class="sidebar-navigation">
+      <a href="dashboard.html"><span>◆</span> Portfolio Overview</a>
+      <a href="dashboard-signals.html"><span>⚡</span> Daily Signals Room</a>
+      <a href="dashboard-market.html"><span>📈</span> Gold Terminal & Chart</a>
+      <a href="dashboard-earnings.html"><span>💰</span> Earnings & ROI Ledger</a>
+      <a href="dashboard-withdrawals.html"><span>🏦</span> Withdrawals Desk</a>
+      <a href="dashboard-referrals.html"><span>👥</span> 3-Tier Affiliate Team</a>
+      <a href="dashboard-salary.html" class="active"><span>🎖️</span> Monthly Leadership Salary</a>
+      <a href="dashboard-videos.html"><span>🎬</span> My Videos & Content Studio</a>
+      <div style="height:1px;background:var(--border);margin:8px 0;"></div>
+      <a href="deposit.html" style="background:linear-gradient(135deg,rgba(243,207,122,0.2),rgba(16,185,129,0.2));border:1px solid var(--gold);color:var(--gold);font-weight:800;"><span>↓</span> + Deposit / Fund Account</a>
+      <a href="blogs.html"><span>📰</span> Market News & Insights</a>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <button class="sidebar-logout-btn" id="logoutBtn"><span>↪</span> Sign Out</button>
+    </div>
+  </aside>
+
+  <main class="dashboard-main">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:15px;margin-bottom:20px;">
+      <div>
+        <div class="header-kicker">Guaranteed Leadership Stipend</div>
+        <h1 class="header-title" style="margin-bottom:5px;">Monthly Career & Salary System</h1>
+        <p class="header-sub" style="margin-bottom:0;">Unlock guaranteed recurring monthly corporate stipends by expanding your institutional direct volume and regional investor syndicate.</p>
+      </div>
+      <a href="deposit.html" style="display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:10px;background:linear-gradient(135deg,var(--gold),#a88132);color:#07120c;font-weight:900;font-size:13px;text-transform:uppercase;box-shadow:0 4px 15px rgba(243,207,122,0.25);border:none;text-decoration:none;">
+        <span>↓</span> + Deposit Funds
+      </a>
+    </div>
+
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+        <div>
+          <h2 style="font:700 20px Georgia,serif;color:#ffffff;">Career Qualification Ladder</h2>
+          <p style="font-size:12px;color:var(--text-muted);margin-top:2px;">Disbursed automatically on the 1st of every calendar month.</p>
+        </div>
+        <div style="padding:6px 14px;border-radius:20px;background:rgba(243,207,122,0.15);border:1px solid var(--gold);color:var(--gold);font-size:11px;font-weight:900;">
+          CURRENT STATUS: EXECUTIVE INVESTOR
+        </div>
+      </div>
+
+      <div class="salary-matrix-grid">
+        <div class="salary-card">
+          <div class="rank-name">Junior Associate</div>
+          <div class="rank-stipend">$300 / mo</div>
+          <div class="rank-req">Requirement: $5,000 Direct Network Volume + 5 Active Direct Investors</div>
+        </div>
+
+        <div class="salary-card">
+          <div class="rank-name">Senior Manager</div>
+          <div class="rank-stipend">$750 / mo</div>
+          <div class="rank-req">Requirement: $15,000 Direct Network Volume + 12 Active Direct Investors</div>
+        </div>
+
+        <div class="salary-card active-rank">
+          <div style="font-size:9px;color:var(--gold);font-weight:900;letter-spacing:1px;text-transform:uppercase;">★ Popular Milestone</div>
+          <div class="rank-name">Regional Director</div>
+          <div class="rank-stipend" style="color:var(--gold)">$2,000 / mo</div>
+          <div class="rank-req">Requirement: $50,000 Direct Network Volume + 25 Active Direct Investors</div>
+        </div>
+
+        <div class="salary-card">
+          <div class="rank-name">Managing Partner</div>
+          <div class="rank-stipend">$5,000 / mo</div>
+          <div class="rank-req">Requirement: $150,000 Direct Network Volume + 50 Active Direct Investors</div>
+        </div>
+
+        <div class="salary-card">
+          <div class="rank-name">Global Chairman</div>
+          <div class="rank-stipend" style="color:var(--gold2)">$12,500 / mo</div>
+          <div class="rank-req">Requirement: $500,000 Direct Network Volume + 100 Active Direct Investors</div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="config.js"></script>
+<script>
+(() => {
+  const token = localStorage.getItem('gcvh_customer_token') || sessionStorage.getItem('gcvh_customer_token');
+  const user = JSON.parse(localStorage.getItem('gcvh_customer_user') || sessionStorage.getItem('gcvh_customer_user') || '{}');
+
+  if (!token) {
+    window.location.href = 'login.html';
+    return;
+  }
+
+  // Populate nav
+  if (user.full_name) {
+    document.getElementById('navUserName').textContent = user.full_name;
+    const initials = user.full_name.split(' ').map(n => n[0]).join('').toUpperCase();
+    document.getElementById('navAvatar').textContent = initials || 'GC';
+  }
+  if (user.package_name) {
+    document.getElementById('navPackageName').textContent = user.package_name;
+  }
+
+  // Mobile menu
+  const sidebar = document.getElementById('sidebar');
+  const backdrop = document.getElementById('sidebarBackdrop');
+  document.getElementById('mobileMenuBtn').onclick = () => {
+    sidebar.classList.add('open');
+    backdrop.classList.add('active');
+  };
+  const closeNav = () => {
+    sidebar.classList.remove('open');
+    backdrop.classList.remove('active');
+  };
+  document.getElementById('sidebarCloseBtn').onclick = closeNav;
+  backdrop.onclick = closeNav;
+
+  document.getElementById('logoutBtn').onclick = () => {
+    localStorage.removeItem('gcvh_customer_token');
+    localStorage.removeItem('gcvh_customer_user');
+    sessionStorage.removeItem('gcvh_customer_token');
+    sessionStorage.removeItem('gcvh_customer_user');
+    window.location.href = 'login.html';
+  };
+})();
+</script>
+</body>
+</html>
