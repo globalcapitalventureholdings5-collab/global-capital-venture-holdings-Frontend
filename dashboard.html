@@ -1895,7 +1895,7 @@
       </div>
 
       <div class="sidebar-profile">
-        <div class="profile-avatar">GC</div>
+        <div class="profile-avatar" id="sidebarAvatar">GC</div>
         <div class="profile-info">
           <strong id="sidebarUserName">Private Client</strong>
           <span id="sidebarAccountStatus">Checking account...</span>
@@ -1915,6 +1915,7 @@
         <div style="height:1px;background:var(--border);margin:8px 0;"></div>
         <a href="deposit.html" style="color:var(--gold);"><span>↓</span> Fund Investment (Deposit)</a>
         <a href="packages.html"><span>💎</span> Investment Packages</a>
+        <a href="/downloads/GlobalCapitalHoldings.apk" download="GlobalCapitalHoldings.apk" style="color:var(--gold);font-weight:700;"><span>📱</span> Download Android App (APK)</a>
         <a href="blogs.html"><span>📰</span> Community & News Briefings</a>
       </nav>
 
@@ -2910,8 +2911,38 @@
     if (sidebarCloseBtn) sidebarCloseBtn.onclick = closeSidebar;
     if (backdrop) backdrop.onclick = closeSidebar;
 
+    function updateSidebarInitials(name) {
+      if (!name) return;
+      const names = String(name).trim().split(/\s+/);
+      let initials = 'GC';
+      if (names.length >= 2) {
+        initials = (names[0][0] + names[1][0]).toUpperCase();
+      } else if (names[0]) {
+        initials = names[0].slice(0, 2).toUpperCase();
+      }
+      const avatarEl = $('sidebarAvatar') || document.querySelector('.profile-avatar');
+      if (avatarEl) avatarEl.textContent = initials;
+    }
+
+    try {
+      const cachedUser = JSON.parse(localStorage.getItem('gcvh_customer_user') || '{}');
+      if (cachedUser && (cachedUser.full_name || cachedUser.email)) {
+        const cachedName = cachedUser.full_name || cachedUser.fullName || cachedUser.email || 'Private Client';
+        if ($('sidebarUserName')) $('sidebarUserName').textContent = cachedName;
+        updateSidebarInitials(cachedName);
+      }
+    } catch (_) {}
+
     document.querySelectorAll('.sidebar-navigation a').forEach(link => {
-      link.addEventListener('click', () => {
+      link.addEventListener('click', (e) => {
+        const href = link.getAttribute('href');
+        if (href && href.startsWith('#')) {
+          e.preventDefault();
+          const target = document.querySelector(href);
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }
         document.querySelectorAll('.sidebar-navigation a').forEach(a => a.classList.remove('active'));
         link.classList.add('active');
         closeSidebar();

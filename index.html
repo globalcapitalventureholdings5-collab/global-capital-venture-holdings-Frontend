@@ -129,6 +129,27 @@
       background: linear-gradient(135deg, #129269, #094530) !important;
       color: #ffffff !important;
     }
+    .nav-btn-download {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 6px !important;
+      background: linear-gradient(135deg, rgba(243, 207, 122, 0.15), rgba(243, 207, 122, 0.05)) !important;
+      color: #f3cf7a !important;
+      border: 1.5px solid rgba(243, 207, 122, 0.45) !important;
+      padding: 8px 14px !important;
+      border-radius: 8px !important;
+      font-size: 12px !important;
+      font-weight: 800 !important;
+      letter-spacing: 0.04em !important;
+      transition: all 0.2s ease !important;
+    }
+    .nav-btn-download:hover {
+      background: linear-gradient(135deg, #f3cf7a, #d4a737) !important;
+      color: #071912 !important;
+      border-color: #f3cf7a !important;
+      box-shadow: 0 4px 16px rgba(243, 207, 122, 0.35);
+      transform: translateY(-1px);
+    }
     .nav-btn-dashboard {
       background: #081a13 !important;
       color: #5eead4 !important;
@@ -690,6 +711,273 @@
     .withdrawal-amount { font: 700 18px Georgia, serif; color: var(--primary-light); }
     .withdrawal-status { color: #0f7a57; font-weight: 800; font-size: 12px; }
 
+    /* APP DOWNLOAD SECTION */
+    .app-download-section {
+      background: radial-gradient(circle at 50% 30%, rgba(15, 122, 87, 0.2) 0%, #05130d 70%);
+      color: #ffffff;
+      padding: 100px 28px;
+      position: relative;
+      overflow: hidden;
+      border-top: 1px solid rgba(243, 207, 122, 0.2);
+    }
+    .app-download-section::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: 
+        linear-gradient(rgba(243, 207, 122, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(243, 207, 122, 0.03) 1px, transparent 1px);
+      background-size: 36px 36px;
+      pointer-events: none;
+    }
+    .app-download-container {
+      max-width: 1280px;
+      margin: auto;
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 56px;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+    .app-download-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(243, 207, 122, 0.12);
+      border: 1px solid rgba(243, 207, 122, 0.35);
+      color: #f3cf7a;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    .app-download-badge .pulse-gold {
+      width: 8px;
+      height: 8px;
+      background: #f3cf7a;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #f3cf7a;
+      animation: pulseDot 2s infinite;
+    }
+    .app-download-info h2 {
+      font: 700 clamp(32px, 4.5vw, 54px)/1.1 Georgia, serif;
+      color: #ffffff;
+      margin-bottom: 20px;
+      letter-spacing: -0.02em;
+    }
+    .app-download-info h2 span {
+      color: #f3cf7a;
+      background: linear-gradient(135deg, #f3cf7a 0%, #ffffff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .app-download-info p {
+      font-size: 17px;
+      line-height: 1.7;
+      color: #b3d4c8;
+      margin-bottom: 32px;
+      max-width: 600px;
+    }
+    .app-features-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 36px;
+    }
+    .app-feature-pill {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 12px 16px;
+      transition: all 0.2s ease;
+    }
+    .app-feature-pill:hover {
+      background: rgba(243, 207, 122, 0.08);
+      border-color: rgba(243, 207, 122, 0.3);
+      transform: translateY(-2px);
+    }
+    .app-feature-icon {
+      font-size: 20px;
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      background: rgba(15, 122, 87, 0.25);
+      border-radius: 8px;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #5eead4;
+    }
+    .app-feature-text strong {
+      display: block;
+      color: #ffffff;
+      font-size: 13.5px;
+      font-weight: 700;
+    }
+    .app-feature-text span {
+      font-size: 11.5px;
+      color: #8dafa3;
+    }
+    .app-download-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 18px;
+    }
+    .btn-download-hero {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      background: linear-gradient(135deg, #f3cf7a 0%, #d4a737 100%);
+      color: #071912;
+      padding: 16px 28px;
+      border-radius: 14px;
+      font-weight: 900;
+      font-size: 16px;
+      box-shadow: 0 10px 30px rgba(243, 207, 122, 0.35);
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      text-decoration: none;
+      border: 1.5px solid #fff2bf;
+    }
+    .btn-download-hero:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 16px 40px rgba(243, 207, 122, 0.5);
+      background: linear-gradient(135deg, #ffffff 0%, #f3cf7a 100%);
+    }
+    .btn-download-icon {
+      font-size: 26px;
+      line-height: 1;
+    }
+    .btn-download-meta {
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+      line-height: 1.2;
+    }
+    .btn-download-meta small {
+      font-size: 10.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      opacity: 0.85;
+      font-weight: 800;
+    }
+    .btn-download-meta strong {
+      font-size: 15px;
+      letter-spacing: -0.01em;
+    }
+    .app-version-pill {
+      display: inline-flex;
+      flex-direction: column;
+      padding: 8px 16px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 10px;
+      font-size: 12px;
+      color: #a3c4b8;
+    }
+    .app-version-pill strong {
+      color: #5eead4;
+      font-family: ui-monospace, SFMono-Regular, monospace;
+    }
+    .app-device-preview {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+    .phone-mockup-frame {
+      width: 310px;
+      background: #0b1a13;
+      border: 10px solid #162820;
+      border-radius: 42px;
+      box-shadow: 0 25px 70px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(243, 207, 122, 0.25);
+      padding: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+    .phone-speaker {
+      width: 60px;
+      height: 4px;
+      background: #2a4035;
+      border-radius: 4px;
+      margin: 0 auto 14px;
+    }
+    .phone-screen-content {
+      background: #07150f;
+      border-radius: 28px;
+      padding: 18px 14px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .phone-top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: #8dafa3;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .phone-balance-card {
+      background: linear-gradient(135deg, #0d3b2b 0%, #071e16 100%);
+      border: 1px solid rgba(243, 207, 122, 0.3);
+      border-radius: 14px;
+      padding: 16px 14px;
+      text-align: center;
+    }
+    .phone-balance-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #a1c8ba;
+    }
+    .phone-balance-val {
+      font: 700 24px Georgia, serif;
+      color: #f3cf7a;
+      margin: 4px 0 6px;
+    }
+    .phone-balance-badge {
+      display: inline-block;
+      background: rgba(16, 185, 129, 0.2);
+      color: #10b981;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 20px;
+    }
+    .phone-quick-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .phone-action-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 10px 8px;
+      text-align: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+    .phone-mini-tx {
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 10px;
+      padding: 10px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+    }
+
     /* FOOTER */
     .footer {
       background: #071912;
@@ -837,6 +1125,7 @@
         <a href="about.html">About Us</a>
         <a href="blogs.html">Blogs</a>
         <a href="contact.html">Contact</a>
+        <a href="/downloads/GlobalCapitalHoldings.apk" download="GlobalCapitalHoldings.apk" class="nav-btn-download" title="Download Android App APK"><span>📱</span> Download App</a>
 
         <!-- Guest state -->
         <a href="login.html" class="nav-btn-signin nav-guest-item">Sign In</a>
@@ -860,6 +1149,7 @@
             <a href="deposit.html" style="color:var(--gold);font-weight:800;"><span>↓</span> Deposit / Fund Account</a>
             <a href="packages.html"><span>💎</span> Investment Packages</a>
             <a href="salary-system.html"><span>🏆</span> Salary System</a>
+            <a href="/downloads/GlobalCapitalHoldings.apk" download="GlobalCapitalHoldings.apk" style="color:var(--gold);"><span>📱</span> Download Android App</a>
             <button type="button" class="nav-logout-btn logout-action"><span>🚪</span> Sign Out / Logout</button>
           </div>
         </div>
@@ -895,9 +1185,11 @@
       <a href="index.html" class="active">Home</a>
       <a href="packages.html">Packages</a>
       <a href="salary-system.html">Salary System</a>
+      <a href="deposit.html" style="color:var(--gold);font-weight:700;">Deposit</a>
       <a href="about.html">About Us</a>
       <a href="blogs.html">Blogs</a>
       <a href="contact.html">Contact</a>
+      <a href="/downloads/GlobalCapitalHoldings.apk" download="GlobalCapitalHoldings.apk" style="color:var(--gold);font-weight:800;display:flex;align-items:center;gap:8px;"><span>📱</span> Download Android App (APK)</a>
     </div>
 
     <!-- Guest actions -->
@@ -945,6 +1237,7 @@
         <p>Institutional portfolio packages with 1.00% daily returns, transparent fortnightly payouts, and leader monthly salary contracts.</p>
         <div class="hero-buttons">
           <a href="packages.html" class="btn btn-primary">Explore Investment Packages →</a>
+          <a href="#appDownloadSection" class="btn btn-outline" style="border-color:rgba(243,207,122,0.5);color:var(--gold);"><span>📱</span> Download Android App</a>
           <a href="salary-system.html" class="btn btn-outline">View Salary Matrix →</a>
           <a href="dashboard.html" id="heroDashboardButton" class="btn btn-primary" hidden>Open Dashboard →</a>
         </div>
@@ -1064,6 +1357,95 @@
         </div>
       </div>
     </section>
+
+    <!-- MOBILE APP DOWNLOAD SECTION -->
+    <section class="app-download-section" id="appDownloadSection">
+      <div class="app-download-container">
+        <div class="app-download-info">
+          <div class="app-download-badge">
+            <span class="pulse-gold"></span> OFFICIAL MOBILE APPLICATION
+          </div>
+          <h2>Get the <span>Mobile App</span></h2>
+          <p>
+            Download the official Android release APK for a faster, ultra-responsive mobile experience with real-time portfolio tracking, instant deposit proofs, live XAU/USD gold feeds, and biometric security.
+          </p>
+
+          <div class="app-features-grid">
+            <div class="app-feature-pill">
+              <div class="app-feature-icon">⚡</div>
+              <div class="app-feature-text">
+                <strong>Instant Deposits</strong>
+                <span>Fast receipt upload & auto verification</span>
+              </div>
+            </div>
+            <div class="app-feature-pill">
+              <div class="app-feature-icon">📈</div>
+              <div class="app-feature-text">
+                <strong>Live Market Analytics</strong>
+                <span>Real-time XAU/USD & crypto charts</span>
+              </div>
+            </div>
+            <div class="app-feature-pill">
+              <div class="app-feature-icon">💎</div>
+              <div class="app-feature-text">
+                <strong>Daily ROI Payouts</strong>
+                <span>Automated 1.00% daily compounding</span>
+              </div>
+            </div>
+            <div class="app-feature-pill">
+              <div class="app-feature-icon">🛡️</div>
+              <div class="app-feature-text">
+                <strong>Bank-Grade Security</strong>
+                <span>Secured tokenization & SSL protection</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="app-download-actions">
+            <a href="/downloads/GlobalCapitalHoldings.apk" download="GlobalCapitalHoldings.apk" class="btn-download-hero" id="mainApkDownloadBtn">
+              <span class="btn-download-icon">⬇</span>
+              <div class="btn-download-meta">
+                <small>Direct APK Download</small>
+                <strong>Download Android App</strong>
+              </div>
+            </a>
+            <div class="app-version-pill">
+              <span>Current Release: <strong id="apkVersionBadge">v1.0.0</strong></span>
+              <span style="font-size:11px;opacity:0.8;">Production APK • 52.6 MB</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="app-device-preview">
+          <div class="phone-mockup-frame">
+            <div class="phone-speaker"></div>
+            <div class="phone-screen-content">
+              <div class="phone-top-bar">
+                <span>✦ GCVH MOBILE</span>
+                <span>🟢 LIVE</span>
+              </div>
+              <div class="phone-balance-card">
+                <div class="phone-balance-label">Total Portfolio Value</div>
+                <div class="phone-balance-val">$24,850.00</div>
+                <span class="phone-balance-badge">+1.00% Daily ROI Active</span>
+              </div>
+              <div class="phone-quick-actions">
+                <div class="phone-action-btn" style="background:linear-gradient(135deg,#0f7a57,#0d5a3f);border-color:#10b981;">↓ Deposit</div>
+                <div class="phone-action-btn">↑ Withdraw</div>
+              </div>
+              <div class="phone-mini-tx">
+                <span style="color:#c9e4d9;">Daily Yield</span>
+                <strong style="color:#10b981;">+$248.50</strong>
+              </div>
+              <div class="phone-mini-tx">
+                <span style="color:#c9e4d9;">XAU/USD Gold</span>
+                <strong style="color:#f3cf7a;">$2,738.50 ▲</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
 
   <!-- MULTI-PAGE FOOTER -->
@@ -1081,6 +1463,7 @@
           <li><a href="packages.html">Investment Packages</a></li>
           <li><a href="salary-system.html">Salary System</a></li>
           <li><a href="dashboard.html">Member Dashboard</a></li>
+          <li><a href="/downloads/GlobalCapitalHoldings.apk" download="GlobalCapitalHoldings.apk" style="color:var(--gold);font-weight:700;">📱 Download Android App</a></li>
         </ul>
       </div>
 
@@ -1116,6 +1499,18 @@
     const token = localStorage.getItem('gcvh_customer_token');
     if (token) {
       document.querySelectorAll('.nav-btn-dashboard, #mobileDashboard').forEach(el => el.hidden = false);
+    }
+
+    // Dynamic APK version and download link binding
+    if (window.GCVH_CONFIG) {
+      const vBadge = document.getElementById('apkVersionBadge');
+      if (vBadge && window.GCVH_CONFIG.APP_VERSION) {
+        vBadge.textContent = 'v' + window.GCVH_CONFIG.APP_VERSION;
+      }
+      const apkUrl = window.GCVH_CONFIG.APK_DOWNLOAD_URL || '/downloads/GlobalCapitalHoldings.apk';
+      document.querySelectorAll('a[download="GlobalCapitalHoldings.apk"]').forEach(a => {
+        a.href = apkUrl;
+      });
     }
 
     async function updateLiveTicker() {
