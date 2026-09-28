@@ -377,149 +377,103 @@ body {
 }
 .small { font-size: 12px; color: var(--muted); line-height: 1.6; }
 
-.spinner-inline {
-  display: inline-block;
-  width: 18px;
-  height: 18px;
-  border: 2.5px solid rgba(7, 18, 12, 0.35);
-  border-radius: 50%;
-  border-top-color: #07120c;
-  animation: spinDepositLoader 0.7s linear infinite;
-  vertical-align: middle;
-  margin-right: 8px;
-}
-@keyframes spinDepositLoader {
-  to { transform: rotate(360deg); }
-}
-
-.success-result-card {
-  display: none;
-  background: linear-gradient(150deg, #0c261b, #07150f);
-  border: 1.5px solid rgba(16, 185, 129, 0.45);
-  border-radius: 16px;
-  padding: 28px 24px;
-  margin-top: 20px;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5), 0 0 30px rgba(16, 185, 129, 0.15);
-  animation: fadeInScale 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-@keyframes fadeInScale {
-  from { opacity: 0; transform: translateY(12px) scale(0.98); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
-}
-
-.success-head {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 18px;
-  padding-bottom: 16px;
-  border-bottom: 1px solid rgba(16, 185, 129, 0.2);
-}
-.success-icon-badge {
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.25), rgba(5, 150, 105, 0.4));
-  border: 2px solid var(--primary-green);
-  display: grid;
-  place-items: center;
-  font-size: 26px;
-  color: #ffffff;
-  box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
-  flex-shrink: 0;
-}
-.receipt-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-  background: rgba(0, 0, 0, 0.35);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+.deposit-history-table-wrap {
+  overflow-x: auto;
   border-radius: 12px;
-  padding: 16px;
-  margin: 18px 0;
+  border: 1px solid var(--line);
+  background: rgba(0, 0, 0, 0.25);
+  margin-top: 14px;
 }
-.receipt-row {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  min-width: 0;
+table.deposit-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+  min-width: 620px;
 }
-.receipt-row.full {
-  grid-column: 1 / -1;
-}
-.receipt-lbl {
-  font-size: 10.5px;
+table.deposit-table th {
+  padding: 12px 14px;
+  text-align: left;
+  font-size: 10px;
   font-weight: 800;
   color: var(--muted);
   text-transform: uppercase;
   letter-spacing: 0.08em;
+  background: rgba(255, 255, 255, 0.02);
+  border-bottom: 1px solid var(--line);
 }
-.receipt-val {
-  font-size: 13.5px;
-  font-weight: 700;
-  color: #ffffff;
-  word-break: break-all;
-  overflow-wrap: anywhere;
-  display: flex;
-  align-items: center;
-  gap: 8px;
+table.deposit-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  color: #d1ded8;
 }
-.receipt-val.gold {
-  color: var(--gold2);
-  font-family: Georgia, serif;
-  font-size: 22px;
+table.deposit-table tr:last-child td {
+  border-bottom: 0;
 }
-.receipt-proof-thumb {
-  max-width: 100%;
-  max-height: 140px;
-  border-radius: 8px;
-  border: 1px solid rgba(243, 207, 122, 0.3);
-  object-fit: cover;
-  margin-top: 6px;
+table.deposit-table tr:hover td {
+  background: rgba(255, 255, 255, 0.02);
 }
 
-.copy-mini-tag {
-  padding: 2px 8px;
-  border-radius: 6px;
-  background: rgba(16, 185, 129, 0.15);
-  border: 1px solid rgba(16, 185, 129, 0.35);
-  color: var(--primary-green);
-  font-size: 10.5px;
-  font-weight: 800;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: all 0.15s ease;
-}
-.copy-mini-tag:hover {
-  background: var(--primary-green);
-  color: #07120c;
-}
-
-.badge-pending {
+.badge-status-pill {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 4px 10px;
+  gap: 5px;
+  padding: 3px 9px;
   border-radius: 999px;
-  background: rgba(243, 207, 122, 0.15);
-  border: 1px solid rgba(243, 207, 122, 0.35);
-  color: var(--gold2);
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 800;
   text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
-.btn-disabled-state {
-  opacity: 0.65;
-  cursor: not-allowed !important;
-  pointer-events: none;
+.badge-status-pill.pending {
+  background: rgba(243, 207, 122, 0.15);
+  color: var(--gold2);
+  border: 1px solid rgba(243, 207, 122, 0.35);
+}
+.badge-status-pill.confirmed {
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--primary-green);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+}
+.badge-status-pill.rejected {
+  background: rgba(239, 68, 68, 0.15);
+  color: #fca5a5;
+  border: 1px solid rgba(239, 68, 68, 0.35);
 }
 
-@media (max-width: 650px) {
-  .methods-grid { grid-template-columns: 1fr; }
-  .grid { grid-template-columns: 1fr; }
-  .receipt-grid { grid-template-columns: 1fr; }
-  .amount-badge { font-size: 32px; }
-  .top { flex-direction: column; align-items: flex-start; gap: 12px; }
+/* IMAGE LIGHTBOX MODAL */
+.proof-lightbox-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.88);
+  backdrop-filter: blur(8px);
+  z-index: 10000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.proof-lightbox-modal.open {
+  display: flex;
+}
+.proof-lightbox-box {
+  background: #0c2017;
+  border: 1.5px solid var(--line);
+  border-radius: 16px;
+  padding: 22px;
+  max-width: 680px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+}
+.proof-lightbox-box img {
+  max-width: 100%;
+  max-height: 65vh;
+  border-radius: 10px;
+  object-fit: contain;
+  margin-top: 10px;
+  border: 1px solid rgba(243, 207, 122, 0.25);
 }
 </style>
 </head>
@@ -635,10 +589,10 @@ body {
         <label>Payment Proof Screenshot (Optional / Recommended)</label>
         
         <div class="upload-zone" id="uploadZone">
-          <input type="file" id="proofInput" name="proof" accept="image/*">
+          <input type="file" id="proofInput" name="proof" accept="image/jpeg,image/png,image/webp,image/jpg,image/gif,image/heic">
           <div style="font-size:32px;pointer-events:none;">📸</div>
           <strong style="color:var(--gold2);font-size:14px;display:block;pointer-events:none;">Click to choose or drop screenshot here</strong>
-          <span style="font-size:11px;color:var(--muted);pointer-events:none;">Supports all JPG, PNG, WEBP images</span>
+          <span style="font-size:11px;color:var(--muted);pointer-events:none;">Supports all JPG, JPEG, PNG, WEBP images (up to 25MB)</span>
         </div>
 
         <div id="uploadPreview" class="upload-preview">
@@ -708,7 +662,7 @@ body {
 
         <div class="receipt-row full" id="receiptProofRow" style="display:none;">
           <span class="receipt-lbl">Attached Payment Proof</span>
-          <img id="receiptProofImg" src="" alt="Payment Proof" class="receipt-proof-thumb">
+          <img id="receiptProofImg" src="" alt="Payment Proof" class="receipt-proof-thumb" style="cursor:pointer;" onclick="openProofLightbox(this.src, 'Submitted Payment Proof')">
         </div>
       </div>
 
@@ -727,6 +681,45 @@ body {
           + Submit Another Deposit
         </button>
       </div>
+    </div>
+  </section>
+
+  <!-- LIVE DEPOSIT SUBMISSIONS & HISTORY LEDGER (FETCHED DYNAMICALLY VIA GET API) -->
+  <section class="card" id="depositHistorySection">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:8px;">
+      <div>
+        <div class="tag">MY SUBMISSIONS</div>
+        <h2 style="font:700 20px Georgia,serif;color:#ffffff;margin-top:2px;">Deposit Records & Status</h2>
+      </div>
+      <button type="button" id="refreshHistoryBtn" class="btn secondary" style="font-size:11.5px;min-height:36px;padding:0 14px;border-radius:8px;">
+        ↻ Refresh
+      </button>
+    </div>
+    <p style="font-size:12px;color:var(--muted);margin-bottom:12px;">
+      Live record of your package deposit requests. Status changes automatically upon administrative verification.
+    </p>
+
+    <div class="deposit-history-table-wrap">
+      <table class="deposit-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Amount</th>
+            <th>Method</th>
+            <th>TXID / Reference</th>
+            <th>Proof</th>
+            <th>Status</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody id="depositHistoryRows">
+          <tr>
+            <td colspan="7" style="text-align:center;padding:26px;color:var(--muted);">
+              Loading deposit history…
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </section>
 
@@ -756,6 +749,17 @@ body {
   </p>
 </div>
 
+<!-- PROOF LIGHTBOX MODAL -->
+<div id="proofLightbox" class="proof-lightbox-modal">
+  <div class="proof-lightbox-box">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+      <strong id="proofLightboxTitle" style="color:var(--gold2);font-size:14px;">Payment Proof</strong>
+      <button type="button" id="closeProofLightboxBtn" style="background:rgba(255,255,255,0.08);border:1px solid var(--line);color:#fff;font-size:16px;width:32px;height:32px;border-radius:8px;cursor:pointer;">✕</button>
+    </div>
+    <img id="proofLightboxImg" src="" alt="Payment Proof">
+  </div>
+</div>
+
 <script src="config.js"></script>
 <script>
 'use strict';
@@ -780,6 +784,25 @@ if (!amount || !allowed.includes(amount)) {
 const $ = id => document.getElementById(id);
 
 let isSubmitting = false;
+
+function getApiBaseUrl() {
+  if (typeof API !== 'undefined' && API) {
+    return API.replace(/\/+$/, '');
+  }
+  if (typeof window !== 'undefined' && window.GCVH_CONFIG && window.GCVH_CONFIG.API_BASE_URL) {
+    return window.GCVH_CONFIG.API_BASE_URL.replace(/\/api\/?$/, '');
+  }
+  return '';
+}
+
+function resolveProofUrl(path) {
+  if (!path) return '';
+  if (path.startsWith('http://') || path.startsWith('https://') || path.startsWith('data:')) return path;
+  const base = getApiBaseUrl();
+  if (path.startsWith('/')) return base + path;
+  if (path.startsWith('uploads/')) return base + '/' + path;
+  return base + '/uploads/deposits/' + path;
+}
 
 function setPackageAmount(newVal) {
   if (isSubmitting) return;
@@ -872,13 +895,28 @@ const paramProof = qs.get('proof') || '';
 if (paramProof && uploadPreview && previewImg) {
   previewFileName.textContent = paramProof;
   previewFileSize.textContent = 'Attached Proof Image';
-  previewImg.src = (paramProof.startsWith('http') || paramProof.startsWith('/') || paramProof.startsWith('data:')) ? paramProof : ('/uploads/deposits/' + paramProof);
+  previewImg.src = resolveProofUrl(paramProof);
   uploadPreview.style.display = 'flex';
   selectedFile = paramProof;
 }
 
 function handleSelectedFile(file) {
   if (!file || isSubmitting) return;
+
+  // Validate File Size (max 25MB)
+  if (file.size > 25 * 1024 * 1024) {
+    showStatus('Selected image is too large (maximum allowed size is 25MB).', true);
+    return;
+  }
+
+  // Validate File Type
+  const validTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg', 'image/gif', 'image/heic'];
+  const ext = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
+  if (file.type && !validTypes.includes(file.type) && !['.jpg', '.jpeg', '.png', '.webp', '.gif', '.heic'].includes(ext)) {
+    showStatus('Invalid file format. Please upload a JPG, PNG, or WEBP image.', true);
+    return;
+  }
+
   selectedFile = file;
   previewFileName.textContent = file.name;
   previewFileSize.textContent = (file.size / (1024 * 1024)).toFixed(2) + ' MB';
@@ -996,6 +1034,23 @@ function copyReceiptValue(elemId, btn) {
   });
 }
 
+function openProofLightbox(src, title) {
+  $('proofLightboxImg').src = src;
+  $('proofLightboxTitle').textContent = title || 'Payment Proof';
+  $('proofLightbox').classList.add('open');
+}
+
+$('closeProofLightboxBtn').onclick = () => {
+  $('proofLightbox').classList.remove('open');
+  $('proofLightboxImg').src = '';
+};
+$('proofLightbox').onclick = (e) => {
+  if (e.target === $('proofLightbox')) {
+    $('proofLightbox').classList.remove('open');
+    $('proofLightboxImg').src = '';
+  }
+};
+
 // Reset form for new submission
 $('submitAnotherBtn').onclick = () => {
   $('depositForm').reset();
@@ -1014,6 +1069,75 @@ $('submitAnotherBtn').onclick = () => {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 };
 
+// GET DEPOSIT HISTORY API CALL
+async function fetchDepositHistory() {
+  const historyTbody = $('depositHistoryRows');
+  const refreshBtn = $('refreshHistoryBtn');
+  if (refreshBtn) refreshBtn.textContent = '↻ Loading…';
+
+  try {
+    const apiBase = getApiBaseUrl();
+    const response = await fetch(apiBase + '/api/deposits', {
+      method: 'GET',
+      headers: {
+        'Authorization': 'Bearer ' + token,
+        'Accept': 'application/json'
+      }
+    });
+
+    if (response.status === 401) {
+      localStorage.removeItem('gcvh_customer_token');
+      location.href = 'login.html';
+      return;
+    }
+
+    if (!response.ok) {
+      throw new Error(`Failed to load history (${response.status})`);
+    }
+
+    const data = await response.json();
+    const list = Array.isArray(data.deposits) ? data.deposits : (Array.isArray(data) ? data : []);
+
+    if (!list.length) {
+      historyTbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:26px;color:var(--muted);">No deposit submissions found yet. Choose a package amount and submit your first deposit above.</td></tr>`;
+      return;
+    }
+
+    historyTbody.innerHTML = list.map(d => {
+      const proofUrl = resolveProofUrl(d.proof_image);
+      const proofHtml = d.proof_image
+        ? `<button type="button" class="copy-mini-tag" style="background:rgba(243,207,122,0.12);border-color:rgba(243,207,122,0.35);color:var(--gold2);" onclick="openProofLightbox('${proofUrl}', 'Deposit #${d.id} Proof')">📸 View Proof</button>`
+        : '<span style="color:var(--muted);font-size:11px;">None</span>';
+
+      const statusCls = d.status === 'confirmed' ? 'confirmed' : (d.status === 'rejected' ? 'rejected' : 'pending');
+      const statusText = d.status === 'confirmed' ? '✓ Confirmed' : (d.status === 'rejected' ? '✕ Rejected' : '● Pending');
+
+      return `<tr>
+        <td><b>#DEP-${d.id}</b></td>
+        <td><strong style="color:var(--gold2);">$${Number(d.amount).toFixed(2)}</strong></td>
+        <td><span class="badge-status-pill ${statusCls}">${d.network || d.asset || 'USDT'}</span></td>
+        <td>
+          <div style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:monospace;font-size:11px;" title="${d.txid || ''}">
+            ${d.txid || '—'}
+          </div>
+        </td>
+        <td>${proofHtml}</td>
+        <td><span class="badge-status-pill ${statusCls}">${statusText}</span></td>
+        <td style="font-size:11px;color:var(--muted);">${d.created_at ? new Date(d.created_at).toLocaleDateString() : '—'}</td>
+      </tr>`;
+    }).join('');
+
+  } catch (err) {
+    console.error('[Deposit API GET Error]', err);
+    historyTbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:20px;color:#fca5a5;">Unable to fetch deposits: ${err.message || 'Connection issue'}</td></tr>`;
+  } finally {
+    if (refreshBtn) refreshBtn.textContent = '↻ Refresh';
+  }
+}
+
+$('refreshHistoryBtn').onclick = fetchDepositHistory;
+
+// POST DEPOSIT FORM SUBMISSION
 $('depositForm').onsubmit = async (e) => {
   e.preventDefault();
   if (isSubmitting) return;
@@ -1040,7 +1164,7 @@ $('depositForm').onsubmit = async (e) => {
   $('txidInput').disabled = true;
 
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 30000);
+  const timeoutId = setTimeout(() => controller.abort(), 35000);
 
   try {
     const formData = new FormData();
@@ -1057,15 +1181,19 @@ $('depositForm').onsubmit = async (e) => {
       formData.append('proofUrl', fileToUpload);
     }
 
-    // Determine target API endpoint
-    let apiBase = '';
-    if (typeof API !== 'undefined' && API) {
-      apiBase = API;
-    } else if (typeof window !== 'undefined' && window.GCVH_CONFIG && window.GCVH_CONFIG.API_BASE_URL) {
-      apiBase = window.GCVH_CONFIG.API_BASE_URL.replace(/\/api\/?$/, '');
-    }
+    const apiBase = getApiBaseUrl();
+    const endpoint = apiBase + '/api/deposits';
 
-    const response = await fetch(apiBase + '/api/deposits', {
+    console.log('[Deposit API POST]', {
+      endpoint,
+      amount,
+      network: currentMethod,
+      txid,
+      hasFile: fileToUpload instanceof File,
+      fileName: fileToUpload instanceof File ? fileToUpload.name : (typeof fileToUpload === 'string' ? fileToUpload : 'none')
+    });
+
+    const response = await fetch(endpoint, {
       method: 'POST',
       headers: { 
         'Authorization': 'Bearer ' + token,
@@ -1078,8 +1206,9 @@ $('depositForm').onsubmit = async (e) => {
     clearTimeout(timeoutId);
 
     const data = await response.json().catch(() => ({}));
+    console.log('[Deposit API Response]', { status: response.status, data });
 
-    if (response.status === 401) {
+    if (response.status === 401 || response.status === 403) {
       localStorage.removeItem('gcvh_customer_token');
       sessionStorage.removeItem('gcvh_customer_token');
       showStatus('Session expired. Redirecting to login...', true);
@@ -1102,18 +1231,6 @@ $('depositForm').onsubmit = async (e) => {
     const depTxid = dep.txid || txid;
     const depCreatedAt = dep.created_at ? new Date(dep.created_at).toLocaleString() : new Date().toLocaleString();
 
-    // Cache pending deposit for UI fast load
-    try {
-      localStorage.setItem('gcvh_pending_deposit', JSON.stringify({
-        id: dep.id,
-        amount: depAmount,
-        txid: depTxid,
-        network: depNetwork,
-        status: dep.status || 'pending',
-        submittedAt: new Date().toISOString()
-      }));
-    } catch (e) {}
-
     // Populate Dynamic Success Receipt Card
     $('receiptId').textContent = depId;
     $('receiptAmount').textContent = '$' + depAmount.toLocaleString('en-US', { minimumFractionDigits: 2 }) + ' USD';
@@ -1129,9 +1246,10 @@ $('depositForm').onsubmit = async (e) => {
     }
 
     // Show attached proof if present
-    if (dep.proof_image || previewImg.src) {
+    const finalProofUrl = resolveProofUrl(dep.proof_image) || previewImg.src;
+    if (finalProofUrl) {
       $('receiptProofRow').style.display = 'flex';
-      $('receiptProofImg').src = dep.proof_image || previewImg.src;
+      $('receiptProofImg').src = finalProofUrl;
     } else {
       $('receiptProofRow').style.display = 'none';
     }
@@ -1143,6 +1261,9 @@ $('depositForm').onsubmit = async (e) => {
     // Smooth scroll into view
     $('successResultCard').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
+    // Refresh Deposit History
+    await fetchDepositHistory();
+
   } catch (err) {
     clearTimeout(timeoutId);
     isSubmitting = false;
@@ -1153,7 +1274,7 @@ $('depositForm').onsubmit = async (e) => {
 
     let displayError = err.message || 'Deposit submission failed.';
     if (err.name === 'AbortError') {
-      displayError = 'Request timed out. Please verify your internet connection or try again.';
+      displayError = 'Request timed out. Please verify your internet connection and try again.';
     } else if (err.message && err.message.includes('Failed to fetch')) {
       displayError = 'Unable to connect to server. Please check your internet connection or server availability.';
     }
@@ -1162,6 +1283,11 @@ $('depositForm').onsubmit = async (e) => {
     $('statusBox').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 };
+
+// Initial Load of History on Page Start
+window.addEventListener('DOMContentLoaded', () => {
+  fetchDepositHistory();
+});
 </script>
 </body>
 </html>
