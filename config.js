@@ -4,19 +4,34 @@
 const CONFIG = {
   API_URL: (() => {
     try {
+      if (typeof window !== 'undefined' && window.__GCVH_API_ENDPOINT__ && String(window.__GCVH_API_ENDPOINT__).trim()) {
+        return String(window.__GCVH_API_ENDPOINT__).trim().replace(/\/+$/, '');
+      }
       const custom = localStorage.getItem('gcvh_api_endpoint');
       if (custom && custom.trim()) return custom.trim().replace(/\/+$/, '');
     } catch (e) {}
-    if (window.location.protocol === 'file:' || !window.location.hostname || window.location.origin === 'null') {
-      return 'https://globalcapitalventureholdings.com';
+
+    if (typeof window !== 'undefined') {
+      const proto = window.location.protocol;
+      const host = window.location.hostname;
+      const port = window.location.port;
+
+      // When running on localhost, 127.0.0.1, or local IP in browser or emulator
+      if (host === 'localhost' || host === '127.0.0.1' || host === '10.0.2.2' || /^192\.168\./.test(host) || /^10\./.test(host)) {
+        if (port === '8080') {
+          return window.location.origin;
+        }
+        return `${proto}//${host}:8080`;
+      }
+
+      // Android file asset or local standalone file
+      if (proto === 'file:' || !host || window.location.origin === 'null') {
+        return 'https://globalcapitalventureholdings.com';
+      }
+
+      return window.location.origin || 'https://globalcapitalventureholdings.com';
     }
-    if ((window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') && window.location.port === '8080') {
-      return 'http://localhost:8080';
-    }
-    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-      return 'https://globalcapitalventureholdings.com';
-    }
-    return window.location.origin || 'https://globalcapitalventureholdings.com';
+    return 'https://globalcapitalventureholdings.com';
   })(),
   TRC20_WALLET: 'TLYNo7HqiDBMzRPuuSPu3SQsL1Fx9gfD5w',
   BEP20_WALLET: '0xda9362094e07897b9fbcad372d353bcfec2cd88c',
@@ -32,6 +47,7 @@ window.GCVH_CONFIG = window.GCVH_CONFIG || {
   BINANCE_UID: CONFIG.BINANCE_UID,
   SUPPORT_EMAIL: CONFIG.SUPPORT_EMAIL
 };
+window.GCVH_CONFIG.API_BASE_URL = CONFIG.API_URL + '/api';
 
 // Helper: Get stored auth token
 function getCustomerToken() {
