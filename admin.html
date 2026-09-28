@@ -305,6 +305,11 @@ async function request(path, options) {
   const text = await response.text();
   let data;
   try { data = text ? JSON.parse(text) : null; } catch { data = text; }
+  if (response.status === 401 || response.status === 403 || (data && (data.error === "Invalid or expired session" || data.error === "Authentication required" || data.error === "Forbidden"))) {
+    const err = new Error(data && data.error ? data.error : "Session expired or unauthorized (401)");
+    err.status = response.status || 401;
+    throw err;
+  }
   if (!response.ok) throw new Error(data && data.error ? data.error : "Request failed (" + response.status + ")");
   return data;
 }
@@ -331,12 +336,16 @@ async function signIn() {
   }
 }
 
-function signOut() {
+function signOut(message) {
   adminToken = "";
   localStorage.removeItem("gcvh_admin_token");
+  sessionStorage.removeItem("gcvh_admin_token");
   $("appScreen").classList.add("hidden");
   $("loginScreen").classList.remove("hidden");
   $("adminPassword").value = "";
+  if (message) {
+    showAlert("loginAlert", message);
+  }
 }
 
 async function loadDashboard() {
@@ -376,8 +385,15 @@ async function loadDashboard() {
     }).join("") : '<tr><td colspan="8"><div class="empty">No pending withdrawal requests.</div></td></tr>';
 
   } catch (error) {
-    if (String(error.message).includes("401") || String(error.message).includes("Forbidden")) {
-      signOut();
+    const isAuthErr = error.status === 401 ||
+                      error.status === 403 ||
+                      String(error.message).includes("401") ||
+                      String(error.message).includes("403") ||
+                      String(error.message).includes("Forbidden") ||
+                      String(error.message).includes("Invalid or expired session") ||
+                      String(error.message).includes("Authentication required");
+    if (isAuthErr) {
+      signOut("Your admin session expired. Please sign in again.");
     } else {
       showAlert("appAlert", "Unable to load dashboard data: " + error.message);
     }
@@ -408,7 +424,7 @@ async function rejectDeposit(id) {
 
 $("signIn").addEventListener("click", signIn);
 $("adminPassword").addEventListener("keydown", function(e) { if (e.key === "Enter") signIn(); });
-$("signOut").addEventListener("click", signOut);
+$("signOut").addEventListener("click", function() { signOut(); });
 $("refresh").addEventListener("click", loadDashboard);
 
 window.addEventListener("DOMContentLoaded", function() {
@@ -416,6 +432,9 @@ window.addEventListener("DOMContentLoaded", function() {
     $("loginScreen").classList.add("hidden");
     $("appScreen").classList.remove("hidden");
     loadDashboard();
+  } else {
+    $("loginScreen").classList.remove("hidden");
+    $("appScreen").classList.add("hidden");
   }
 });
 </script>

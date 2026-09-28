@@ -2651,7 +2651,14 @@
     }
 
     async function addTrade() {
-      if (!accountActive || executed[signal.date]) return;
+      if (executed[signal.date]) return;
+      if (!accountActive) {
+        $('signalNotice').textContent = "Please activate an investment package with a verified deposit first to earn daily 1% ROI.";
+        if (typeof window.showToast === 'function') {
+          window.showToast('An active package deposit is required to execute trading clicks.', 'error');
+        }
+        return;
+      }
       const button = $('executeSignal');
       button.disabled = true;
       button.textContent = 'Placing Order…';
@@ -2664,7 +2671,15 @@
         });
         const d = await r.json().catch(() => ({}));
         if (!r.ok) {
-          if (r.status === 409) { await loadTrades(); return; }
+          if (r.status === 409) {
+            executed[signal.date] = { time: Date.now(), direction: signal.direction };
+            localStorage.setItem('globeCapitalExecutedSignals', JSON.stringify(executed));
+            await loadTrades();
+            await loadMe();
+            await loadEarnings();
+            renderSignal();
+            return;
+          }
           throw new Error(d.error || 'Unable to execute today’s signal.');
         }
 
@@ -2672,7 +2687,8 @@
         executed[signal.date] = { time: now, direction: signal.direction };
         localStorage.setItem('globeCapitalExecutedSignals', JSON.stringify(executed));
 
-        addChat('Account Desk', `Signal Executed. Today's ${signal.direction} XAUUSD order placed. 1.00% profit (${money(investment.amount * 0.01, 2)}) settles in 30 minutes.`);
+        const profitStr = money(investment.amount * 0.01, 2);
+        addChat('Account Desk', `Signal Executed. Today's ${signal.direction} XAUUSD order placed. 1.00% profit (${profitStr}) settles in 30 minutes.`);
         
         openSignalModal(signal.direction, signal.instrument, SETTLE_DURATION);
         

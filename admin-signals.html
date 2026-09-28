@@ -212,7 +212,15 @@ a{color:inherit;text-decoration:none}
 
   async function loadSignals() {
     try {
-      const res = await fetch(`${window.GCVH_CONFIG.API_BASE_URL}/signals`);
+      const res = await fetch(`${window.GCVH_CONFIG.API_BASE_URL}/admin/signals`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (res.status === 401 || res.status === 403) {
+        localStorage.removeItem('gcvh_admin_token');
+        sessionStorage.removeItem('gcvh_admin_token');
+        window.location.href = 'admin.html';
+        return;
+      }
       if (!res.ok) throw new Error('Failed to fetch signals');
       const data = await res.json();
       allSignals = data.signals || [];
