@@ -377,9 +377,147 @@ body {
 }
 .small { font-size: 12px; color: var(--muted); line-height: 1.6; }
 
+.spinner-inline {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 2.5px solid rgba(7, 18, 12, 0.35);
+  border-radius: 50%;
+  border-top-color: #07120c;
+  animation: spinDepositLoader 0.7s linear infinite;
+  vertical-align: middle;
+  margin-right: 8px;
+}
+@keyframes spinDepositLoader {
+  to { transform: rotate(360deg); }
+}
+
+.success-result-card {
+  display: none;
+  background: linear-gradient(150deg, #0c261b, #07150f);
+  border: 1.5px solid rgba(16, 185, 129, 0.45);
+  border-radius: 16px;
+  padding: 28px 24px;
+  margin-top: 20px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5), 0 0 30px rgba(16, 185, 129, 0.15);
+  animation: fadeInScale 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes fadeInScale {
+  from { opacity: 0; transform: translateY(12px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.success-head {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 18px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(16, 185, 129, 0.2);
+}
+.success-icon-badge {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.25), rgba(5, 150, 105, 0.4));
+  border: 2px solid var(--primary-green);
+  display: grid;
+  place-items: center;
+  font-size: 26px;
+  color: #ffffff;
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+  flex-shrink: 0;
+}
+.receipt-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 16px;
+  margin: 18px 0;
+}
+.receipt-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.receipt-row.full {
+  grid-column: 1 / -1;
+}
+.receipt-lbl {
+  font-size: 10.5px;
+  font-weight: 800;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.receipt-val {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #ffffff;
+  word-break: break-all;
+  overflow-wrap: anywhere;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.receipt-val.gold {
+  color: var(--gold2);
+  font-family: Georgia, serif;
+  font-size: 22px;
+}
+.receipt-proof-thumb {
+  max-width: 100%;
+  max-height: 140px;
+  border-radius: 8px;
+  border: 1px solid rgba(243, 207, 122, 0.3);
+  object-fit: cover;
+  margin-top: 6px;
+}
+
+.copy-mini-tag {
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  color: var(--primary-green);
+  font-size: 10.5px;
+  font-weight: 800;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+.copy-mini-tag:hover {
+  background: var(--primary-green);
+  color: #07120c;
+}
+
+.badge-pending {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(243, 207, 122, 0.15);
+  border: 1px solid rgba(243, 207, 122, 0.35);
+  color: var(--gold2);
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+.btn-disabled-state {
+  opacity: 0.65;
+  cursor: not-allowed !important;
+  pointer-events: none;
+}
+
 @media (max-width: 650px) {
   .methods-grid { grid-template-columns: 1fr; }
   .grid { grid-template-columns: 1fr; }
+  .receipt-grid { grid-template-columns: 1fr; }
   .amount-badge { font-size: 32px; }
   .top { flex-direction: column; align-items: flex-start; gap: 12px; }
 }
@@ -439,7 +577,7 @@ body {
     <div id="amountDisplay" class="amount-badge">$100.00</div>
   </section>
 
-  <section class="card">
+  <section class="card" id="step1Card">
     <div class="tag">1 · SELECT PAYMENT METHOD</div>
     
     <div class="methods-grid" id="methodsContainer">
@@ -475,8 +613,11 @@ body {
     </p>
   </section>
 
-  <section class="card">
+  <section class="card" id="step2Card">
     <div class="tag">2 · SUBMIT TRANSACTION DETAILS & PROOF</div>
+
+    <!-- FORM ERROR ALERT BOX -->
+    <div id="statusBox" class="status" style="margin-top:16px;"></div>
 
     <form id="depositForm" style="display:flex;flex-direction:column;gap:18px;margin-top:16px;">
       <div class="grid">
@@ -513,9 +654,80 @@ body {
       <button id="submitDepositBtn" class="btn primary" type="submit" style="width:100%;margin-top:8px;">
         Submit Deposit for Verification →
       </button>
-
-      <div id="statusBox" class="status"></div>
     </form>
+
+    <!-- DYNAMIC SUCCESS RECEIPT CARD (DISPLAYED REAL-TIME ON API SUCCESS) -->
+    <div id="successResultCard" class="success-result-card">
+      <div class="success-head">
+        <div class="success-icon-badge">✓</div>
+        <div>
+          <span class="badge-pending" id="successStatusBadge">● PENDING VERIFICATION</span>
+          <h2 style="font:700 22px Georgia,serif;color:#ffffff;margin:4px 0 2px;">Deposit Request Submitted</h2>
+          <p id="successApiMessage" style="font-size:13px;color:#b6d7cb;line-height:1.4;">
+            Your deposit request has been securely received and forwarded to the settlement team for blockchain validation.
+          </p>
+        </div>
+      </div>
+
+      <div class="receipt-grid">
+        <div class="receipt-row">
+          <span class="receipt-lbl">Deposit Reference ID</span>
+          <span class="receipt-val" id="receiptId">#DEP-0000</span>
+        </div>
+
+        <div class="receipt-row">
+          <span class="receipt-lbl">Deposit Amount</span>
+          <span class="receipt-val gold" id="receiptAmount">$100.00 USD</span>
+        </div>
+
+        <div class="receipt-row">
+          <span class="receipt-lbl">Payment Method & Asset</span>
+          <span class="receipt-val" id="receiptMethod">USDT (TRC20)</span>
+        </div>
+
+        <div class="receipt-row">
+          <span class="receipt-lbl">Submitted At</span>
+          <span class="receipt-val" id="receiptDate">—</span>
+        </div>
+
+        <div class="receipt-row full">
+          <span class="receipt-lbl">Submitted Transaction ID (TXID)</span>
+          <div class="receipt-val">
+            <span id="receiptTxid" style="font-family:ui-monospace,monospace;font-size:12.5px;color:var(--gold);">—</span>
+            <button type="button" class="copy-mini-tag" onclick="copyReceiptValue('receiptTxid', this)">Copy TXID</button>
+          </div>
+        </div>
+
+        <div class="receipt-row full">
+          <span class="receipt-lbl">Platform Wallet / UID Paid To</span>
+          <div class="receipt-val">
+            <span id="receiptTargetAddress" style="font-family:ui-monospace,monospace;font-size:12.5px;color:#e2ede8;">—</span>
+            <button type="button" class="copy-mini-tag" onclick="copyReceiptValue('receiptTargetAddress', this)">Copy Address</button>
+          </div>
+        </div>
+
+        <div class="receipt-row full" id="receiptProofRow" style="display:none;">
+          <span class="receipt-lbl">Attached Payment Proof</span>
+          <img id="receiptProofImg" src="" alt="Payment Proof" class="receipt-proof-thumb">
+        </div>
+      </div>
+
+      <div class="notice" style="margin-bottom:18px;">
+        <strong>WHAT HAPPENS NEXT?</strong>
+        <p style="margin-top:4px;font-size:12px;color:#cbd5e1;line-height:1.5;">
+          Our automated verification system and administrators review deposits within 15-30 minutes. Once confirmed, your portfolio dashboard unlocks immediately and daily 1.00% profit accrual begins.
+        </p>
+      </div>
+
+      <div style="display:flex;gap:12px;flex-wrap:wrap;">
+        <a href="dashboard.html" class="btn primary" style="flex:1;min-width:200px;text-align:center;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;">
+          <span>◫</span> View in Portfolio Dashboard →
+        </a>
+        <button type="button" id="submitAnotherBtn" class="btn secondary" style="min-width:160px;">
+          + Submit Another Deposit
+        </button>
+      </div>
+    </div>
   </section>
 
   <div class="card" style="margin-top:20px;padding:20px 22px;background:rgba(243,207,122,0.05);border:1px solid rgba(243,207,122,0.25);border-radius:16px;">
@@ -547,6 +759,7 @@ body {
 <script src="config.js"></script>
 <script>
 'use strict';
+
 const token = localStorage.getItem('gcvh_customer_token') || sessionStorage.getItem('gcvh_customer_token');
 if (!token) {
   location.href = 'login.html?redirect=' + encodeURIComponent(location.pathname + location.search);
@@ -566,7 +779,10 @@ if (!amount || !allowed.includes(amount)) {
 
 const $ = id => document.getElementById(id);
 
+let isSubmitting = false;
+
 function setPackageAmount(newVal) {
+  if (isSubmitting) return;
   amount = Number(newVal);
   if ($('amountDisplay')) $('amountDisplay').textContent = '$' + amount.toLocaleString('en-US') + '.00';
   if ($('packageAmountInput')) $('packageAmountInput').value = amount;
@@ -621,6 +837,7 @@ function updateMethodDetails() {
 }
 
 function selectMethod(method) {
+  if (isSubmitting) return;
   if (!WALLET_DATA[method]) method = 'TRC20';
   currentMethod = method;
   document.querySelectorAll('.method-btn').forEach(btn => {
@@ -635,7 +852,7 @@ document.querySelectorAll('.method-btn').forEach(btn => {
 
 selectMethod(currentMethod);
 
-// URL Query pre-fill for TXID and Proof
+// Pre-fill TXID from URL query if present
 const paramTxid = qs.get('txid') || '';
 if (paramTxid && $('txidInput')) {
   $('txidInput').value = paramTxid;
@@ -661,7 +878,7 @@ if (paramProof && uploadPreview && previewImg) {
 }
 
 function handleSelectedFile(file) {
-  if (!file) return;
+  if (!file || isSubmitting) return;
   selectedFile = file;
   previewFileName.textContent = file.name;
   previewFileSize.textContent = (file.size / (1024 * 1024)).toFixed(2) + ' MB';
@@ -687,7 +904,7 @@ if (uploadZone) {
     uploadZone.addEventListener(eventName, (e) => {
       e.preventDefault();
       e.stopPropagation();
-      uploadZone.classList.add('dragover');
+      if (!isSubmitting) uploadZone.classList.add('dragover');
     }, false);
   });
 
@@ -703,6 +920,7 @@ if (uploadZone) {
     e.preventDefault();
     e.stopPropagation();
     uploadZone.classList.remove('dragover');
+    if (isSubmitting) return;
     const dt = e.dataTransfer;
     const file = dt && dt.files && dt.files[0];
     if (file) {
@@ -713,6 +931,7 @@ if (uploadZone) {
 
 // Paste from Clipboard
 window.addEventListener('paste', (e) => {
+  if (isSubmitting) return;
   const items = (e.clipboardData || window.clipboardData).items;
   if (!items) return;
   for (let i = 0; i < items.length; i++) {
@@ -729,6 +948,7 @@ window.addEventListener('paste', (e) => {
 if (removeProofBtn) {
   removeProofBtn.onclick = (e) => {
     e.stopPropagation();
+    if (isSubmitting) return;
     selectedFile = null;
     if (proofInput) proofInput.value = '';
     uploadPreview.style.display = 'none';
@@ -739,23 +959,88 @@ if (removeProofBtn) {
 function showStatus(text, isError = false) {
   const el = $('statusBox');
   if (!el) return;
+  if (!text) {
+    el.style.display = 'none';
+    el.textContent = '';
+    return;
+  }
   el.style.display = 'block';
   el.className = 'status' + (isError ? ' error' : '');
-  el.textContent = text;
+  el.innerHTML = (isError ? '<span style="font-size:16px;margin-right:6px;">⚠</span> ' : '<span style="font-size:16px;margin-right:6px;">✓</span> ') + text;
 }
+
+function copyReceiptValue(elemId, btn) {
+  const el = $(elemId);
+  if (!el) return;
+  const val = el.textContent.trim();
+  if (!val) return;
+  navigator.clipboard.writeText(val).then(() => {
+    const orig = btn.textContent;
+    btn.textContent = '✓ Copied!';
+    btn.style.background = '#10b981';
+    btn.style.color = '#07120c';
+    setTimeout(() => {
+      btn.textContent = orig;
+      btn.style.background = '';
+      btn.style.color = '';
+    }, 2000);
+  }).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = val;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    btn.textContent = '✓ Copied!';
+    setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
+  });
+}
+
+// Reset form for new submission
+$('submitAnotherBtn').onclick = () => {
+  $('depositForm').reset();
+  $('depositForm').style.display = 'flex';
+  $('successResultCard').style.display = 'none';
+  selectedFile = null;
+  uploadPreview.style.display = 'none';
+  previewImg.src = '';
+  showStatus('');
+  setPackageAmount(100);
+  selectMethod('TRC20');
+  $('txidInput').disabled = false;
+  $('submitDepositBtn').disabled = false;
+  $('submitDepositBtn').innerHTML = 'Submit Deposit for Verification →';
+  isSubmitting = false;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+};
 
 $('depositForm').onsubmit = async (e) => {
   e.preventDefault();
+  if (isSubmitting) return;
+
   const txid = $('txidInput').value.trim();
   if (!txid) {
-    showStatus('Please enter the Transaction ID (TXID) or reference.', true);
+    showStatus('Please enter the blockchain Transaction ID (TXID) or Binance Pay reference.', true);
     $('txidInput').focus();
     return;
   }
 
+  if (!amount || amount <= 0) {
+    showStatus('Please select a valid package amount.', true);
+    return;
+  }
+
+  isSubmitting = true;
+  showStatus('');
+
   const submitBtn = $('submitDepositBtn');
   submitBtn.disabled = true;
-  submitBtn.textContent = 'Submitting Deposit…';
+  submitBtn.classList.add('btn-disabled-state');
+  submitBtn.innerHTML = '<span class="spinner-inline"></span> Processing Deposit Verification…';
+  $('txidInput').disabled = true;
+
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 30000);
 
   try {
     const formData = new FormData();
@@ -772,49 +1057,109 @@ $('depositForm').onsubmit = async (e) => {
       formData.append('proofUrl', fileToUpload);
     }
 
-    const apiUrl = (typeof API !== 'undefined' && API) ? API : '';
-    const r = await fetch(apiUrl + '/api/deposits', {
+    // Determine target API endpoint
+    let apiBase = '';
+    if (typeof API !== 'undefined' && API) {
+      apiBase = API;
+    } else if (typeof window !== 'undefined' && window.GCVH_CONFIG && window.GCVH_CONFIG.API_BASE_URL) {
+      apiBase = window.GCVH_CONFIG.API_BASE_URL.replace(/\/api\/?$/, '');
+    }
+
+    const response = await fetch(apiBase + '/api/deposits', {
       method: 'POST',
-      headers: { Authorization: 'Bearer ' + token },
-      body: formData
+      headers: { 
+        'Authorization': 'Bearer ' + token,
+        'Accept': 'application/json'
+      },
+      body: formData,
+      signal: controller.signal
     });
 
-    const d = await r.json().catch(() => ({}));
-    if (r.status === 401) {
+    clearTimeout(timeoutId);
+
+    const data = await response.json().catch(() => ({}));
+
+    if (response.status === 401) {
       localStorage.removeItem('gcvh_customer_token');
-      location.href = 'login.html';
+      sessionStorage.removeItem('gcvh_customer_token');
+      showStatus('Session expired. Redirecting to login...', true);
+      setTimeout(() => {
+        location.href = 'login.html?redirect=' + encodeURIComponent(location.pathname + location.search);
+      }, 1500);
       return;
     }
 
-    if (!r.ok) {
-      throw new Error(d.error || 'Deposit submission failed.');
+    if (!response.ok) {
+      const errorMsg = data.error || data.message || `Server returned error (${response.status}). Please try again.`;
+      throw new Error(errorMsg);
     }
 
-    localStorage.setItem('gcvh_pending_deposit', JSON.stringify({
-      amount,
-      txid,
-      network: currentMethod,
-      submittedAt: new Date().toISOString()
-    }));
+    const dep = data.deposit || {};
+    const depId = dep.id ? `#DEP-${dep.id}` : `#DEP-${Date.now().toString().slice(-6)}`;
+    const depAmount = dep.amount ? Number(dep.amount) : amount;
+    const depNetwork = dep.network || currentMethod;
+    const depAsset = dep.asset || 'USDT';
+    const depTxid = dep.txid || txid;
+    const depCreatedAt = dep.created_at ? new Date(dep.created_at).toLocaleString() : new Date().toLocaleString();
 
-    showStatus('✓ Deposit submitted successfully! Your payment of $' + amount + ' is pending administrator verification. The dashboard will unlock immediately upon approval.');
-    $('txidInput').disabled = true;
-    submitBtn.textContent = 'Deposit Submitted Successfully';
+    // Cache pending deposit for UI fast load
+    try {
+      localStorage.setItem('gcvh_pending_deposit', JSON.stringify({
+        id: dep.id,
+        amount: depAmount,
+        txid: depTxid,
+        network: depNetwork,
+        status: dep.status || 'pending',
+        submittedAt: new Date().toISOString()
+      }));
+    } catch (e) {}
 
-    const dashLink = document.createElement('a');
-    dashLink.href = 'dashboard.html';
-    dashLink.className = 'btn secondary';
-    dashLink.style.display = 'block';
-    dashLink.style.textAlign = 'center';
-    dashLink.style.marginTop = '14px';
-    dashLink.style.textDecoration = 'none';
-    dashLink.textContent = 'Return to Dashboard →';
-    $('statusBox').appendChild(dashLink);
+    // Populate Dynamic Success Receipt Card
+    $('receiptId').textContent = depId;
+    $('receiptAmount').textContent = '$' + depAmount.toLocaleString('en-US', { minimumFractionDigits: 2 }) + ' USD';
+    $('receiptMethod').textContent = `${depAsset} (${depNetwork})`;
+    $('receiptDate').textContent = depCreatedAt;
+    $('receiptTxid').textContent = depTxid;
+    
+    const targetWallet = WALLET_DATA[depNetwork] ? WALLET_DATA[depNetwork].address : WALLET_DATA.TRC20.address;
+    $('receiptTargetAddress').textContent = targetWallet;
+
+    if (data.message) {
+      $('successApiMessage').textContent = data.message;
+    }
+
+    // Show attached proof if present
+    if (dep.proof_image || previewImg.src) {
+      $('receiptProofRow').style.display = 'flex';
+      $('receiptProofImg').src = dep.proof_image || previewImg.src;
+    } else {
+      $('receiptProofRow').style.display = 'none';
+    }
+
+    // Hide Form, Show Result Card
+    $('depositForm').style.display = 'none';
+    $('successResultCard').style.display = 'block';
+
+    // Smooth scroll into view
+    $('successResultCard').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
   } catch (err) {
+    clearTimeout(timeoutId);
+    isSubmitting = false;
     submitBtn.disabled = false;
-    submitBtn.textContent = 'Submit Deposit for Verification →';
-    showStatus(err.message || 'Deposit submission failed.', true);
+    submitBtn.classList.remove('btn-disabled-state');
+    submitBtn.innerHTML = 'Submit Deposit for Verification →';
+    $('txidInput').disabled = false;
+
+    let displayError = err.message || 'Deposit submission failed.';
+    if (err.name === 'AbortError') {
+      displayError = 'Request timed out. Please verify your internet connection or try again.';
+    } else if (err.message && err.message.includes('Failed to fetch')) {
+      displayError = 'Unable to connect to server. Please check your internet connection or server availability.';
+    }
+
+    showStatus(displayError, true);
+    $('statusBox').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 };
 </script>
