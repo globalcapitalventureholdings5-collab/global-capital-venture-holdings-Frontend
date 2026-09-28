@@ -187,14 +187,18 @@ let adminToken = localStorage.getItem("gcvh_admin_token") || "";
 if (!adminToken) location.href = "admin.html";
 
 let allDeposits = [];
-let currentFilter = "all";
+let currentFilter = "pending";
 
 function $(id) { return document.getElementById(id); }
 
 function showAlert(id, text, type) {
   const el = $(id);
+  if (!el) return;
   el.textContent = text;
   el.className = "alert show " + (type || "error");
+  setTimeout(() => {
+    if (type === 'success') el.className = "alert";
+  }, 4000);
 }
 
 function escapeHtml(value) {
@@ -203,11 +207,21 @@ function escapeHtml(value) {
   });
 }
 
+function getProofUrl(path) {
+  if (!path) return '';
+  if (path.startsWith('http://') || path.startsWith('https://') || path.startsWith('data:')) return path;
+  const base = (typeof API !== 'undefined' && API) ? API.replace(/\/+$/, '') : '';
+  if (path.startsWith('/')) return base + path;
+  if (path.startsWith('uploads/')) return base + '/' + path;
+  return base + '/uploads/deposits/' + path;
+}
+
 async function request(path, options) {
   options = options || {};
   const headers = Object.assign({"Content-Type":"application/json"}, options.headers || {});
   headers.Authorization = "Bearer " + adminToken;
-  const response = await fetch(API + path, Object.assign({}, options, {headers:headers}));
+  const apiBase = (typeof API !== 'undefined' && API) ? API.replace(/\/+$/, '') : '';
+  const response = await fetch(apiBase + path, Object.assign({}, options, {headers:headers}));
   const text = await response.text();
   let data;
   try { data = text ? JSON.parse(text) : null; } catch { data = text; }
@@ -230,19 +244,46 @@ function renderTable() {
   $("totalVolume").textContent = "$" + volume.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
   $("depositRows").innerHTML = list.length ? list.map(function(d) {
+    const proofUrl = getProofUrl(d.proof_image);
     const proofHtml = d.proof_image
-      ? '<button type="button" class="action" onclick="viewProof(\''+escapeHtml(API+d.proof_image)+'\', \''+escapeHtml(d.full_name)+'\')">📸 View Proof</button>'
-      : '<span class="muted">None</span>';
+      ? `<button type="button" class="action" style="color:var(--gold2);border-color:rgba(213,173,90,0.4);" onclick="viewProof('${escapeHtml(proofUrl)}', '${escapeHtml(d.full_name)}')">📸 View Proof</button>`
+      : '<span class="muted">No Proof</span>';
 
     const actionHtml = d.status === "pending"
-      ? '<div class="actions"><button class="action approve" onclick="approveDeposit('+Number(d.id)+')">Approve</button><button class="action reject" onclick="rejectDeposit('+Number(d.id)+')">Reject</button></div>'
-      : '<span class="muted">—</span>';
+      ? `<div class="actions">
+           <button class="action approve" id="btnApprove_${d.id}" onclick="approveDeposit(${Number(d.id)})">✓ Approve</button>
+           <button class="action reject" id="btnReject_${d.id}" onclick="rejectDeposit(${Number(d.id)})">✕ Reject</button>
+         </div>`
+      : `<span class="muted">${d.status === 'confirmed' ? '✓ Activated' : '✕ Rejected'}</span>`;
 
-    return '<tr><td>#'+escapeHtml(d.id)+'</td><td><b>'+escapeHtml(d.full_name)+'</b><br><span class="muted">'+escapeHtml(d.email)+'</span></td><td>$'+Number(d.amount).toFixed(2)+'</td><td>'+escapeHtml(d.tier || ('$' + d.amount))+'</td><td><span class="badge">'+escapeHtml(d.network || d.asset || 'USDT')+'</span></td><td><div style="max-width:200px;word-break:break-all">'+escapeHtml(d.txid)+'</div></td><td>'+proofHtml+'</td><td><span class="badge '+escapeHtml(d.status)+'">'+escapeHtml(d.status)+'</span></td><td>'+(d.created_at ? new Date(d.created_at).toLocaleDateString() : '—')+'</td><td>'+actionHtml+'</td></tr>';
-  }).join("") : '<tr><td colspan="10"><div class="empty">No deposits found for this filter.</div></td></tr>';
+    const txidCopy = d.txid ? `<button type="button" class="action" style="font-size:8px;padding:2px 6px;margin-top:3px;" onclick="copyTx('${escapeHtml(d.txid)}', this)">Copy</button>` : '';
+
+    return `<tr>
+      <td><b>#${escapeHtml(d.id)}</b></td>
+      <td><b>${escapeHtml(d.full_name)}</b><br><span class="muted">${escapeHtml(d.email)}</span></td>
+      <td><b style="color:var(--gold2);font-size:13px;">$${Number(d.amount).toFixed(2)}</b></td>
+      <td>${escapeHtml(d.tier || ('$' + Number(d.amount).toFixed(0)))}</td>
+      <td><span class="badge">${escapeHtml(d.network || d.asset || 'USDT')}</span></td>
+      <td><div style="max-width:180px;word-break:break-all;font-family:monospace;font-size:11px;">${escapeHtml(d.txid)}</div>${txidCopy}</td>
+      <td>${proofHtml}</td>
+      <td><span class="badge ${escapeHtml(d.status)}">${escapeHtml(d.status)}</span></td>
+      <td>${d.created_at ? new Date(d.created_at).toLocaleString() : '—'}</td>
+      <td>${actionHtml}</td>
+    </tr>`;
+  }).join("") : `<tr><td colspan="10"><div class="empty">No ${currentFilter === 'all' ? '' : currentFilter} deposits found.</div></td></tr>`;
+}
+
+function copyTx(text, btn) {
+  navigator.clipboard.writeText(text).then(() => {
+    const orig = btn.textContent;
+    btn.textContent = 'Copied!';
+    setTimeout(() => { btn.textContent = orig; }, 1500);
+  });
 }
 
 async function loadDeposits() {
+  const refreshBtn = $("refresh");
+  if (refreshBtn) refreshBtn.textContent = "↻ Loading…";
   try {
     allDeposits = await request("/api/admin/deposits");
     renderTable();
@@ -253,28 +294,52 @@ async function loadDeposits() {
     } else {
       showAlert("appAlert", "Unable to load deposits: " + error.message);
     }
+  } finally {
+    if (refreshBtn) refreshBtn.textContent = "↻ Refresh Deposits";
   }
 }
 
 async function approveDeposit(id) {
-  if (!confirm("Approve deposit #" + id + " and activate customer package with 3-level commissions?")) return;
+  if (!confirm(`Are you sure you want to APPROVE deposit #${id}?\n\nThis will immediately:\n1. Lock in the customer package principal\n2. Activate their 1.00% daily trading desk\n3. Calculate & distribute 3-level upline commissions (10%, 5%, 3%)`)) return;
+  
+  const btn = $(`btnApprove_${id}`);
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = "Approving…";
+  }
+
   try {
-    await request("/api/admin/deposits/" + id + "/approve", { method: "POST", body: "{}" });
-    showAlert("appAlert", "Deposit #" + id + " approved successfully!", "success");
+    const res = await request(`/api/admin/deposits/${id}/approve`, { method: "POST", body: "{}" });
+    showAlert("appAlert", res.message || `Deposit #${id} approved successfully!`, "success");
     await loadDeposits();
   } catch (e) {
-    showAlert("appAlert", e.message);
+    showAlert("appAlert", e.message || "Failed to approve deposit.");
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = "✓ Approve";
+    }
   }
 }
 
 async function rejectDeposit(id) {
-  if (!confirm("Reject deposit request #" + id + "?")) return;
+  if (!confirm(`Are you sure you want to REJECT deposit #${id}?`)) return;
+  
+  const btn = $(`btnReject_${id}`);
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = "Rejecting…";
+  }
+
   try {
-    await request("/api/admin/deposits/" + id + "/reject", { method: "POST", body: "{}" });
-    showAlert("appAlert", "Deposit #" + id + " rejected.", "success");
+    const res = await request(`/api/admin/deposits/${id}/reject`, { method: "POST", body: "{}" });
+    showAlert("appAlert", res.message || `Deposit #${id} rejected.`, "success");
     await loadDeposits();
   } catch (e) {
-    showAlert("appAlert", e.message);
+    showAlert("appAlert", e.message || "Failed to reject deposit.");
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = "✕ Reject";
+    }
   }
 }
 
@@ -302,6 +367,15 @@ document.querySelectorAll(".filter-btn").forEach(btn => {
     currentFilter = btn.dataset.filter;
     renderTable();
   };
+});
+
+// Default active filter button setup
+document.querySelectorAll(".filter-btn").forEach(btn => {
+  if (btn.dataset.filter === currentFilter) {
+    btn.classList.add("active");
+  } else {
+    btn.classList.remove("active");
+  }
 });
 
 $("signOut").addEventListener("click", function() {
