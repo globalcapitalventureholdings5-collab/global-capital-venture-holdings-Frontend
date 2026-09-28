@@ -2074,124 +2074,6 @@
         </div>
       </section>
 
-      <!-- USER INFORMATION & OFFICIAL FUNDING WALLETS SECTION -->
-      <section id="userDetailsSection" class="dashboard-card user-account-section">
-        <div class="card-head">
-          <div>
-            <div class="section-tag">ACCOUNT DETAILS & OFFICIAL WALLETS</div>
-            <h2>User Profile & <span>Payment Methods</span></h2>
-          </div>
-          <div class="status-indicator">
-            <span class="live-dot"></span>
-            <span id="profileActiveBadge">VERIFIED CLIENT</span>
-          </div>
-        </div>
-
-        <div class="user-info-banner">
-          <div class="user-info-item">
-            <span class="item-label">Client </span>
-            <div class="item-value" id="displayUserName">Private Client</div>
-          </div>
-          <div class="user-info-item">
-            <span class="item-label">Email Address</span>
-            <div class="item-value" id="displayUserEmail">client@gcvh.com</div>
-          </div>
-          <div class="user-info-item">
-            <span class="item-label">Active Package</span>
-            <div class="item-value" id="displayUserPackage" style="color:var(--gold);">$100 Starter</div>
-          </div>
-          <div class="user-info-item">
-            <span class="item-label">Referral Code</span>
-            <div class="item-value">
-              <span id="displayRefCode">—</span>
-              <button type="button" class="copy-pill-btn"
-                onclick="copyValue(document.getElementById('displayRefCode').textContent, 'Referral code copied!')">Copy</button>
-            </div>
-          </div>
-          <div class="user-info-item">
-            <span class="item-label">Account Verification</span>
-            <div class="item-value" style="color:var(--primary-green);">● Active & Protected</div>
-          </div>
-        </div>
-
-        <div style="margin-bottom:14px;">
-          <div
-            style="font-size:11px;font-weight:800;color:var(--gold);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:4px;">
-            Official Platform Funding & Settlement Wallets
-          </div>
-          <p style="font-size:12px;color:var(--text-muted);line-height:1.5;">
-            Use these verified official addresses for all package deposits and account funding. Click copy to copy
-            directly to clipboard.
-          </p>
-        </div>
-
-        <div class="wallets-display-grid">
-          <!-- TRC20 -->
-          <div class="wallet-card-item">
-            <div class="wallet-card-top">
-              <span class="wallet-card-title">🔴 USDT (TRC20)</span>
-              <span class="wallet-badge-pill badge-trc">TRON Network</span>
-            </div>
-            <div class="wallet-address-container" id="dashTrc20">TLYNo7HqiDBMzRPuuSPu3SQsL1Fx9gfD5w</div>
-            <button type="button" class="btn-copy-wallet"
-              onclick="copyWalletAddr('TLYNo7HqiDBMzRPuuSPu3SQsL1Fx9gfD5w', this)">
-              <span>📋</span> Copy TRC20 Wallet
-            </button>
-          </div>
-
-          <!-- BEP20 -->
-          <div class="wallet-card-item">
-            <div class="wallet-card-top">
-              <span class="wallet-card-title">🟡 USDT (BEP20)</span>
-              <span class="wallet-badge-pill badge-bep">BNB Smart Chain</span>
-            </div>
-            <div class="wallet-address-container" id="dashBep20">0xda9362094e07897b9fbcad372d353bcfec2cd88c</div>
-            <button type="button" class="btn-copy-wallet"
-              onclick="copyWalletAddr('0xda9362094e07897b9fbcad372d353bcfec2cd88c', this)">
-              <span>📋</span> Copy BEP20 Wallet
-            </button>
-          </div>
-
-
-
-          <!-- Binance UID -->
-          <div class="wallet-card-item">
-            <div class="wallet-card-top">
-              <span class="wallet-card-title">💎 Binance UID</span>
-              <span class="wallet-badge-pill badge-uid">Binance Pay</span>
-            </div>
-            <div class="wallet-address-container" id="dashBinanceUid">55868490</div>
-            <button type="button" class="btn-copy-wallet" onclick="copyWalletAddr('55868490', this)">
-              <span>📋</span> Copy Binance UID
-            </button>
-          </div>
-        </div>
-
-        <!-- CORPORATE SUPPORT AREA -->
-        <div class="corporate-support-bar">
-          <div>
-            <div
-              style="font-size:11px;font-weight:800;color:var(--gold);text-transform:uppercase;letter-spacing:0.08em;">
-              Dedicated Corporate Support Desk</div>
-            <div style="font-size:13px;color:#cdd5dc;margin-top:2px;">
-              For institutional inquiries, deposits, or account support: <a
-                href="mailto:globalcapitalventureholdings5@gmail.com"
-                style="color:var(--gold);font-weight:700;text-decoration:underline;">globalcapitalventureholdings5@gmail.com</a>
-            </div>
-          </div>
-          <div style="display:flex;gap:10px;align-items:center;">
-            <a href="mailto:globalcapitalventureholdings5@gmail.com" class="btn btn-gold"
-              style="font-size:12px;min-height:38px;padding:0 16px;text-decoration:none;display:inline-flex;align-items:center;gap:6px;">
-              <span>✉</span> Send Email
-            </a>
-            <button type="button" class="btn btn-outline" style="font-size:12px;min-height:38px;padding:0 14px;"
-              onclick="copyValue('globalcapitalventureholdings5@gmail.com', 'Support email copied!')">
-              Copy Email
-            </button>
-          </div>
-        </div>
-      </section>
-
       <!-- 6 STATS CARDS (INCLUDING TOTAL BALANCE) -->
       <section id="overview" class="statistics-grid">
         <div class="stat-card featured-total">
@@ -2262,6 +2144,122 @@
           <div class="stat-footer">
             <span id="withdrawalRuleTag" class="green-text">1st Withdrawal: Any Time</span>
             <span id="payoutUnlockDate">15-Day Cycle</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- USER INFORMATION & OFFICIAL FUNDING WALLETS SECTION -->
+      <section id="userDetailsSection" class="dashboard-card user-account-section">
+        <div class="card-head">
+          <div>
+            <div class="section-tag">ACCOUNT DETAILS & OFFICIAL WALLETS</div>
+            <h2>User Profile & <span>Payment Methods</span></h2>
+          </div>
+          <div class="status-indicator">
+            <span class="live-dot"></span>
+            <span id="profileActiveBadge">VERIFIED CLIENT</span>
+          </div>
+        </div>
+
+        <div class="user-info-banner">
+          <div class="user-info-item">
+            <span class="item-label">Client Name</span>
+            <div class="item-value" id="displayUserName">Private Client</div>
+          </div>
+          <div class="user-info-item">
+            <span class="item-label">Email Address</span>
+            <div class="item-value" id="displayUserEmail">client@gcvh.com</div>
+          </div>
+          <div class="user-info-item">
+            <span class="item-label">Active Package</span>
+            <div class="item-value" id="displayUserPackage" style="color:var(--gold);">$100 Starter</div>
+          </div>
+          <div class="user-info-item">
+            <span class="item-label">Referral Code</span>
+            <div class="item-value">
+              <span id="displayRefCode">—</span>
+              <button type="button" class="copy-pill-btn"
+                onclick="copyValue(document.getElementById('displayRefCode').textContent, 'Referral code copied!')">Copy</button>
+            </div>
+          </div>
+          <div class="user-info-item">
+            <span class="item-label">Account Verification</span>
+            <div class="item-value" style="color:var(--primary-green);">● Active & Protected</div>
+          </div>
+        </div>
+
+        <div style="margin-bottom:14px;">
+          <div
+            style="font-size:11px;font-weight:800;color:var(--gold);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:4px;">
+            Official Platform Funding & Settlement Wallets
+          </div>
+          <p style="font-size:12px;color:var(--text-muted);line-height:1.5;">
+            Use these verified official addresses for all package deposits and account funding. Click copy to copy
+            directly to clipboard.
+          </p>
+        </div>
+
+        <div class="wallets-display-grid">
+          <!-- TRC20 -->
+          <div class="wallet-card-item">
+            <div class="wallet-card-top">
+              <span class="wallet-card-title">🔴 USDT (TRC20)</span>
+              <span class="wallet-badge-pill badge-trc">TRON Network</span>
+            </div>
+            <div class="wallet-address-container" id="dashTrc20">TLYNo7HqiDBMzRPuuSPu3SQsL1Fx9gfD5w</div>
+            <button type="button" class="btn-copy-wallet"
+              onclick="copyWalletAddr('TLYNo7HqiDBMzRPuuSPu3SQsL1Fx9gfD5w', this)">
+              <span>📋</span> Copy TRC20 Wallet
+            </button>
+          </div>
+
+          <!-- BEP20 -->
+          <div class="wallet-card-item">
+            <div class="wallet-card-top">
+              <span class="wallet-card-title">🟡 USDT (BEP20)</span>
+              <span class="wallet-badge-pill badge-bep">BNB Smart Chain</span>
+            </div>
+            <div class="wallet-address-container" id="dashBep20">0xda9362094e07897b9fbcad372d353bcfec2cd88c</div>
+            <button type="button" class="btn-copy-wallet"
+              onclick="copyWalletAddr('0xda9362094e07897b9fbcad372d353bcfec2cd88c', this)">
+              <span>📋</span> Copy BEP20 Wallet
+            </button>
+          </div>
+
+          <!-- Binance UID -->
+          <div class="wallet-card-item">
+            <div class="wallet-card-top">
+              <span class="wallet-card-title">💎 Binance UID</span>
+              <span class="wallet-badge-pill badge-uid">Binance Pay</span>
+            </div>
+            <div class="wallet-address-container" id="dashBinanceUid">55868490</div>
+            <button type="button" class="btn-copy-wallet" onclick="copyWalletAddr('55868490', this)">
+              <span>📋</span> Copy Binance UID
+            </button>
+          </div>
+        </div>
+
+        <!-- CORPORATE SUPPORT AREA -->
+        <div class="corporate-support-bar">
+          <div>
+            <div
+              style="font-size:11px;font-weight:800;color:var(--gold);text-transform:uppercase;letter-spacing:0.08em;">
+              Dedicated Corporate Support Desk</div>
+            <div style="font-size:13px;color:#cdd5dc;margin-top:2px;">
+              For institutional inquiries, deposits, or account support: <a
+                href="mailto:globalcapitalventureholdings5@gmail.com"
+                style="color:var(--gold);font-weight:700;text-decoration:underline;">globalcapitalventureholdings5@gmail.com</a>
+            </div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:center;">
+            <a href="mailto:globalcapitalventureholdings5@gmail.com" class="btn btn-gold"
+              style="font-size:12px;min-height:38px;padding:0 16px;text-decoration:none;display:inline-flex;align-items:center;gap:6px;">
+              <span>✉</span> Send Email
+            </a>
+            <button type="button" class="btn btn-outline" style="font-size:12px;min-height:38px;padding:0 14px;"
+              onclick="copyValue('globalcapitalventureholdings5@gmail.com', 'Support email copied!')">
+              Copy Email
+            </button>
           </div>
         </div>
       </section>
