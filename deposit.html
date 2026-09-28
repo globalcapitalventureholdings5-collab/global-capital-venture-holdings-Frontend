@@ -547,10 +547,9 @@ body {
 <script src="config.js"></script>
 <script>
 'use strict';
-const token = localStorage.getItem('gcvh_customer_token');
+const token = localStorage.getItem('gcvh_customer_token') || sessionStorage.getItem('gcvh_customer_token');
 if (!token) {
   location.href = 'login.html?redirect=' + encodeURIComponent(location.pathname + location.search);
-  throw new Error('Authentication required');
 }
 
 const qs = new URLSearchParams(location.search);
@@ -569,9 +568,11 @@ const $ = id => document.getElementById(id);
 
 function setPackageAmount(newVal) {
   amount = Number(newVal);
-  $('amountDisplay').textContent = '$' + amount.toLocaleString('en-US') + '.00';
-  $('packageAmountInput').value = amount;
-  localStorage.setItem('gcvh_selected_package', JSON.stringify({ amount: amount }));
+  if ($('amountDisplay')) $('amountDisplay').textContent = '$' + amount.toLocaleString('en-US') + '.00';
+  if ($('packageAmountInput')) $('packageAmountInput').value = amount;
+  try {
+    localStorage.setItem('gcvh_selected_package', JSON.stringify({ amount: amount }));
+  } catch (e) {}
 
   document.querySelectorAll('.pkg-chip').forEach(btn => {
     btn.classList.toggle('active', Number(btn.dataset.val) === amount);
@@ -586,7 +587,10 @@ document.querySelectorAll('.pkg-chip').forEach(btn => {
 
 setPackageAmount(amount);
 
-let currentMethod = 'TRC20';
+let currentMethod = (qs.get('method') || qs.get('network') || 'TRC20').toUpperCase();
+if (!['TRC20', 'BEP20', 'UID'].includes(currentMethod)) {
+  currentMethod = 'TRC20';
+}
 
 const WALLET_DATA = {
   TRC20: {
@@ -611,9 +615,9 @@ const WALLET_DATA = {
 
 function updateMethodDetails() {
   const info = WALLET_DATA[currentMethod] || WALLET_DATA.TRC20;
-  $('depositAddressLabel').textContent = info.label;
-  $('depositAddressDisplay').textContent = info.address;
-  $('paymentInstructions').textContent = (typeof info.instructions === 'function') ? info.instructions(amount) : info.instructions;
+  if ($('depositAddressLabel')) $('depositAddressLabel').textContent = info.label;
+  if ($('depositAddressDisplay')) $('depositAddressDisplay').textContent = info.address;
+  if ($('paymentInstructions')) $('paymentInstructions').textContent = (typeof info.instructions === 'function') ? info.instructions(amount) : info.instructions;
 }
 
 function selectMethod(method) {
@@ -629,7 +633,13 @@ document.querySelectorAll('.method-btn').forEach(btn => {
   btn.onclick = () => selectMethod(btn.dataset.method);
 });
 
-selectMethod('TRC20');
+selectMethod(currentMethod);
+
+// URL Query pre-fill for TXID and Proof
+const paramTxid = qs.get('txid') || '';
+if (paramTxid && $('txidInput')) {
+  $('txidInput').value = paramTxid;
+}
 
 // Proof Screenshot Upload Handling
 const proofInput = $('proofInput');
@@ -640,6 +650,15 @@ const previewFileName = $('previewFileName');
 const previewFileSize = $('previewFileSize');
 const removeProofBtn = $('removeProofBtn');
 let selectedFile = null;
+
+const paramProof = qs.get('proof') || '';
+if (paramProof && uploadPreview && previewImg) {
+  previewFileName.textContent = paramProof;
+  previewFileSize.textContent = 'Attached Proof Image';
+  previewImg.src = (paramProof.startsWith('http') || paramProof.startsWith('/') || paramProof.startsWith('data:')) ? paramProof : ('/uploads/deposits/' + paramProof);
+  uploadPreview.style.display = 'flex';
+  selectedFile = paramProof;
+}
 
 function handleSelectedFile(file) {
   if (!file) return;
@@ -681,6 +700,9 @@ if (uploadZone) {
   });
 
   uploadZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    uploadZone.classList.remove('dragover');
     const dt = e.dataTransfer;
     const file = dt && dt.files && dt.files[0];
     if (file) {
@@ -694,7 +716,7 @@ window.addEventListener('paste', (e) => {
   const items = (e.clipboardData || window.clipboardData).items;
   if (!items) return;
   for (let i = 0; i < items.length; i++) {
-    if (items[i].type.indexOf('image') !== -1) {
+    if (items[i].type && items[i].type.indexOf('image') !== -1) {
       const file = items[i].getAsFile();
       if (file) {
         handleSelectedFile(file);
@@ -716,6 +738,7 @@ if (removeProofBtn) {
 
 function showStatus(text, isError = false) {
   const el = $('statusBox');
+  if (!el) return;
   el.style.display = 'block';
   el.className = 'status' + (isError ? ' error' : '');
   el.textContent = text;
@@ -726,6 +749,7 @@ $('depositForm').onsubmit = async (e) => {
   const txid = $('txidInput').value.trim();
   if (!txid) {
     showStatus('Please enter the Transaction ID (TXID) or reference.', true);
+    $('txidInput').focus();
     return;
   }
 
@@ -742,11 +766,14 @@ $('depositForm').onsubmit = async (e) => {
     formData.append('txid', txid);
 
     const fileToUpload = selectedFile || (proofInput.files && proofInput.files[0]);
-    if (fileToUpload) {
+    if (fileToUpload instanceof File) {
       formData.append('proof', fileToUpload);
+    } else if (typeof fileToUpload === 'string' && fileToUpload) {
+      formData.append('proofUrl', fileToUpload);
     }
 
-    const r = await fetch(API + '/api/deposits', {
+    const apiUrl = (typeof API !== 'undefined' && API) ? API : '';
+    const r = await fetch(apiUrl + '/api/deposits', {
       method: 'POST',
       headers: { Authorization: 'Bearer ' + token },
       body: formData
