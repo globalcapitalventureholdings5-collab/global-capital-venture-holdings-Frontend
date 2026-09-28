@@ -348,9 +348,9 @@ body {
       <span class="mark">✦</span>
       <span>Global Capital<br><b>Venture Holdings, Inc.</b></span>
     </a>
-    <div style="display:flex;gap:14px;align-items:center;">
-      <a class="back" href="dashboard.html">◫ Dashboard</a>
-      <a class="back" href="packages.html">← Packages</a>
+    <div style="display:flex;gap:12px;align-items:center;">
+      <a class="back" href="dashboard.html" style="padding:8px 14px;border-radius:8px;background:rgba(255,255,255,0.05);border:1px solid var(--line);">◫ Dashboard</a>
+      <a class="back" href="packages.html" style="padding:8px 14px;border-radius:8px;background:rgba(255,255,255,0.05);border:1px solid var(--line);">← Packages</a>
     </div>
   </header>
 
@@ -361,7 +361,7 @@ body {
       <div style="font-weight:700;font-size:14px;color:#fff;">100% Capital Protection & Instant Daily Payout Protocol</div>
       <div style="font-size:12px;color:#d0d7de;margin-top:2px;">All verified package deposits automatically qualify for 1.00% daily returns, 3-tier affiliate commissions, and monthly leadership tiers.</div>
     </div>
-    <a href="salary-system.html" class="btn secondary" style="font-size:11px;min-height:36px;padding:0 14px;white-space:nowrap;">View Salary Plan →</a>
+    <a href="salary-system.html" class="btn secondary" style="font-size:11px;min-height:36px;padding:0 14px;white-space:nowrap;text-decoration:none;display:inline-flex;align-items:center;">View Salary Plan →</a>
   </div>
 
   <div class="deposit-warning">
@@ -372,7 +372,7 @@ body {
   <section class="card hero">
     <div class="tag">PACKAGE DEPOSIT</div>
     <h1>Complete Your <span style="color:var(--gold2)">Deposit</span></h1>
-    <p>Select your package amount and payment method (BEP20, TRC20, or Binance UID), transfer the exact amount, and submit the Transaction ID along with your payment proof screenshot.</p>
+    <p>Select your package amount and payment method (TRC20, BEP20, or Binance Pay UID), transfer the exact amount, and submit the Transaction ID along with your payment proof screenshot.</p>
     
     <div class="pkg-selector-wrap">
       <label style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;font-weight:800;display:block;">Select Package Amount</label>
@@ -397,16 +397,16 @@ body {
   <section class="card">
     <div class="tag">1 · SELECT PAYMENT METHOD</div>
     
-    <div class="methods-grid">
-      <button type="button" class="method-btn active" data-method="BEP20">
-        <span class="method-icon">🟡</span>
-        <span>USDT (BEP20)</span>
-        <small style="font-size:10px;color:var(--muted);">BNB Smart Chain</small>
-      </button>
-      <button type="button" class="method-btn" data-method="TRC20">
+    <div class="methods-grid" id="methodsContainer">
+      <button type="button" class="method-btn active" data-method="TRC20">
         <span class="method-icon">🔴</span>
         <span>USDT (TRC20)</span>
         <small style="font-size:10px;color:var(--muted);">TRON Network</small>
+      </button>
+      <button type="button" class="method-btn" data-method="BEP20">
+        <span class="method-icon">🟡</span>
+        <span>USDT (BEP20)</span>
+        <small style="font-size:10px;color:var(--muted);">BNB Smart Chain</small>
       </button>
       <button type="button" class="method-btn" data-method="UID">
         <span class="method-icon">💎</span>
@@ -416,15 +416,14 @@ body {
     </div>
 
     <div class="field" style="margin-top:16px">
-      <label id="depositAddressLabel">USDT Deposit Address (BEP20)</label>
-      <div class="address-box">
-        <input id="depositAddress" readonly placeholder="Loading payment address…">
-        <button id="copyAddressBtn" class="btn secondary" type="button">Copy Address</button>
+      <label id="depositAddressLabel">Official USDT Deposit Address (TRC20)</label>
+      <div style="background:rgba(0,0,0,0.4);border:1.5px solid rgba(243,207,122,0.35);border-radius:12px;padding:16px 18px;font-family:ui-monospace,SFMono-Regular,monospace;font-size:14px;font-weight:700;color:var(--gold);word-break:break-all;user-select:all;" id="depositAddressDisplay">
+        TLYNo7HqiDBMzRPuuSPu3SQsL1Fx9gfD5w
       </div>
     </div>
 
     <p id="paymentInstructions" class="notice" style="margin-top:16px">
-      Send the exact package amount to this deposit address.
+      Send the exact package amount to this official TRON (TRC20) deposit address.
     </p>
     <p class="small" style="margin-top:10px;">
       Double-check the network and address in your wallet before confirming the transfer.
@@ -438,30 +437,31 @@ body {
       <div class="grid">
         <div class="field">
           <label>Package Amount ($ USD)</label>
-          <input id="packageAmountInput" type="number" readonly>
+          <input id="packageAmountInput" type="number" readonly value="100">
         </div>
         <div class="field">
           <label>Transaction ID (TXID) / Reference <span style="color:#ef4444;">*</span></label>
-          <input id="txidInput" name="txid" required placeholder="Paste your blockchain TXID or Binance Pay ID">
+          <input id="txidInput" name="txid" required placeholder="Paste your blockchain TXID or Binance Pay reference ID">
         </div>
       </div>
 
       <div class="field">
         <label>Payment Proof Screenshot (Optional / Recommended)</label>
+        
         <div class="upload-zone" id="uploadZone">
-          <input type="file" id="proofInput" name="proof" accept="image/jpeg,image/png,image/webp,image/jpg">
-          <div style="font-size:28px;margin-bottom:6px;">📸</div>
-          <strong style="color:var(--gold2);font-size:14px;display:block;">Click to browse or drop payment screenshot</strong>
-          <span style="font-size:11px;color:var(--muted);">Supports JPG, PNG, WEBP (Max 15MB)</span>
+          <input type="file" id="proofInput" name="proof" accept="image/*">
+          <div style="font-size:32px;pointer-events:none;">📸</div>
+          <strong style="color:var(--gold2);font-size:14px;display:block;pointer-events:none;">Click to choose or drop screenshot here</strong>
+          <span style="font-size:11px;color:var(--muted);pointer-events:none;">Supports all JPG, PNG, WEBP images</span>
         </div>
 
         <div id="uploadPreview" class="upload-preview">
           <img id="previewImg" src="" alt="Proof Preview">
           <div style="flex:1;overflow:hidden;">
-            <strong id="previewFileName" style="display:block;font-size:12px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">screenshot.png</strong>
+            <strong id="previewFileName" style="display:block;font-size:12.5px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">screenshot.png</strong>
             <span id="previewFileSize" style="font-size:11px;color:var(--muted);">1.2 MB</span>
           </div>
-          <button type="button" id="removeProofBtn" style="background:transparent;border:0;color:#ef4444;font-size:14px;cursor:pointer;">✕ Remove</button>
+          <button type="button" id="removeProofBtn" style="background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.3);color:#fca5a5;padding:6px 12px;border-radius:8px;font-size:12px;cursor:pointer;font-weight:700;">✕ Remove</button>
         </div>
       </div>
 
@@ -487,9 +487,6 @@ body {
         </div>
       </div>
       <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
-        <button type="button" class="btn secondary" style="font-size:12px;min-height:38px;padding:0 14px;white-space:nowrap;" onclick="copyValue('globalcapitalventureholdings5@gmail.com', 'Support email copied!')">
-          <span>📋</span> Copy Email
-        </button>
         <a href="mailto:globalcapitalventureholdings5@gmail.com" class="btn primary" style="font-size:12px;min-height:38px;padding:0 16px;display:inline-flex;align-items:center;gap:6px;text-decoration:none;white-space:nowrap;">
           <span>✉</span> Email Support Desk
         </a>
@@ -520,7 +517,7 @@ try {
 
 const allowed = [10, 25, 50, 100, 200, 300, 500, 1000, 2500, 5000, 10000];
 if (!amount || !allowed.includes(amount)) {
-  amount = 100; // Default to $100 if none chosen
+  amount = 100;
 }
 
 const $ = id => document.getElementById(id);
@@ -535,9 +532,7 @@ function setPackageAmount(newVal) {
     btn.classList.toggle('active', Number(btn.dataset.val) === amount);
   });
 
-  if (typeof updateInstructions === 'function') {
-    updateInstructions();
-  }
+  updateMethodDetails();
 }
 
 document.querySelectorAll('.pkg-chip').forEach(btn => {
@@ -546,111 +541,129 @@ document.querySelectorAll('.pkg-chip').forEach(btn => {
 
 setPackageAmount(amount);
 
-let fundingData = null;
-let currentMethod = 'BEP20';
+let currentMethod = 'TRC20';
 
-const DEFAULT_ADDRESSES = {
-  BEP20: {
-    label: 'USDT Deposit Address (BEP20 / BNB Smart Chain)',
-    address: '0xda9362094e07897b9fbcad372d353bcfec2cd88c',
-    instructions: (amt) => 'Send the exact amount of $' + amt + ' USDT (BEP20) to this BNB Smart Chain address.'
-  },
+const WALLET_DATA = {
   TRC20: {
-    label: 'USDT Deposit Address (TRC20 / TRON Network)',
+    name: 'USDT (TRC20 / TRON Network)',
+    label: 'Official USDT Deposit Address (TRC20)',
     address: 'TLYNo7HqiDBMzRPuuSPu3SQsL1Fx9gfD5w',
-    instructions: (amt) => 'Send the exact amount of $' + amt + ' USDT (TRC20) to this Tron network address.'
+    instructions: (amt) => `Send the exact amount of $${amt} USDT (TRC20) to this official Tron network wallet address.`
+  },
+  BEP20: {
+    name: 'USDT (BEP20 / BNB Smart Chain)',
+    label: 'Official USDT Deposit Address (BEP20)',
+    address: '0xda9362094e07897b9fbcad372d353bcfec2cd88c',
+    instructions: (amt) => `Send the exact amount of $${amt} USDT (BEP20) to this official BNB Smart Chain wallet address.`
   },
   UID: {
-    label: 'Binance UID / Pay ID (UID: 55868490)',
+    name: 'Binance Pay UID',
+    label: 'Official Binance Pay UID (55868490)',
     address: '55868490',
-    instructions: (amt) => 'Transfer the exact amount of $' + amt + ' USDT via Binance Pay to this Binance UID (55868490).'
+    instructions: (amt) => `Transfer the exact amount of $${amt} USDT via Binance Pay directly to this Binance UID: 55868490.`
   }
 };
 
-function updateInstructions() {
-  const mData = (fundingData && fundingData.methods)
-    ? fundingData.methods.find(m => m.id === currentMethod)
-    : null;
-
-  const fallback = DEFAULT_ADDRESSES[currentMethod] || DEFAULT_ADDRESSES.BEP20;
-  const address = (mData && mData.address) ? mData.address : fallback.address;
-  const label = (mData && mData.name) ? `${mData.name} Address / UID` : fallback.label;
-  const instructions = (mData && mData.instructions) ? mData.instructions : (typeof fallback.instructions === 'function' ? fallback.instructions(amount) : fallback.instructions);
-
-  $('depositAddressLabel').textContent = label;
-  $('depositAddress').value = address;
-  $('paymentInstructions').textContent = instructions;
+function updateMethodDetails() {
+  const info = WALLET_DATA[currentMethod] || WALLET_DATA.TRC20;
+  $('depositAddressLabel').textContent = info.label;
+  $('depositAddressDisplay').textContent = info.address;
+  $('paymentInstructions').textContent = (typeof info.instructions === 'function') ? info.instructions(amount) : info.instructions;
 }
 
 function selectMethod(method) {
+  if (!WALLET_DATA[method]) method = 'TRC20';
   currentMethod = method;
   document.querySelectorAll('.method-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.method === method);
   });
-  updateInstructions();
+  updateMethodDetails();
 }
 
 document.querySelectorAll('.method-btn').forEach(btn => {
   btn.onclick = () => selectMethod(btn.dataset.method);
 });
 
-async function loadFunding() {
-  try {
-    const r = await fetch(API + '/api/funding-info', { cache: 'no-store' });
-    if (r.ok) {
-      fundingData = await r.json();
-    }
-  } catch (e) {}
-  selectMethod(currentMethod);
-}
+selectMethod('TRC20');
 
-$('copyAddressBtn').onclick = async () => {
-  const v = $('depositAddress').value;
-  if (v) {
-    if (typeof window.copyToClipboard === 'function') {
-      window.copyToClipboard(v, 'Address copied to clipboard!');
-    } else {
-      try {
-        await navigator.clipboard.writeText(v);
-      } catch (e) {
-        $('depositAddress').select();
-        document.execCommand('copy');
-      }
-    }
-    $('copyAddressBtn').textContent = 'Copied!';
-    setTimeout(() => $('copyAddressBtn').textContent = 'Copy Address', 1500);
-  }
-};
-
-// Proof File Preview
+// Proof Screenshot Upload Handling
 const proofInput = $('proofInput');
+const uploadZone = $('uploadZone');
 const uploadPreview = $('uploadPreview');
 const previewImg = $('previewImg');
 const previewFileName = $('previewFileName');
 const previewFileSize = $('previewFileSize');
 const removeProofBtn = $('removeProofBtn');
+let selectedFile = null;
 
-if (proofInput) {
-  proofInput.onchange = () => {
-    const file = proofInput.files && proofInput.files[0];
-    if (file) {
-      previewFileName.textContent = file.name;
-      previewFileSize.textContent = (file.size / (1024 * 1024)).toFixed(2) + ' MB';
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        previewImg.src = e.target.result;
-        uploadPreview.style.display = 'flex';
-      };
-      reader.readAsDataURL(file);
-    } else {
-      uploadPreview.style.display = 'none';
-    }
+function handleSelectedFile(file) {
+  if (!file) return;
+  selectedFile = file;
+  previewFileName.textContent = file.name;
+  previewFileSize.textContent = (file.size / (1024 * 1024)).toFixed(2) + ' MB';
+  
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    previewImg.src = e.target.result;
+    uploadPreview.style.display = 'flex';
   };
+  reader.readAsDataURL(file);
 }
 
+if (proofInput) {
+  proofInput.addEventListener('change', (e) => {
+    const file = e.target.files && e.target.files[0];
+    if (file) handleSelectedFile(file);
+  });
+}
+
+// Drag & Drop
+if (uploadZone) {
+  ['dragenter', 'dragover'].forEach(eventName => {
+    uploadZone.addEventListener(eventName, (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      uploadZone.classList.add('dragover');
+    }, false);
+  });
+
+  ['dragleave', 'drop'].forEach(eventName => {
+    uploadZone.addEventListener(eventName, (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      uploadZone.classList.remove('dragover');
+    }, false);
+  });
+
+  uploadZone.addEventListener('drop', (e) => {
+    const dt = e.dataTransfer;
+    const file = dt && dt.files && dt.files[0];
+    if (file) {
+      handleSelectedFile(file);
+    }
+  }, false);
+}
+
+// Paste from Clipboard
+window.addEventListener('paste', (e) => {
+  const items = (e.clipboardData || window.clipboardData).items;
+  if (!items) return;
+  for (let i = 0; i < items.length; i++) {
+    if (items[i].type.indexOf('image') !== -1) {
+      const file = items[i].getAsFile();
+      if (file) {
+        handleSelectedFile(file);
+        break;
+      }
+    }
+  }
+});
+
 if (removeProofBtn) {
-  removeProofBtn.onclick = () => {
-    proofInput.value = '';
+  removeProofBtn.onclick = (e) => {
+    e.stopPropagation();
+    selectedFile = null;
+    if (proofInput) proofInput.value = '';
     uploadPreview.style.display = 'none';
     previewImg.src = '';
   };
@@ -683,8 +696,9 @@ $('depositForm').onsubmit = async (e) => {
     formData.append('network', currentMethod);
     formData.append('txid', txid);
 
-    if (proofInput.files && proofInput.files[0]) {
-      formData.append('proof', proofInput.files[0]);
+    const fileToUpload = selectedFile || (proofInput.files && proofInput.files[0]);
+    if (fileToUpload) {
+      formData.append('proof', fileToUpload);
     }
 
     const r = await fetch(API + '/api/deposits', {
@@ -721,7 +735,8 @@ $('depositForm').onsubmit = async (e) => {
     dashLink.style.display = 'block';
     dashLink.style.textAlign = 'center';
     dashLink.style.marginTop = '14px';
-    dashLink.textContent = 'Go to Dashboard →';
+    dashLink.style.textDecoration = 'none';
+    dashLink.textContent = 'Return to Dashboard →';
     $('statusBox').appendChild(dashLink);
 
   } catch (err) {
@@ -730,8 +745,6 @@ $('depositForm').onsubmit = async (e) => {
     showStatus(err.message || 'Deposit submission failed.', true);
   }
 };
-
-loadFunding();
 </script>
 </body>
 </html>
