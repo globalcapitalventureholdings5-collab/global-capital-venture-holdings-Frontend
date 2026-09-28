@@ -1,4 +1,33 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <circle cx="32" cy="32" r="30" fill="#0d5a3f" stroke="#c59b27" stroke-width="2"/>
-  <text x="32" y="42" font-size="32" text-anchor="middle" fill="#ffffff" font-family="Georgia, serif">✦</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="gcvhBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0c251a"/>
+      <stop offset="50%" stop-color="#071710"/>
+      <stop offset="100%" stop-color="#040e0a"/>
+    </linearGradient>
+    <linearGradient id="gcvhGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fcedb4"/>
+      <stop offset="50%" stop-color="#f3cf7a"/>
+      <stop offset="100%" stop-color="#c59b27"/>
+    </linearGradient>
+    <linearGradient id="gcvhEmerald" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34d399"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="2.5" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Background Circle -->
+  <circle cx="50" cy="50" r="47" fill="url(#gcvhBg)" stroke="url(#gcvhGold)" stroke-width="2.5"/>
+  <circle cx="50" cy="50" r="41" fill="none" stroke="url(#gcvhEmerald)" stroke-width="1" stroke-opacity="0.6" stroke-dasharray="4 3"/>
+
+  <!-- Luxury 4-Point Star / Diamond Core -->
+  <g filter="url(#glow)">
+    <path d="M50 16 Q50 42 24 50 Q50 58 50 84 Q50 58 76 50 Q50 42 50 16 Z" fill="url(#gcvhGold)"/>
+  </g>
+  <circle cx="50" cy="50" r="4.5" fill="#ffffff"/>
+  <circle cx="50" cy="50" r="2.5" fill="#040e0a"/>
 </svg>

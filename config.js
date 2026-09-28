@@ -93,7 +93,7 @@ async function copyToClipboard(text, btnElement, successMsg = 'Copied!') {
   showCopyToast(successMsg);
 
   // Button state update if element provided
-  if (btnElement) {
+  if (btnElement && btnElement.nodeType === 1) {
     const originalText = btnElement.dataset.origText || btnElement.innerHTML;
     if (!btnElement.dataset.origText) btnElement.dataset.origText = originalText;
     btnElement.classList.add('btn-copied-state');
@@ -104,6 +104,10 @@ async function copyToClipboard(text, btnElement, successMsg = 'Copied!') {
     }, 1800);
   }
 }
+
+window.copyToClipboard = copyToClipboard;
+window.copyWalletAddr = (addr, btn) => copyToClipboard(addr, btn, 'Wallet Address Copied!');
+window.copyValue = (val, msg = 'Copied to Clipboard!') => copyToClipboard(val, null, msg);
 
 function showCopyToast(msg = 'Copied to clipboard!') {
   let toast = document.getElementById('gcvhGlobalToast');
@@ -134,9 +138,9 @@ async function syncGlobalNav() {
     const email = (userData && userData.email) || 'Active Account';
     const initials = name.split(' ').filter(Boolean).map(n => n[0]).slice(0, 2).join('').toUpperCase() || 'GC';
 
-    document.querySelectorAll('.user-text-name, .mobile-user-name').forEach(el => { el.textContent = name; el.title = name; });
-    document.querySelectorAll('.user-text-email, .mobile-user-email').forEach(el => { el.textContent = email; el.title = email; });
-    document.querySelectorAll('.user-avatar-sm, .mobile-user-avatar').forEach(el => el.textContent = initials);
+    document.querySelectorAll('.user-text-name, .mobile-user-name, #sidebarUserName, #lockedUserName').forEach(el => { el.textContent = name; el.title = name; });
+    document.querySelectorAll('.user-text-email, .mobile-user-email, #lockedUserEmail').forEach(el => { el.textContent = email; el.title = email; });
+    document.querySelectorAll('.user-avatar-sm, .mobile-user-avatar, .profile-avatar').forEach(el => el.textContent = initials);
   }
 
   if (!token) {
@@ -191,7 +195,7 @@ function initUserDropdown() {
   }
 
   // Universal Logout Handlers
-  document.querySelectorAll('.nav-logout-btn, #mobileLogoutBtn').forEach(btn => {
+  document.querySelectorAll('.nav-logout-btn, #mobileLogoutBtn, #sidebarLogout').forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.preventDefault();
       if (confirm('Are you sure you want to sign out?')) {
@@ -209,67 +213,67 @@ function initUserDropdown() {
 
 // Helper: Mobile menu toggle with overlay drawer support
 function initMobileMenu() {
-  const menuBtn = document.getElementById('menuBtn') || document.getElementById('mobileMenuBtn');
-  const mobileMenu = document.getElementById('mobileMenu') || document.getElementById('sidebar');
-  let navBackdrop = document.getElementById('navBackdrop') || document.getElementById('sidebarBackdrop');
-  const mobileCloseBtn = document.getElementById('mobileCloseBtn') || document.getElementById('sidebarCloseBtn');
+  const menuBtns = document.querySelectorAll('#mobileMenuButton, #mobileMenuBtn, #menuBtn, .mobile-menu-btn, .mobile-menu');
+  const sidebar = document.getElementById('sidebar') || document.getElementById('mobileMenu') || document.querySelector('.sidebar');
+  let backdrop = document.getElementById('sidebarBackdrop') || document.getElementById('navBackdrop') || document.querySelector('.sidebar-backdrop');
+  const closeBtns = document.querySelectorAll('#sidebarCloseBtn, #mobileCloseBtn, .sidebar-close-btn');
 
-  if (!mobileMenu) return;
+  if (!sidebar) return;
 
-  if (!navBackdrop) {
-    navBackdrop = document.createElement('div');
-    navBackdrop.id = 'navBackdrop';
-    navBackdrop.className = 'nav-backdrop';
-    document.body.appendChild(navBackdrop);
+  if (!backdrop) {
+    backdrop = document.createElement('div');
+    backdrop.id = 'sidebarBackdrop';
+    backdrop.className = 'sidebar-backdrop';
+    document.body.appendChild(backdrop);
   }
 
   function openDrawer() {
-    mobileMenu.classList.add('open');
-    mobileMenu.classList.add('active');
-    if (navBackdrop) {
-      navBackdrop.classList.add('active');
-      navBackdrop.classList.add('open');
+    sidebar.classList.add('mobile-open');
+    sidebar.classList.add('open');
+    sidebar.classList.add('active');
+    if (backdrop) {
+      backdrop.classList.add('active');
+      backdrop.classList.add('open');
     }
     document.body.style.overflow = 'hidden';
-    if (menuBtn) menuBtn.setAttribute('aria-expanded', 'true');
+    menuBtns.forEach(btn => btn.setAttribute('aria-expanded', 'true'));
   }
 
   function closeDrawer() {
-    mobileMenu.classList.remove('open');
-    mobileMenu.classList.remove('active');
-    if (navBackdrop) {
-      navBackdrop.classList.remove('active');
-      navBackdrop.classList.remove('open');
+    sidebar.classList.remove('mobile-open');
+    sidebar.classList.remove('open');
+    sidebar.classList.remove('active');
+    if (backdrop) {
+      backdrop.classList.remove('active');
+      backdrop.classList.remove('open');
     }
     document.body.style.overflow = '';
-    if (menuBtn) menuBtn.setAttribute('aria-expanded', 'false');
+    menuBtns.forEach(btn => btn.setAttribute('aria-expanded', 'false'));
   }
 
-  if (menuBtn) {
-    menuBtn.onclick = (e) => {
+  menuBtns.forEach(btn => {
+    btn.onclick = (e) => {
       e.stopPropagation();
-      if (mobileMenu.classList.contains('open') || mobileMenu.classList.contains('active')) {
+      if (sidebar.classList.contains('mobile-open') || sidebar.classList.contains('open') || sidebar.classList.contains('active')) {
         closeDrawer();
       } else {
         openDrawer();
       }
     };
-  }
+  });
 
-  if (mobileCloseBtn) {
-    mobileCloseBtn.onclick = (e) => {
+  closeBtns.forEach(btn => {
+    btn.onclick = (e) => {
       e.stopPropagation();
       closeDrawer();
     };
+  });
+
+  if (backdrop) {
+    backdrop.onclick = () => closeDrawer();
   }
 
-  if (navBackdrop) {
-    navBackdrop.onclick = () => {
-      closeDrawer();
-    };
-  }
-
-  mobileMenu.querySelectorAll('a').forEach(a => {
+  sidebar.querySelectorAll('a').forEach(a => {
     a.addEventListener('click', () => {
       if (!a.classList.contains('no-close')) {
         closeDrawer();

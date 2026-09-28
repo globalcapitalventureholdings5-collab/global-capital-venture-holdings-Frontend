@@ -8,23 +8,31 @@
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <style>
 :root {
-  --bg: #07090b;
-  --panel: #0d1116;
-  --panel-card: #10151c;
-  --gold: #d9ad4b;
-  --gold2: #f1d17a;
-  --text: #f5f5f2;
-  --muted: #aeb1b5;
-  --green: #16e58b;
-  --red: #ff6b6b;
-  --line: rgba(255, 255, 255, 0.08);
+  --bg: #07120c;
+  --panel: #0c2017;
+  --panel-card: #081710;
+  --gold: #f3cf7a;
+  --gold2: #fcedb4;
+  --gold-dark: #c59b27;
+  --text: #e2ede8;
+  --muted: #8ba89d;
+  --green: #10b981;
+  --primary-green: #10b981;
+  --red: #ef4444;
+  --line: rgba(16, 185, 129, 0.16);
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: #07120c; }
+::-webkit-scrollbar-thumb { background: rgba(16, 185, 129, 0.3); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(16, 185, 129, 0.6); }
+* { scrollbar-width: thin; scrollbar-color: rgba(16, 185, 129, 0.3) #07120c; }
 body {
   background: var(--bg);
   color: var(--text);
   font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   line-height: 1.5;
+  overflow-x: hidden;
 }
 .wrap {
   max-width: 920px;
@@ -465,14 +473,28 @@ body {
     </form>
   </section>
 
-  <div class="card" style="margin-top:20px;padding:18px 22px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;background:rgba(217,173,75,0.05);border-color:rgba(217,173,75,0.2);">
-    <div>
-      <div style="font-size:11px;font-weight:800;color:var(--gold);text-transform:uppercase;letter-spacing:0.08em;">Need Assistance With Your Deposit?</div>
-      <div style="font-size:13px;color:#cdd5dc;margin-top:3px;">Our institutional funding desk is available 24/7 to assist with payment verification.</div>
+  <div class="card" style="margin-top:20px;padding:20px 22px;background:rgba(243,207,122,0.05);border:1px solid rgba(243,207,122,0.25);border-radius:16px;">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;">
+      <div style="flex:1;min-width:240px;">
+        <div style="font-size:11px;font-weight:800;color:var(--gold);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:4px;">
+          Institutional Help & Support Desk
+        </div>
+        <div style="font-size:13px;color:#cdd5dc;line-height:1.5;">
+          Our funding desk is available 24/7 for deposit validation and package activation assistance.
+        </div>
+        <div style="margin-top:8px;font-size:12px;color:var(--gold2);word-break:break-all;overflow-wrap:anywhere;font-family:ui-monospace,SFMono-Regular,monospace;font-weight:700;">
+          ✉ globalcapitalventureholdings5@gmail.com
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+        <button type="button" class="btn secondary" style="font-size:12px;min-height:38px;padding:0 14px;white-space:nowrap;" onclick="copyValue('globalcapitalventureholdings5@gmail.com', 'Support email copied!')">
+          <span>📋</span> Copy Email
+        </button>
+        <a href="mailto:globalcapitalventureholdings5@gmail.com" class="btn primary" style="font-size:12px;min-height:38px;padding:0 16px;display:inline-flex;align-items:center;gap:6px;text-decoration:none;white-space:nowrap;">
+          <span>✉</span> Email Support Desk
+        </a>
+      </div>
     </div>
-    <a href="mailto:globalcapitalventureholdings5@gmail.com" class="btn secondary" style="font-size:12px;min-height:38px;padding:0 16px;display:inline-flex;align-items:center;gap:6px;text-decoration:none;">
-      <span>✉</span> globalcapitalventureholdings5@gmail.com
-    </a>
   </div>
 
   <p class="small" style="margin-top:16px;">

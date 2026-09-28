@@ -25,7 +25,27 @@
       --radius: 16px;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * { 
+      box-sizing: border-box; 
+      margin: 0; 
+      padding: 0; 
+      scrollbar-width: thin;
+      scrollbar-color: rgba(16, 185, 129, 0.35) #07120c;
+    }
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #07120c;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(16, 185, 129, 0.35);
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(16, 185, 129, 0.6);
+    }
     html { scroll-behavior: smooth; }
     body {
       background: var(--bg-dark);
@@ -114,6 +134,21 @@
       padding: 28px 20px;
       z-index: 999;
       overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(16, 185, 129, 0.35) #07120c;
+    }
+    .sidebar::-webkit-scrollbar {
+      width: 5px;
+    }
+    .sidebar::-webkit-scrollbar-track {
+      background: #091711;
+    }
+    .sidebar::-webkit-scrollbar-thumb {
+      background: rgba(16, 185, 129, 0.3);
+      border-radius: 4px;
+    }
+    .sidebar::-webkit-scrollbar-thumb:hover {
+      background: rgba(16, 185, 129, 0.6);
     }
     .sidebar-header {
       display: flex;
@@ -1572,14 +1607,22 @@
             </div>
           </div>
 
-          <div class="corporate-support-bar">
-            <div>
-              <div style="font-size:11px;font-weight:800;color:var(--gold);text-transform:uppercase;">Institutional Help & Support</div>
-              <div style="font-size:12px;color:#cbd5e1;margin-top:2px;">Contact customer desk for assistance: <strong>globalcapitalventureholdings5@gmail.com</strong></div>
+          <div class="corporate-support-bar" style="margin-top:16px;">
+            <div style="flex:1;min-width:220px;text-align:left;">
+              <div style="font-size:11px;font-weight:800;color:var(--gold);text-transform:uppercase;letter-spacing:0.08em;">Institutional Help & Support Desk</div>
+              <div style="font-size:12px;color:#cbd5e1;margin-top:2px;">Contact customer desk for 24/7 payment verification:</div>
+              <div style="margin-top:4px;font-size:12px;color:var(--gold);font-family:ui-monospace,SFMono-Regular,monospace;font-weight:700;word-break:break-all;overflow-wrap:anywhere;">
+                ✉ globalcapitalventureholdings5@gmail.com
+              </div>
             </div>
-            <a href="mailto:globalcapitalventureholdings5@gmail.com" class="btn btn-outline" style="font-size:12px;min-height:36px;padding:0 14px;border-color:rgba(243,207,122,0.4);color:var(--gold);">
-              <span>✉</span> Email Support Desk
-            </a>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+              <button type="button" class="btn btn-outline" style="font-size:11.5px;min-height:36px;padding:0 12px;border-color:rgba(243,207,122,0.4);color:var(--gold);white-space:nowrap;" onclick="copyValue('globalcapitalventureholdings5@gmail.com', 'Support email copied!')">
+                <span>📋</span> Copy Email
+              </button>
+              <a href="mailto:globalcapitalventureholdings5@gmail.com" class="btn btn-outline" style="font-size:11.5px;min-height:36px;padding:0 14px;border-color:rgba(243,207,122,0.4);color:var(--gold);background:rgba(243,207,122,0.1);white-space:nowrap;">
+                <span>✉</span> Email Support Desk
+              </a>
+            </div>
           </div>
         </div>
 
@@ -2142,6 +2185,29 @@
           <div style="padding:32px;text-align:center;color:var(--text-muted);grid-column:1/-1;">Loading market blog posts…</div>
         </div>
       </section>
+
+      <!-- INSTITUTIONAL PLATFORM FOOTER -->
+      <footer style="margin-top:40px;padding:24px 20px;border-radius:16px;background:rgba(243,207,122,0.04);border:1px solid rgba(243,207,122,0.2);display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;">
+        <div style="flex:1;min-width:240px;">
+          <div style="font-size:11px;font-weight:800;color:var(--gold);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px;">
+            Institutional Help & Support Desk
+          </div>
+          <div style="font-size:12.5px;color:#cdd5dc;line-height:1.5;">
+            Need help with your portfolio, deposits, or account? Contact customer desk:
+          </div>
+          <div style="margin-top:6px;font-size:12px;color:var(--gold);font-family:ui-monospace,SFMono-Regular,monospace;font-weight:700;word-break:break-all;overflow-wrap:anywhere;">
+            ✉ globalcapitalventureholdings5@gmail.com
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+          <button type="button" class="btn btn-outline" style="font-size:12px;min-height:38px;padding:0 14px;white-space:nowrap;" onclick="copyValue('globalcapitalventureholdings5@gmail.com', 'Support email copied!')">
+            <span>📋</span> Copy Email
+          </button>
+          <a href="mailto:globalcapitalventureholdings5@gmail.com" class="btn btn-gold" style="font-size:12px;min-height:38px;padding:0 16px;display:inline-flex;align-items:center;gap:6px;text-decoration:none;white-space:nowrap;">
+            <span>✉</span> Email Support Desk
+          </a>
+        </div>
+      </footer>
 
     </main>
   </div>
