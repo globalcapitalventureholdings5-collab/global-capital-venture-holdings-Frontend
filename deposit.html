@@ -1154,7 +1154,7 @@ async function fetchDepositHistory() {
   }
 }
 
-$('refreshHistoryBtn').onclick = fetchDepositHistory;
+if ($('refreshHistoryBtn')) $('refreshHistoryBtn').onclick = fetchDepositHistory;
 
 // POST DEPOSIT FORM SUBMISSION
 $('depositForm').onsubmit = async (e) => {
@@ -1303,10 +1303,8 @@ $('depositForm').onsubmit = async (e) => {
   }
 };
 
-// Initial Load of History on Page Start
-window.addEventListener('DOMContentLoaded', () => {
-  fetchDepositHistory();
-});
+// This script is loaded after the page markup, so start immediately.
+fetchDepositHistory();
 </script>
 </body>
 </html>
