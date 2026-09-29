@@ -880,8 +880,8 @@ document.querySelectorAll('.method-btn').forEach(btn => {
 
 selectMethod(currentMethod);
 
-// Pre-fill TXID from URL query if present
-const paramTxid = qs.get('txid') || '';
+// Pre-fill TXID from URL query if present. Keep tvid for older deposit links.
+const paramTxid = qs.get('txid') || qs.get('tvid') || qs.get('transactionId') || qs.get('reference') || '';
 if (paramTxid && $('txidInput')) {
   $('txidInput').value = paramTxid;
 }
@@ -897,12 +897,15 @@ const removeProofBtn = $('removeProofBtn');
 let selectedFile = null;
 
 const paramProof = qs.get('proof') || '';
-if (paramProof && uploadPreview && previewImg) {
+const isStoredProofReference = /^(https?:\/\/|data:image\/|\/?uploads\/deposits\/)/i.test(paramProof);
+if (paramProof && isStoredProofReference && uploadPreview && previewImg) {
   previewFileName.textContent = paramProof;
   previewFileSize.textContent = 'Attached Proof Image';
   previewImg.src = resolveProofUrl(paramProof);
   uploadPreview.style.display = 'flex';
   selectedFile = paramProof;
+} else if (paramProof && !isStoredProofReference) {
+  showStatus('Please choose the payment screenshot from your device before submitting.', true);
 }
 
 function handleSelectedFile(file) {
