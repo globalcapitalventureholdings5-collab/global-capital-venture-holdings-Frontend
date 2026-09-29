@@ -829,8 +829,6 @@ document.querySelectorAll('.pkg-chip').forEach(btn => {
   btn.onclick = () => setPackageAmount(btn.dataset.val);
 });
 
-setPackageAmount(amount);
-
 let currentMethod = (qs.get('method') || qs.get('network') || 'TRC20').toUpperCase();
 if (!['TRC20', 'BEP20', 'UID'].includes(currentMethod)) {
   currentMethod = 'TRC20';
@@ -856,6 +854,8 @@ const WALLET_DATA = {
     instructions: (amt) => `Transfer the exact amount of $${amt} USDT via Binance Pay directly to this Binance UID: 55868490.`
   }
 };
+
+setPackageAmount(amount);
 
 function updateMethodDetails() {
   const info = WALLET_DATA[currentMethod] || WALLET_DATA.TRC20;
