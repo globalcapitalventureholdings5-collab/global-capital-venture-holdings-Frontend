@@ -1411,7 +1411,7 @@
             </a>
             <div class="app-version-pill">
               <span>Current Release: <strong id="apkVersionBadge">v1.0.0</strong></span>
-              <span style="font-size:11px;opacity:0.8;">Production APK • 52.6 MB</span>
+              <span id="apkFileSizeBadge" style="font-size:11px;opacity:0.8;">Production APK • 374.8 MB</span>
             </div>
           </div>
         </div>
@@ -1501,17 +1501,39 @@
       document.querySelectorAll('.nav-btn-dashboard, #mobileDashboard').forEach(el => el.hidden = false);
     }
 
-    // Dynamic APK version and download link binding
-    if (window.GCVH_CONFIG) {
-      const vBadge = document.getElementById('apkVersionBadge');
-      if (vBadge && window.GCVH_CONFIG.APP_VERSION) {
-        vBadge.textContent = 'v' + window.GCVH_CONFIG.APP_VERSION;
-      }
-      const apkUrl = window.GCVH_CONFIG.APK_DOWNLOAD_URL || '/downloads/GlobalCapitalHoldings.apk';
+    // Dynamic APK version, size and download link binding
+    (async function initApkMetadata() {
+      const defaultUrl = (window.GCVH_CONFIG && window.GCVH_CONFIG.APK_DOWNLOAD_URL) || '/download-app';
+      try {
+        const apiUrl = (window.GCVH_CONFIG && window.GCVH_CONFIG.API_BASE_URL)
+          ? window.GCVH_CONFIG.API_BASE_URL + '/apk-status'
+          : '/api/apk-status';
+        const res = await fetch(apiUrl, { cache: 'no-store' });
+        if (res.ok) {
+          const data = await res.json();
+          const vBadge = document.getElementById('apkVersionBadge');
+          const sizeBadge = document.getElementById('apkFileSizeBadge');
+          if (vBadge && data.version) vBadge.textContent = data.version;
+          if (sizeBadge && data.fileSizeFormatted) sizeBadge.textContent = `Production APK • ${data.fileSizeFormatted}`;
+
+          const targetUrl = data.downloadUrl || defaultUrl;
+          document.querySelectorAll('a[download="GlobalCapitalHoldings.apk"], .btn-download-hero, .nav-btn-download').forEach(a => {
+            a.href = targetUrl;
+            if (!data.available) {
+              a.onclick = (e) => {
+                e.preventDefault();
+                alert('The Android App package is currently undergoing a scheduled update. Please check back shortly.');
+              };
+            }
+          });
+          return;
+        }
+      } catch (_) {}
+
       document.querySelectorAll('a[download="GlobalCapitalHoldings.apk"]').forEach(a => {
-        a.href = apkUrl;
+        a.href = defaultUrl;
       });
-    }
+    })();
 
     async function updateLiveTicker() {
       try {

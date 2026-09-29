@@ -1,0 +1,13 @@
+{
+  "version": "v1.0.0",
+  "versionCode": 101,
+  "minAndroid": "Android 8.0+ (Oreo)",
+  "changelog": "Official Global Capital Venture Holdings Android App. Real-time gold (XAU/USD) trade executions, instant deposit verifications, portfolio balance tracking, and secure biometric PIN authentication.",
+  "externalMirrorUrl": "",
+  "useExternalUrl": false,
+  "isDownloadEnabled": true,
+  "fileName": "GlobalCapitalHoldings.apk",
+  "fileSizeBytes": 392981578,
+  "fileSizeFormatted": "374.78 MB",
+  "lastUpdated": "2026-09-29T12:00:00.000Z"
+}
