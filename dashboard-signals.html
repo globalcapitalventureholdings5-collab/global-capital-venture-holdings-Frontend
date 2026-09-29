@@ -460,30 +460,33 @@
   }
 
   // Populate nav
-  if (user.full_name) {
+  if (user.full_name && document.getElementById('navUserName')) {
     document.getElementById('navUserName').textContent = user.full_name;
     const initials = user.full_name.split(' ').map(n => n[0]).join('').toUpperCase();
-    document.getElementById('navAvatar').textContent = initials || 'GC';
+    if (document.getElementById('navAvatar')) document.getElementById('navAvatar').textContent = initials || 'GC';
   }
-  if (user.package_name) {
+  if (user.package_name && document.getElementById('navPackageName')) {
     document.getElementById('navPackageName').textContent = user.package_name;
   }
 
   // Mobile menu
   const sidebar = document.getElementById('sidebar');
   const backdrop = document.getElementById('sidebarBackdrop');
-  document.getElementById('mobileMenuBtn').onclick = () => {
+  const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+  if (mobileMenuBtn && sidebar && backdrop) mobileMenuBtn.onclick = () => {
     sidebar.classList.add('open');
     backdrop.classList.add('active');
   };
   const closeNav = () => {
-    sidebar.classList.remove('open');
-    backdrop.classList.remove('active');
+    if (sidebar) sidebar.classList.remove('open');
+    if (backdrop) backdrop.classList.remove('active');
   };
-  document.getElementById('sidebarCloseBtn').onclick = closeNav;
-  backdrop.onclick = closeNav;
+  const sidebarCloseBtn = document.getElementById('sidebarCloseBtn');
+  if (sidebarCloseBtn) sidebarCloseBtn.onclick = closeNav;
+  if (backdrop) backdrop.onclick = closeNav;
 
-  document.getElementById('logoutBtn').onclick = () => {
+  const logoutBtn = document.getElementById('logoutBtn') || document.getElementById('sidebarLogout');
+  if (logoutBtn) logoutBtn.onclick = () => {
     localStorage.removeItem('gcvh_customer_token');
     localStorage.removeItem('gcvh_customer_user');
     sessionStorage.removeItem('gcvh_customer_token');
