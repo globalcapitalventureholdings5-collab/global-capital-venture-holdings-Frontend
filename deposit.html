@@ -919,6 +919,13 @@ function handleSelectedFile(file) {
   }
 
   selectedFile = file;
+  if (proofInput && typeof DataTransfer !== 'undefined') {
+    try {
+      const transfer = new DataTransfer();
+      transfer.items.add(file);
+      proofInput.files = transfer.files;
+    } catch (e) {}
+  }
   previewFileName.textContent = file.name;
   previewFileSize.textContent = (file.size / (1024 * 1024)).toFixed(2) + ' MB';
   
@@ -1175,9 +1182,9 @@ $('depositForm').onsubmit = async (e) => {
     formData.append('network', currentMethod);
     formData.append('txid', txid);
 
-    const fileToUpload = selectedFile || (proofInput.files && proofInput.files[0]);
-    if (fileToUpload instanceof File) {
-      formData.append('proof', fileToUpload);
+    const fileToUpload = (proofInput.files && proofInput.files[0]) || selectedFile;
+    if (fileToUpload && typeof fileToUpload === 'object' && typeof fileToUpload.name === 'string') {
+      formData.append('proof', fileToUpload, fileToUpload.name);
     } else if (typeof fileToUpload === 'string' && fileToUpload) {
       formData.append('proofUrl', fileToUpload);
     }
@@ -1190,8 +1197,8 @@ $('depositForm').onsubmit = async (e) => {
       amount,
       network: currentMethod,
       txid,
-      hasFile: fileToUpload instanceof File,
-      fileName: fileToUpload instanceof File ? fileToUpload.name : (typeof fileToUpload === 'string' ? fileToUpload : 'none')
+      hasFile: Boolean(fileToUpload && typeof fileToUpload === 'object' && typeof fileToUpload.name === 'string'),
+      fileName: fileToUpload && typeof fileToUpload.name === 'string' ? fileToUpload.name : (typeof fileToUpload === 'string' ? fileToUpload : 'none')
     });
 
     const response = await fetch(endpoint, {
