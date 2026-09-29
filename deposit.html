@@ -294,13 +294,17 @@ body {
   background: rgba(243, 207, 122, 0.06);
 }
 .upload-zone input[type="file"] {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
+  position: relative;
+  display: block;
+  opacity: 1;
   cursor: pointer;
   width: 100%;
-  height: 100%;
-  z-index: 10;
+  height: auto;
+  padding: 10px;
+  border: 1px solid rgba(243, 207, 122, 0.35);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #ffffff;
 }
 .upload-preview {
   display: none;
@@ -592,7 +596,7 @@ table.deposit-table tr:hover td {
         <div class="upload-zone" id="uploadZone">
           <input type="file" id="proofInput" name="proof" accept="image/jpeg,image/png,image/webp,image/jpg,image/gif,image/heic">
           <div style="font-size:32px;pointer-events:none;">📸</div>
-          <strong style="color:var(--gold2);font-size:14px;display:block;pointer-events:none;">Click to choose or drop screenshot here</strong>
+          <label for="proofInput" style="color:var(--gold2);font-size:14px;display:block;font-weight:700;cursor:pointer;">Choose screenshot or drop it here</label>
           <span style="font-size:11px;color:var(--muted);pointer-events:none;">Supports all JPG, JPEG, PNG, WEBP images (up to 25MB)</span>
         </div>
 
@@ -932,6 +936,10 @@ function handleSelectedFile(file) {
   const reader = new FileReader();
   reader.onload = (e) => {
     previewImg.src = e.target.result;
+    uploadPreview.style.display = 'flex';
+  };
+  reader.onerror = () => {
+    previewImg.src = URL.createObjectURL(file);
     uploadPreview.style.display = 'flex';
   };
   reader.readAsDataURL(file);
