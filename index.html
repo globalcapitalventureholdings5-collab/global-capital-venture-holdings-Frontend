@@ -1500,9 +1500,34 @@
 
   <script src="config.js"></script>
   <script>
-    const token = localStorage.getItem('gcvh_customer_token');
+    const token = localStorage.getItem('gcvh_customer_token') || sessionStorage.getItem('gcvh_customer_token');
     if (token) {
       document.querySelectorAll('.nav-btn-dashboard, #mobileDashboard').forEach(el => el.hidden = false);
+
+      (async () => {
+        try {
+          const apiBase = window.GCVH_CONFIG && window.GCVH_CONFIG.API_BASE_URL;
+          if (!apiBase) return;
+          const response = await fetch(`${apiBase}/me`, {
+            headers: { Authorization: `Bearer ${token}` },
+            cache: 'no-store'
+          });
+
+          if (response.ok) {
+            window.location.replace('dashboard.html');
+            return;
+          }
+
+          if (response.status === 401 || response.status === 403) {
+            localStorage.removeItem('gcvh_customer_token');
+            localStorage.removeItem('gcvh_customer_user');
+            sessionStorage.removeItem('gcvh_customer_token');
+            sessionStorage.removeItem('gcvh_customer_user');
+          }
+        } catch (error) {
+          console.warn('Unable to validate the saved session; keeping the homepage open.', error);
+        }
+      })();
     }
 
     // Dynamic APK version, size and download link binding
