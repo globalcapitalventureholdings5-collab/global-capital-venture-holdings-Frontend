@@ -37,7 +37,7 @@ const CONFIG = {
   BEP20_WALLET: '0xda9362094e07897b9fbcad372d353bcfec2cd88c',
   BINANCE_UID: '55868490',
   SUPPORT_EMAIL: 'globalcapitalventureholdings5@gmail.com',
-  APP_VERSION: '1.0.0',
+  APP_VERSION: '1.0.2',
   APK_DOWNLOAD_URL: '/downloads/GlobalCapitalHoldings.apk',
   APK_FILE_NAME: 'GlobalCapitalHoldings.apk'
 };

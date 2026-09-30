@@ -1410,9 +1410,13 @@
               </div>
             </a>
             <div class="app-version-pill">
-              <span>Current Release: <strong id="apkVersionBadge">v1.0.0</strong></span>
-              <span id="apkFileSizeBadge" style="font-size:11px;opacity:0.8;">Production APK • 374.8 MB</span>
+              <span>Current Release: <strong id="apkVersionBadge">v1.0.2</strong></span>
+              <span id="apkFileSizeBadge" style="font-size:11px;opacity:0.8;">Production APK • 52.90 MB</span>
             </div>
+          </div>
+          <div style="margin-top:12px;display:flex;align-items:center;gap:8px;font-size:11px;color:#94a3b8;line-height:1.4;">
+            <span style="color:#d5ad5a;font-size:14px;">💡</span>
+            <span>Tap file to install. If prompted by Android, tap <strong>Settings</strong> &rarr; enable <strong>Allow from this source</strong> to complete installation.</span>
           </div>
         </div>
 
@@ -1503,7 +1507,12 @@
 
     // Dynamic APK version, size and download link binding
     (async function initApkMetadata() {
-      const defaultUrl = (window.GCVH_CONFIG && window.GCVH_CONFIG.APK_DOWNLOAD_URL) || '/download-app';
+      const apiHost = (window.GCVH_CONFIG && window.GCVH_CONFIG.API_URL) ? window.GCVH_CONFIG.API_URL.replace(/\/+$/, '') : '';
+      const rawDefault = (window.GCVH_CONFIG && window.GCVH_CONFIG.APK_DOWNLOAD_URL) || '/downloads/GlobalCapitalHoldings.apk';
+      const defaultUrl = (rawDefault.startsWith('/') && apiHost && !window.location.origin.includes(apiHost.replace(/^https?:\/\//, '')))
+        ? apiHost + rawDefault
+        : rawDefault;
+
       try {
         const apiUrl = (window.GCVH_CONFIG && window.GCVH_CONFIG.API_BASE_URL)
           ? window.GCVH_CONFIG.API_BASE_URL + '/apk-status'
@@ -1516,7 +1525,11 @@
           if (vBadge && data.version) vBadge.textContent = data.version;
           if (sizeBadge && data.fileSizeFormatted) sizeBadge.textContent = `Production APK • ${data.fileSizeFormatted}`;
 
-          const targetUrl = data.downloadUrl || defaultUrl;
+          let targetUrl = data.downloadUrl || defaultUrl;
+          if (targetUrl.startsWith('/') && apiHost && !window.location.origin.includes(apiHost.replace(/^https?:\/\//, ''))) {
+            targetUrl = apiHost + targetUrl;
+          }
+
           document.querySelectorAll('a[download="GlobalCapitalHoldings.apk"], .btn-download-hero, .nav-btn-download').forEach(a => {
             a.href = targetUrl;
             if (!data.available) {

@@ -158,12 +158,12 @@ input:checked + .slider:before{transform:translateX(20px);background-color:var(-
   <div class="stats-bar">
     <div class="stat-box">
       <div class="stat-label">Production Release</div>
-      <div id="statVersion" class="stat-val" style="color:var(--gold2);">v1.0.0</div>
-      <div id="statBuildCode" class="stat-sub">Build #101 • Android 8.0+</div>
+      <div id="statVersion" class="stat-val" style="color:var(--gold2);">v1.0.2</div>
+      <div id="statBuildCode" class="stat-sub">Build #102 • Android 8.0+</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">Active APK Package Size</div>
-      <div id="statFileSize" class="stat-val" style="color:var(--green);">374.8 MB</div>
+      <div id="statFileSize" class="stat-val" style="color:var(--green);">52.90 MB</div>
       <div id="statFileName" class="stat-sub">GlobalCapitalHoldings.apk</div>
     </div>
     <div class="stat-box">
@@ -421,14 +421,14 @@ input:checked + .slider:before{transform:translateX(20px);background-color:var(-
       $('directDownloadBtn').href = domain + '/download-app';
 
       // Fill Forms
-      $('uploadVersion').value = cfg.version || 'v1.0.0';
-      $('uploadVersionCode').value = (Number(cfg.versionCode) || 100) + 1;
+      $('uploadVersion').value = cfg.version || 'v1.0.2';
+      $('uploadVersionCode').value = (Number(cfg.versionCode) || 102) + 1;
       $('uploadChangelog').value = cfg.changelog || '';
 
       $('toggleDownloadEnabled').checked = Boolean(cfg.isDownloadEnabled !== false);
       $('toggleUseExternal').checked = Boolean(cfg.useExternalUrl);
       $('settingsExternalUrl').value = cfg.externalMirrorUrl || '';
-      $('settingsVersion').value = cfg.version || 'v1.0.0';
+      $('settingsVersion').value = cfg.version || 'v1.0.2';
       $('settingsMinAndroid').value = cfg.minAndroid || 'Android 8.0+';
       $('settingsChangelog').value = cfg.changelog || '';
 
