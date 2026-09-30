@@ -420,6 +420,9 @@
         <button class="btn-execute" id="btnExecuteTrade">
           ⚡ Execute Algorithmic Trade (Lock 1% Daily Yield)
         </button>
+        <p id="signalWindowStatus" role="status" style="margin:10px 0 0;text-align:center;color:var(--text-muted);font-size:12px;line-height:1.5;">
+          Checking mining window and account eligibility...
+        </p>
       </div>
     </div>
 
@@ -496,7 +499,10 @@
 
   async function loadSignals() {
     try {
-      const res = await fetch(`${window.GCVH_CONFIG.API_BASE_URL}/signals`);
+      const res = await fetch(`${window.GCVH_CONFIG.API_BASE_URL}/signals`, {
+        headers: { 'Authorization': `Bearer ${token}` },
+        cache: 'no-store'
+      });
       if (!res.ok) throw new Error('Failed to load signals');
       const data = await res.json();
       const signals = data.signals || [];
@@ -509,6 +515,24 @@
         document.getElementById('dispSigTp2').textContent = top.tp2 || '$2,682.00';
         document.getElementById('dispSigSl').textContent = top.sl || '$2,642.00';
         document.getElementById('dispSigNotes').textContent = top.notes || 'Institutional XAUUSD momentum setup.';
+      }
+
+      const executeButton = document.getElementById('btnExecuteTrade');
+      const windowStatus = document.getElementById('signalWindowStatus');
+      const session = data.session || {};
+      if (executeButton) executeButton.disabled = !session.can_execute;
+      if (windowStatus) {
+        if (session.already_executed) {
+          windowStatus.textContent = 'Today’s mining reward has already been claimed. You can claim again in the next daily window.';
+        } else if (!session.account_active) {
+          windowStatus.textContent = 'A deposit must be verified and your investment package activated before mining rewards can be claimed.';
+        } else if (session.is_weekend) {
+          windowStatus.textContent = 'Mining is closed for the weekend. The next window opens Monday at 10:00 AM Pakistan time.';
+        } else if (!session.is_within_hours) {
+          windowStatus.textContent = `Mining is available from ${session.window_start || '10:00 AM PKT'} to ${session.window_end || '10:00 PM PKT'} (Pakistan time).`;
+        } else {
+          windowStatus.textContent = 'Mining window is open. You may claim one reward today.';
+        }
       }
 
       const tbody = document.getElementById('signalsHistoryBody');
@@ -531,11 +555,14 @@
       }
     } catch (err) {
       console.error(err);
+      const windowStatus = document.getElementById('signalWindowStatus');
+      if (windowStatus) windowStatus.textContent = err.message || 'Could not check mining eligibility. Please refresh and try again.';
     }
   }
 
   document.getElementById('btnExecuteTrade').onclick = async () => {
     const btn = document.getElementById('btnExecuteTrade');
+    if (btn.disabled) return;
     btn.disabled = true;
     btn.textContent = '⏳ Executing Algorithmic Scalping Order...';
     try {
@@ -547,13 +574,14 @@
         }
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.message || 'Trade execution failed');
-      alert(`🎉 Trade Executed Successfully! You earned 1.0% ROI ($${Number(data.earnings || 0).toFixed(2)}) credited to your available balance.`);
-      btn.textContent = '✓ Trade Completed Today';
+      if (!res.ok) throw new Error(data.error || data.message || `Reward claim failed (${res.status}).`);
+      alert(`Trade recorded successfully. Your 1% reward ($${Number(data.earnings || 0).toFixed(2)}) will settle according to the reward processing period.`);
+      btn.textContent = '✓ Reward Claimed Today';
+      await loadSignals();
     } catch (err) {
-      alert(err.message || 'Already executed today. New signal window opens at 00:00 UTC.');
+      alert(err.message || 'Unable to claim the mining reward.');
       btn.textContent = '⚡ Execute Algorithmic Trade (Lock 1% Daily Yield)';
-      btn.disabled = false;
+      await loadSignals();
     }
   };
 
