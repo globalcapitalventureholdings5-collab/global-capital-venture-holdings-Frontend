@@ -2980,7 +2980,9 @@
     let currentUserData = null;
 
     const dayKey = () => new Date().toISOString().slice(0, 10);
-    let executed = JSON.parse(localStorage.getItem('globeCapitalExecutedSignals') || '{}');
+    // Claim state must come from this user's authenticated server response, not shared browser storage.
+    localStorage.removeItem('globeCapitalExecutedSignals');
+    let executed = {};
     let trades = [];
     let signal = {
       date: dayKey(),
@@ -3167,7 +3169,7 @@
         $('signalStatus').className = 'signal-status-badge';
         executeBtn.disabled = false;
         executeBtn.textContent = "Execute Today's Click (1% ROI) →";
-        $('signalNotice').textContent = "Execute today's clicking signal to receive your 1.00% daily profit (credits in 30 minutes).";
+        $('signalNotice').textContent = "No mining reward is generated automatically. Press Execute Today's Click to claim today's 1.00% reward; settlement starts only after your claim.";
         if (settlementBox) settlementBox.classList.remove('active');
         return;
       }
@@ -3234,7 +3236,8 @@
             time: new Date(ex.executed_at).getTime(),
             direction: signal.direction
           };
-          localStorage.setItem('globeCapitalExecutedSignals', JSON.stringify(executed));
+        } else {
+          delete executed[signal.date];
         }
         renderSignal();
       } catch (e) { }
@@ -3263,7 +3266,7 @@
         if (!r.ok) {
           if (r.status === 409) {
             executed[signal.date] = { time: Date.now(), direction: signal.direction };
-            localStorage.setItem('globeCapitalExecutedSignals', JSON.stringify(executed));
+            await loadTodaySignal();
             await loadTrades();
             await loadMe();
             await loadEarnings();
@@ -3275,7 +3278,6 @@
 
         const now = Date.now();
         executed[signal.date] = { time: now, direction: signal.direction };
-        localStorage.setItem('globeCapitalExecutedSignals', JSON.stringify(executed));
 
         const profitStr = money(investment.amount * 0.01, 2);
         addChat('Account Desk', `Signal Executed. Today's ${signal.direction} XAUUSD order placed. 1.00% profit (${profitStr}) settles in 30 minutes.`);
@@ -3415,11 +3417,6 @@
         const r = await fetch(API + '/api/trades', { headers: { Authorization: 'Bearer ' + customerToken }, cache: 'no-store' });
         if (!r.ok) return;
         trades = await r.json();
-        trades.forEach(t => {
-          const key = t.executed_at ? new Date(t.executed_at).toISOString().slice(0, 10) : null;
-          if (key) executed[key] = { time: new Date(t.executed_at).getTime(), direction: t.side };
-        });
-        localStorage.setItem('globeCapitalExecutedSignals', JSON.stringify(executed));
         renderSignal();
       } catch (e) { }
     }

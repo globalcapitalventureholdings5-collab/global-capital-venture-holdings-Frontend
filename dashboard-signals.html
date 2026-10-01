@@ -506,6 +506,7 @@
       if (!res.ok) throw new Error('Failed to load signals');
       const data = await res.json();
       const signals = data.signals || [];
+      const session = data.session || {};
       if (signals.length) {
         const top = signals[0];
         document.getElementById('dispSigPair').textContent = top.pair || 'XAUUSD';
@@ -519,7 +520,6 @@
 
       const executeButton = document.getElementById('btnExecuteTrade');
       const windowStatus = document.getElementById('signalWindowStatus');
-      const session = data.session || {};
       if (executeButton) executeButton.disabled = !session.can_execute;
       if (windowStatus) {
         if (session.already_executed) {
@@ -531,7 +531,7 @@
         } else if (!session.is_within_hours) {
           windowStatus.textContent = `Mining is available from ${session.window_start || '10:00 AM PKT'} to ${session.window_end || '10:00 PM PKT'} (Pakistan time).`;
         } else {
-          windowStatus.textContent = 'Mining window is open. You may claim one reward today.';
+          windowStatus.textContent = 'Mining is not automatic. Press the claim button to request today’s reward.';
         }
       }
 
@@ -548,7 +548,7 @@
             <td>${s.entry_price || '-'}</td>
             <td style="color:var(--primary-green)">${s.tp || '-'}</td>
             <td style="color:var(--red)">${s.sl || '-'}</td>
-            <td><span style="color:var(--primary-green);font-weight:700">● Completed / Won</span></td>
+            <td><span style="color:${session.already_executed && String(s.id) === String(data.id) ? 'var(--primary-green)' : 'var(--text-muted)'};font-weight:700">${session.already_executed && String(s.id) === String(data.id) ? (data.user_execution && data.user_execution.settling ? '● Claimed · Settling' : '● Claimed') : '● Signal Published'}</span></td>
             <td style="color:var(--text-muted);font-size:11px">${new Date(s.created_at || Date.now()).toLocaleDateString()}</td>
           </tr>
         `).join('');
