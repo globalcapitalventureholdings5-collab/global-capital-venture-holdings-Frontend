@@ -242,7 +242,7 @@
 
         const redirect = params.get('redirect');
         setTimeout(() => {
-          location.href = (redirect && (redirect.startsWith('deposit.html') || redirect.startsWith('dashboard.html') || redirect.startsWith('packages.html')))
+          location.href = (redirect && (redirect.startsWith('deposit.html') || redirect.startsWith('dashboard.html') || redirect.startsWith('dashboard-account.html') || redirect.startsWith('packages.html')))
             ? redirect
             : 'dashboard.html';
         }, 600);
