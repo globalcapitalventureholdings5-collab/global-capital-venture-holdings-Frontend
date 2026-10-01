@@ -38,7 +38,7 @@ const CONFIG = {
   BINANCE_UID: '55868490',
   SUPPORT_EMAIL: 'globalcapitalventureholdings5@gmail.com',
   APP_VERSION: '1.0.2',
-  APK_DOWNLOAD_URL: '/downloads/GlobalCapitalHoldings.apk',
+  APK_DOWNLOAD_URL: '/api/download-apk',
   APK_FILE_NAME: 'GlobalCapitalHoldings.apk'
 };
 
@@ -129,6 +129,35 @@ function showCopyToast(msg = 'Copied to clipboard!') {
   toast._timer = setTimeout(() => {
     toast.classList.remove('show');
   }, 2200);
+}
+
+async function initApkDownloadLinks() {
+  const links = document.querySelectorAll('a[download="GlobalCapitalHoldings.apk"]');
+  if (!links.length) return;
+
+  const apiBase = `${CONFIG.API_URL}/api`;
+  const defaultUrl = `${apiBase}/download-apk`;
+  links.forEach(link => { link.href = defaultUrl; });
+
+  try {
+    const response = await fetch(`${apiBase}/apk-status`, { cache: 'no-store' });
+    const status = await response.json();
+    if (status.available) {
+      const target = status.useExternalUrl && status.externalMirrorUrl
+        ? status.externalMirrorUrl
+        : defaultUrl;
+      links.forEach(link => { link.href = target; });
+      return;
+    }
+  } catch (_) {}
+
+  links.forEach(link => {
+    link.href = '#';
+    link.onclick = event => {
+      event.preventDefault();
+      alert('The Android APK has not been uploaded to the server yet. Please contact the administrator.');
+    };
+  });
 }
 
 // Helper: Check login & update nav across all pages
@@ -583,4 +612,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initMobileMenu();
   initUserDropdown();
   syncGlobalNav();
+  initApkDownloadLinks();
 });

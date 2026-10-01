@@ -185,12 +185,12 @@ input:checked + .slider:before{transform:translateX(20px);background-color:var(-
         <div style="font-size:10px;font-weight:900;letter-spacing:1px;text-transform:uppercase;color:var(--gold2);margin-bottom:6px;">Official Public Download Endpoint:</div>
         <div class="link-box">
           <span style="opacity:0.7;">🔗</span>
-          <span id="publicDownloadLinkText" style="flex:1;">https://globalcapitalventureholdings.com/download-app</span>
+          <span id="publicDownloadLinkText" style="flex:1;">https://globalcapitalventureholdings.com/api/download-apk</span>
           <button type="button" class="btn-secondary" id="copyUrlBtn" style="padding:6px 12px;font-size:10px;">📋 Copy Link</button>
         </div>
       </div>
       <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
-        <a id="directDownloadBtn" href="/download-app" class="btn-primary" target="_blank" download="GlobalCapitalHoldings.apk">
+        <a id="directDownloadBtn" href="/api/download-apk" class="btn-primary" target="_blank" download="GlobalCapitalHoldings.apk">
           <span>⬇</span> Download & Test Current APK
         </a>
         <button id="verifyRouteBtn" type="button" class="btn-secondary">
@@ -302,7 +302,7 @@ input:checked + .slider:before{transform:translateX(20px);background-color:var(-
           <div class="form-group" style="margin-top:16px;">
             <label class="form-label">External Mirror / Direct Download URL</label>
             <input id="settingsExternalUrl" type="url" class="form-input" placeholder="https://cdn.example.com/GlobalCapitalHoldings.apk or Google Drive Direct Link">
-            <div class="form-note">If enabled, requests to <code>/download-app</code> or <code>/downloads/GlobalCapitalHoldings.apk</code> immediately redirect to this cloud mirror. Also serves as automatic fallback if local file is missing.</div>
+            <div class="form-note">If enabled, requests to <code>/api/download-apk</code> redirect to this cloud mirror. The mirror is also used if no local APK is present.</div>
           </div>
 
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
@@ -416,9 +416,9 @@ input:checked + .slider:before{transform:translateX(20px);background-color:var(-
       }
 
       // Public Download Link Text
-      const domain = window.location.origin;
-      $('publicDownloadLinkText').textContent = domain + '/download-app';
-      $('directDownloadBtn').href = domain + '/download-app';
+      const downloadUrl = `${window.GCVH_CONFIG.API_BASE_URL}/download-apk`;
+      $('publicDownloadLinkText').textContent = downloadUrl;
+      $('directDownloadBtn').href = downloadUrl;
 
       // Fill Forms
       $('uploadVersion').value = cfg.version || 'v1.0.2';
