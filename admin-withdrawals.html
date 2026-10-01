@@ -233,9 +233,14 @@ a{color:inherit;text-decoration:none}
       const res = await fetch(`${window.GCVH_CONFIG.API_BASE_URL}/admin/withdrawals`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
-      if (!res.ok) throw new Error('Failed to load withdrawals');
+      if (!res.ok) {
+        const error = await res.json().catch(() => ({}));
+        throw new Error(error.error || error.message || `Failed to load withdrawals (${res.status}).`);
+      }
       const data = await res.json();
-      allWithdrawals = data.withdrawals || [];
+      allWithdrawals = Array.isArray(data)
+        ? data
+        : (Array.isArray(data.withdrawals) ? data.withdrawals : []);
       render();
     } catch (err) {
       showAlert(err.message, true);
@@ -248,6 +253,7 @@ a{color:inherit;text-decoration:none}
 
     let pendingCount = 0;
     let pendingVal = 0;
+    let pendingNetVal = 0;
     let paidVal = 0;
 
     allWithdrawals.forEach(w => {
@@ -255,6 +261,7 @@ a{color:inherit;text-decoration:none}
       if (w.status === 'pending') {
         pendingCount++;
         pendingVal += gross;
+        pendingNetVal += Number(w.net_amount ?? (gross - Number(w.fee_amount || gross * 0.10)));
       } else if (w.status === 'paid') {
         paidVal += gross;
       }
@@ -262,7 +269,7 @@ a{color:inherit;text-decoration:none}
 
     document.getElementById('statPendingCount').textContent = pendingCount;
     document.getElementById('statPendingVal').textContent = `$${pendingVal.toFixed(2)}`;
-    document.getElementById('statNetPayable').textContent = `$${(pendingVal * 0.9).toFixed(2)}`;
+    document.getElementById('statNetPayable').textContent = `$${pendingNetVal.toFixed(2)}`;
     document.getElementById('statTotalPaid').textContent = `$${paidVal.toFixed(2)}`;
 
     const filtered = allWithdrawals.filter(w => {
@@ -302,9 +309,9 @@ a{color:inherit;text-decoration:none}
           <td style="font-weight:700;color:#fff">$${gross.toFixed(2)}</td>
           <td style="color:#ff849a">-$${fee.toFixed(2)}</td>
           <td style="font-weight:800;color:var(--green)">$${net.toFixed(2)}</td>
-          <td><span style="color:var(--gold2);font-weight:700">${w.method || 'USDT'}</span></td>
-          <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;font-family:monospace" title="${w.wallet_address || w.account_details || ''}">
-            ${w.wallet_address || w.account_details || 'N/A'}
+          <td><span style="color:var(--gold2);font-weight:700">${w.network || w.method || w.asset || 'USDT'}</span></td>
+          <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;font-family:monospace" title="${w.destination || w.wallet_address || w.account_details || ''}">
+            ${w.destination || w.wallet_address || w.account_details || 'N/A'}
           </td>
           <td>${statusBadge}</td>
           <td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;font-family:monospace;font-size:10px">
@@ -347,7 +354,7 @@ a{color:inherit;text-decoration:none}
         body: JSON.stringify({ txid })
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.message || 'Settlement failed');
+      if (!res.ok) throw new Error(data.error || data.message || 'Settlement failed');
       showAlert(`Withdrawal #${id} marked as settled successfully!`);
       closeModal();
       loadWithdrawals();
@@ -370,7 +377,7 @@ a{color:inherit;text-decoration:none}
         body: JSON.stringify({ reason })
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.message || 'Rejection failed');
+      if (!res.ok) throw new Error(data.error || data.message || 'Rejection failed');
       showAlert(`Withdrawal #${id} has been rejected.`);
       loadWithdrawals();
     } catch (err) {
