@@ -387,7 +387,7 @@ input:checked + .slider:before{transform:translateX(20px);background-color:var(-
       $('statVersion').textContent = cfg.version || 'v1.0.0';
       $('statBuildCode').textContent = `Build #${cfg.versionCode || 101} • ${cfg.minAndroid || 'Android 8.0+'}`;
       
-      const sizeText = file.exists ? (file.sizeFormatted || '374.8 MB') : (cfg.fileSizeFormatted || 'Not on server');
+      const sizeText = file.exists ? (file.sizeFormatted || 'Unknown size') : (cfg.externalMirrorUrl ? (cfg.fileSizeFormatted || 'External mirror') : 'Not uploaded');
       $('statFileSize').textContent = sizeText;
       $('statFileName').textContent = file.filename || 'GlobalCapitalHoldings.apk';
 

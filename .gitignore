@@ -1,8 +1,4 @@
 node_modules/
 .DS_Store
 *.log
-*.apk
-downloads/*.apk
-downloads/GlobalCapitalHoldings.apk
-downloads/gcvh.apk
 
