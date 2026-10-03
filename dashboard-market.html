@@ -383,30 +383,34 @@
   }
 
   // Populate nav
-  if (user.full_name) {
+  if (user.full_name && document.getElementById('navUserName')) {
     document.getElementById('navUserName').textContent = user.full_name;
     const initials = user.full_name.split(' ').map(n => n[0]).join('').toUpperCase();
-    document.getElementById('navAvatar').textContent = initials || 'GC';
+    const avatar = document.getElementById('navAvatar');
+    if (avatar) avatar.textContent = initials || 'GC';
   }
-  if (user.package_name) {
+  if (user.package_name && document.getElementById('navPackageName')) {
     document.getElementById('navPackageName').textContent = user.package_name;
   }
 
   // Mobile menu
   const sidebar = document.getElementById('sidebar');
   const backdrop = document.getElementById('sidebarBackdrop');
-  document.getElementById('mobileMenuBtn').onclick = () => {
+  const mobileMenuButton = document.getElementById('mobileMenuButton');
+  if (mobileMenuButton && sidebar && backdrop) mobileMenuButton.onclick = () => {
     sidebar.classList.add('open');
     backdrop.classList.add('active');
   };
   const closeNav = () => {
-    sidebar.classList.remove('open');
-    backdrop.classList.remove('active');
+    if (sidebar) sidebar.classList.remove('open');
+    if (backdrop) backdrop.classList.remove('active');
   };
-  document.getElementById('sidebarCloseBtn').onclick = closeNav;
-  backdrop.onclick = closeNav;
+  const sidebarCloseButton = document.getElementById('sidebarCloseBtn');
+  if (sidebarCloseButton) sidebarCloseButton.onclick = closeNav;
+  if (backdrop) backdrop.onclick = closeNav;
 
-  document.getElementById('logoutBtn').onclick = () => {
+  const logoutButton = document.getElementById('logoutBtn') || document.getElementById('sidebarLogout');
+  if (logoutButton) logoutButton.onclick = () => {
     localStorage.removeItem('gcvh_customer_token');
     localStorage.removeItem('gcvh_customer_user');
     sessionStorage.removeItem('gcvh_customer_token');
@@ -430,6 +434,9 @@
       allow_symbol_change: true,
       container_id: "tv_chart_container"
     });
+  } else {
+    const chart = document.getElementById('tv_chart_container');
+    if (chart) chart.innerHTML = '<div style="height:100%;display:grid;place-items:center;color:var(--text-muted);">Live chart is unavailable right now.</div>';
   }
 
   async function loadMarketPrice() {

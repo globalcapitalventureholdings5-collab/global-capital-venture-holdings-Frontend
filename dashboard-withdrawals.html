@@ -468,30 +468,34 @@
   }
 
   // Populate nav
-  if (user.full_name) {
+  if (user.full_name && document.getElementById('navUserName')) {
     document.getElementById('navUserName').textContent = user.full_name;
     const initials = user.full_name.split(' ').map(n => n[0]).join('').toUpperCase();
-    document.getElementById('navAvatar').textContent = initials || 'GC';
+    const avatar = document.getElementById('navAvatar');
+    if (avatar) avatar.textContent = initials || 'GC';
   }
-  if (user.package_name) {
+  if (user.package_name && document.getElementById('navPackageName')) {
     document.getElementById('navPackageName').textContent = user.package_name;
   }
 
   // Mobile menu
   const sidebar = document.getElementById('sidebar');
   const backdrop = document.getElementById('sidebarBackdrop');
-  document.getElementById('mobileMenuBtn').onclick = () => {
+  const mobileMenuButton = document.getElementById('mobileMenuButton');
+  if (mobileMenuButton && sidebar && backdrop) mobileMenuButton.onclick = () => {
     sidebar.classList.add('open');
     backdrop.classList.add('active');
   };
   const closeNav = () => {
-    sidebar.classList.remove('open');
-    backdrop.classList.remove('active');
+    if (sidebar) sidebar.classList.remove('open');
+    if (backdrop) backdrop.classList.remove('active');
   };
-  document.getElementById('sidebarCloseBtn').onclick = closeNav;
-  backdrop.onclick = closeNav;
+  const sidebarCloseButton = document.getElementById('sidebarCloseBtn');
+  if (sidebarCloseButton) sidebarCloseButton.onclick = closeNav;
+  if (backdrop) backdrop.onclick = closeNav;
 
-  document.getElementById('logoutBtn').onclick = () => {
+  const logoutButton = document.getElementById('logoutBtn') || document.getElementById('sidebarLogout');
+  if (logoutButton) logoutButton.onclick = () => {
     localStorage.removeItem('gcvh_customer_token');
     localStorage.removeItem('gcvh_customer_user');
     sessionStorage.removeItem('gcvh_customer_token');
@@ -511,16 +515,24 @@
 
   async function loadWithdrawals() {
     try {
-      const res = await fetch(`${window.GCVH_CONFIG.API_BASE_URL}/withdrawals`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
+      const apiBase = window.GCVH_CONFIG.API_BASE_URL;
+      const [res, profileRes] = await Promise.all([
+        fetch(`${apiBase}/withdrawals`, {
+          headers: { 'Authorization': `Bearer ${token}` },
+          cache: 'no-store'
+        }),
+        fetch(`${apiBase}/me`, {
+          headers: { 'Authorization': `Bearer ${token}` },
+          cache: 'no-store'
+        })
+      ]);
       if (!res.ok) throw new Error('Failed to load withdrawals');
       const data = await res.json();
-      
-      const balance = Number(data.balance || user.balance || 0);
+      const profile = profileRes.ok ? await profileRes.json() : {};
+      const balance = Number(profile.available_withdrawal || 0);
       document.getElementById('dispBalance').textContent = `$${balance.toFixed(2)}`;
 
-      const list = data.withdrawals || [];
+      const list = Array.isArray(data) ? data : (Array.isArray(data.withdrawals) ? data.withdrawals : []);
       const tbody = document.getElementById('withdrawHistoryBody');
       if (!list.length) {
         tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:30px;color:var(--text-muted)">No withdrawal requests submitted yet.</td></tr>';
@@ -529,27 +541,30 @@
 
       tbody.innerHTML = list.map(w => {
         const gross = Number(w.amount || 0);
-        const fee = Number(w.fee_amount || (gross * 0.10));
-        const net = Number(w.net_amount || (gross - fee));
+        const fee = Number(w.fee_amount ?? (gross * 0.10));
+        const net = Number(w.net_amount ?? (gross - fee));
         const status = (w.status || 'pending').toLowerCase();
+        const method = w.network || w.method || w.asset || 'USDT';
+        const destination = w.destination || w.wallet_address || w.account_details || 'N/A';
+        const txid = w.provider_id || w.txid || '-';
         return `
           <tr>
             <td><b>#${w.id}</b></td>
             <td>$${gross.toFixed(2)}</td>
             <td style="color:var(--red)">-$${fee.toFixed(2)}</td>
             <td style="font-weight:800;color:var(--primary-green)">$${net.toFixed(2)}</td>
-            <td><b style="color:var(--gold)">${w.method || 'USDT'}</b></td>
-            <td style="font-family:monospace;max-width:180px;overflow:hidden;text-overflow:ellipsis" title="${w.wallet_address || w.account_details || ''}">
-              ${w.wallet_address || w.account_details || 'N/A'}
-            </td>
+            <td><b style="color:var(--gold)">${method}</b></td>
+            <td style="font-family:monospace;max-width:180px;overflow:hidden;text-overflow:ellipsis" title="${destination}">${destination}</td>
             <td><span class="badge ${status}">${status}</span></td>
-            <td style="font-family:monospace;font-size:11px;color:var(--gold2)">${w.txid || '-'}</td>
+            <td style="font-family:monospace;font-size:11px;color:var(--gold2)">${txid}</td>
             <td style="color:var(--text-muted);font-size:11px">${new Date(w.created_at || Date.now()).toLocaleDateString()}</td>
           </tr>
         `;
       }).join('');
     } catch (err) {
       console.error(err);
+      const tbody = document.getElementById('withdrawHistoryBody');
+      if (tbody) tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:30px;color:var(--text-muted)">Unable to load withdrawals. Please refresh and try again.</td></tr>';
     }
   }
 
@@ -561,8 +576,9 @@
 
     const payload = {
       amount: Number(document.getElementById('withAmount').value),
-      method: document.getElementById('withMethod').value,
-      wallet_address: document.getElementById('withAddress').value.trim()
+      asset: 'USDT',
+      network: document.getElementById('withMethod').value,
+      destination: document.getElementById('withAddress').value.trim()
     };
 
     try {
@@ -575,7 +591,7 @@
         body: JSON.stringify(payload)
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.message || 'Withdrawal submission failed');
+      if (!res.ok) throw new Error(data.error || data.message || 'Withdrawal submission failed');
       alert('✓ Withdrawal request submitted successfully! Funds will be settled within the 24-hour verification window.');
       document.getElementById('withdrawForm').reset();
       document.getElementById('prevGross').textContent = '$0.00';
