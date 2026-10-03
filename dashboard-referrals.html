@@ -399,40 +399,24 @@
       <div class="tier-card">
         <span class="tier-badge" style="background:rgba(16,185,129,0.15);color:var(--primary-green)">Tier 1 — Direct</span>
         <div class="tier-rate" style="color:var(--primary-green)">10%</div>
-        <p style="font-size:12px;color:var(--text-muted);margin-top:6px;">Instant commission on direct investor activations</p>
+        <p id="tier1Summary" style="font-size:12px;color:var(--text-muted);margin-top:6px;">0 members · $0.00 rewards</p>
       </div>
       <div class="tier-card">
         <span class="tier-badge" style="background:rgba(243,207,122,0.15);color:var(--gold)">Tier 2 — Secondary</span>
         <div class="tier-rate" style="color:var(--gold)">5%</div>
-        <p style="font-size:12px;color:var(--text-muted);margin-top:6px;">Commission on your partners' invited network</p>
+        <p id="tier2Summary" style="font-size:12px;color:var(--text-muted);margin-top:6px;">0 members · $0.00 rewards</p>
       </div>
       <div class="tier-card">
         <span class="tier-badge" style="background:rgba(197,155,39,0.15);color:var(--gold-dark)">Tier 3 — Tertiary</span>
         <div class="tier-rate" style="color:var(--gold2)">3%</div>
-        <p style="font-size:12px;color:var(--text-muted);margin-top:6px;">Passive override on level 3 group volume</p>
+        <p id="tier3Summary" style="font-size:12px;color:var(--text-muted);margin-top:6px;">0 members · $0.00 rewards</p>
       </div>
     </div>
 
     <!-- REFERRALS TABLE -->
     <div class="card">
-      <h3 style="font:700 18px Georgia,serif;color:#ffffff;margin-bottom:12px;">Downline Network & Commission Logs</h3>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Member Name</th>
-              <th>Email</th>
-              <th>Network Tier</th>
-              <th>Package Active</th>
-              <th>Commission Earned</th>
-              <th>Join Date</th>
-            </tr>
-          </thead>
-          <tbody id="referralsTableBody">
-            <tr><td colspan="6" style="text-align:center;padding:30px;color:var(--text-muted)">Loading partner tree...</td></tr>
-          </tbody>
-        </table>
-      </div>
+      <h3 style="font:700 18px Georgia,serif;color:#ffffff;margin-bottom:12px;">Downline Network</h3>
+      <div id="referralTree" aria-live="polite"><div style="padding:24px;text-align:center;color:var(--text-muted)">Loading partner tree...</div></div>
     </div>
   </main>
 </div>
@@ -459,8 +443,8 @@
   }
 
   // Setup ref link
-  const refCode = user.referral_code || 'GCVH';
-  const fullRefUrl = `${window.location.origin}/register.html?ref=${encodeURIComponent(refCode)}`;
+  let refCode = user.referral_code || 'GCVH';
+  let fullRefUrl = `${window.location.origin}/register.html?ref=${encodeURIComponent(refCode)}`;
   document.getElementById('refLinkInput').value = fullRefUrl;
 
   document.getElementById('copyRefBtn').onclick = () => {
@@ -498,33 +482,44 @@
     window.location.href = 'login.html';
   };
 
+  function escapeHtml(value) {
+    return String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+  }
+
   async function loadReferrals() {
     try {
-      const res = await fetch(`${window.GCVH_CONFIG.API_BASE_URL}/referrals`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      if (!res.ok) throw new Error('Failed to load referrals');
-      const data = await res.json();
-      
-      const list = data.referrals || [];
-      const tbody = document.getElementById('referralsTableBody');
-      if (!list.length) {
-        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:30px;color:var(--text-muted)">No downline members registered yet. Share your link above to begin building your matrix!</td></tr>';
-        return;
-      }
+      const apiBase = window.GCVH_CONFIG.API_BASE_URL;
+      const headers = { 'Authorization': `Bearer ${token}` };
+      const [summaryResponse, treeResponse] = await Promise.all([
+        fetch(`${apiBase}/referral`, { headers, cache: 'no-store' }),
+        fetch(`${apiBase}/referral-tree`, { headers, cache: 'no-store' })
+      ]);
+      if (!summaryResponse.ok || !treeResponse.ok) throw new Error('Failed to load referral data');
+      const summary = await summaryResponse.json();
+      const tree = await treeResponse.json();
 
-      tbody.innerHTML = list.map(r => `
-        <tr>
-          <td><b>${r.full_name || 'Partner Member'}</b></td>
-          <td style="color:var(--text-muted)">${r.email || '-'}</td>
-          <td><span style="color:var(--gold);font-weight:800">Tier ${r.level || 1}</span></td>
-          <td><span style="color:var(--primary-green)">${r.package_name || 'Active Investor'}</span></td>
-          <td style="font-weight:800;color:var(--primary-green)">+$${Number(r.commission || 0).toFixed(2)}</td>
-          <td style="color:var(--text-muted);font-size:11px">${new Date(r.created_at || Date.now()).toLocaleDateString()}</td>
-        </tr>
-      `).join('');
+      refCode = summary.code || refCode;
+      fullRefUrl = summary.link || `${window.location.origin}/register.html?ref=${encodeURIComponent(refCode)}`;
+      document.getElementById('refLinkInput').value = fullRefUrl;
+      document.getElementById('tier1Summary').textContent = `${Number(summary.level1_count || 0)} members · $${Number(summary.level1_rewards || 0).toFixed(2)} rewards`;
+      document.getElementById('tier2Summary').textContent = `${Number(summary.level2_count || 0)} members · $${Number(summary.level2_rewards || 0).toFixed(2)} rewards`;
+      document.getElementById('tier3Summary').textContent = `${Number(summary.level3_count || 0)} members · $${Number(summary.level3_rewards || 0).toFixed(2)} rewards`;
+
+      const groups = [
+        ['level1', 'Level 1 Direct', '10%'],
+        ['level2', 'Level 2 Team', '5%'],
+        ['level3', 'Level 3 Team', '3%']
+      ];
+      document.getElementById('referralTree').innerHTML = groups.map(([key, title, rate]) => {
+        const members = tree[key] || [];
+        const memberRows = members.length
+          ? members.map(member => `<div style="padding:6px 0;border-top:1px solid rgba(255,255,255,.05);">${escapeHtml(member.full_name || member.email || 'Partner Member')}<span style="display:block;color:var(--text-muted);font-size:10px;">${escapeHtml(member.email || '')}</span></div>`).join('')
+          : '<span style="color:var(--text-muted);">No members at this level yet.</span>';
+        return `<section style="margin-top:10px;padding:14px;border:1px solid var(--border);border-radius:10px;background:rgba(0,0,0,.14);"><strong>${title}</strong><span style="color:var(--text-muted);font-size:11px;"> (${members.length} members · ${rate})</span><div style="margin-top:8px;font-size:12px;">${memberRows}</div></section>`;
+      }).join('');
     } catch (err) {
       console.error(err);
+      document.getElementById('referralTree').innerHTML = '<div style="padding:24px;text-align:center;color:var(--text-muted)">Referral data is temporarily unavailable.</div>';
     }
   }
 

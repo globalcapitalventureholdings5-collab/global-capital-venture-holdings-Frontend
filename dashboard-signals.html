@@ -499,7 +499,7 @@
 
   async function loadSignals() {
     try {
-      const res = await fetch(`${window.GCVH_CONFIG.API_BASE_URL}/signals`, {
+      const res = await fetch(`${window.GCVH_CONFIG.API_BASE_URL}/signals/today`, {
         headers: { 'Authorization': `Bearer ${token}` },
         cache: 'no-store'
       });
@@ -507,16 +507,13 @@
       const data = await res.json();
       const signals = data.signals || [];
       const session = data.session || {};
-      if (signals.length) {
-        const top = signals[0];
-        document.getElementById('dispSigPair').textContent = top.pair || 'XAUUSD';
-        document.getElementById('dispSigType').textContent = (top.type || 'BUY').toUpperCase();
-        document.getElementById('dispSigEntry').textContent = top.entry_price || '$2,654.50';
-        document.getElementById('dispSigTp1').textContent = top.tp || '$2,668.00';
-        document.getElementById('dispSigTp2').textContent = top.tp2 || '$2,682.00';
-        document.getElementById('dispSigSl').textContent = top.sl || '$2,642.00';
-        document.getElementById('dispSigNotes').textContent = top.notes || 'Institutional XAUUSD momentum setup.';
-      }
+      document.getElementById('dispSigPair').textContent = data.symbol || data.pair || 'XAUUSD';
+      document.getElementById('dispSigType').textContent = (data.side || data.type || 'BUY').toUpperCase();
+      document.getElementById('dispSigEntry').textContent = data.entry || data.entry_price || 'Market';
+      document.getElementById('dispSigTp1').textContent = data.take_profit || data.tp || '—';
+      document.getElementById('dispSigTp2').textContent = data.tp2 || '—';
+      document.getElementById('dispSigSl').textContent = data.stop_loss || data.sl || '—';
+      document.getElementById('dispSigNotes').textContent = data.message || data.notes || 'No signal notes provided.';
 
       const executeButton = document.getElementById('btnExecuteTrade');
       const windowStatus = document.getElementById('signalWindowStatus');

@@ -347,7 +347,7 @@
 
     <div class="stats-bar">
       <div class="stat-card">
-        <div class="label">Available Withdrawable Balance</div>
+        <div class="label">Total Account Balance</div>
         <div class="val" style="color:var(--primary-green)" id="statBalance">$0.00</div>
       </div>
       <div class="stat-card">
@@ -374,11 +374,11 @@
         <table>
           <thead>
             <tr>
-              <th>ID</th>
               <th>Transaction Type</th>
               <th>Description</th>
               <th>Credit Amount</th>
               <th>Date & Time</th>
+              <th>Status</th>
             </tr>
           </thead>
           <tbody id="earningsTableBody">
@@ -441,17 +441,43 @@
       if (!res.ok) throw new Error('Failed to load earnings');
       const data = await res.json();
       
-      const balance = Number(data.balance || user.balance || 0);
-      const totalRoi = Number(data.total_roi || 0);
-      const totalRef = Number(data.total_referral || 0);
-      const totalEarned = totalRoi + totalRef;
+      const summary = data.summary || {};
+      const balance = Number(summary.total_balance || 0);
+      const totalRoi = Number(summary.trade_profit || 0);
+      const totalRef = Number(summary.referral_commissions || 0);
+      const totalEarned = Number(summary.total_earnings || (totalRoi + totalRef + Number(summary.salary_earned || 0)));
 
       document.getElementById('statBalance').textContent = `$${balance.toFixed(2)}`;
       document.getElementById('statTotalRoi').textContent = `$${totalRoi.toFixed(2)}`;
       document.getElementById('statTotalRef').textContent = `$${totalRef.toFixed(2)}`;
       document.getElementById('statTotalEarned').textContent = `$${totalEarned.toFixed(2)}`;
 
-      const list = data.earnings || [];
+      const list = [
+        ...(data.trades || []).map(item => ({
+          id: `TRADE-${item.id}`,
+          type: 'Daily ROI',
+          description: `${item.side || 'BUY'} ${item.symbol || 'XAUUSD'} · ${item.principal_applied || 0} capital · ${item.profit_rate ? (Number(item.profit_rate) * 100).toFixed(2) : '1.00'}%`,
+          amount: item.profit_amount,
+          created_at: item.executed_at,
+          status: item.status || 'Settling'
+        })),
+        ...(data.referral_commissions || []).map(item => ({
+          id: `REF-${item.id}`,
+          type: `Level ${item.level || 1} Referral`,
+          description: `Commission from ${item.purchaser_name || 'referred member'}`,
+          amount: item.amount,
+          created_at: item.created_at,
+          status: item.status || 'credited'
+        })),
+        ...(data.salary_credits || []).map(item => ({
+          id: `SAL-${item.id}`,
+          type: 'Leadership Salary',
+          description: `Tier ${item.tier_no || 1} salary credit`,
+          amount: item.amount,
+          created_at: item.credited_at,
+          status: 'credited'
+        }))
+      ].sort((left, right) => new Date(right.created_at || 0) - new Date(left.created_at || 0));
       const tbody = document.getElementById('earningsTableBody');
       if (!list.length) {
         tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:30px;color:var(--text-muted)">No earnings transactions recorded yet.</td></tr>';
@@ -460,11 +486,11 @@
 
       tbody.innerHTML = list.map((e, idx) => `
         <tr>
-          <td><b>#${e.id || idx + 1}</b></td>
           <td><span class="badge" style="background:rgba(16,185,129,0.15);color:var(--primary-green)">${e.type || 'Daily ROI'}</span></td>
-          <td>${e.notes || e.description || 'Daily algorithmic scalping return'}</td>
+          <td>${e.description || 'Account credit'}</td>
           <td style="font-weight:800;color:var(--primary-green)">+$${Number(e.amount || 0).toFixed(2)}</td>
           <td style="color:var(--text-muted);font-size:11px">${new Date(e.created_at || Date.now()).toLocaleString()}</td>
+          <td>${e.status || 'credited'}</td>
         </tr>
       `).join('');
     } catch (err) {

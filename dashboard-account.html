@@ -156,17 +156,20 @@
           const response = await fetch(`${apiBase}/me`, { headers: { Authorization: `Bearer ${token}` }, cache: 'no-store' });
           const data = await response.json().catch(() => ({}));
           if (!response.ok) throw new Error(data.error || 'Unable to load account profile.');
-          const active = Number(data.principal || 0) > 0;
+          const principal = Number(data.principal || 0);
+          const packageAmount = Number(data.package_amount || 0);
+          const active = principal > 0 || packageAmount > 0;
           setText('profileName', data.full_name || data.fullName || 'Private Client');
           setText('profileEmail', data.email || '—');
-          setText('profilePackage', active ? `$${Number(data.package_amount || data.principal).toLocaleString('en-US')} ${data.tier || 'Package'}` : 'No active package');
-          setText('profileVerification', data.status === 'active' ? (active ? 'Active & funded' : 'Account active · deposit pending') : (data.status || 'Pending'));
+          const packageText = data.tier
+            ? `$${Number(data.package_amount || principal || 100).toLocaleString('en-US')} ${data.tier}`
+            : (principal > 0 ? `$${principal.toLocaleString('en-US')} Active` : 'No Active Package');
+          setText('profilePackage', packageText);
+          setText('profileReferral', data.referral_code || '—');
+          setText('profileVerification', '● Active & Protected');
           setText('profilePrincipal', `$${Number(data.principal || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`);
           setText('sidebarAccountStatus', data.status === 'active' ? 'Account Active' : 'Account Pending');
-          setText('profileStatus', active ? 'Verified client' : 'Account active');
-          const referralResponse = await fetch(`${apiBase}/referral`, { headers: { Authorization: `Bearer ${token}` }, cache: 'no-store' });
-          if (referralResponse.ok) { const referral = await referralResponse.json(); setText('profileReferral', referral.code || '—'); }
-          else setText('profileReferral', 'Unavailable');
+          setText('profileStatus', active ? 'VERIFIED CLIENT' : 'ACCOUNT PENDING');
         } catch (error) {
           setText('pageAlert', error.message || 'Unable to load account details.');
           if (/session|token|unauthorized|expired/i.test(error.message || '')) {

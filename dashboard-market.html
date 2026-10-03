@@ -350,22 +350,14 @@
     </div>
     <p class="header-sub">High-frequency TradingView multi-timeframe liquidity feed tracking global bullion spot prices and London/New York session flow.</p>
 
-    <div class="stats-bar">
+    <div class="stats-bar" style="grid-template-columns:repeat(2,minmax(0,1fr));">
       <div class="stat-card">
         <div class="label">XAUUSD Spot Price</div>
-        <div class="val" style="color:var(--gold)">$2,658.40</div>
+        <div class="val" id="marketSpotPrice" style="color:var(--gold)">Loading...</div>
       </div>
       <div class="stat-card">
-        <div class="label">24h Range High / Low</div>
-        <div class="val" style="font-size:17px;">$2,668.50 / $2,642.10</div>
-      </div>
-      <div class="stat-card">
-        <div class="label">Market Sentiment</div>
-        <div class="val" style="color:var(--primary-green)">Strong Buy (84%)</div>
-      </div>
-      <div class="stat-card">
-        <div class="label">Daily Macro Bias</div>
-        <div class="val" style="color:var(--gold2)">Bullish Accumulation</div>
+        <div class="label">Daily Return on Investment</div>
+        <div class="val" style="color:var(--primary-green)">1.00% / Calendar Day</div>
       </div>
     </div>
 
@@ -427,7 +419,7 @@
     new window.TradingView.widget({
       autosize: true,
       symbol: "OANDA:XAUUSD",
-      interval: "15",
+      interval: "1",
       timezone: "Etc/UTC",
       theme: "dark",
       style: "1",
@@ -439,6 +431,25 @@
       container_id: "tv_chart_container"
     });
   }
+
+  async function loadMarketPrice() {
+    const priceElement = document.getElementById('marketSpotPrice');
+    if (!priceElement) return;
+    try {
+      const response = await fetch('https://api.gold-api.com/price/XAU', { cache: 'no-store' });
+      if (!response.ok) throw new Error('Market price unavailable');
+      const data = await response.json();
+      const price = Number(data.price);
+      priceElement.textContent = Number.isFinite(price)
+        ? '$' + price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+        : '—';
+    } catch (_) {
+      priceElement.textContent = '—';
+    }
+  }
+
+  loadMarketPrice();
+  setInterval(loadMarketPrice, 15000);
 })();
 </script>
 <script>
