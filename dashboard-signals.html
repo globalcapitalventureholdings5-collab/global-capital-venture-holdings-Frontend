@@ -239,44 +239,27 @@
       padding: 28px;
       margin-top: 24px;
     }
-    .signal-box { border:1px solid var(--border); border-radius:14px; background:linear-gradient(145deg,#0c2017,#081710); padding:24px; margin-top:16px; }
-    .signal-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; margin:18px 0; }
-    .sig-item { min-width:0; padding:12px; background:rgba(0,0,0,.2); border:1px solid var(--border); border-radius:10px; }
-    .sig-label { display:block; color:var(--text-muted); font-size:9px; font-weight:900; text-transform:uppercase; }
-    .sig-val { display:block; margin-top:5px; color:#fff; font-size:14px; font-weight:800; overflow-wrap:anywhere; }
-    .signal-direction { margin-top:5px; font-size:24px; font-weight:900; color:var(--primary-green); }
-    .btn-execute { display:flex; align-items:center; justify-content:center; width:100%; min-height:52px; margin-top:16px; border:0; border-radius:10px; background:linear-gradient(135deg,var(--primary-green),#047857); color:#fff; font-size:13px; font-weight:900; text-transform:uppercase; cursor:pointer; }
-    .btn-execute:disabled { opacity:.5; cursor:not-allowed; transform:none; }
-    .signal-status-badge { display:inline-block; padding:6px 14px; border-radius:999px; background:rgba(243,207,122,.14); color:var(--gold); font-size:10px; font-weight:900; }
-    .signal-status-badge.completed { background:rgba(16,185,129,.14); color:var(--primary-green); }
-    .signal-status-badge.closed { background:rgba(239,68,68,.12); color:#fca5a5; }
-    .signalWindowStatus { margin:10px 0 0; text-align:center; color:var(--text-muted); font-size:12px; line-height:1.5; }
-    .signal-task-layout { display:grid; grid-template-columns:1.2fr .8fr; gap:16px; margin-top:16px; }
-    .signal-task-card { min-width:0; border:1px solid rgba(243,207,122,.25); border-radius:12px; background:rgba(0,0,0,.12); padding:18px; }
-    .signal-task-meta { color:var(--text-muted); font-size:10px; font-weight:800; letter-spacing:.08em; }
-    .signal-detail-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:8px; margin:16px 0; }
-    .signal-detail-cell { min-width:0; padding:11px; border:1px solid var(--border); border-radius:9px; background:rgba(0,0,0,.2); }
-    .signal-detail-cell span { display:block; color:var(--text-muted); font-size:9px; }
-    .signal-detail-cell strong { display:block; margin-top:4px; color:#fff; font-size:12px; overflow-wrap:anywhere; }
-    .account-desk { min-height:280px; display:flex; flex-direction:column; overflow:hidden; border:1px solid var(--border); border-radius:12px; background:#080b0e; }
-    .account-desk-head { display:flex; align-items:center; gap:10px; padding:14px; border-bottom:1px solid var(--border); }
-    .account-desk-avatar { width:30px; height:30px; display:grid; place-items:center; border-radius:9px; background:linear-gradient(135deg,var(--gold),#bd9550); color:#100d06; font-size:9px; font-weight:950; }
-    .account-desk-head strong { display:block; color:#fff; font-size:11px; }
-    .account-desk-head span { display:block; color:var(--text-muted); font-size:9px; }
-    .account-desk-messages { flex:1; max-height:240px; padding:13px; overflow:auto; }
-    .account-desk-message { margin-bottom:12px; }
-    .account-desk-message strong { display:block; margin-bottom:3px; color:var(--gold); font-size:9px; }
-    .account-desk-message p { color:#d5ded9; font-size:10px; line-height:1.5; }
-    .account-desk-form { display:flex; gap:8px; padding:10px; border-top:1px solid var(--border); }
-    .account-desk-form input { flex:1; min-width:0; height:36px; padding:0 10px; border:1px solid var(--border); border-radius:8px; background:#050807; color:#fff; font-size:10px; }
-    .account-desk-form button { min-width:52px; border:0; border-radius:8px; background:var(--primary-green); color:#07120c; font-size:10px; font-weight:900; }
-    .settlement-card-box { display:none; margin-top:14px; padding:14px; border:1px solid rgba(243,207,122,.25); border-radius:10px; background:rgba(243,207,122,.05); }
-    .settlement-card-box.active { display:block; }
-    .settlement-header-row { display:flex; justify-content:space-between; gap:12px; color:#fff; font-size:11px; font-weight:800; }
-    .settlement-timer-text { color:var(--gold); font-variant-numeric:tabular-nums; }
-    .settlement-bar-track { height:5px; margin:10px 0; border-radius:9px; background:rgba(255,255,255,.08); overflow:hidden; }
-    .settlement-bar-fill { height:100%; width:0; background:var(--primary-green); }
-    .settlement-note { color:var(--text-muted); font-size:10px; line-height:1.5; }
+    .signal-box {
+      border: 1px solid rgba(243, 207, 122, 0.3);
+      border-radius: 14px;
+      background: rgba(243, 207, 122, 0.04);
+      padding: 24px;
+      margin-top: 16px;
+    }
+    .signal-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-top: 16px;
+    }
+    .sig-item {
+      padding: 14px;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+    .sig-label { font-size: 10px; font-weight: 900; text-transform: uppercase; color: var(--text-muted); }
+    .sig-val { font-size: 18px; font-weight: 800; color: #ffffff; margin-top: 4px; }
 
     .btn-execute {
       display: inline-flex;
@@ -309,9 +292,7 @@
       .sidebar-close-btn { display: grid; }
       .mobile-header { display: flex; }
       .dashboard-main { margin-left: 0; width: 100%; padding: 24px 16px 60px; }
-      .signal-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .signal-task-layout { grid-template-columns:1fr; }
-      .signal-detail-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+      .signal-grid { grid-template-columns: repeat(2, 1fr); }
     }
   </style>
 </head>
@@ -390,40 +371,81 @@
     </div>
     <p class="header-sub">Review the verified market signal and manually claim your daily 1.00% reward during the eligible window.</p>
 
-    <!-- DAILY CLICKING TRADE TASK -->
+    <!-- LIVE ACTIVE SIGNAL CARD -->
     <div class="card">
-      <div class="card-head">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
         <div>
-          <div class="section-tag">DAILY CLICKING & SIGNAL INBOX</div>
-          <h2 style="font:700 20px Georgia,serif;color:#ffffff;">Daily <span style="color:var(--primary-green);">Clicking Trade Task</span></h2>
+          <h2 style="font:700 20px Georgia,serif;color:#ffffff;">Today's Verified Market Signal</h2>
+          <p style="font-size:12px;color:var(--text-muted);margin-top:2px;">Dispatched directly from the GCVH Institutional Gold Trading Desk</p>
         </div>
-        <div id="signalStatus" class="signal-status-badge">Checking Signal</div>
+        <div style="padding:6px 14px;border-radius:30px;background:rgba(16,185,129,0.15);border:1px solid var(--primary-green);color:var(--primary-green);font-size:11px;font-weight:900;">
+          ● LIVE SETUP ACTIVE
+        </div>
       </div>
 
-      <div class="signal-task-layout">
-        <section class="signal-task-card">
-          <div class="signal-task-meta" id="signalDate">--</div>
-          <div id="signalDirection" class="signal-direction">No signal received</div>
-          <div class="signal-detail-grid">
-            <div class="signal-detail-cell"><span>Instrument</span><strong id="signalInstrument">XAUUSD</strong></div>
-            <div class="signal-detail-cell"><span>Profit Rate</span><strong style="color:var(--primary-green);">+1.00% Daily</strong></div>
-            <div class="signal-detail-cell"><span>Trading Hours</span><strong>10AM – 10PM</strong></div>
-            <div class="signal-detail-cell"><span>Weekend Off</span><strong style="color:var(--gold);">Sat & Sun Off</strong></div>
+      <div class="signal-box">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+          <div>
+            <span style="font-size:12px;font-weight:900;color:var(--gold);letter-spacing:1px;text-transform:uppercase;">Asset Pair</span>
+            <div style="font-size:24px;font-weight:800;color:#fff;margin-top:2px;" id="dispSigPair">XAUUSD (Spot Gold)</div>
           </div>
-          <button id="executeSignal" class="btn-execute" disabled>Execute Today's Click (1% ROI) →</button>
-          <p class="signalWindowStatus" id="signalNotice" role="status">Checking mining window and account eligibility...</p>
-          <div id="settlementBox" class="settlement-card-box">
-            <div class="settlement-header-row"><span>⏳ Profit Settlement in Progress</span><span id="settlementTimer" class="settlement-timer-text">30:00</span></div>
-            <div class="settlement-bar-track"><div id="settlementProgressFill" class="settlement-bar-fill"></div></div>
-            <div class="settlement-note">Your manually placed clicking order is settling. Today's 1.00% profit (<strong id="settlingProfitAmount" style="color:var(--primary-green);">$0.00</strong>) will be added to your Total Balance in 30 minutes.</div>
+          <div style="padding:8px 18px;border-radius:8px;background:rgba(16,185,129,0.2);color:var(--primary-green);font-weight:900;font-size:14px;" id="dispSigType">
+            BUY / LONG
           </div>
-        </section>
+        </div>
 
-        <section class="account-desk">
-          <div class="account-desk-head"><div class="account-desk-avatar">GC</div><div><strong>Account Desk</strong><span>Signal & Client Support</span></div></div>
-          <div id="chatMessages" class="account-desk-messages" aria-live="polite"></div>
-          <div class="account-desk-form"><input id="chatInput" type="text" placeholder="Message the account desk..." maxlength="300"><button id="sendChat" type="button">Send</button></div>
-        </section>
+        <div class="signal-grid">
+          <div class="sig-item">
+            <div class="sig-label">Target Entry</div>
+            <div class="sig-val" id="dispSigEntry">$2,654.50</div>
+          </div>
+          <div class="sig-item">
+            <div class="sig-label">Take Profit 1</div>
+            <div class="sig-val" style="color:var(--primary-green)" id="dispSigTp1">$2,668.00</div>
+          </div>
+          <div class="sig-item">
+            <div class="sig-label">Take Profit 2</div>
+            <div class="sig-val" style="color:var(--primary-green)" id="dispSigTp2">$2,682.00</div>
+          </div>
+          <div class="sig-item">
+            <div class="sig-label">Stop Loss</div>
+            <div class="sig-val" style="color:var(--red)" id="dispSigSl">$2,642.00</div>
+          </div>
+        </div>
+
+        <div style="margin-top:16px;padding:12px 16px;background:rgba(0,0,0,0.2);border-radius:8px;font-size:12px;color:#cbd5e1;" id="dispSigNotes">
+          Macro setup: Liquidity sweep below Asian session lows with strong institutional accumulation on London open.
+        </div>
+
+        <button class="btn-execute" id="btnExecuteTrade">
+          ⚡ Execute Algorithmic Trade (Lock 1% Daily Yield)
+        </button>
+        <p id="signalWindowStatus" role="status" style="margin:10px 0 0;text-align:center;color:var(--text-muted);font-size:12px;line-height:1.5;">
+          Checking mining window and account eligibility...
+        </p>
+      </div>
+    </div>
+
+    <!-- SIGNALS HISTORY TABLE -->
+    <div class="card">
+      <h3 style="font:700 18px Georgia,serif;color:#ffffff;margin-bottom:12px;">Recent Dispatched Signals History</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Pair</th>
+              <th>Type</th>
+              <th>Entry Price</th>
+              <th>Take Profit</th>
+              <th>Stop Loss</th>
+              <th>Status</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody id="signalsHistoryBody">
+            <tr><td colspan="7" style="text-align:center;padding:30px;color:var(--text-muted)">Loading recent signal history...</td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </main>
@@ -443,187 +465,91 @@
   const $ = (id) => document.getElementById(id);
   const money = (value, digits = 2) => `$${Number(value || 0).toFixed(digits)}`;
 
-  const setStatus = (text, type = '') => {
-    const status = $('signalStatus');
-    if (!status) return;
-    status.textContent = text;
-    status.className = 'signal-status-badge' + (type ? ` ${type}` : '');
-  };
-
-  const setSettlement = (show, remainingSec = 1800, profit = 0) => {
-    const box = $('settlementBox');
-    const timer = $('settlementTimer');
-    const fill = $('settlementProgressFill');
-    const amount = $('settlingProfitAmount');
-    if (box) box.classList.toggle('active', !!show);
-    if (timer) {
-      const total = Math.max(0, Number(remainingSec) || 0);
-      const mins = String(Math.floor(total / 60)).padStart(2, '0');
-      const secs = String(total % 60).padStart(2, '0');
-      timer.textContent = `${mins}:${secs}`;
-    }
-    if (fill) {
-      const pct = Math.max(0, Math.min(100, (1800 - (Number(remainingSec) || 0)) / 18));
-      fill.style.width = `${pct}%`;
-    }
-    if (amount) amount.textContent = money(profit, 2);
-  };
-
-  const addChat = (sender, text) => {
-    const panel = $('chatMessages');
-    if (!panel) return;
-    const row = document.createElement('div');
-    row.className = 'account-desk-message';
-    const safe = String(text).replace(/[<>&]/g, (char) => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' }[char]));
-    row.innerHTML = `<strong>${sender}</strong><p>${safe}</p>`;
-    panel.appendChild(row);
-    panel.scrollTop = panel.scrollHeight;
-  };
-
-  if (user.full_name && $('sidebarUserName')) $('sidebarUserName').textContent = user.full_name;
-  if (user.full_name && $('sidebarAvatar')) {
-    const initials = user.full_name.split(' ').map((n) => n[0]).join('').toUpperCase() || 'GC';
-    $('sidebarAvatar').textContent = initials;
-  }
-
-  const sidebar = $('sidebar');
-  const backdrop = $('sidebarBackdrop');
-  const mobileMenuBtn = $('mobileMenuButton');
-  if (mobileMenuBtn && sidebar && backdrop) mobileMenuBtn.onclick = () => {
-    sidebar.classList.add('open');
-    backdrop.classList.add('active');
-  };
-  const closeNav = () => {
-    if (sidebar) sidebar.classList.remove('open');
-    if (backdrop) backdrop.classList.remove('active');
-  };
-  const sidebarCloseBtn = $('sidebarCloseBtn');
-  if (sidebarCloseBtn) sidebarCloseBtn.onclick = closeNav;
-  if (backdrop) backdrop.onclick = closeNav;
-
-  const logoutBtn = $('sidebarLogout');
-  if (logoutBtn) logoutBtn.onclick = () => {
-    localStorage.removeItem('gcvh_customer_token');
-    localStorage.removeItem('gcvh_customer_user');
-    sessionStorage.removeItem('gcvh_customer_token');
-    sessionStorage.removeItem('gcvh_customer_user');
-    window.location.href = 'login.html';
-  };
-
   async function loadSignals() {
     try {
       const res = await fetch(`${window.GCVH_CONFIG.API_BASE_URL}/signals/today`, {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { 'Authorization': `Bearer ${token}` },
         cache: 'no-store'
       });
       if (!res.ok) throw new Error('Failed to load signals');
       const data = await res.json();
+      const signals = data.signals || [];
       const session = data.session || {};
-      const direction = (data.side || data.direction || 'BUY').toUpperCase();
-      const directionText = direction === 'SELL' ? 'SELL / SHORT' : 'BUY / LONG';
-      const signalDate = data.date || new Date().toISOString().split('T')[0];
 
-      if ($('signalDate')) {
-        $('signalDate').textContent = `Signal Date · ${new Date(`${signalDate}T12:00:00`).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`;
-      }
-      if ($('signalDirection')) {
-        $('signalDirection').textContent = directionText;
-        $('signalDirection').style.color = direction === 'SELL' ? 'var(--red)' : 'var(--primary-green)';
-      }
-      if ($('signalInstrument')) $('signalInstrument').textContent = data.symbol || data.pair || 'XAUUSD';
+      $('dispSigPair').textContent = data.symbol || data.pair || 'XAUUSD';
+      $('dispSigType').textContent = (data.side || data.type || 'BUY').toUpperCase();
+      $('dispSigEntry').textContent = data.entry || data.entry_price || 'Market';
+      $('dispSigTp1').textContent = data.take_profit || data.tp || '—';
+      $('dispSigTp2').textContent = data.tp2 || '—';
+      $('dispSigSl').textContent = data.stop_loss || data.sl || '—';
+      $('dispSigNotes').textContent = data.message || data.notes || 'No signal notes provided.';
 
-      const btn = $('executeSignal');
-      const notice = $('signalNotice');
-      if (btn) {
-        btn.disabled = !(session.can_execute && !session.already_executed);
-        btn.textContent = session.already_executed ? 'Reward Claimed Today' : "Execute Today's Click (1% ROI) →";
-      }
-
-      if (notice) {
+      const executeButton = $('btnExecuteTrade');
+      const windowStatus = $('signalWindowStatus');
+      if (executeButton) executeButton.disabled = !session.can_execute;
+      if (windowStatus) {
         if (session.already_executed) {
-          notice.textContent = 'Today’s 1.00% reward has already been claimed. Please return in the next daily window.';
+          windowStatus.textContent = 'Today’s mining reward has already been claimed. You can claim again in the next daily window.';
         } else if (!session.account_active) {
-          notice.textContent = 'A verified deposit and active package are required before you can claim today’s 1.00% reward.';
+          windowStatus.textContent = 'A deposit must be verified and your investment package activated before mining rewards can be claimed.';
         } else if (session.is_weekend) {
-          notice.textContent = 'The daily signal window is closed for the weekend. Trading resumes Monday at 10:00 AM PKT.';
+          windowStatus.textContent = 'Mining is closed for the weekend. The next window opens Monday at 10:00 AM Pakistan time.';
         } else if (!session.is_within_hours) {
-          notice.textContent = `The daily window is open from ${session.window_start || '10:00 AM PKT'} to ${session.window_end || '10:00 PM PKT'} (Pakistan time).`;
+          windowStatus.textContent = `Mining is available from ${session.window_start || '10:00 AM PKT'} to ${session.window_end || '10:00 PM PKT'} (Pakistan time).`;
         } else {
-          notice.textContent = 'Mining is not automatic. Press the claim button to request today’s 1.00% reward.';
+          windowStatus.textContent = 'Mining is not automatic. Press the claim button to request today’s reward.';
         }
       }
 
-      if (session.already_executed) {
-        setStatus('● Completed (+1.00% ROI)', 'completed');
-        setSettlement(true, 0, Number(data.user_execution?.earnings || 0));
-      } else if (!session.can_execute) {
-        setStatus('Session Closed', 'closed');
-        setSettlement(false, 1800, 0);
-      } else {
-        setStatus('Signal Active', '');
-      }
-
-      if ($('chatMessages') && !$('chatMessages').children.length) {
-        addChat('Account Desk', 'Daily signal desk is online. Ask about your claim, payout timing, or eligibility.');
+      const tbody = $('signalsHistoryBody');
+      if (tbody) {
+        if (!signals.length) {
+          tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:30px;color:var(--text-muted)">No active signals broadcasted.</td></tr>';
+          return;
+        }
+        tbody.innerHTML = signals.map(s => `
+          <tr>
+            <td><b style="color:var(--gold)">${s.pair || 'XAUUSD'}</b></td>
+            <td><span style="font-weight:800;color:var(--primary-green)">${(s.type || 'BUY').toUpperCase()}</span></td>
+            <td>${s.entry_price || '-'}</td>
+            <td style="color:var(--primary-green)">${s.tp || '-'}</td>
+            <td style="color:var(--red)">${s.sl || '-'}</td>
+            <td><span style="color:${session.already_executed && String(s.id) === String(data.id) ? 'var(--primary-green)' : 'var(--text-muted)'};font-weight:700">${session.already_executed && String(s.id) === String(data.id) ? '● Claimed' : '● Signal Published'}</span></td>
+            <td style="color:var(--text-muted);font-size:11px">${new Date(s.created_at || Date.now()).toLocaleDateString()}</td>
+          </tr>
+        `).join('');
       }
     } catch (err) {
       console.error(err);
-      if ($('signalNotice')) $('signalNotice').textContent = err.message || 'Could not check the signal window. Please refresh and try again.';
-      setStatus('Awaiting Signal', '');
+      const windowStatus = $('signalWindowStatus');
+      if (windowStatus) windowStatus.textContent = err.message || 'Could not check mining eligibility. Please refresh and try again.';
     }
   }
 
-  const executeSignal = $('executeSignal');
-  if (executeSignal) {
-    executeSignal.onclick = async () => {
-      if (executeSignal.disabled) return;
-      executeSignal.disabled = true;
-      executeSignal.textContent = '⏳ Executing Order...';
-
-      try {
-        const res = await fetch(`${window.GCVH_CONFIG.API_BASE_URL}/daily-claim`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`
-          },
-          cache: 'no-store'
-        });
-        const data = await res.json().catch(() => ({}));
-        if (!res.ok) throw new Error(data.error || data.message || `Reward claim failed (${res.status}).`);
-
-        const profit = Number(data.earnings || 0);
-        addChat('Account Desk', `Signal executed successfully. Today’s 1.00% reward of ${money(profit, 2)} is now settling.`);
-        setStatus('● Settling (+1.00% ROI)', '');
-        setSettlement(true, 1800, profit);
-      } catch (err) {
-        addChat('Account Desk', err.message || 'Unable to claim the reward at this time.');
-        if ($('signalNotice')) $('signalNotice').textContent = err.message || 'Unable to claim the reward at this time.';
-        executeSignal.disabled = false;
-        executeSignal.textContent = "Execute Today's Click (1% ROI) →";
-      }
-    };
-  }
-
-  const sendChat = $('sendChat');
-  if (sendChat) {
-    sendChat.onclick = () => {
-      const input = $('chatInput');
-      const value = input && input.value.trim();
-      if (!value) return;
-      addChat('You', value);
-      if (input) input.value = '';
-    };
-  }
-
-  if ($('chatInput')) {
-    $('chatInput').addEventListener('keydown', (event) => {
-      if (event.key === 'Enter') {
-        event.preventDefault();
-        if (sendChat) sendChat.click();
-      }
-    });
-  }
+  $('btnExecuteTrade').onclick = async () => {
+    const btn = $('btnExecuteTrade');
+    if (btn.disabled) return;
+    btn.disabled = true;
+    btn.textContent = '⏳ Executing Algorithmic Scalping Order...';
+    try {
+      const res = await fetch(`${window.GCVH_CONFIG.API_BASE_URL}/daily-claim`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || data.message || `Reward claim failed (${res.status}).`);
+      alert(`Trade recorded successfully. Your 1% reward ($${Number(data.earnings || 0).toFixed(2)}) will settle according to the reward processing period.`);
+      btn.textContent = '✓ Reward Claimed Today';
+      await loadSignals();
+    } catch (err) {
+      alert(err.message || 'Unable to claim the mining reward.');
+      btn.textContent = '⚡ Execute Algorithmic Trade (Lock 1% Daily Yield)';
+      await loadSignals();
+    }
+  };
 
   loadSignals();
 })();
