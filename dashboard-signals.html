@@ -239,6 +239,164 @@
       padding: 28px;
       margin-top: 24px;
     }
+    .reference-signal-wrap {
+      display: grid;
+      grid-template-columns: minmax(0, 1.8fr) minmax(260px, 0.9fr);
+      gap: 18px;
+      background: rgba(8, 22, 16, 0.7);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 18px 18px 14px;
+      margin-top: 24px;
+    }
+    .reference-signal-left {
+      background: rgba(10, 29, 22, 0.4);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px 18px 14px;
+    }
+    .section-tag {
+      color: var(--gold);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 900;
+      margin-bottom: 10px;
+    }
+    .reference-title {
+      font: 700 36px Georgia, serif;
+      color: #ffffff;
+      line-height: 1.05;
+      margin: 0 0 10px;
+    }
+    .reference-title span { color: var(--primary-green); }
+    .reference-date {
+      color: var(--text-muted);
+      font-size: 18px;
+      margin: 6px 0 18px;
+    }
+    .reference-pair {
+      font-size: 54px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      color: var(--primary-green);
+      margin: 0 0 16px;
+      line-height: 1;
+    }
+    .reference-metrics {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin: 10px 0 18px;
+    }
+    .reference-metric {
+      background: rgba(9, 20, 17, 0.7);
+      border: 1px solid rgba(16, 185, 129, 0.18);
+      border-radius: 12px;
+      padding: 14px 12px;
+      min-height: 90px;
+    }
+    .reference-metric span {
+      display: block;
+      color: var(--text-muted);
+      font-size: 12px;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+    .reference-metric strong {
+      display: block;
+      color: #ffffff;
+      font-size: 18px;
+      font-weight: 800;
+    }
+    .reference-status-button {
+      width: 100%;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #14b67d, #10b981);
+      color: #09261d;
+      font-weight: 900;
+      font-size: 24px;
+      padding: 18px 20px;
+      margin-top: 10px;
+      box-shadow: 0 10px 25px rgba(16,185,129,0.22);
+    }
+    .reference-note {
+      margin-top: 18px;
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .reference-signal-right {
+      background: rgba(10, 29, 22, 0.4);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 10px 12px 12px;
+      display: flex;
+      flex-direction: column;
+      min-height: 100%;
+    }
+    .reference-desk-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 10px 12px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 10px;
+    }
+    .reference-desk-avatar {
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--gold), #bd9550);
+      color: #100d06;
+      font: 800 18px Georgia, serif;
+    }
+    .reference-desk-header strong {
+      display: block;
+      color: #ffffff;
+      font-size: 20px;
+      line-height: 1.2;
+    }
+    .reference-desk-header span {
+      display: block;
+      color: var(--text-muted);
+      font-size: 12px;
+      margin-top: 2px;
+    }
+    .reference-desk-body {
+      flex: 1;
+      min-height: 120px;
+      margin-top: 6px;
+    }
+    .reference-desk-form {
+      display: flex;
+      gap: 10px;
+      margin-top: 8px;
+      padding-top: 10px;
+      border-top: 1px solid var(--border);
+    }
+    .reference-desk-form input {
+      flex: 1;
+      min-width: 0;
+      background: rgba(0,0,0,0.1);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: #ffffff;
+      padding: 12px 14px;
+      font-size: 14px;
+    }
+    .reference-desk-form button {
+      min-width: 92px;
+      border: none;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #061b13;
+      font-weight: 900;
+      font-size: 16px;
+    }
     .signal-box {
       border: 1px solid rgba(243, 207, 122, 0.3);
       border-radius: 14px;
@@ -370,6 +528,40 @@
       </a>
     </div>
     <p class="header-sub">Review the verified market signal and manually claim your daily 1.00% reward during the eligible window.</p>
+
+    <div class="reference-signal-wrap">
+      <div class="reference-signal-left">
+        <div class="section-tag">DAILY CLICKING &amp; SIGNAL INBOX</div>
+        <h2 class="reference-title">Daily <span>Clicking Trade Task</span></h2>
+        <div class="reference-date">Oct 4, 2026</div>
+        <div class="reference-pair">BUY XAUUSD</div>
+
+        <div class="reference-metrics">
+          <div class="reference-metric"><span>Instrument</span><strong>XAUUSD</strong></div>
+          <div class="reference-metric"><span>Profit Rate</span><strong>+1.00% Daily</strong></div>
+          <div class="reference-metric"><span>Trading Hours</span><strong>10AM – 10PM</strong></div>
+          <div class="reference-metric"><span>Weekend Off</span><strong>Sat &amp; Sun Off</strong></div>
+        </div>
+
+        <button class="reference-status-button" type="button">Weekend Off (Closed)</button>
+        <div class="reference-note">Clicking system is closed on Saturday and Sunday. Daily trading tasks resume Monday at 10:00 AM PKT.</div>
+      </div>
+
+      <div class="reference-signal-right">
+        <div class="reference-desk-header">
+          <div class="reference-desk-avatar">GC</div>
+          <div>
+            <strong>Account Desk</strong>
+            <span>Signal &amp; Client Support</span>
+          </div>
+        </div>
+        <div class="reference-desk-body"></div>
+        <div class="reference-desk-form">
+          <input type="text" placeholder="Message the account desk..." aria-label="Message the account desk" />
+          <button type="button">Send</button>
+        </div>
+      </div>
+    </div>
 
     <!-- LIVE ACTIVE SIGNAL CARD -->
     <div class="card">
