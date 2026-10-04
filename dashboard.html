@@ -814,88 +814,8 @@
     /* SIGNAL DESK */
     .signal-layout {
       display: grid;
-      grid-template-columns: 1fr;
-      gap: 16px;
-    }
-
-    .overview-signal-card {
-      border: 1px solid rgba(243, 207, 122, 0.3);
-      border-radius: 14px;
-      background: rgba(243, 207, 122, 0.04);
-      padding: 24px;
-    }
-
-    .overview-signal-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
-    .overview-signal-label {
-      color: var(--gold);
-      font-size: 11px;
-      font-weight: 900;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-    }
-
-    .overview-signal-direction {
-      padding: 8px 16px;
-      border-radius: 8px;
-      background: rgba(16, 185, 129, .16);
-      color: var(--primary-green);
-      font-size: 13px;
-      font-weight: 900;
-    }
-
-    .overview-signal-values {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 10px;
-      margin: 18px 0;
-    }
-
-    .overview-signal-value {
-      min-width: 0;
-      padding: 13px;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      background: rgba(0, 0, 0, .24);
-    }
-
-    .overview-signal-value span {
-      display: block;
-      color: var(--text-muted);
-      font-size: 9px;
-      font-weight: 900;
-      text-transform: uppercase;
-    }
-
-    .overview-signal-value strong {
-      display: block;
-      margin-top: 5px;
-      color: #fff;
-      font-size: 16px;
-      overflow-wrap: anywhere;
-    }
-
-    .overview-signal-value .target-value { color: var(--primary-green); }
-    .overview-signal-value .stop-value { color: var(--red); }
-
-    .overview-signal-message {
-      padding: 12px 14px;
-      border-radius: 8px;
-      background: rgba(0, 0, 0, .22);
-      color: #cbd5e1;
-      font-size: 11px;
-      line-height: 1.6;
-    }
-
-    @media (max-width: 650px) {
-      .overview-signal-card { padding: 17px; }
-      .overview-signal-values { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 20px;
     }
 
     .signal-details-grid {
@@ -2385,49 +2305,21 @@
         </div>
 
         <div class="signal-layout">
-          <div class="overview-signal-card">
-            <div class="overview-signal-top">
-              <div>
-                <span class="overview-signal-label">Asset Pair</span>
-                <div id="signalDirection" class="signal-direction">BUY XAUUSD</div>
-                <span id="signalDate" style="font-size:10px;color:var(--text-muted);">--</span>
-              </div>
-              <div id="signalInstrument" class="overview-signal-direction">XAUUSD</div>
-            </div>
-
-            <div class="overview-signal-values">
-              <div class="overview-signal-value"><span>Target Entry</span><strong id="signalEntry">Market</strong></div>
-              <div class="overview-signal-value"><span>Take Profit 1</span><strong class="target-value" id="signalTp1">—</strong></div>
-              <div class="overview-signal-value"><span>Take Profit 2</span><strong class="target-value" id="signalTp2">—</strong></div>
-              <div class="overview-signal-value"><span>Stop Loss</span><strong class="stop-value" id="signalStop">—</strong></div>
-            </div>
-
-            <div id="signalMessage" class="overview-signal-message">Waiting for today's verified market signal.</div>
-
+          <div>
+            <div style="font-size:11px;color:var(--text-muted);letter-spacing:0.1em;font-weight:800;" id="signalDate">--</div>
+            <div id="signalDirection" class="signal-direction">No signal received</div>
             <div class="signal-details-grid">
+              <div class="signal-detail-cell"><span>Instrument</span><strong id="signalInstrument">XAUUSD</strong></div>
               <div class="signal-detail-cell"><span>Profit Rate</span><strong style="color:var(--primary-green);">+1.00% Daily</strong></div>
-              <div class="signal-detail-cell"><span>Trading Hours</span><strong>10AM – 10PM PKT</strong></div>
+              <div class="signal-detail-cell"><span>Trading Hours</span><strong>10AM – 10PM</strong></div>
               <div class="signal-detail-cell"><span>Weekend Off</span><strong style="color:var(--gold);">Sat & Sun Off</strong></div>
-              <div class="signal-detail-cell"><span>Claim Mode</span><strong>Manual</strong></div>
             </div>
-
-            <button id="executeSignal" class="btn btn-primary" style="width:100%;height:52px;font-size:15px;" disabled>
-              Execute Today's Click (1% ROI) →
-            </button>
-            <p id="signalNotice" style="margin-top:12px;font-size:12px;color:var(--text-muted);">
-              No mining reward is generated automatically. Claim today's reward manually during the open window.
-            </p>
-
-            <!-- 30-MINUTE SETTLEMENT COUNTDOWN CARD -->
+            <button id="executeSignal" class="btn btn-primary" style="width:100%;height:52px;font-size:15px;" disabled>Execute Today's Click (1% ROI) →</button>
+            <p id="signalNotice" style="margin-top:12px;font-size:12px;color:var(--text-muted);">No mining reward is generated automatically. Press Execute Today's Click to claim manually.</p>
             <div id="settlementBox" class="settlement-card-box">
-              <div class="settlement-header-row">
-                <div class="settlement-title"><span>⏳</span> Profit Settlement in Progress</div>
-                <div id="settlementTimer" class="settlement-timer-text">29:59</div>
-              </div>
+              <div class="settlement-header-row"><div class="settlement-title"><span>⏳</span> Profit Settlement in Progress</div><div id="settlementTimer" class="settlement-timer-text">29:59</div></div>
               <div class="settlement-bar-track"><div id="settlementProgressFill" class="settlement-bar-fill"></div></div>
-              <div class="settlement-note">
-                Your manually placed clicking order is settling. Today's 1.00% profit (<strong id="settlingProfitAmount" style="color:var(--primary-green);">$0.00</strong>) will be added to your Total Balance in 30 minutes.
-              </div>
+              <div class="settlement-note">Your manually placed clicking order is settling. Today's 1.00% profit (<strong id="settlingProfitAmount" style="color:var(--primary-green);">$0.00</strong>) will be added to your Total Balance in 30 minutes.</div>
             </div>
           </div>
 
@@ -3206,14 +3098,9 @@
       const execInfo = executed[signal.date];
       const isDone = !!execInfo;
       $('signalDate').textContent = new Date(signal.date + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-      $('signalDirection').textContent = signal.direction === 'SELL' ? 'SELL / SHORT' : 'BUY / LONG';
+      $('signalDirection').textContent = signal.direction + ' ' + (signal.instrument || 'XAUUSD');
       $('signalDirection').className = 'signal-direction ' + (signal.direction === 'BUY' ? 'buy-signal' : 'sell-signal');
       $('signalInstrument').textContent = signal.instrument || 'XAUUSD';
-      if ($('signalEntry')) $('signalEntry').textContent = signal.entry || 'Market';
-      if ($('signalTp1')) $('signalTp1').textContent = signal.tp || '—';
-      if ($('signalTp2')) $('signalTp2').textContent = signal.tp2 || '—';
-      if ($('signalStop')) $('signalStop').textContent = signal.sl || '—';
-      if ($('signalMessage')) $('signalMessage').textContent = signal.message || 'No signal notes provided.';
 
       const settlementBox = $('settlementBox');
       const executeBtn = $('executeSignal');
@@ -3252,7 +3139,7 @@
         $('signalStatus').className = 'signal-status-badge';
         executeBtn.disabled = false;
         executeBtn.textContent = "Execute Today's Click (1% ROI) →";
-        $('signalNotice').textContent = "No mining reward is generated automatically. Press Execute Today's Click to claim today's 1.00% reward; settlement starts only after your claim.";
+        $('signalNotice').textContent = "No mining reward is generated automatically. Press Execute Today's Click to claim manually; settlement begins after your claim.";
         if (settlementBox) settlementBox.classList.remove('active');
         return;
       }
@@ -3309,7 +3196,6 @@
             entry: d.entry || 'Market',
             sl: d.stop_loss || '—',
             tp: d.take_profit || '—',
-            tp2: d.tp2 || '—',
             message: d.message || ''
           };
         }
