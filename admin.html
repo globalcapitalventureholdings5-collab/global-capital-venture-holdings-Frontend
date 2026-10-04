@@ -406,7 +406,8 @@ async function loadDashboard() {
     $("customersCount").textContent = users.length;
     $("depositsCount").textContent = pendingDeposits.length;
     $("withdrawalsCount").textContent = pendingWithdrawals.length;
-    $("blogsCount").textContent = blogs.length;
+    const blogsCountEl = $("blogsCount");
+    if (blogsCountEl) blogsCountEl.textContent = blogs.length;
 
     $("pendingDepositRows").innerHTML = pendingDeposits.length ? pendingDeposits.slice(0, 5).map(function(d) {
       const proofUrl = getProofUrl(d.proof_image);
