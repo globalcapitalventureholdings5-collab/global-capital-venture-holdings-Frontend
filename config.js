@@ -33,9 +33,9 @@ const CONFIG = {
     }
     return 'https://globalcapitalventureholdings.com';
   })(),
-  TRC20_WALLET: 'TLYNo7HqiDBMzRPuuSPu3SQsL1Fx9gfD5w',
-  BEP20_WALLET: '0xda9362094e07897b9fbcad372d353bcfec2cd88c',
-  BINANCE_UID: '55868490',
+  TRC20_WALLET: 'THGj2PhwgUxLHkUqfpxBrp39yUWcLQ3g84',
+  BEP20_WALLET: '',
+  BINANCE_UID: '',
   SUPPORT_EMAIL: 'globalcapitalventureholdings5@gmail.com',
   APP_VERSION: '1.0.2',
   APK_DOWNLOAD_URL: '/api/download-apk',

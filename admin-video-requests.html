@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>GCVH — Video Review Requests</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <style>
+    * { box-sizing: border-box; }
+    :root { --bg:#070a0d; --panel:#0e141a; --line:#222c35; --gold:#d5ad5a; --gold2:#f1d48b; --text:#f4f6f8; --muted:#7f8b94; --green:#38d99a; --red:#ff647f; }
+    html,body { margin:0; min-height:100%; background:var(--bg); color:var(--text); font-family:Inter,Arial,sans-serif; }
+    button,select,textarea { font:inherit; } button { cursor:pointer; } a { color:inherit; text-decoration:none; }
+    .app { min-height:100vh; display:flex; }
+    .sidebar { position:fixed; inset:0 auto 0 0; width:250px; background:#090d11; border-right:1px solid var(--line); padding:23px 15px; display:flex; flex-direction:column; overflow-y:auto; }
+    .side-brand { display:flex; align-items:center; gap:10px; padding:0 10px 24px; border-bottom:1px solid var(--line); }
+    .side-logo { width:36px; height:36px; border:1px solid #d5ad5a70; border-radius:50%; display:grid; place-items:center; color:var(--gold2); font:21px Georgia,serif; }
+    .side-name { font:700 15px Georgia,serif; }.side-sub { color:var(--gold); font-size:7px; font-weight:900; letter-spacing:1.4px; text-transform:uppercase; margin-top:3px; }
+    .nav-group { margin-top:20px; }.nav-label { padding:0 10px 8px; color:#59656f; font-size:8px; font-weight:900; letter-spacing:1.5px; text-transform:uppercase; }
+    .nav { display:block; width:100%; padding:11px 12px; margin:2px 0; border:1px solid transparent; border-radius:9px; background:transparent; color:#9da8b0; text-align:left; font-size:11px; font-weight:800; }
+    .nav.active,.nav:hover { background:#ffffff06; border-color:var(--line); color:var(--gold2); }.nav-icon { display:inline-block; width:24px; color:var(--gold); }
+    .main { margin-left:250px; width:calc(100% - 250px); min-width:0; }
+    .header { min-height:76px; position:sticky; top:0; z-index:2; display:flex; align-items:center; justify-content:space-between; gap:12px; padding:14px 31px; background:#080c0fee; border-bottom:1px solid var(--line); }
+    .kicker { color:var(--gold); font-size:8px; font-weight:900; letter-spacing:1.7px; text-transform:uppercase; }.header h1 { font:700 21px Georgia,serif; margin:4px 0 0; }
+    .button { padding:9px 13px; border:1px solid var(--line); border-radius:8px; background:#ffffff05; color:#cbd2d6; font-size:10px; font-weight:900; }
+    .content { max-width:1500px; padding:30px; }.alert { display:none; margin-bottom:18px; padding:12px; border-radius:9px; font-size:12px; }.alert.show { display:block; }.alert.error { border:1px solid #ff647f35; background:#ff647f12; color:#ff9aae; }.alert.success { border:1px solid #38d99a35; background:#38d99a12; color:#7ce7ba; }
+    .stats { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; margin-bottom:20px; }.stat { padding:17px; border:1px solid var(--line); border-radius:12px; background:var(--panel); }.stat-label { color:var(--muted); font-size:9px; font-weight:900; letter-spacing:1px; text-transform:uppercase; }.stat strong { display:block; margin-top:7px; color:#fff; font-size:24px; }
+    .toolbar { display:flex; justify-content:space-between; align-items:center; gap:12px; padding:14px 17px; border:1px solid var(--line); border-radius:12px 12px 0 0; background:var(--panel); }.toolbar p { margin:0; color:var(--muted); font-size:11px; }.toolbar select { padding:8px 10px; border:1px solid var(--line); border-radius:8px; background:#070a0d; color:#fff; }
+    .request-list { display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:14px; padding:17px; border:1px solid var(--line); border-top:0; border-radius:0 0 12px 12px; background:#0a0f13; }
+    .request { overflow:hidden; border:1px solid var(--line); border-radius:12px; background:linear-gradient(145deg,#10171e,#0b1014); }.preview { display:grid; place-items:center; min-height:190px; background:#000; }.preview video { display:block; width:100%; max-height:270px; }.preview button { padding:9px 12px; border:1px solid #d5ad5a55; border-radius:8px; background:#d5ad5a12; color:var(--gold2); font-size:11px; font-weight:800; }
+    .request-body { padding:16px; }.request-top { display:flex; justify-content:space-between; align-items:center; gap:8px; }.badge { padding:5px 8px; border-radius:20px; color:var(--gold2); background:#d5ad5a12; font-size:9px; font-weight:900; text-transform:uppercase; }.badge.approved { color:var(--green); background:#38d99a10; }.badge.rejected { color:var(--red); background:#ff647f10; }.date,.muted { color:var(--muted); font-size:10px; }
+    .request h2 { margin:12px 0 6px; font:700 17px Georgia,serif; overflow-wrap:anywhere; }.description { min-height:42px; color:#bac4ca; font-size:11px; line-height:1.5; white-space:pre-wrap; overflow-wrap:anywhere; }.author { margin:12px 0 0; color:var(--muted); font-size:10px; overflow-wrap:anywhere; }.note { margin-top:10px; padding:9px; border-radius:8px; background:#ffffff06; color:#cbd2d6; font-size:10px; white-space:pre-wrap; }
+    .actions { display:flex; gap:8px; margin-top:14px; }.actions button { flex:1; padding:9px; border-radius:8px; font-size:10px; font-weight:900; }.approve { border:1px solid #38d99a55; background:#38d99a12; color:var(--green); }.reject { border:1px solid #ff647f55; background:#ff647f12; color:var(--red); }.actions button:disabled,.preview button:disabled { opacity:.5; cursor:wait; }
+    .empty { grid-column:1/-1; padding:40px 15px; color:var(--muted); text-align:center; font-size:12px; }
+    .pagination { display:flex; justify-content:center; align-items:center; gap:12px; margin-top:18px; color:var(--muted); font-size:11px; }.pagination[hidden] { display:none; }.pagination button:disabled { opacity:.45; cursor:not-allowed; }
+    @media(max-width:900px) { .sidebar { display:none; }.main { margin-left:0; width:100%; }.header { padding:14px 16px; }.content { padding:18px 14px; }.stats { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="side-brand"><div class="side-logo">G</div><div><div class="side-name">Global Capital</div><div class="side-sub">Admin Center</div></div></div>
+    <div class="nav-group">
+      <div class="nav-label">Core Navigation</div>
+      <a class="nav" href="admin.html"><span class="nav-icon">◆</span>Overview</a>
+      <a class="nav" href="admin-deposits.html"><span class="nav-icon">↓</span>Deposits Portal</a>
+      <a class="nav" href="admin-withdrawals.html"><span class="nav-icon">↑</span>Withdrawals</a>
+      <a class="nav" href="admin-customers.html"><span class="nav-icon">◈</span>Customer Accounts</a>
+      <a class="nav" href="admin-referrals.html"><span class="nav-icon">%</span>Referrals & Rewards</a>
+      <a class="nav" href="admin-signals.html"><span class="nav-icon">⌁</span>Daily Signals Desk</a>
+      <a class="nav active" href="admin-video-requests.html"><span class="nav-icon">🎬</span>Video Requests</a>
+      <a class="nav" href="admin-blogs.html"><span class="nav-icon">▤</span>Blogs & Publications</a>
+    </div>
+    <button id="signOut" class="nav" type="button" style="margin-top:auto;color:#ff849a;"><span class="nav-icon">↪</span>Sign Out</button>
+  </aside>
+  <main class="main">
+    <header class="header">
+      <div><div class="kicker">Member Content Governance</div><h1>Video Review Requests</h1></div>
+      <button id="refresh" class="button" type="button">↻ Refresh</button>
+    </header>
+    <div class="content">
+      <div id="appAlert" class="alert" role="status"></div>
+      <div class="stats">
+        <div class="stat"><span class="stat-label">Pending Review</span><strong id="pendingCount">0</strong></div>
+        <div class="stat"><span class="stat-label">Approved & Published</span><strong id="approvedCount">0</strong></div>
+        <div class="stat"><span class="stat-label">Rejected</span><strong id="rejectedCount">0</strong></div>
+      </div>
+      <div class="toolbar">
+        <p>Preview each private submission. Approving publishes it and credits a one-time $5 reward.</p>
+        <select id="statusFilter" aria-label="Filter requests by status">
+          <option value="pending">Pending</option><option value="approved">Approved</option><option value="rejected">Rejected</option><option value="all">All requests</option>
+        </select>
+      </div>
+      <div class="request-list" id="requestList"><div class="empty">Loading video requests…</div></div>
+      <div class="pagination" id="pagination" hidden>
+        <button id="previousPage" class="button" type="button">← Previous</button><span id="pageLabel"></span><button id="nextPage" class="button" type="button">Next →</button>
+      </div>
+    </div>
+  </main>
+</div>
+<script src="config.js"></script>
+<script>
+(() => {
+  const token = localStorage.getItem('gcvh_admin_token') || sessionStorage.getItem('gcvh_admin_token');
+  if (!token) {
+    location.replace('admin.html');
+    return;
+  }
+  const apiBase = window.GCVH_CONFIG.API_BASE_URL;
+  const list = document.getElementById('requestList');
+  const alertBox = document.getElementById('appAlert');
+  const pagination = document.getElementById('pagination');
+  const statusFilter = document.getElementById('statusFilter');
+  let page = 1;
+  let pageCount = 1;
+  let objectUrls = [];
+  let loadSequence = 0;
+
+  function escapeHtml(value) {
+    return String(value ?? '').replace(/[&<>"']/g, character => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    })[character]);
+  }
+
+  function showAlert(message, error = false) {
+    alertBox.textContent = message;
+    alertBox.className = `alert show ${error ? 'error' : 'success'}`;
+  }
+
+  async function request(path, options = {}) {
+    const response = await fetch(`${apiBase}${path}`, {
+      ...options,
+      headers: { Authorization: `Bearer ${token}`, ...(options.headers || {}) },
+      cache: 'no-store'
+    });
+    const data = await response.json().catch(() => ({}));
+    if (response.status === 401 || response.status === 403) {
+      localStorage.removeItem('gcvh_admin_token');
+      sessionStorage.removeItem('gcvh_admin_token');
+      location.replace('admin.html');
+      throw new Error('Admin session expired or access denied.');
+    }
+    if (!response.ok) throw new Error(data.error || data.message || 'Request failed.');
+    return data;
+  }
+
+  function releasePreviews() {
+    objectUrls.forEach(url => URL.revokeObjectURL(url));
+    objectUrls = [];
+  }
+
+  function render(items) {
+    releasePreviews();
+    if (!items.length) {
+      list.innerHTML = '<div class="empty">No requests match this filter.</div>';
+      return;
+    }
+    list.innerHTML = items.map(item => `
+      <article class="request">
+        <div class="preview">
+          <button type="button" data-preview="${Number(item.id)}">Load private video preview</button>
+        </div>
+        <div class="request-body">
+          <div class="request-top"><span class="badge ${escapeHtml(item.status)}">${escapeHtml(item.status)}</span><span class="date">${escapeHtml(item.created_at ? new Date(item.created_at).toLocaleString() : '')}</span></div>
+          <h2>${escapeHtml(item.title)}</h2>
+          <p class="description">${escapeHtml(item.description)}</p>
+          <p class="author">${escapeHtml(item.author || 'Member')} · ${escapeHtml(item.author_email || '')}</p>
+          ${item.admin_note ? `<div class="note"><b>Review note:</b> ${escapeHtml(item.admin_note)}</div>` : ''}
+          ${item.status === 'pending' ? `<div class="actions"><button class="approve" type="button" data-approve="${Number(item.id)}">Approve & credit $5</button><button class="reject" type="button" data-reject="${Number(item.id)}">Reject</button></div>` : ''}
+        </div>
+      </article>`).join('');
+
+    list.querySelectorAll('[data-preview]').forEach(button => button.addEventListener('click', async () => {
+      button.disabled = true;
+      button.textContent = 'Loading…';
+      try {
+        const response = await fetch(`${apiBase}/admin/video-requests/${button.dataset.preview}/media`, {
+          headers: { Authorization: `Bearer ${token}` },
+          cache: 'no-store'
+        });
+        if (!response.ok) {
+          const data = await response.json().catch(() => ({}));
+          throw new Error(data.error || 'Unable to load video preview.');
+        }
+        const url = URL.createObjectURL(await response.blob());
+        objectUrls.push(url);
+        const player = document.createElement('video');
+        player.controls = true;
+        player.preload = 'metadata';
+        player.playsInline = true;
+        player.src = url;
+        button.replaceWith(player);
+      } catch (error) {
+        button.disabled = false;
+        button.textContent = 'Retry video preview';
+        showAlert(error.message, true);
+      }
+    }));
+
+    list.querySelectorAll('[data-approve]').forEach(button => button.addEventListener('click', async () => {
+      const id = button.dataset.approve;
+      if (!confirm(`Approve video request #${id}? It will be published and the member will receive a one-time $5.00 account credit.`)) return;
+      await review(id, 'approve', {});
+    }));
+
+    list.querySelectorAll('[data-reject]').forEach(button => button.addEventListener('click', async () => {
+      const id = button.dataset.reject;
+      const note = prompt('Optional rejection note for the member:');
+      if (note === null) return;
+      await review(id, 'reject', { note });
+    }));
+  }
+
+  async function review(id, action, body) {
+    try {
+      const data = await request(`/admin/video-requests/${id}/${action}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+      showAlert(data.message || `Video request ${action}d.`);
+      await loadRequests();
+    } catch (error) {
+      showAlert(error.message, true);
+    }
+  }
+
+  async function loadRequests() {
+    const sequence = ++loadSequence;
+    alertBox.className = 'alert';
+    list.innerHTML = '<div class="empty">Loading video requests…</div>';
+    releasePreviews();
+    try {
+      const data = await request(`/admin/video-requests?status=${encodeURIComponent(statusFilter.value)}&page=${page}`);
+      if (sequence !== loadSequence) return;
+      const counts = data.counts || {};
+      document.getElementById('pendingCount').textContent = Number(counts.pending || 0);
+      document.getElementById('approvedCount').textContent = Number(counts.approved || 0);
+      document.getElementById('rejectedCount').textContent = Number(counts.rejected || 0);
+      page = Number(data.page || page);
+      pageCount = Math.max(1, Number(data.totalPages || 1));
+      document.getElementById('pageLabel').textContent = `Page ${page} of ${pageCount} · ${Number(data.total || 0)} requests`;
+      document.getElementById('previousPage').disabled = page <= 1;
+      document.getElementById('nextPage').disabled = page >= pageCount;
+      pagination.hidden = pageCount <= 1;
+      render(Array.isArray(data.items) ? data.items : []);
+    } catch (error) {
+      if (sequence !== loadSequence) return;
+      list.innerHTML = '<div class="empty">Unable to load video requests.</div>';
+      showAlert(error.message, true);
+    }
+  }
+
+  statusFilter.addEventListener('change', () => { page = 1; loadRequests(); });
+  document.getElementById('refresh').addEventListener('click', loadRequests);
+  document.getElementById('previousPage').addEventListener('click', () => { if (page > 1) { page -= 1; loadRequests(); } });
+  document.getElementById('nextPage').addEventListener('click', () => { if (page < pageCount) { page += 1; loadRequests(); } });
+  document.getElementById('signOut').addEventListener('click', () => {
+    localStorage.removeItem('gcvh_admin_token');
+    sessionStorage.removeItem('gcvh_admin_token');
+    location.href = 'admin.html';
+  });
+  loadRequests();
+})();
+</script>
+</body>
+</html>

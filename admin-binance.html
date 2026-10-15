@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>GCVH — Admin Binance API Monitor</title>
+<title>GCVH — Admin TRC20 Wallet Monitor</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <style>
 *{box-sizing:border-box}
@@ -76,13 +76,14 @@ a{color:inherit;text-decoration:none}
     <a class="nav" href="admin-customers.html"><span class="nav-icon">◈</span>Customer Accounts</a>
     <a class="nav" href="admin-referrals.html"><span class="nav-icon">%</span>Referrals & Rewards</a>
     <a class="nav" href="admin-signals.html"><span class="nav-icon">⌁</span>Daily Signals Desk</a>
+    <a class="nav" href="admin-video-requests.html"><span class="nav-icon">🎬</span>Video Requests</a>
     <a class="nav" href="admin-blogs.html"><span class="nav-icon">🎬</span>Blogs & Video Manager</a>
   </div>
   
   <div class="nav-group">
     <div class="nav-label">Infrastructure & Apps</div>
     <a class="nav" href="admin-app.html"><span class="nav-icon">📱</span>Mobile App (APK)</a>
-    <a class="nav active" href="admin-binance.html"><span class="nav-icon">◇</span>Binance API Monitor</a>
+    <a class="nav active" href="admin-binance.html"><span class="nav-icon">◇</span>TRC20 Wallet Monitor</a>
   </div>
   
   <div class="side-bottom">
@@ -94,97 +95,77 @@ a{color:inherit;text-decoration:none}
 <main class="main">
 <header class="header">
   <div>
-    <div class="kicker">Exchange Integration</div>
-    <h1>Binance API Liquidity & Reserves Monitor</h1>
+    <div class="kicker">Funding Settlement</div>
+    <h1>TRC20 Wallet Settlement Monitor</h1>
   </div>
   <div class="header-right">
-    <div class="connected"><i></i>REST API Active</div>
-    <button id="refresh" class="refresh" type="button">↻ Query Exchange</button>
+    <div class="connected"><i></i>TRC20 Only</div>
+    <button id="refresh" class="refresh" type="button">↻ Refresh View</button>
   </div>
 </header>
 
 <div class="content">
   <div class="stats-bar">
     <div class="stat-box">
-      <div class="stat-label">USDT Hot Wallet Liquidity</div>
-      <div id="statUsdt" class="stat-val" style="color:var(--green);">$84,520.00</div>
+      <div class="stat-label">Accepted Asset</div>
+      <div class="stat-val" style="color:var(--green);">USDT</div>
     </div>
     <div class="stat-box">
-      <div class="stat-label">BTC Collateral Balance</div>
-      <div id="statBtc" class="stat-val" style="color:var(--gold2);">1.4208 BTC</div>
+      <div class="stat-label">Settlement Network</div>
+      <div class="stat-val" style="color:var(--gold2);">TRC20</div>
     </div>
     <div class="stat-box">
-      <div class="stat-label">Estimated Reserve Value</div>
-      <div id="statTotalVal" class="stat-val">$218,650.00</div>
+      <div class="stat-label">Enabled Operations</div>
+      <div class="stat-val">Deposit &amp; withdrawal</div>
     </div>
+  </div>
+
+  <div class="card">
+  <div class="section-head">
+    <div>
+      <div class="section-title">TRC20 Wallet & Settlement Status</div>
+      <div class="section-sub">Official settlement wallet configuration for all deposits and withdrawals.</div>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Asset</th>
+          <th>Network / Protocol</th>
+          <th>Official Wallet Address</th>
+          <th>Configured Use</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><b style="color:var(--green)">USDT (TRC20)</b></td>
+          <td>Tron / TRC20</td>
+          <td style="font-family:monospace;color:var(--gold2)">THGj2PhwgUxLHkUqfpxBrp39yUWcLQ3g84</td>
+          <td>Deposits and withdrawals</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
   </div>
 
   <div class="card">
     <div class="section-head">
       <div>
-        <div class="section-title">Liquidity Pool & Bridge Wallets</div>
-        <div class="section-sub">Real-time balances across settlement gateways and cold storage multisig vaults.</div>
-      </div>
-    </div>
-
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>Asset</th>
-            <th>Network / Protocol</th>
-            <th>Deposit Gateway Address</th>
-            <th>Hot Wallet Available</th>
-            <th>Multisig Vault Locked</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><b style="color:var(--green)">USDT (TRC20)</b></td>
-            <td>Tron / TRC20</td>
-            <td style="font-family:monospace;color:var(--gold2)">TMx8RkP9mQz7K2jVbW4nE6sY1cL3aF8xGh</td>
-            <td style="font-weight:700">$54,200.00</td>
-            <td>$250,000.00</td>
-            <td><span style="color:var(--green);font-weight:800">● Operational</span></td>
-          </tr>
-          <tr>
-            <td><b style="color:var(--gold)">USDT (BEP20)</b></td>
-            <td>BNB Smart Chain</td>
-            <td style="font-family:monospace;color:var(--gold2)">0x71C5A6B48D9E0A23F1C74895B2E1097C45A3D8F2</td>
-            <td style="font-weight:700">$30,320.00</td>
-            <td>$180,000.00</td>
-            <td><span style="color:var(--green);font-weight:800">● Operational</span></td>
-          </tr>
-          <tr>
-            <td><b style="color:var(--gold2)">Binance Direct UID</b></td>
-            <td>Internal Off-Chain Ledger</td>
-            <td style="font-family:monospace;color:var(--gold2)">984729104</td>
-            <td style="font-weight:700">Instant Liquidity</td>
-            <td>-</td>
-            <td><span style="color:var(--green);font-weight:800">● Operational</span></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="section-head">
-      <div>
-        <div class="section-title">Algorithmic Gold (XAUUSD) Hedging Desk</div>
-        <div class="section-sub">Institutional risk management protocols and order execution bridge.</div>
+        <div class="section-title">Wallet Settlement Information</div>
+        <div class="section-sub">Funding and payout instructions for the supported network.</div>
       </div>
     </div>
 
     <div class="info-grid">
       <div class="info-card">
-        <div class="info-title">Hedging Model</div>
-        <div class="info-desc">Member ROI is backed by institutional XAUUSD algorithmic scalping and automated liquidity arbitrage across global bullion spot markets and Binance crypto derivatives.</div>
+          <div class="info-title">Settlement Model</div>
+          <div class="info-desc">Member deposits and withdrawals are processed through the official TRC20 USDT wallet only. This is the active settlement network for all client funding operations.</div>
       </div>
       <div class="info-card">
         <div class="info-title">Settlement SLA</div>
-        <div class="info-desc">Automated batch payout engine verifies user withdrawals on a bi-weekly cycle with a strict maximum 24-hour SLA upon admin verification and TXID broadcast.</div>
+          <div class="info-desc">Automated batch payout engine verifies user withdrawals on a bi-weekly cycle with a strict maximum 24-hour SLA upon admin verification and TRC20 transaction broadcast.</div>
       </div>
     </div>
   </div>
@@ -202,7 +183,7 @@ a{color:inherit;text-decoration:none}
   }
 
   document.getElementById('refresh').onclick = () => {
-    alert('Binance API connection verified. Liquidity balances synced with spot wallet.');
+    window.location.reload();
   };
 
   document.getElementById('signOut').onclick = () => {

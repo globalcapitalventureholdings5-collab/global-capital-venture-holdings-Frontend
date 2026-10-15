@@ -184,7 +184,7 @@ body {
 /* METHOD TABS */
 .methods-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(1, 1fr);
   gap: 12px;
   margin: 16px 0;
 }
@@ -514,7 +514,7 @@ table.deposit-table tr:hover td {
   <section class="card hero">
     <div class="tag">PACKAGE DEPOSIT</div>
     <h1>Complete Your <span style="color:var(--gold2)">Deposit</span></h1>
-    <p>Select your package amount and payment method (TRC20, BEP20, or Binance Pay UID), transfer the exact amount, and submit the Transaction ID along with your payment proof screenshot.</p>
+    <p>Select your package amount and payment method (USDT TRC20 — TRON network). Transfer the exact amount and submit the Transaction ID along with your payment proof screenshot.</p>
     
     <div class="pkg-selector-wrap">
       <label style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;font-weight:800;display:block;">Select Package Amount</label>
@@ -545,22 +545,12 @@ table.deposit-table tr:hover td {
         <span>USDT (TRC20)</span>
         <small style="font-size:10px;color:var(--muted);">TRON Network</small>
       </button>
-      <button type="button" class="method-btn" data-method="BEP20">
-        <span class="method-icon">🟡</span>
-        <span>USDT (BEP20)</span>
-        <small style="font-size:10px;color:var(--muted);">BNB Smart Chain</small>
-      </button>
-      <button type="button" class="method-btn" data-method="UID">
-        <span class="method-icon">💎</span>
-        <span>Binance UID</span>
-        <small style="font-size:10px;color:var(--muted);">Binance Pay</small>
-      </button>
     </div>
 
     <div class="field" style="margin-top:16px">
       <label id="depositAddressLabel">Official USDT Deposit Address (TRC20)</label>
       <div style="background:rgba(0,0,0,0.4);border:1.5px solid rgba(243,207,122,0.35);border-radius:12px;padding:16px 18px;font-family:ui-monospace,SFMono-Regular,monospace;font-size:14px;font-weight:700;color:var(--gold);word-break:break-all;user-select:all;" id="depositAddressDisplay">
-        TLYNo7HqiDBMzRPuuSPu3SQsL1Fx9gfD5w
+        THGj2PhwgUxLHkUqfpxBrp39yUWcLQ3g84
       </div>
     </div>
 
@@ -830,7 +820,7 @@ document.querySelectorAll('.pkg-chip').forEach(btn => {
 });
 
 let currentMethod = (qs.get('method') || qs.get('network') || 'TRC20').toUpperCase();
-if (!['TRC20', 'BEP20', 'UID'].includes(currentMethod)) {
+if (!['TRC20'].includes(currentMethod)) {
   currentMethod = 'TRC20';
 }
 
@@ -838,20 +828,8 @@ const WALLET_DATA = {
   TRC20: {
     name: 'USDT (TRC20 / TRON Network)',
     label: 'Official USDT Deposit Address (TRC20)',
-    address: 'TLYNo7HqiDBMzRPuuSPu3SQsL1Fx9gfD5w',
+    address: 'THGj2PhwgUxLHkUqfpxBrp39yUWcLQ3g84',
     instructions: (amt) => `Send the exact amount of $${amt} USDT (TRC20) to this official Tron network wallet address.`
-  },
-  BEP20: {
-    name: 'USDT (BEP20 / BNB Smart Chain)',
-    label: 'Official USDT Deposit Address (BEP20)',
-    address: '0xda9362094e07897b9fbcad372d353bcfec2cd88c',
-    instructions: (amt) => `Send the exact amount of $${amt} USDT (BEP20) to this official BNB Smart Chain wallet address.`
-  },
-  UID: {
-    name: 'Binance Pay UID',
-    label: 'Official Binance Pay UID (55868490)',
-    address: '55868490',
-    instructions: (amt) => `Transfer the exact amount of $${amt} USDT via Binance Pay directly to this Binance UID: 55868490.`
   }
 };
 

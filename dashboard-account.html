@@ -98,9 +98,7 @@
       <section class="account-panel">
         <div class="panel-heading"><h2>Official Funding Wallets</h2><p>Verify the network carefully before sending funds. Only use the address matching your selected payment method.</p></div>
         <div class="wallet-grid">
-          <article class="wallet-card"><div class="wallet-head"><h3>USDT (TRC20)</h3><span class="wallet-network">TRON</span></div><div class="wallet-address" id="walletTrc20">TLYNo7HqiDBMzRPuuSPu3SQsL1Fx9gfD5w</div><button class="copy-button" type="button" data-copy="walletTrc20">Copy TRC20 Address</button></article>
-          <article class="wallet-card"><div class="wallet-head"><h3>USDT (BEP20)</h3><span class="wallet-network">BNB SMART CHAIN</span></div><div class="wallet-address" id="walletBep20">0xda9362094e07897b9fbcad372d353bcfec2cd88c</div><button class="copy-button" type="button" data-copy="walletBep20">Copy BEP20 Address</button></article>
-          <article class="wallet-card"><div class="wallet-head"><h3>Binance Pay UID</h3><span class="wallet-network">BINANCE PAY</span></div><div class="wallet-address" id="walletBinance">55868490</div><button class="copy-button" type="button" data-copy="walletBinance">Copy Binance UID</button></article>
+          <article class="wallet-card"><div class="wallet-head"><h3>USDT (TRC20)</h3><span class="wallet-network">TRON</span></div><div class="wallet-address" id="walletTrc20">THGj2PhwgUxLHkUqfpxBrp39yUWcLQ3g84</div><button class="copy-button" type="button" data-copy="walletTrc20">Copy TRC20 Address</button></article>
         </div>
         <div class="support-line">Need account or payment support? <a href="mailto:globalcapitalventureholdings5@gmail.com">globalcapitalventureholdings5@gmail.com</a></div>
         <div class="page-alert" id="pageAlert" role="status"></div>
@@ -147,7 +145,7 @@
           const input = document.createElement('textarea'); input.value = value; input.style.position = 'fixed'; input.style.opacity = '0';
           document.body.appendChild(input); input.select(); document.execCommand('copy'); input.remove(); button.textContent = 'Copied';
         }
-        setTimeout(() => { button.textContent = button.dataset.copy === 'walletTrc20' ? 'Copy TRC20 Address' : button.dataset.copy === 'walletBep20' ? 'Copy BEP20 Address' : 'Copy Binance UID'; }, 1500);
+        setTimeout(() => { button.textContent = button.dataset.copy === 'walletTrc20' ? 'Copy TRC20 Address' : 'Copy Address'; }, 1500);
       }));
 
       async function loadProfile() {
@@ -180,8 +178,6 @@
       }
 
       if (window.GCVH_CONFIG?.TRC20_WALLET) setText('walletTrc20', window.GCVH_CONFIG.TRC20_WALLET);
-      if (window.GCVH_CONFIG?.BEP20_WALLET) setText('walletBep20', window.GCVH_CONFIG.BEP20_WALLET);
-      if (window.GCVH_CONFIG?.BINANCE_UID) setText('walletBinance', window.GCVH_CONFIG.BINANCE_UID);
       loadProfile();
     })();
   </script>
