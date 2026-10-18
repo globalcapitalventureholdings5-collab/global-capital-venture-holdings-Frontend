@@ -401,8 +401,9 @@
                         </select>
           </div>
           <div class="form-group" style="grid-column:1/-1;">
-            <label class="form-label">Receiving Wallet Address / Binance Pay UID</label>
-            <input id="withAddress" type="text" class="form-input" placeholder="e.g. TMx8RkP9mQz7K2jV... or 0x71C5A6... or Binance UID" required>
+            <label class="form-label">Your USDT TRC20 Receiving Wallet Address</label>
+            <input id="withAddress" type="text" class="form-input" inputmode="text" autocapitalize="characters" spellcheck="false" maxlength="34" pattern="T[1-9A-HJ-NP-Za-km-z]{33}" placeholder="Enter your USDT TRC20 wallet address" aria-describedby="walletAddressHint" required>
+            <small id="walletAddressHint" style="display:block;margin-top:7px;color:var(--text-muted);font-size:11px;">Your saved wallet will be filled automatically. You can enter a different TRC20 wallet for this request; one-time changes are not saved to your profile.</small>
           </div>
         </div>
 
@@ -475,6 +476,7 @@
   if (user.package_name && document.getElementById('navPackageName')) {
     document.getElementById('navPackageName').textContent = user.package_name;
   }
+  let savedWithdrawalAddress = '';
 
   // Mobile menu
   const sidebar = document.getElementById('sidebar');
@@ -524,11 +526,23 @@
           cache: 'no-store'
         })
       ]);
-      if (!res.ok) throw new Error('Failed to load withdrawals');
-      const data = await res.json();
-      const profile = profileRes.ok ? await profileRes.json() : {};
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || 'Failed to load withdrawals.');
+      if (!profileRes.ok) {
+        const profileError = await profileRes.json().catch(() => ({}));
+        throw new Error(profileError.error || 'Unable to load your saved withdrawal wallet.');
+      }
+      const profile = await profileRes.json();
       const balance = Number(profile.available_withdrawal || 0);
       document.getElementById('dispBalance').textContent = `$${balance.toFixed(2)}`;
+      savedWithdrawalAddress = profile.withdrawal_address || '';
+      const addressInput = document.getElementById('withAddress');
+      if (!addressInput.value || addressInput.value === savedWithdrawalAddress) {
+        addressInput.value = savedWithdrawalAddress;
+      }
+      document.getElementById('walletAddressHint').textContent = savedWithdrawalAddress
+        ? 'Your saved wallet is filled in above. You may edit it for this request only; to permanently change your saved wallet, update it in User & Wallet Details.'
+        : 'No saved wallet yet. Enter a TRC20 wallet for this request, or save a default wallet in User & Wallet Details.';
 
       const list = Array.isArray(data) ? data : (Array.isArray(data.withdrawals) ? data.withdrawals : []);
       const tbody = document.getElementById('withdrawHistoryBody');
@@ -568,6 +582,11 @@
 
   document.getElementById('withdrawForm').onsubmit = async (e) => {
     e.preventDefault();
+    const destination = document.getElementById('withAddress').value.trim();
+    if (!/^T[1-9A-HJ-NP-Za-km-z]{33}$/.test(destination)) {
+      alert('Enter a valid 34-character USDT TRC20 (TRON) wallet address.');
+      return;
+    }
     const btn = document.getElementById('submitWithdrawBtn');
     btn.disabled = true;
     btn.textContent = 'Submitting Request...';
@@ -576,7 +595,7 @@
       amount: Number(document.getElementById('withAmount').value),
       asset: 'USDT',
       network: document.getElementById('withMethod').value,
-      destination: document.getElementById('withAddress').value.trim()
+      destination
     };
 
     try {
@@ -592,6 +611,7 @@
       if (!res.ok) throw new Error(data.error || data.message || 'Withdrawal submission failed');
       alert('✓ Withdrawal request submitted successfully! Funds will be settled within the 24-hour verification window.');
       document.getElementById('withdrawForm').reset();
+      document.getElementById('withAddress').value = savedWithdrawalAddress;
       document.getElementById('prevGross').textContent = '$0.00';
       document.getElementById('prevFee').textContent = '-$0.00';
       document.getElementById('prevNet').textContent = '$0.00';

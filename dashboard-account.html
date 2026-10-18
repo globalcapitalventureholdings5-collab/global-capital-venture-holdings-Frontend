@@ -23,19 +23,18 @@
     .profile-field { min-width:0; padding:16px; border:1px solid var(--border); border-radius:11px; background:rgba(0,0,0,.14); }
     .profile-label { display:block; color:var(--muted); font-size:9px; font-weight:900; letter-spacing:.1em; text-transform:uppercase; }
     .profile-value { display:block; margin-top:7px; color:#fff; font-size:14px; font-weight:700; overflow-wrap:anywhere; }
-    .wallet-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; }
-    .wallet-card { min-width:0; padding:18px; border:1px solid var(--border); border-radius:12px; background:rgba(0,0,0,.16); }
-    .wallet-head { display:flex; align-items:center; justify-content:space-between; gap:8px; }
-    .wallet-head h3 { color:#fff; font-size:13px; }
-    .wallet-network { color:var(--gold); font-size:9px; font-weight:800; }
-    .wallet-address { min-height:48px; display:flex; align-items:center; margin:13px 0; padding:11px; border:1px solid rgba(243,207,122,.17); border-radius:8px; background:rgba(243,207,122,.04); color:#f4d88f; font:600 11px/1.5 ui-monospace,Consolas,monospace; overflow-wrap:anywhere; }
-    .copy-button { width:100%; min-height:40px; border:1px solid rgba(16,185,129,.25); border-radius:8px; background:rgba(16,185,129,.1); color:#dff8ec; font-size:10px; font-weight:900; }
-    .copy-button:hover { background:rgba(16,185,129,.18); }
-    .support-line { margin-top:18px; padding:16px; border:1px solid rgba(243,207,122,.18); border-radius:10px; color:var(--muted); font-size:11px; line-height:1.7; }
-    .support-line a { color:var(--gold); font-weight:800; overflow-wrap:anywhere; }
+    .wallet-field { display:grid; gap:8px; }
+    .wallet-field label { color:var(--muted); font-size:10px; font-weight:900; letter-spacing:.08em; text-transform:uppercase; }
+    .wallet-field input { width:100%; min-height:48px; padding:12px 14px; border:1px solid var(--border); border-radius:9px; outline:none; background:#07120c; color:#fff; font:600 13px ui-monospace,Consolas,monospace; }
+    .wallet-field input:focus { border-color:var(--primary-green); box-shadow:0 0 0 3px rgba(16,185,129,.1); }
+    .wallet-help { margin-top:10px; color:var(--muted); font-size:11px; line-height:1.6; }
+    .wallet-actions { display:flex; justify-content:flex-end; margin-top:16px; }
+    .wallet-save { min-height:42px; padding:0 18px; border:1px solid rgba(16,185,129,.35); border-radius:9px; background:rgba(16,185,129,.13); color:#dff8ec; font-size:11px; font-weight:900; }
+    .wallet-save:disabled { opacity:.6; cursor:wait; }
     .page-alert { margin-top:14px; color:var(--muted); font-size:12px; }
-    @media(max-width:900px) { .wallet-grid { grid-template-columns:1fr 1fr; } }
-    @media(max-width:640px) { .account-header { align-items:flex-start; flex-direction:column; } .account-panel { padding:17px; } .profile-grid,.wallet-grid { grid-template-columns:1fr; } }
+    .page-alert.success { color:var(--primary-green); }
+    .page-alert.error { color:#ff849a; }
+    @media(max-width:640px) { .account-header { align-items:flex-start; flex-direction:column; } .account-panel { padding:17px; } .profile-grid { grid-template-columns:1fr; } .wallet-actions .wallet-save { width:100%; } }
   </style>
 </head>
 <body class="dashboard-body">
@@ -71,7 +70,7 @@
         <a href="blogs.html"><span>📰</span> Community & News Briefings</a>
       </nav>
       <div class="sidebar-bottom">
-        <div class="account-note"><span>PRIVATE PORTFOLIO</span><p>Account profile and verified funding wallet details.</p></div>
+        <div class="account-note"><span>PRIVATE PORTFOLIO</span><p>Account profile and saved withdrawal wallet details.</p></div>
         <a href="index.html" class="sidebar-home">← Return to Homepage</a>
         <button id="sidebarLogout" class="sidebar-logout-btn" type="button">🚪 Sign Out / Logout</button>
       </div>
@@ -79,7 +78,7 @@
 
     <main class="dashboard-main account-main">
       <header class="account-header">
-        <div><div class="account-kicker">Private Client Area</div><h1 class="account-title">User & <span>Wallet Details</span></h1><p class="account-subtitle">Your account profile, investment package, referral details, and official platform funding addresses.</p></div>
+        <div><div class="account-kicker">Private Client Area</div><h1 class="account-title">User & <span>Wallet Details</span></h1><p class="account-subtitle">Your account profile, investment package, referral details, and saved withdrawal wallet.</p></div>
         <div class="account-status"><i></i><span id="profileStatus">Checking account</span></div>
       </header>
 
@@ -96,12 +95,16 @@
       </section>
 
       <section class="account-panel">
-        <div class="panel-heading"><h2>Official Funding Wallets</h2><p>Verify the network carefully before sending funds. Only use the address matching your selected payment method.</p></div>
-        <div class="wallet-grid">
-          <article class="wallet-card"><div class="wallet-head"><h3>USDT (TRC20)</h3><span class="wallet-network">TRON</span></div><div class="wallet-address" id="walletTrc20">THGj2PhwgUxLHkUqfpxBrp39yUWcLQ3g84</div><button class="copy-button" type="button" data-copy="walletTrc20">Copy TRC20 Address</button></article>
-        </div>
-        <div class="support-line">Need account or payment support? <a href="mailto:globalcapitalventureholdings5@gmail.com">globalcapitalventureholdings5@gmail.com</a></div>
-        <div class="page-alert" id="pageAlert" role="status"></div>
+        <div class="panel-heading"><h2>Your Withdrawal Wallet</h2><p>Save the USDT TRC20 wallet where you want to receive withdrawals.</p></div>
+        <form id="withdrawalWalletForm">
+          <div class="wallet-field">
+            <label for="withdrawalWalletAddress">USDT TRC20 Wallet Address</label>
+            <input id="withdrawalWalletAddress" type="text" inputmode="text" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="34" pattern="T[1-9A-HJ-NP-Za-km-z]{33}" placeholder="Enter your TRON wallet address" required>
+          </div>
+          <p class="wallet-help">Your saved address will be filled in on the withdrawal page. You may enter a different TRC20 wallet there for a one-time request without changing this saved address.</p>
+          <div class="wallet-actions"><button class="wallet-save" id="saveWithdrawalWallet" type="submit">Save Withdrawal Wallet</button></div>
+        </form>
+        <div class="page-alert" id="pageAlert" role="status" aria-live="polite"></div>
       </section>
     </main>
   </div>
@@ -137,16 +140,48 @@
         location.href = 'login.html';
       });
 
-      document.querySelectorAll('[data-copy]').forEach(button => button.addEventListener('click', async () => {
-        const value = $(button.dataset.copy)?.textContent?.trim();
-        if (!value) return;
-        try { await navigator.clipboard.writeText(value); button.textContent = 'Copied'; }
-        catch (_) {
-          const input = document.createElement('textarea'); input.value = value; input.style.position = 'fixed'; input.style.opacity = '0';
-          document.body.appendChild(input); input.select(); document.execCommand('copy'); input.remove(); button.textContent = 'Copied';
+      const walletForm = $('withdrawalWalletForm');
+      const walletInput = $('withdrawalWalletAddress');
+      const saveWalletButton = $('saveWithdrawalWallet');
+      const pageAlert = $('pageAlert');
+      const isValidTrc20Address = address => /^T[1-9A-HJ-NP-Za-km-z]{33}$/.test(address);
+
+      function showPageAlert(message, isError = false) {
+        pageAlert.textContent = message;
+        pageAlert.className = `page-alert ${isError ? 'error' : 'success'}`;
+      }
+
+      walletForm.addEventListener('submit', async event => {
+        event.preventDefault();
+        const address = walletInput.value.trim();
+        if (!isValidTrc20Address(address)) {
+          showPageAlert('Enter a valid 34-character USDT TRC20 (TRON) wallet address.', true);
+          return;
         }
-        setTimeout(() => { button.textContent = button.dataset.copy === 'walletTrc20' ? 'Copy TRC20 Address' : 'Copy Address'; }, 1500);
-      }));
+
+        saveWalletButton.disabled = true;
+        saveWalletButton.textContent = 'Saving...';
+        try {
+          const response = await fetch(`${window.GCVH_CONFIG.API_BASE_URL}/me/withdrawal-address`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json', Authorization: `******` },
+            body: JSON.stringify({ withdrawal_address: address })
+          });
+          const data = await response.json().catch(() => ({}));
+          if (!response.ok) throw new Error(data.error || 'Unable to save your withdrawal wallet.');
+          walletInput.value = data.withdrawal_address || address;
+          showPageAlert(data.message || 'Your USDT TRC20 withdrawal wallet has been saved.');
+        } catch (error) {
+          showPageAlert(error.message || 'Unable to save your withdrawal wallet.', true);
+          if (/session|token|unauthorized|expired/i.test(error.message || '')) {
+            localStorage.removeItem('gcvh_customer_token'); sessionStorage.removeItem('gcvh_customer_token');
+            location.replace('login.html?redirect=' + encodeURIComponent('dashboard-account.html'));
+          }
+        } finally {
+          saveWalletButton.disabled = false;
+          saveWalletButton.textContent = 'Save Withdrawal Wallet';
+        }
+      });
 
       async function loadProfile() {
         try {
@@ -166,6 +201,7 @@
           setText('profileReferral', data.referral_code || '—');
           setText('profileVerification', '● Active & Protected');
           setText('profilePrincipal', `$${Number(data.principal || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`);
+          walletInput.value = data.withdrawal_address || '';
           setText('sidebarAccountStatus', data.status === 'active' ? 'Account Active' : 'Account Pending');
           setText('profileStatus', active ? 'VERIFIED CLIENT' : 'ACCOUNT PENDING');
         } catch (error) {
@@ -177,7 +213,6 @@
         }
       }
 
-      if (window.GCVH_CONFIG?.TRC20_WALLET) setText('walletTrc20', window.GCVH_CONFIG.TRC20_WALLET);
       loadProfile();
     })();
   </script>
