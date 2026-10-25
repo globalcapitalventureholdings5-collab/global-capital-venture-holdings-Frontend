@@ -56,6 +56,14 @@ a{color:inherit;text-decoration:none}
 .empty{padding:40px;text-align:center;color:#61707a;font-size:12px}
 .alert{display:none;padding:12px;border-radius:9px;margin-bottom:15px;font-size:12px}
 .alert.show{display:block}.alert.error{background:#ff647f12;border:1px solid #ff647f35;color:#ff9aae}.alert.success{background:#38d99a12;border:1px solid #38d99a35;color:#7ce7ba}
+.confirm-overlay{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.78)}
+.confirm-overlay.open{display:flex}.confirm-dialog{width:min(440px,100%);padding:22px;border:1px solid var(--line);border-radius:14px;background:#10171e;box-shadow:0 24px 80px #000}
+.confirm-dialog h2{margin:0;color:var(--gold2);font:700 19px Georgia,serif}.confirm-dialog p{margin:12px 0;color:#cbd2d6;font-size:12px;line-height:1.6}
+.confirm-dialog input{display:none;width:100%;margin:12px 0;padding:11px;border:1px solid var(--line);border-radius:8px;background:#070a0d;color:#fff}
+.confirm-dialog input.visible{display:block}.confirm-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
+.confirm-actions button{padding:9px 13px;border:1px solid var(--line);border-radius:8px;background:#ffffff08;color:#cbd2d6;font-size:11px;font-weight:800}
+.confirm-actions .confirm-danger{border-color:#ff647f55;background:#ff647f12;color:#ff9aae}
+.confirm-actions .confirm-primary{border-color:#38d99a55;background:#38d99a12;color:#7ce7ba}
 
 @media(max-width:900px){.stats-bar{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:768px){.sidebar{display:none}.main{margin-left:0;width:100%}.header{padding:0 15px}.content{padding:20px 15px}.stats-bar{grid-template-columns:1fr}}
@@ -170,6 +178,18 @@ a{color:inherit;text-decoration:none}
 </main>
 </div>
 
+<div id="customerConfirmOverlay" class="confirm-overlay" role="presentation">
+  <section class="confirm-dialog" role="dialog" aria-modal="true" aria-labelledby="customerConfirmTitle" aria-describedby="customerConfirmMessage">
+    <h2 id="customerConfirmTitle">Confirm customer action</h2>
+    <p id="customerConfirmMessage"></p>
+    <input id="customerConfirmInput" type="text" autocomplete="off" aria-label="Type DELETE to confirm permanent deletion">
+    <div class="confirm-actions">
+      <button id="customerConfirmCancel" type="button">Cancel</button>
+      <button id="customerConfirmAccept" class="confirm-primary" type="button">Confirm</button>
+    </div>
+  </section>
+</div>
+
 <script src="config.js"></script>
 <script>
 (() => {
@@ -192,7 +212,8 @@ a{color:inherit;text-decoration:none}
     if (!el) return;
     el.textContent = msg;
     el.className = `alert show ${isError ? 'error' : 'success'}`;
-    setTimeout(() => { el.className = 'alert'; }, 6000);
+    if (showAlert.timer) clearTimeout(showAlert.timer);
+    showAlert.timer = setTimeout(() => { el.className = 'alert'; }, 10000);
   }
 
   async function loadCustomers() {
@@ -270,8 +291,58 @@ a{color:inherit;text-decoration:none}
       `;
     }).join('');
 
-    tbody.querySelectorAll('[data-action]').forEach(button => {
-      button.addEventListener('click', () => handleCustomerAction(button));
+  }
+
+  function confirmCustomerAction(action, name) {
+    const overlay = document.getElementById('customerConfirmOverlay');
+    const title = document.getElementById('customerConfirmTitle');
+    const message = document.getElementById('customerConfirmMessage');
+    const input = document.getElementById('customerConfirmInput');
+    const accept = document.getElementById('customerConfirmAccept');
+    const cancel = document.getElementById('customerConfirmCancel');
+    const deleting = action === 'delete';
+
+    title.textContent = deleting ? 'Permanently delete customer?' : (action === 'ban' ? 'Ban customer account?' : 'Unban customer account?');
+    message.textContent = deleting
+      ? `This permanently deletes ${name} and associated account data, financial records, referrals, and submitted or published videos. Type DELETE below to confirm.`
+      : action === 'ban'
+        ? `Ban ${name}? Their current sessions will lose access immediately.`
+        : `Unban ${name} and allow them to sign in again?`;
+    input.value = '';
+    input.classList.toggle('visible', deleting);
+    accept.textContent = deleting ? 'Permanently Delete' : (action === 'ban' ? 'Ban Account' : 'Unban Account');
+    accept.className = deleting || action === 'ban' ? 'confirm-danger' : 'confirm-primary';
+    overlay.classList.add('open');
+    if (deleting) input.focus();
+    else accept.focus();
+
+    return new Promise(resolve => {
+      const finish = confirmed => {
+        overlay.classList.remove('open');
+        accept.removeEventListener('click', onAccept);
+        cancel.removeEventListener('click', onCancel);
+        overlay.removeEventListener('click', onOverlayClick);
+        document.removeEventListener('keydown', onKeyDown);
+        resolve(confirmed);
+      };
+      const onAccept = () => {
+        if (deleting && input.value.trim() !== 'DELETE') {
+          showAlert('Type DELETE exactly to confirm permanent deletion.', true);
+          input.focus();
+          return;
+        }
+        finish(true);
+      };
+      const onCancel = () => finish(false);
+      const onOverlayClick = event => { if (event.target === overlay) finish(false); };
+      const onKeyDown = event => {
+        if (event.key === 'Escape') finish(false);
+        if (event.key === 'Enter' && !deleting) onAccept();
+      };
+      accept.addEventListener('click', onAccept);
+      cancel.addEventListener('click', onCancel);
+      overlay.addEventListener('click', onOverlayClick);
+      document.addEventListener('keydown', onKeyDown);
     });
   }
 
@@ -284,20 +355,19 @@ a{color:inherit;text-decoration:none}
     let body;
 
     if (action === 'ban') {
-      if (!window.confirm(`Ban ${name}? Their current sessions will also lose access immediately.`)) return;
+      if (!await confirmCustomerAction(action, name)) return;
       endpoint += '/status';
       body = { status: 'banned' };
     } else if (action === 'unban') {
-      if (!window.confirm(`Unban ${name} and allow them to sign in again?`)) return;
+      if (!await confirmCustomerAction(action, name)) return;
       endpoint += '/status';
       body = { status: 'active' };
-    } else {
-      if (!window.confirm(`Permanently delete ${name} and their account data, financial records, referrals, and submitted/published videos? This cannot be undone.`)) return;
-      if (window.prompt('Type DELETE to permanently remove this customer and their associated data:') !== 'DELETE') {
-        showAlert('Deletion cancelled. The confirmation text did not match.', true);
-        return;
-      }
+    } else if (action === 'delete') {
+      if (!await confirmCustomerAction(action, name)) return;
       method = 'DELETE';
+    } else {
+      showAlert('Unknown customer action.', true);
+      return;
     }
 
     button.disabled = true;
@@ -319,6 +389,11 @@ a{color:inherit;text-decoration:none}
       showAlert(err.message || `Unable to ${action} customer.`, true);
     }
   }
+
+  document.getElementById('customersBody').addEventListener('click', event => {
+    const button = event.target.closest('[data-action]');
+    if (button && !button.disabled) handleCustomerAction(button);
+  });
 
   document.getElementById('searchInput').oninput = render;
   document.getElementById('refresh').onclick = loadCustomers;
