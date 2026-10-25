@@ -303,7 +303,12 @@ a{color:inherit;text-decoration:none}
 
 <script src="config.js"></script>
 <script>
-let adminToken = localStorage.getItem("gcvh_admin_token") || "";
+const sessionExpired = new URLSearchParams(window.location.search).get("session") === "expired";
+if (sessionExpired) {
+  localStorage.removeItem("gcvh_admin_token");
+  sessionStorage.removeItem("gcvh_admin_token");
+}
+let adminToken = sessionExpired ? "" : (localStorage.getItem("gcvh_admin_token") || "");
 
 function $(id) { return document.getElementById(id); }
 
@@ -485,6 +490,7 @@ window.addEventListener("DOMContentLoaded", function() {
   } else {
     $("loginScreen").classList.remove("hidden");
     $("appScreen").classList.add("hidden");
+    if (sessionExpired) showAlert("loginAlert", "Your admin session expired. Please sign in again.");
   }
 });
 </script>

@@ -193,7 +193,7 @@ a{color:inherit;text-decoration:none}
 <script src="config.js"></script>
 <script>
 (() => {
-  const token = localStorage.getItem('gcvh_admin_token') || sessionStorage.getItem('gcvh_admin_token');
+  let token = localStorage.getItem('gcvh_admin_token') || sessionStorage.getItem('gcvh_admin_token');
   if (!token) {
     window.location.href = 'admin.html';
     return;
@@ -216,16 +216,52 @@ a{color:inherit;text-decoration:none}
     showAlert.timer = setTimeout(() => { el.className = 'alert'; }, 10000);
   }
 
+  function handleAuthFailure(error) {
+    if (error.status !== 401) return false;
+    localStorage.removeItem('gcvh_admin_token');
+    sessionStorage.removeItem('gcvh_admin_token');
+    window.location.replace('admin.html?session=expired');
+    return true;
+  }
+
+  async function fetchAdminApi(url, options = {}) {
+    let currentToken = localStorage.getItem('gcvh_admin_token') || sessionStorage.getItem('gcvh_admin_token');
+    const headers = { ...(options.headers || {}) };
+    delete headers.Authorization;
+    const sendRequest = activeToken => fetch(url, {
+      ...options,
+      headers: {
+        ...headers,
+        ...(activeToken ? { Authorization: `Bearer ${activeToken}` } : {})
+      }
+    });
+
+    let response = await sendRequest(currentToken);
+    if (response.status === 401) {
+      const refreshedToken = localStorage.getItem('gcvh_admin_token') || sessionStorage.getItem('gcvh_admin_token');
+      if (refreshedToken && refreshedToken !== currentToken) {
+        currentToken = refreshedToken;
+        response = await sendRequest(currentToken);
+      }
+    }
+    return response;
+  }
+
   async function loadCustomers() {
     try {
-      const res = await fetch(`${window.GCVH_CONFIG.API_BASE_URL}/admin/customers`, {
+      const res = await fetchAdminApi(`${window.GCVH_CONFIG.API_BASE_URL}/admin/customers`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Failed to load customers.');
+      if (!res.ok) {
+        const error = new Error(data.error || 'Failed to load customers.');
+        error.status = res.status;
+        throw error;
+      }
       allUsers = Array.isArray(data) ? data : (data.customers || data.users || []);
       render();
     } catch (err) {
+      if (handleAuthFailure(err)) return;
       showAlert(err.message, true);
     }
   }
@@ -372,7 +408,7 @@ a{color:inherit;text-decoration:none}
 
     button.disabled = true;
     try {
-      const res = await fetch(endpoint, {
+      const res = await fetchAdminApi(endpoint, {
         method,
         headers: {
           'Authorization': `******`,
@@ -381,11 +417,16 @@ a{color:inherit;text-decoration:none}
         ...(body ? { body: JSON.stringify(body) } : {})
       });
       const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data.error || `Unable to ${action} customer.`);
+      if (!res.ok) {
+        const error = new Error(data.error || `Unable to ${action} customer.`);
+        error.status = res.status;
+        throw error;
+      }
       showAlert(data.message || 'Customer account updated.');
       await loadCustomers();
     } catch (err) {
       button.disabled = false;
+      if (handleAuthFailure(err)) return;
       showAlert(err.message || `Unable to ${action} customer.`, true);
     }
   }
