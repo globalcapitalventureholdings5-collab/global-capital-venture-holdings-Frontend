@@ -34,10 +34,8 @@ const CONFIG = {
     return 'https://globalcapitalventureholdings.com';
   })(),
   TRC20_WALLET: 'THGj2PhwgUxLHkUqfpxBrp39yUWcLQ3g84',
-  BEP20_WALLET: '',
-  BINANCE_UID: '',
   SUPPORT_EMAIL: 'globalcapitalventureholdings5@gmail.com',
-  APP_VERSION: '1.0.2',
+  APP_VERSION: '1.0.4',
   APK_DOWNLOAD_URL: '/api/download-apk',
   APK_FILE_NAME: 'GlobalCapitalHoldings.apk'
 };
@@ -46,8 +44,6 @@ const API = CONFIG.API_URL;
 window.GCVH_CONFIG = window.GCVH_CONFIG || {
   API_BASE_URL: CONFIG.API_URL + '/api',
   TRC20_WALLET: CONFIG.TRC20_WALLET,
-  BEP20_WALLET: CONFIG.BEP20_WALLET,
-  BINANCE_UID: CONFIG.BINANCE_UID,
   SUPPORT_EMAIL: CONFIG.SUPPORT_EMAIL,
   APP_VERSION: CONFIG.APP_VERSION,
   APK_DOWNLOAD_URL: CONFIG.APK_DOWNLOAD_URL,

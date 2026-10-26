@@ -339,9 +339,7 @@
         <div class="header-kicker">Transparent Financial Ledger</div>
         <h1 class="header-title" style="margin-bottom:0;">Earnings & Yield Distribution History</h1>
       </div>
-      <a href="deposit.html" style="display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:10px;background:linear-gradient(135deg,var(--gold),#a88132);color:#07120c;font-weight:900;font-size:13px;text-transform:uppercase;box-shadow:0 4px 15px rgba(243,207,122,0.25);border:none;">
-        <span>↓</span> + Deposit / Fund Account
-      </a>
+
     </div>
     <p class="header-sub">Comprehensive ledger documenting your daily 1.0% trade profits, multi-level affiliate bonuses, and monthly rank stipends.</p>
 
@@ -444,12 +442,13 @@
       });
       if (!res.ok) throw new Error('Failed to load earnings');
       const data = await res.json();
-      
+
       const summary = data.summary || {};
       const balance = Number(summary.total_balance || 0);
       const totalRoi = Number(summary.trade_profit || 0);
       const totalRef = Number(summary.referral_commissions || 0);
-      const totalEarned = Number(summary.total_earnings || (totalRoi + totalRef + Number(summary.salary_earned || 0)));
+      const videoRewards = Number(summary.video_rewards || 0);
+      const totalEarned = Number(summary.total_earnings || (totalRoi + totalRef + Number(summary.salary_earned || 0) + videoRewards));
 
       document.getElementById('statBalance').textContent = `$${balance.toFixed(2)}`;
       document.getElementById('statTotalRoi').textContent = `$${totalRoi.toFixed(2)}`;
@@ -479,6 +478,14 @@
           description: `Tier ${item.tier_no || 1} salary credit`,
           amount: item.amount,
           created_at: item.credited_at,
+          status: 'credited'
+        })),
+        ...(data.video_rewards || []).map(item => ({
+          id: `VIDEO-${item.id}`,
+          type: 'Approved Video Reward',
+          description: item.note || `One-time reward for approved video request #${item.reference_id}`,
+          amount: item.amount,
+          created_at: item.created_at,
           status: 'credited'
         }))
       ].sort((left, right) => new Date(right.created_at || 0) - new Date(left.created_at || 0));

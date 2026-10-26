@@ -221,40 +221,6 @@
       max-width: 1500px;
       min-height: 100vh;
     }
-    .header-kicker {
-      color: var(--gold);
-      font-size: 11px;
-      font-weight: 900;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      margin-bottom: 6px;
-    }
-    .header-title { font: 700 28px Georgia, serif; color: #ffffff; margin-bottom: 8px; }
-    .header-sub { color: var(--text-muted); font-size: 14px; max-width: 700px; }
-
-    .card {
-      background: linear-gradient(145deg, #0d2218, #07140e);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 28px;
-      margin-top: 24px;
-    }
-    .reference-signal-wrap {
-      display: grid;
-      grid-template-columns: minmax(0, 1.8fr) minmax(260px, 0.9fr);
-      gap: 18px;
-      background: rgba(8, 22, 16, 0.7);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 18px 18px 14px;
-      margin-top: 24px;
-    }
-    .reference-signal-left {
-      background: rgba(10, 29, 22, 0.4);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 18px 18px 14px;
-    }
     .section-tag {
       color: var(--gold);
       font-size: 11px;
@@ -263,186 +229,158 @@
       font-weight: 900;
       margin-bottom: 10px;
     }
-    .reference-title {
-      font: 700 36px Georgia, serif;
-      color: #ffffff;
-      line-height: 1.05;
-      margin: 0 0 10px;
-    }
-    .reference-title span { color: var(--primary-green); }
-    .reference-date {
-      color: var(--text-muted);
-      font-size: 18px;
-      margin: 6px 0 18px;
-    }
-    .reference-pair {
-      font-size: 54px;
-      font-weight: 800;
-      letter-spacing: -0.04em;
-      color: var(--primary-green);
-      margin: 0 0 16px;
-      line-height: 1;
-    }
-    .reference-metrics {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 12px;
-      margin: 10px 0 18px;
-    }
-    .reference-metric {
-      background: rgba(9, 20, 17, 0.7);
-      border: 1px solid rgba(16, 185, 129, 0.18);
-      border-radius: 12px;
-      padding: 14px 12px;
-      min-height: 90px;
-    }
-    .reference-metric span {
-      display: block;
-      color: var(--text-muted);
-      font-size: 12px;
-      margin-bottom: 8px;
-      font-weight: 600;
-    }
-    .reference-metric strong {
-      display: block;
-      color: #ffffff;
-      font-size: 18px;
-      font-weight: 800;
-    }
-    .reference-status-button {
-      width: 100%;
-      border: none;
-      border-radius: 12px;
-      background: linear-gradient(135deg, #14b67d, #10b981);
-      color: #09261d;
-      font-weight: 900;
-      font-size: 24px;
-      padding: 18px 20px;
-      margin-top: 10px;
-      box-shadow: 0 10px 25px rgba(16,185,129,0.22);
-    }
-    .reference-note {
-      margin-top: 18px;
-      color: var(--text-muted);
-      font-size: 14px;
-      line-height: 1.6;
-    }
-    .reference-signal-right {
-      background: rgba(10, 29, 22, 0.4);
+    .dashboard-card {
+      background: linear-gradient(145deg, #0c2017, #07140e);
       border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 10px 12px 12px;
-      display: flex;
-      flex-direction: column;
-      min-height: 100%;
+      border-radius: var(--radius);
+      padding: 28px;
+      margin-bottom: 24px;
     }
-    .reference-desk-header {
+    .card-head {
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      gap: 12px;
-      padding: 8px 10px 12px;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 10px;
+      margin-bottom: 20px;
+      gap: 16px;
+      flex-wrap: wrap;
     }
-    .reference-desk-avatar {
-      width: 44px;
-      height: 44px;
-      display: grid;
-      place-items: center;
-      border-radius: 12px;
-      background: linear-gradient(135deg, var(--gold), #bd9550);
-      color: #100d06;
-      font: 800 18px Georgia, serif;
-    }
-    .reference-desk-header strong {
-      display: block;
-      color: #ffffff;
-      font-size: 20px;
-      line-height: 1.2;
-    }
-    .reference-desk-header span {
-      display: block;
-      color: var(--text-muted);
-      font-size: 12px;
-      margin-top: 2px;
-    }
-    .reference-desk-body {
-      flex: 1;
-      min-height: 120px;
-      margin-top: 6px;
-    }
-    .reference-desk-form {
-      display: flex;
-      gap: 10px;
-      margin-top: 8px;
-      padding-top: 10px;
-      border-top: 1px solid var(--border);
-    }
-    .reference-desk-form input {
-      flex: 1;
-      min-width: 0;
-      background: rgba(0,0,0,0.1);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      color: #ffffff;
-      padding: 12px 14px;
-      font-size: 14px;
-    }
-    .reference-desk-form button {
-      min-width: 92px;
-      border: none;
-      border-radius: 10px;
-      background: linear-gradient(135deg, #10b981, #059669);
-      color: #061b13;
-      font-weight: 900;
-      font-size: 16px;
-    }
-    .signal-box {
-      border: 1px solid rgba(243, 207, 122, 0.3);
-      border-radius: 14px;
-      background: rgba(243, 207, 122, 0.04);
-      padding: 24px;
-      margin-top: 16px;
-    }
-    .signal-grid {
+    .card-head h2 { font: 700 24px Georgia, serif; color: #ffffff; }
+    .card-head h2 span { color: var(--primary-green); }
+    .signal-layout { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 20px; }
+    .signal-details-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-      margin-top: 16px;
+      gap: 10px;
+      margin: 18px 0;
     }
-    .sig-item {
-      padding: 14px;
-      background: rgba(0, 0, 0, 0.3);
+    .signal-detail-cell {
+      padding: 12px;
       border: 1px solid var(--border);
       border-radius: 10px;
+      background: rgba(0, 0, 0, 0.2);
     }
-    .sig-label { font-size: 10px; font-weight: 900; text-transform: uppercase; color: var(--text-muted); }
-    .sig-val { font-size: 18px; font-weight: 800; color: #ffffff; margin-top: 4px; }
-
-    .btn-execute {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      width: 100%;
-      padding: 16px 28px;
-      border-radius: 12px;
+    .signal-detail-cell span { display: block; font-size: 10px; color: var(--text-muted); }
+    .signal-detail-cell strong { display: block; font-size: 14px; color: #ffffff; margin-top: 4px; }
+    .signal-direction { font: 700 32px Georgia, serif; margin: 14px 0 8px; }
+    .buy-signal { color: var(--primary-green); }
+    .sell-signal { color: var(--red); }
+    .signal-status-badge {
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 800;
+      background: rgba(243, 207, 122, 0.15);
+      color: var(--gold);
+      letter-spacing: 0.05em;
+    }
+    .signal-status-badge.settling {
+      background: rgba(243, 207, 122, 0.2);
+      color: var(--gold);
+      border: 1px solid rgba(243, 207, 122, 0.4);
+      animation: pulseSettling 1.8s infinite ease-in-out;
+    }
+    .signal-status-badge.completed {
+      background: rgba(16, 185, 129, 0.18);
+      color: var(--primary-green);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+    }
+    .signal-status-badge.closed {
+      background: rgba(239, 68, 68, 0.15);
+      color: #fca5a5;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+    @keyframes pulseSettling {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.75; transform: scale(0.98); }
+    }
+    .btn-primary {
       background: linear-gradient(135deg, var(--primary-green), #047857);
       color: #ffffff;
       font-weight: 800;
-      font-size: 15px;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      border: none;
-      margin-top: 20px;
-      transition: all 0.2s;
+      border: 0;
+      border-radius: 10px;
+      padding: 0 18px;
+      cursor: pointer;
     }
-    .btn-execute:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3); }
-
-    .table-wrap { overflow-x: auto; margin-top: 16px; }
-    table { width: 100%; border-collapse: collapse; min-width: 700px; }
-    th { text-align: left; padding: 12px 14px; font-size: 10px; color: var(--text-muted); text-transform: uppercase; border-bottom: 1px solid var(--border); }
-    td { padding: 14px; border-bottom: 1px solid rgba(255, 255, 255, 0.04); font-size: 13px; color: var(--text-body); }
+    .btn-primary:disabled { opacity: 0.55; cursor: not-allowed; }
+    .settlement-card-box {
+      display: none;
+      background: linear-gradient(145deg, rgba(243, 207, 122, 0.08), rgba(0, 0, 0, 0.3));
+      border: 1px solid rgba(243, 207, 122, 0.3);
+      border-radius: 12px;
+      padding: 16px;
+      margin-top: 14px;
+    }
+    .settlement-card-box.active { display: block; }
+    .settlement-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      gap: 10px;
+    }
+    .settlement-title { font-size: 12px; font-weight: 800; color: var(--gold); display: flex; align-items: center; gap: 6px; }
+    .settlement-timer-text {
+      font-family: ui-monospace, SFMono-Regular, monospace;
+      font-size: 16px;
+      font-weight: 800;
+      color: #ffffff;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 4px 10px;
+      border-radius: 6px;
+      border: 1px solid rgba(243, 207, 122, 0.3);
+    }
+    .settlement-bar-track { width: 100%; height: 8px; border-radius: 999px; background: rgba(255, 255, 255, 0.08); overflow: hidden; margin: 10px 0 6px; }
+    .settlement-bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #c59b27, #f3cf7a); border-radius: 999px; transition: width 1s linear; }
+    .settlement-note { font-size: 11px; color: #b8d4c9; line-height: 1.4; }
+    .chat-panel {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: rgba(0, 0, 0, 0.15);
+      display: flex;
+      flex-direction: column;
+      min-height: 320px;
+      overflow: hidden;
+    }
+    .chat-header { padding: 14px 18px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+    .chat-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold), #bd9550);
+      color: #111;
+      display: grid;
+      place-items: center;
+      font-size: 12px;
+      font-weight: 900;
+    }
+    .chat-messages { flex: 1; padding: 16px; min-height: 150px; max-height: 300px; overflow-y: auto; }
+    .chat-row { display: flex; flex-direction: column; margin-bottom: 12px; }
+    .chat-row span { font-size: 10px; color: var(--gold); margin-bottom: 3px; }
+    .chat-row p {
+      background: rgba(255, 255, 255, 0.06);
+      padding: 10px 14px;
+      border-radius: 10px;
+      color: #d6e8e0;
+      font-size: 12px;
+      max-width: 90%;
+      overflow-wrap: anywhere;
+    }
+    .chat-row.mine { align-items: flex-end; }
+    .chat-row.mine span { color: var(--primary-green); }
+    .chat-row.mine p { background: rgba(16, 185, 129, 0.15); color: #ffffff; }
+    .chat-input-row { display: flex; border-top: 1px solid var(--border); padding: 10px; gap: 8px; }
+    .chat-input-row input {
+      flex: 1;
+      min-width: 0;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: #ffffff;
+      padding: 10px;
+    }
+    .chat-input-row button { background: var(--primary-green); color: #07120c; border: 0; border-radius: 8px; padding: 0 16px; font-weight: 800; }
 
     @media(max-width: 960px) {
       .sidebar { transform: translateX(-100%); transition: transform 0.3s ease; }
@@ -450,7 +388,9 @@
       .sidebar-close-btn { display: grid; }
       .mobile-header { display: flex; }
       .dashboard-main { margin-left: 0; width: 100%; padding: 24px 16px 60px; }
-      .signal-grid { grid-template-columns: repeat(2, 1fr); }
+      .signal-layout { grid-template-columns: 1fr; }
+      .signal-details-grid { grid-template-columns: repeat(2, 1fr); }
+      .dashboard-card { padding: 22px 18px; }
     }
   </style>
 </head>
@@ -518,128 +458,50 @@
     </aside>
 
   <main class="dashboard-main">
-    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:16px;">
-      <div>
-        <div class="header-kicker">Algorithmic Trade Execution</div>
-        <h1 class="header-title" style="margin-bottom:0;">Daily Institutional Signals Room</h1>
-      </div>
-      <a href="deposit.html" style="display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:10px;background:linear-gradient(135deg,var(--gold),#a88132);color:#07120c;font-weight:900;font-size:13px;text-transform:uppercase;box-shadow:0 4px 15px rgba(243,207,122,0.25);border:none;">
-        <span>↓</span> + Deposit / Fund Account
-      </a>
-    </div>
-    <p class="header-sub">Review the verified market signal and manually claim your daily 1.00% reward during the eligible window.</p>
-
-    <div class="reference-signal-wrap">
-      <div class="reference-signal-left">
-        <div class="section-tag">DAILY CLICKING &amp; SIGNAL INBOX</div>
-        <h2 class="reference-title">Daily <span>Clicking Trade Task</span></h2>
-        <div class="reference-date">Oct 4, 2026</div>
-        <div class="reference-pair">BUY XAUUSD</div>
-
-        <div class="reference-metrics">
-          <div class="reference-metric"><span>Instrument</span><strong>XAUUSD</strong></div>
-          <div class="reference-metric"><span>Profit Rate</span><strong>+1.00% Daily</strong></div>
-          <div class="reference-metric"><span>Trading Hours</span><strong>10AM – 10PM</strong></div>
-          <div class="reference-metric"><span>Weekend Off</span><strong>Sat &amp; Sun Off</strong></div>
-        </div>
-
-        <button class="reference-status-button" type="button">Weekend Off (Closed)</button>
-        <div class="reference-note">Clicking system is closed on Saturday and Sunday. Daily trading tasks resume Monday at 10:00 AM PKT.</div>
-      </div>
-
-      <div class="reference-signal-right">
-        <div class="reference-desk-header">
-          <div class="reference-desk-avatar">GC</div>
-          <div>
-            <strong>Account Desk</strong>
-            <span>Signal &amp; Client Support</span>
-          </div>
-        </div>
-        <div class="reference-desk-body"></div>
-        <div class="reference-desk-form">
-          <input type="text" placeholder="Message the account desk..." aria-label="Message the account desk" />
-          <button type="button">Send</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- LIVE ACTIVE SIGNAL CARD -->
-    <div class="card">
-      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+    <section id="signals" class="dashboard-card">
+      <div class="card-head">
         <div>
-          <h2 style="font:700 20px Georgia,serif;color:#ffffff;">Today's Verified Market Signal</h2>
-          <p style="font-size:12px;color:var(--text-muted);margin-top:2px;">Dispatched directly from the GCVH Institutional Gold Trading Desk</p>
+          <div class="section-tag">DAILY CLICKING &amp; SIGNAL INBOX</div>
+          <h2>Daily <span>Clicking Trade Task</span></h2>
         </div>
-        <div style="padding:6px 14px;border-radius:30px;background:rgba(16,185,129,0.15);border:1px solid var(--primary-green);color:var(--primary-green);font-size:11px;font-weight:900;">
-          ● LIVE SETUP ACTIVE
-        </div>
+        <div id="signalStatus" class="signal-status-badge">Awaiting Signal</div>
       </div>
 
-      <div class="signal-box">
-        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
-          <div>
-            <span style="font-size:12px;font-weight:900;color:var(--gold);letter-spacing:1px;text-transform:uppercase;">Asset Pair</span>
-            <div style="font-size:24px;font-weight:800;color:#fff;margin-top:2px;" id="dispSigPair">XAUUSD (Spot Gold)</div>
+      <div class="signal-layout">
+        <div>
+          <div style="font-size:11px;color:var(--text-muted);letter-spacing:0.1em;font-weight:800;" id="signalDate">--</div>
+          <div id="signalDirection" class="signal-direction">No signal received</div>
+          <div class="signal-details-grid">
+            <div class="signal-detail-cell"><span>Instrument</span><strong id="signalInstrument">XAUUSD</strong></div>
+            <div class="signal-detail-cell"><span>Profit Rate</span><strong style="color:var(--primary-green);">+1.00% Daily</strong></div>
+            <div class="signal-detail-cell"><span>Trading Hours</span><strong>10AM – 10PM</strong></div>
+            <div class="signal-detail-cell"><span>Weekend Off</span><strong style="color:var(--gold);">Sat &amp; Sun Off</strong></div>
           </div>
-          <div style="padding:8px 18px;border-radius:8px;background:rgba(16,185,129,0.2);color:var(--primary-green);font-weight:900;font-size:14px;" id="dispSigType">
-            BUY / LONG
-          </div>
-        </div>
-
-        <div class="signal-grid">
-          <div class="sig-item">
-            <div class="sig-label">Target Entry</div>
-            <div class="sig-val" id="dispSigEntry">$2,654.50</div>
-          </div>
-          <div class="sig-item">
-            <div class="sig-label">Take Profit 1</div>
-            <div class="sig-val" style="color:var(--primary-green)" id="dispSigTp1">$2,668.00</div>
-          </div>
-          <div class="sig-item">
-            <div class="sig-label">Take Profit 2</div>
-            <div class="sig-val" style="color:var(--primary-green)" id="dispSigTp2">$2,682.00</div>
-          </div>
-          <div class="sig-item">
-            <div class="sig-label">Stop Loss</div>
-            <div class="sig-val" style="color:var(--red)" id="dispSigSl">$2,642.00</div>
+          <button id="executeSignal" class="btn-primary" style="width:100%;height:52px;font-size:15px;" disabled>Execute Today's Click (1% ROI) →</button>
+          <p id="signalNotice" role="status" aria-live="polite" style="margin-top:12px;font-size:12px;color:var(--text-muted);">Checking today's signal and account eligibility...</p>
+          <div id="settlementBox" class="settlement-card-box">
+            <div class="settlement-header-row"><div class="settlement-title"><span>⏳</span> Profit Settlement in Progress</div><div id="settlementTimer" class="settlement-timer-text">29:59</div></div>
+            <div class="settlement-bar-track"><div id="settlementProgressFill" class="settlement-bar-fill"></div></div>
+            <div class="settlement-note">Your manually placed clicking order is settling. Today's 1.00% profit (<strong id="settlingProfitAmount" style="color:var(--primary-green);">$0.00</strong>) will be added to your Total Balance in 30 minutes.</div>
           </div>
         </div>
 
-        <div style="margin-top:16px;padding:12px 16px;background:rgba(0,0,0,0.2);border-radius:8px;font-size:12px;color:#cbd5e1;" id="dispSigNotes">
-          Macro setup: Liquidity sweep below Asian session lows with strong institutional accumulation on London open.
+        <div class="chat-panel">
+          <div class="chat-header">
+            <div class="chat-avatar">GC</div>
+            <div>
+              <strong style="font-size:12px;color:#fff;display:block;">Account Desk</strong>
+              <span style="font-size:10px;color:var(--text-muted);display:block;">Signal &amp; Client Support</span>
+            </div>
+          </div>
+          <div id="chatMessages" class="chat-messages"></div>
+          <div class="chat-input-row">
+            <input id="chatInput" placeholder="Message the account desk…" maxlength="300" aria-label="Message the account desk">
+            <button id="sendChat" type="button">Send</button>
+          </div>
         </div>
-
-        <button class="btn-execute" id="btnExecuteTrade">
-          ⚡ Execute Algorithmic Trade (Lock 1% Daily Yield)
-        </button>
-        <p id="signalWindowStatus" role="status" style="margin:10px 0 0;text-align:center;color:var(--text-muted);font-size:12px;line-height:1.5;">
-          Checking mining window and account eligibility...
-        </p>
       </div>
-    </div>
-
-    <!-- SIGNALS HISTORY TABLE -->
-    <div class="card">
-      <h3 style="font:700 18px Georgia,serif;color:#ffffff;margin-bottom:12px;">Recent Dispatched Signals History</h3>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Pair</th>
-              <th>Type</th>
-              <th>Entry Price</th>
-              <th>Take Profit</th>
-              <th>Stop Loss</th>
-              <th>Status</th>
-              <th>Date</th>
-            </tr>
-          </thead>
-          <tbody id="signalsHistoryBody">
-            <tr><td colspan="7" style="text-align:center;padding:30px;color:var(--text-muted)">Loading recent signal history...</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+    </section>
   </main>
 </div>
 
@@ -647,103 +509,241 @@
 <script>
 (() => {
   const token = localStorage.getItem('gcvh_customer_token') || sessionStorage.getItem('gcvh_customer_token');
-  const user = JSON.parse(localStorage.getItem('gcvh_customer_user') || sessionStorage.getItem('gcvh_customer_user') || '{}');
-
   if (!token) {
     window.location.href = 'login.html';
     return;
   }
 
-  const $ = (id) => document.getElementById(id);
-  const money = (value, digits = 2) => `$${Number(value || 0).toFixed(digits)}`;
+  const $ = id => document.getElementById(id);
+  const apiBase = window.GCVH_CONFIG.API_BASE_URL;
+  const settlementDuration = 30 * 60;
+  let signal = { date: new Date().toISOString().slice(0, 10), instrument: 'XAUUSD', direction: 'BUY' };
+  let session = {};
+  let executedAt = null;
+  let principal = 0;
+  let isLoading = true;
+  let isAccountLoading = true;
+  let signalError = '';
+  let accountError = '';
+  let hasAlertedSettled = false;
 
-  async function loadSignals() {
-    try {
-      const res = await fetch(`${window.GCVH_CONFIG.API_BASE_URL}/signals/today`, {
-        headers: { 'Authorization': `Bearer ${token}` },
-        cache: 'no-store'
-      });
-      if (!res.ok) throw new Error('Failed to load signals');
-      const data = await res.json();
-      const signals = data.signals || [];
-      const session = data.session || {};
+  function money(value) {
+    return '$' + Number(value || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
 
-      $('dispSigPair').textContent = data.symbol || data.pair || 'XAUUSD';
-      $('dispSigType').textContent = (data.side || data.type || 'BUY').toUpperCase();
-      $('dispSigEntry').textContent = data.entry || data.entry_price || 'Market';
-      $('dispSigTp1').textContent = data.take_profit || data.tp || '—';
-      $('dispSigTp2').textContent = data.tp2 || '—';
-      $('dispSigSl').textContent = data.stop_loss || data.sl || '—';
-      $('dispSigNotes').textContent = data.message || data.notes || 'No signal notes provided.';
+  function formatMMSS(totalSeconds) {
+    const seconds = Math.max(0, Math.floor(totalSeconds));
+    return String(Math.floor(seconds / 60)).padStart(2, '0') + ':' + String(seconds % 60).padStart(2, '0');
+  }
 
-      const executeButton = $('btnExecuteTrade');
-      const windowStatus = $('signalWindowStatus');
-      if (executeButton) executeButton.disabled = !session.can_execute;
-      if (windowStatus) {
-        if (session.already_executed) {
-          windowStatus.textContent = 'Today’s mining reward has already been claimed. You can claim again in the next daily window.';
-        } else if (!session.account_active) {
-          windowStatus.textContent = 'A deposit must be verified and your investment package activated before mining rewards can be claimed.';
-        } else if (session.is_weekend) {
-          windowStatus.textContent = 'Mining is closed for the weekend. The next window opens Monday at 10:00 AM Pakistan time.';
-        } else if (!session.is_within_hours) {
-          windowStatus.textContent = `Mining is available from ${session.window_start || '10:00 AM PKT'} to ${session.window_end || '10:00 PM PKT'} (Pakistan time).`;
-        } else {
-          windowStatus.textContent = 'Mining is not automatic. Press the claim button to request today’s reward.';
+  function redirectIfUnauthorized(response) {
+    if (response.status !== 401) return false;
+    localStorage.removeItem('gcvh_customer_token');
+    localStorage.removeItem('gcvh_customer_user');
+    sessionStorage.removeItem('gcvh_customer_token');
+    sessionStorage.removeItem('gcvh_customer_user');
+    window.location.href = 'login.html';
+    return true;
+  }
+
+  function addChat(sender, text) {
+    const row = document.createElement('div');
+    row.className = 'chat-row ' + (sender === 'You' ? 'mine' : 'desk');
+    const name = document.createElement('span');
+    name.textContent = sender;
+    const message = document.createElement('p');
+    message.textContent = text;
+    row.append(name, message);
+    $('chatMessages').appendChild(row);
+    $('chatMessages').scrollTop = $('chatMessages').scrollHeight;
+  }
+
+  function renderSignal() {
+    $('signalDate').textContent = new Date(signal.date + 'T12:00:00').toLocaleDateString('en-US', {
+      month: 'short', day: 'numeric', year: 'numeric'
+    });
+    $('signalDirection').textContent = signal.direction + ' ' + signal.instrument;
+    $('signalDirection').className = 'signal-direction ' + (signal.direction === 'BUY' ? 'buy-signal' : 'sell-signal');
+    $('signalInstrument').textContent = signal.instrument;
+
+    const status = $('signalStatus');
+    const notice = $('signalNotice');
+    const button = $('executeSignal');
+    const settlement = $('settlementBox');
+    const profit = principal * 0.01;
+    $('settlingProfitAmount').textContent = money(profit);
+    button.disabled = isLoading || isAccountLoading || Boolean(signalError) || Boolean(accountError) || !session.can_execute || Boolean(executedAt);
+
+    if (executedAt) {
+      const elapsed = Math.floor((Date.now() - executedAt) / 1000);
+      const remaining = Math.max(0, settlementDuration - elapsed);
+      button.disabled = true;
+      if (remaining > 0) {
+        const progress = Math.min(100, Math.max(0, elapsed / settlementDuration * 100));
+        status.textContent = 'Settling (' + formatMMSS(remaining) + ')';
+        status.className = 'signal-status-badge settling';
+        button.textContent = 'Order Settling (' + formatMMSS(remaining) + ')';
+        notice.textContent = "Order is active in position. Today's 1.00% profit (" + money(profit) + ') will credit in ' + formatMMSS(remaining) + '.';
+        settlement.classList.add('active');
+        $('settlementTimer').textContent = formatMMSS(remaining);
+        $('settlementProgressFill').style.width = progress.toFixed(1) + '%';
+      } else {
+        status.textContent = 'Completed (+1.00% ROI)';
+        status.className = 'signal-status-badge completed';
+        button.textContent = "Today's Click Completed";
+        notice.textContent = "Today's 1.00% ROI profit settlement is completed and credited to your Total Balance.";
+        settlement.classList.remove('active');
+        if (!hasAlertedSettled && elapsed < settlementDuration + 15) {
+          hasAlertedSettled = true;
+          addChat('Account Desk', "Today's 1.00% profit (" + money(profit) + ") settlement is complete.");
+          loadAccount();
         }
       }
+      return;
+    }
 
-      const tbody = $('signalsHistoryBody');
-      if (tbody) {
-        if (!signals.length) {
-          tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:30px;color:var(--text-muted)">No active signals broadcasted.</td></tr>';
-          return;
-        }
-        tbody.innerHTML = signals.map(s => `
-          <tr>
-            <td><b style="color:var(--gold)">${s.pair || 'XAUUSD'}</b></td>
-            <td><span style="font-weight:800;color:var(--primary-green)">${(s.type || 'BUY').toUpperCase()}</span></td>
-            <td>${s.entry_price || '-'}</td>
-            <td style="color:var(--primary-green)">${s.tp || '-'}</td>
-            <td style="color:var(--red)">${s.sl || '-'}</td>
-            <td><span style="color:${session.already_executed && String(s.id) === String(data.id) ? 'var(--primary-green)' : 'var(--text-muted)'};font-weight:700">${session.already_executed && String(s.id) === String(data.id) ? '● Claimed' : '● Signal Published'}</span></td>
-            <td style="color:var(--text-muted);font-size:11px">${new Date(s.created_at || Date.now()).toLocaleDateString()}</td>
-          </tr>
-        `).join('');
-      }
-    } catch (err) {
-      console.error(err);
-      const windowStatus = $('signalWindowStatus');
-      if (windowStatus) windowStatus.textContent = err.message || 'Could not check mining eligibility. Please refresh and try again.';
+    settlement.classList.remove('active');
+    button.textContent = "Execute Today's Click (1% ROI) ->";
+    if (isLoading || isAccountLoading) {
+      status.textContent = 'Checking Signal';
+      status.className = 'signal-status-badge';
+      notice.textContent = "Checking today's signal and account eligibility...";
+    } else if (signalError) {
+      status.textContent = 'Signal Unavailable';
+      status.className = 'signal-status-badge closed';
+      notice.textContent = signalError;
+    } else if (accountError) {
+      status.textContent = 'Account Check Failed';
+      status.className = 'signal-status-badge closed';
+      notice.textContent = accountError;
+    } else if (!session.account_active) {
+      status.textContent = 'Account Inactive';
+      status.className = 'signal-status-badge closed';
+      notice.textContent = "A verified deposit and active investment package are required before today's reward can be claimed.";
+    } else if (session.is_weekend) {
+      status.textContent = 'Weekend Off (Closed)';
+      status.className = 'signal-status-badge closed';
+      notice.textContent = 'Clicking system is closed for the weekend. The next window opens Monday at 10:00 AM Pakistan time.';
+    } else if (session.already_executed) {
+      status.textContent = 'Claimed Today';
+      status.className = 'signal-status-badge completed';
+      button.textContent = "Today's Click Completed";
+      notice.textContent = "Today's reward has already been claimed. You can claim again in the next daily window.";
+    } else if (!session.is_within_hours) {
+      status.textContent = 'Session Closed (10AM-10PM)';
+      status.className = 'signal-status-badge closed';
+      notice.textContent = 'Daily clicking is available from ' + (session.window_start || '10:00 AM') + ' to ' + (session.window_end || '10:00 PM') + ' PKT. Please return during the active session.';
+    } else if (session.can_execute) {
+      status.textContent = 'Signal Active (1% ROI)';
+      status.className = 'signal-status-badge';
+      notice.textContent = "No mining reward is generated automatically. Press Execute Today's Click to claim manually; settlement begins after your claim.";
+    } else {
+      status.textContent = 'Signal Unavailable';
+      status.className = 'signal-status-badge closed';
+      notice.textContent = "Today's signal is not currently available for execution. Please refresh or contact support.";
     }
   }
 
-  $('btnExecuteTrade').onclick = async () => {
-    const btn = $('btnExecuteTrade');
-    if (btn.disabled) return;
-    btn.disabled = true;
-    btn.textContent = '⏳ Executing Algorithmic Scalping Order...';
+  async function loadAccount() {
     try {
-      const res = await fetch(`${window.GCVH_CONFIG.API_BASE_URL}/daily-claim`, {
+      const response = await fetch(apiBase + '/me', {
+        headers: { Authorization: 'Bearer ' + token },
+        cache: 'no-store'
+      });
+      if (redirectIfUnauthorized(response)) return;
+      if (!response.ok) throw new Error('Could not load account details (HTTP ' + response.status + ').');
+      const data = await response.json();
+      principal = Number(data.principal || data.package_amount || 0);
+      accountError = '';
+    } catch (error) {
+      console.error('Account details could not be loaded:', error);
+      accountError = error.message || 'Could not load account details. Please refresh and try again.';
+    }
+    isAccountLoading = false;
+    renderSignal();
+  }
+
+  async function loadTodaySignal() {
+    try {
+      const response = await fetch(apiBase + '/signals/today', {
+        headers: { Authorization: 'Bearer ' + token },
+        cache: 'no-store'
+      });
+      if (redirectIfUnauthorized(response)) return;
+      if (!response.ok) throw new Error("Could not load today's signal (HTTP " + response.status + ").");
+      const data = await response.json();
+      session = data.session || {};
+      signal = {
+        date: data.active_date ? String(data.active_date).slice(0, 10) : new Date().toISOString().slice(0, 10),
+        instrument: data.symbol || 'XAUUSD',
+        direction: String(data.side || 'BUY').toUpperCase()
+      };
+      const execution = data.user_execution;
+      executedAt = execution && execution.executed_at ? new Date(execution.executed_at).getTime() : null;
+      if (executedAt !== null && !Number.isFinite(executedAt)) throw new Error('The server returned an invalid execution timestamp.');
+      signalError = '';
+    } catch (error) {
+      console.error("Today's signal could not be loaded:", error);
+      signalError = error.message || "Could not load today's signal. Please refresh and try again.";
+    } finally {
+      isLoading = false;
+      renderSignal();
+    }
+  }
+
+  $('executeSignal').onclick = async () => {
+    const button = $('executeSignal');
+    if (button.disabled || isLoading) return;
+    button.disabled = true;
+    button.textContent = 'Placing Order...';
+    $('signalNotice').textContent = "Submitting your request to execute today's signal...";
+    try {
+      const response = await fetch(apiBase + '/signals/today/execute', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        }
+          Authorization: 'Bearer ' + token
+        },
+        cache: 'no-store',
+        body: JSON.stringify({})
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || data.message || `Reward claim failed (${res.status}).`);
-      alert(`Trade recorded successfully. Your 1% reward ($${Number(data.earnings || 0).toFixed(2)}) will settle according to the reward processing period.`);
-      btn.textContent = '✓ Reward Claimed Today';
-      await loadSignals();
-    } catch (err) {
-      alert(err.message || 'Unable to claim the mining reward.');
-      btn.textContent = '⚡ Execute Algorithmic Trade (Lock 1% Daily Yield)';
-      await loadSignals();
+      if (redirectIfUnauthorized(response)) return;
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        if (response.status === 409) {
+          await loadTodaySignal();
+          return;
+        }
+        throw new Error(data.error || data.message || "Unable to execute today's signal (HTTP " + response.status + ").");
+      }
+      executedAt = Date.now();
+      session.already_executed = true;
+      session.can_execute = false;
+      addChat('Account Desk', "Signal executed. Today's " + signal.direction + ' ' + signal.instrument + ' order was placed. 1.00% profit (' + money(principal * 0.01) + ') will settle in 30 minutes.');
+      renderSignal();
+      await Promise.all([loadAccount(), loadTodaySignal()]);
+    } catch (error) {
+      console.error('Signal execution failed:', error);
+      $('signalNotice').textContent = error.message || "Unable to execute today's signal. Please try again.";
+      button.disabled = false;
+      renderSignal();
     }
   };
 
-  loadSignals();
+  $('sendChat').onclick = () => {
+    const input = $('chatInput');
+    const message = input.value.trim();
+    if (!message) return;
+    addChat('You', message);
+    input.value = '';
+  };
+  $('chatInput').addEventListener('keydown', event => {
+    if (event.key === 'Enter') $('sendChat').click();
+  });
+
+  Promise.all([loadAccount(), loadTodaySignal()]);
+  setInterval(renderSignal, 1000);
+  setInterval(loadTodaySignal, 30000);
 })();
 </script>
 <script>

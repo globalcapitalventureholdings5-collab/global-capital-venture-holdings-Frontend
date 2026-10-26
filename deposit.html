@@ -184,7 +184,7 @@ body {
 /* METHOD TABS */
 .methods-grid {
   display: grid;
-  grid-template-columns: repeat(1, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 12px;
   margin: 16px 0;
 }
@@ -514,7 +514,7 @@ table.deposit-table tr:hover td {
   <section class="card hero">
     <div class="tag">PACKAGE DEPOSIT</div>
     <h1>Complete Your <span style="color:var(--gold2)">Deposit</span></h1>
-    <p>Select your package amount and payment method (USDT TRC20 — TRON network). Transfer the exact amount and submit the Transaction ID along with your payment proof screenshot.</p>
+    <p>Transfer your package amount in USDT over the TRON (TRC20) network to the address below, then submit the transaction ID and payment proof.</p>
     
     <div class="pkg-selector-wrap">
       <label style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;font-weight:800;display:block;">Select Package Amount</label>
@@ -576,7 +576,7 @@ table.deposit-table tr:hover td {
         </div>
         <div class="field">
           <label>Transaction ID (TXID) / Reference <span style="color:#ef4444;">*</span></label>
-          <input id="txidInput" name="txid" required placeholder="Paste your blockchain TXID or Binance Pay reference ID">
+          <input id="txidInput" name="txid" required placeholder="Paste your TRC20 transaction ID (TXID)">
         </div>
       </div>
 
@@ -819,10 +819,7 @@ document.querySelectorAll('.pkg-chip').forEach(btn => {
   btn.onclick = () => setPackageAmount(btn.dataset.val);
 });
 
-let currentMethod = (qs.get('method') || qs.get('network') || 'TRC20').toUpperCase();
-if (!['TRC20'].includes(currentMethod)) {
-  currentMethod = 'TRC20';
-}
+let currentMethod = 'TRC20';
 
 const WALLET_DATA = {
   TRC20: {
@@ -1141,7 +1138,7 @@ $('depositForm').onsubmit = async (e) => {
 
   const txid = $('txidInput').value.trim();
   if (!txid) {
-    showStatus('Please enter the blockchain Transaction ID (TXID) or Binance Pay reference.', true);
+    showStatus('Please enter the TRC20 blockchain Transaction ID (TXID).', true);
     $('txidInput').focus();
     return;
   }

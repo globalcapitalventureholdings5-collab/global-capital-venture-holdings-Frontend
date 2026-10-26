@@ -1573,7 +1573,7 @@
                </div>
              </div>`;
 
-        const authorActions = isOwner
+        const authorActions = isOwner && isAdmin
           ? `<div class="blog-author-actions">
                <button class="blog-btn-action blog-btn-edit" type="button" onclick="openEditModal(${blog.id})">
                  <span>✏️</span> Edit Post
@@ -1751,7 +1751,9 @@
           if (!res.ok) throw new Error(data.error || 'Failed to publish post.');
 
           postFormAlert.className = 'post-alert success';
-          postFormAlert.textContent = '✓ Video post published successfully!';
+          postFormAlert.textContent = isAdmin
+            ? '✓ Video post published successfully!'
+            : '✓ Video submitted for admin review. It will appear after approval; approved videos earn a one-time $5 reward.';
           postFormAlert.style.display = 'block';
 
           setTimeout(() => {

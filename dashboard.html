@@ -1967,10 +1967,10 @@
         <div style="margin:18px 0 10px;text-align:left;">
           <div
             style="font-size:11px;font-weight:800;color:var(--gold);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:4px;">
-            Official Funding & Deposit Wallets
+            Official Funding & Deposit Wallet
           </div>
           <p style="font-size:12px;color:var(--text-muted);margin-bottom:12px;">
-            Transfer your package amount to any official verified address below:
+            Transfer your package amount to this official verified address:
           </p>
 
           <div class="wallets-display-grid">
@@ -2166,59 +2166,8 @@
           </div>
         </div>
 
-        <div style="margin-bottom:14px;">
-          <div
-            style="font-size:11px;font-weight:800;color:var(--gold);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:4px;">
-            Official Platform Funding & Settlement Wallets
-          </div>
-          <p style="font-size:12px;color:var(--text-muted);line-height:1.5;">
-            Use these verified official addresses for all package deposits and account funding. Click copy to copy
-            directly to clipboard.
-          </p>
-        </div>
-
-        <div class="wallets-display-grid">
-          <!-- TRC20 -->
-          <div class="wallet-card-item">
-            <div class="wallet-card-top">
-              <span class="wallet-card-title">🔴 USDT (TRC20)</span>
-              <span class="wallet-badge-pill badge-trc">TRON Network</span>
-            </div>
-            <div class="wallet-address-container" id="dashTrc20">TLYNo7HqiDBMzRPuuSPu3SQsL1Fx9gfD5w</div>
-            <button type="button" class="btn-copy-wallet"
-              onclick="copyWalletAddr('TLYNo7HqiDBMzRPuuSPu3SQsL1Fx9gfD5w', this)">
-              <span>📋</span> Copy TRC20 Wallet
-            </button>
-          </div>
-
-          <!-- BEP20 -->
-          <div class="wallet-card-item">
-            <div class="wallet-card-top">
-              <span class="wallet-card-title">🟡 USDT (BEP20)</span>
-              <span class="wallet-badge-pill badge-bep">BNB Smart Chain</span>
-            </div>
-            <div class="wallet-address-container" id="dashBep20">0xda9362094e07897b9fbcad372d353bcfec2cd88c</div>
-            <button type="button" class="btn-copy-wallet"
-              onclick="copyWalletAddr('0xda9362094e07897b9fbcad372d353bcfec2cd88c', this)">
-              <span>📋</span> Copy BEP20 Wallet
-            </button>
-          </div>
-
-          <!-- Binance UID -->
-          <div class="wallet-card-item">
-            <div class="wallet-card-top">
-              <span class="wallet-card-title">💎 Binance UID</span>
-              <span class="wallet-badge-pill badge-uid">Binance Pay</span>
-            </div>
-            <div class="wallet-address-container" id="dashBinanceUid">55868490</div>
-            <button type="button" class="btn-copy-wallet" onclick="copyWalletAddr('55868490', this)">
-              <span>📋</span> Copy Binance UID
-            </button>
-          </div>
-        </div>
-
         <!-- CORPORATE SUPPORT AREA -->
-        <div class="corporate-support-bar">
+        <!-- <div class="corporate-support-bar">
           <div>
             <div
               style="font-size:11px;font-weight:800;color:var(--gold);text-transform:uppercase;letter-spacing:0.08em;">
@@ -2239,7 +2188,7 @@
               Copy Email
             </button>
           </div>
-        </div>
+        </div> -->
       </section>
 
       <!-- LIVE MARKET CARD -->
@@ -2654,18 +2603,16 @@
             *</label>
           <select id="withdrawMethodSelect"
             style="width:100%;height:44px;padding:0 14px;border-radius:10px;background:#081811;border:1px solid var(--border);color:#fff;outline:none;font-size:13px;">
-            <option value="BEP20">USDT (BEP20 — BNB Smart Chain)</option>
             <option value="TRC20">USDT (TRC20 — TRON Network)</option>
-            <option value="UID">Binance UID / Pay ID</option>
           </select>
         </div>
 
         <div style="display:flex;flex-direction:column;gap:6px;">
           <label id="withdrawDestinationLabel"
-            style="font-size:11px;font-weight:800;color:#c0ded4;text-transform:uppercase;">Destination Wallet Address
-            *</label>
+            style="font-size:11px;font-weight:800;color:#c0ded4;text-transform:uppercase;">USDT Destination Address
+            (TRC20 / TRON) *</label>
           <input type="text" id="withdrawDestinationInput" required
-            placeholder="Enter your destination address or Binance UID"
+            placeholder="Enter your TRON (TRC20) receiving wallet address"
             style="width:100%;height:44px;padding:0 14px;border-radius:10px;background:rgba(0,0,0,0.4);border:1px solid var(--border);color:#fff;outline:none;font-size:13px;font-family:ui-monospace,monospace;">
         </div>
 
@@ -3337,7 +3284,7 @@
           serverGrowth: Number(d.growth || 0),
           referralBalance: Number(d.referral_balance || 0),
           salaryBalance: Number(d.salary_balance || 0),
-          totalBalance: Number(d.total_balance || (principal + Number(d.growth || 0) + Number(d.referral_balance || 0) + Number(d.salary_balance || 0))),
+          totalBalance: Number(d.total_balance || (principal + Number(d.growth || 0) + Number(d.referral_balance || 0) + Number(d.salary_balance || 0) + Number(d.video_reward_balance || 0))),
           availableWithdrawal: Number(d.available_withdrawal || 0),
           completedWithdrawals: Number(d.completed_withdrawals || 0),
           nextWithdrawalAt: d.next_withdrawal_at,
@@ -3549,17 +3496,8 @@
 
     if (withdrawMethodSelect) {
       withdrawMethodSelect.onchange = () => {
-        const m = withdrawMethodSelect.value;
-        if (m === 'UID') {
-          withdrawDestLabel.textContent = 'Binance UID / Pay ID *';
-          withdrawDestInput.placeholder = 'e.g. 839201948';
-        } else if (m === 'BEP20') {
-          withdrawDestLabel.textContent = 'USDT Destination Address (BEP20 / BSC) *';
-          withdrawDestInput.placeholder = '0x...';
-        } else {
-          withdrawDestLabel.textContent = 'USDT Destination Address (TRC20 / TRON) *';
-          withdrawDestInput.placeholder = 'T...';
-        }
+        withdrawDestLabel.textContent = 'USDT Destination Address (TRC20 / TRON) *';
+        withdrawDestInput.placeholder = 'T...';
       };
     }
 
@@ -3581,7 +3519,7 @@
         }
 
         if (!dest) {
-          showWithdrawAlert('Please enter your destination wallet address or Binance UID.', true);
+          showWithdrawAlert('Please enter your TRC20 receiving wallet address.', true);
           return;
         }
 
